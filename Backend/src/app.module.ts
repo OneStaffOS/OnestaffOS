@@ -10,6 +10,12 @@ import { EmployeeModule } from './employee/employee.module';
 import { OrgModule } from './org/org.module';
 import { PerformanceModule } from './performance/performance.module';
 import { AuthModule } from './auth/auth.module';
+import { TimeManagementModule } from './time-management/time-management.module';
+import { RecruitmentModule } from './recruitment/recruitment.module';
+import { LeavesModule } from './leaves/leaves.module';
+import { PayrollConfigModule } from './payroll-config/payroll-config.module';
+import { PayrollExecutionModule } from './payroll-execution/payroll-execution.module';
+import { PayrollTrackingModule } from './payroll-tracking/payroll-tracking.module';
 
 @Module({
   imports: [
@@ -19,6 +25,12 @@ import { AuthModule } from './auth/auth.module';
     OrgModule,
     PerformanceModule,
     AuthModule,
+    TimeManagementModule,
+    RecruitmentModule,
+    LeavesModule,
+    PayrollConfigModule,
+    PayrollExecutionModule,
+    PayrollTrackingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

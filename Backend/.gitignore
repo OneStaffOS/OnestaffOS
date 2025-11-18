@@ -56,7 +56,16 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 
-performance/
-org/
-auth/
-employee/
+dto/
+employees.controller.ts
+employees.service.ts
+employees.controller.spec.ts
+employees.service.spec.ts
+performances.controller.spec.ts
+performances.service.spec.ts
+performances.controller.ts
+performances.service.ts
+orgs.controller.ts
+orgs.service.ts
+orgs.controller.spec.ts
+orgs.service.spec.ts
