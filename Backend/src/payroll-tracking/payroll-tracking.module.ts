@@ -1,42 +1,30 @@
-// src/payroll-tracking/payroll-tracking.module.ts
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-
-import { Payslip, PayslipSchema } from './models/payslip.schema';
-import {
-  PayrollDispute,
-  PayrollDisputeSchema,
-} from './models/payroll-dispute.schema';
-import {
-  ExpenseClaim,
-  ExpenseClaimSchema,
-} from './models/expense-claim.schema';
-import {
-  RefundRecord,
-  RefundRecordSchema,
-} from './models/refund-record.schema';
-import { Employee, EmployeeSchema } from '../employee/models/employee.schema';
-import {
-  PayrollRun,
-  PayrollRunSchema,
-} from '../payroll-execution/models/payroll-run.schema';
-import {
-  PayrollRunItem,
-  PayrollRunItemSchema,
-} from '../payroll-execution/models/payroll-run-item.schema';
+import { JwtModule } from '@nestjs/jwt';
+import { PayrollTrackingController } from './payroll-tracking.controller';
+import { PayrollTrackingService } from './payroll-tracking.service';
+import { refunds, refundsSchema } from './models/refunds.schema';
+import { claims, claimsSchema } from './models/claims.schema';
+import { disputes, disputesSchema } from './models/disputes.schema';
+import { PayrollConfigurationModule } from '../payroll-configuration/payroll-configuration.module';
+import { PayrollExecutionModule } from '../payroll-execution/payroll-execution.module';
 
 @Module({
   imports: [
+    PayrollConfigurationModule,
+    forwardRef(() => PayrollExecutionModule),
     MongooseModule.forFeature([
-      { name: Payslip.name, schema: PayslipSchema },
-      { name: PayrollDispute.name, schema: PayrollDisputeSchema },
-      { name: ExpenseClaim.name, schema: ExpenseClaimSchema },
-      { name: RefundRecord.name, schema: RefundRecordSchema },
-      { name: Employee.name, schema: EmployeeSchema },
-      { name: PayrollRun.name, schema: PayrollRunSchema },
-      { name: PayrollRunItem.name, schema: PayrollRunItemSchema },
+      { name: refunds.name, schema: refundsSchema },
+      { name: claims.name, schema: claimsSchema },
+      { name: disputes.name, schema: disputesSchema },
     ]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
-  exports: [MongooseModule],
+  controllers: [PayrollTrackingController],
+  providers: [PayrollTrackingService],
+  exports: [PayrollTrackingService]
 })
-export class PayrollTrackingModule {}
+export class PayrollTrackingModule { }

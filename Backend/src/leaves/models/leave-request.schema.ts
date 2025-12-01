@@ -1,147 +1,72 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MSchema, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+import { LeaveStatus } from '../enums/leave-status.enum';
 
-export type LeaveRequestStatus =
-  | 'Draft'
-  | 'Submitted'
-  | 'ManagerApproved'
-  | 'ManagerRejected'
-  | 'HRApproved'
-  | 'HRRejected'
-  | 'Cancelled'
-  | 'Completed';
-
-export type LeaveRequestOrigin = 'PreLeave' | 'PostLeave';
-
-@Schema({ _id: false })
-class LeaveAttachment {
-  @Prop({ required: true }) key!: string;      // storage key
-  @Prop({ required: true }) name!: string;     // filename
-  @Prop() contentType?: string;
-  @Prop() uploadedAt?: Date;
-}
-
-@Schema({ _id: false })
-class ApprovalStep {
-  @Prop({ required: true }) role!: string;     // "Manager", "HR"
-  @Prop() approverId?: string;                // user id / email
-  @Prop() decision?: 'Approved' | 'Rejected';
-  @Prop() comment?: string;
-  @Prop() decidedAt?: Date;
-}
+export type LeaveRequestDocument = HydratedDocument<LeaveRequest>;
 
 @Schema({ timestamps: true })
 export class LeaveRequest {
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Employee', required: true, index: true })
-  employeeId!: Types.ObjectId;
 
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'LeaveType', required: true })
-  leaveTypeId!: Types.ObjectId;
+  // EMPLOYEE REQUESTING THE LEAVE
+  @Prop({ type: Types.ObjectId, ref: 'EmployeeProfile', required: true })
+  employeeId: Types.ObjectId;
 
-  @Prop()
-  leaveTypeCode?: string; // denormalized for reporting
+  // LEAVE TYPE (annual, sick, maternity, etc.)
+  @Prop({ type: Types.ObjectId, ref: 'LeaveType', required: true })
+  leaveTypeId: Types.ObjectId;
 
-  @Prop({ required: true })
-  startDate!: Date;
-
-  @Prop({ required: true })
-  endDate!: Date;
-
-  /** Net working days requested (exact + rounded) */
-  @Prop()
-  daysRequestedExact?: number;
-
-  @Prop()
-  daysRequestedRounded?: number;
-
-  /** Whether this was submitted after the leave (REQ-031) */
-  @Prop({ default: 'PreLeave', enum: ['PreLeave', 'PostLeave'] })
-  origin!: LeaveRequestOrigin;
-
-  @Prop()
-  reason?: string;
-
-  @Prop({ type: [LeaveAttachment], default: [] })
-  attachments!: LeaveAttachment[];
-
-  /** Status lifecycle (Draft → Submitted → ManagerApproved → HRApproved…) */
+  // DATE RANGE (from → to)
   @Prop({
-    default: 'Draft',
-    enum: [
-      'Draft',
-      'Submitted',
-      'ManagerApproved',
-      'ManagerRejected',
-      'HRApproved',
-      'HRRejected',
-      'Cancelled',
-      'Completed',
-    ],
-    index: true,
+    type: {
+      from: Date,
+      to: Date,
+    },
+    required: true,
   })
-  status!: LeaveRequestStatus;
+  dates: { from: Date; to: Date };
 
-  /** Manager & HR IDs (for fast queries) */
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Employee' })
-  managerId?: Types.ObjectId;
+  // CALCULATED NET DURATION (excluding weekends/holidays)
+  @Prop({ required: true })
+  durationDays: number;
 
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Employee' })
-  hrOwnerId?: Types.ObjectId;
-
-  /** Full approval chain (manager → HR → others) */
-  @Prop({ type: [ApprovalStep], default: [] })
-  approvals!: ApprovalStep[];
-
-  /** Timestamps for audit */
+  // OPTIONAL JUSTIFICATION
   @Prop()
-  submittedAt?: Date;
+  justification?: string;
 
-  @Prop()
-  managerDecidedAt?: Date;
+  // SUPPORTING DOCUMENT (MEDICAL CERTIFICATE, ETC.)
+  @Prop({ type: Types.ObjectId, ref: 'Document' })
+  attachmentId?: Types.ObjectId;
 
-  @Prop()
-  hrDecidedAt?: Date;
+  // APPROVAL WORKFLOW HISTORY
+  @Prop({
+    type: [
+      {
+        role: String,
+        status: String,
+        decidedBy: { type: Types.ObjectId, ref: 'EmployeeProfile' },
+        decidedAt: Date,
+      },
+    ],
+    default: [],
+  })
+  approvalFlow: {
+    role: string;
+    status: string;
+    decidedBy?: Types.ObjectId;
+    decidedAt?: Date;
+  }[];
 
-  @Prop()
-  finalizedAt?: Date;
+  // OVERALL STATUS
+  @Prop({
+    enum: LeaveStatus,
+    default: LeaveStatus.PENDING,
+  })
+  status: LeaveStatus;
 
-  /** When cancelled / modified by employee before finalization */
-  @Prop()
-  cancelledAt?: Date;
-
-  /** If HR overrides manager decision (REQ-026) */
+  // FLAG IRREGULAR PATTERNS (OPTIONAL)
   @Prop({ default: false })
-  hrOverride!: boolean;
-
-  @Prop()
-  hrOverrideReason?: string;
-
-  /** Flags from validation engine (BR 28, 29, 31) */
-  @Prop({ default: false })
-  exceedsEntitlement!: boolean;
-
-  @Prop({ default: false })
-  convertedExcessToUnpaid!: boolean;
-
-  @Prop()
-  unpaidPortionDays?: number;
-
-  @Prop({ default: false })
-  hasTeamConflict!: boolean; // overlapping critical team members
-
-  @Prop({ default: false })
-  overlapsOtherLeaves!: boolean;
-
-  /** Integration flags */
-  @Prop({ default: false })
-  syncedToTimeManagement!: boolean;
-
-  @Prop({ default: false })
-  syncedToPayroll!: boolean;
-
-  @Prop()
-  syncReference?: string; // external integration id
+  irregularPatternFlag: boolean;
 }
 
-export type LeaveRequestDocument = HydratedDocument<LeaveRequest>;
-export const LeaveRequestSchema = SchemaFactory.createForClass(LeaveRequest);
+export const LeaveRequestSchema =
+  SchemaFactory.createForClass(LeaveRequest);

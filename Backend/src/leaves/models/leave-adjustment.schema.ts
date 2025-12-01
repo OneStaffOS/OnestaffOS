@@ -1,46 +1,35 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MSchema, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+import { AdjustmentType } from '../enums/adjustment-type.enum';
 
-export type AdjustmentType =
-  | 'Grant'
-  | 'Correction'
-  | 'CarryOver'
-  | 'Encashment'
-  | 'Penalty';
+export type LeaveAdjustmentDocument = HydratedDocument<LeaveAdjustment>;
 
 @Schema({ timestamps: true })
 export class LeaveAdjustment {
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Employee', required: true, index: true })
-  employeeId!: Types.ObjectId;
+  // EMPLOYEE WHOSE BALANCE IS BEING ADJUSTED
+  @Prop({ type: Types.ObjectId, ref: 'EmployeeProfile', required: true })
+  employeeId: Types.ObjectId;
 
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'LeaveType', required: true })
-  leaveTypeId!: Types.ObjectId;
+  // LEAVE TYPE BEING ADJUSTED
+  @Prop({ type: Types.ObjectId, ref: 'LeaveType', required: true })
+  leaveTypeId: Types.ObjectId;
 
-  /** Signed amount (+ credit, - debit) – exact and rounded */
+  // ADD / DEDUCT / CORRECTION
+  @Prop({ enum: AdjustmentType, required: true })
+  adjustmentType: AdjustmentType;
+
+  // NUMBER OF DAYS (+ OR -)
   @Prop({ required: true })
-  amountExact!: number;
+  amount: number;
 
+  // REASON FOR ADJUSTMENT
   @Prop({ required: true })
-  amountRounded!: number;
+  reason: string;
 
-  @Prop({
-    default: 'Correction',
-    enum: ['Grant', 'Correction', 'CarryOver', 'Encashment', 'Penalty'],
-  })
-  type!: AdjustmentType;
-
-  /** Optional link back to a leave request or offboarding settlement */
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'LeaveRequest' })
-  relatedRequestId?: Types.ObjectId;
-
-  /** Who did this adjustment (HR Admin) */
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Employee' })
-  adjustedByEmployeeId?: Types.ObjectId;
-
-  @Prop()
-  reason?: string;
+  // HR EMPLOYEE WHO PERFORMED THE ADJUSTMENT
+  @Prop({ type: Types.ObjectId, ref: 'EmployeeProfile', required: true })
+  hrUserId: Types.ObjectId;
 }
 
-export type LeaveAdjustmentDocument = HydratedDocument<LeaveAdjustment>;
 export const LeaveAdjustmentSchema =
   SchemaFactory.createForClass(LeaveAdjustment);

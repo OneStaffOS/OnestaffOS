@@ -1,74 +1,41 @@
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+import { AttachmentType } from '../enums/attachment-type.enum';
 
-export type LeaveCategory =
-  | 'Annual'
-  | 'Sick'
-  | 'Unpaid'
-  | 'Mission'
-  | 'Maternity'
-  | 'Paternity'
-  | 'Special'
-  | 'Other';
-
-export type LeaveUnit = 'Days' | 'Hours';
-
-export type LeaveTypeStatus = 'Active' | 'Inactive' | 'Archived';
+export type LeaveTypeDocument = HydratedDocument<LeaveType>;
 
 @Schema({ timestamps: true })
 export class LeaveType {
-  /** Unique code, e.g. "ANNUAL", "SICK", "UNPAID" */
-  @Prop({ required: true, unique: true, uppercase: true })
-  code!: string;
+  @Prop({ required: true, unique: true })
+  code: string;
 
   @Prop({ required: true })
-  name!: string; // "Annual Leave", "Sick Leave", ...
+  name: string;
 
-  @Prop({ default: 'Annual', enum: [
-    'Annual',
-    'Sick',
-    'Unpaid',
-    'Mission',
-    'Maternity',
-    'Paternity',
-    'Special',
-    'Other',
-  ] })
-  category!: LeaveCategory;
+  @Prop({ type: Types.ObjectId, ref: 'LeaveCategory', required: true })
+  categoryId: Types.ObjectId;
 
   @Prop()
   description?: string;
 
-  /** Paid or unpaid (affects payroll integration) */
   @Prop({ default: true })
-  isPaid!: boolean;
+  paid: boolean;
 
-  /**
-   * If true, this leave reduces annual vacation balance
-   * (Annual, Accidental, Compensation etc.)
-   */
+  @Prop({ default: true })
+  deductible: boolean;
+
   @Prop({ default: false })
-  deductsFromAnnualBalance!: boolean;
+  requiresAttachment: boolean;
 
-  /** Payroll paycode linkage (BR 6) */
-  @Prop()
-  payrollPayCode?: string;
+  @Prop({ enum: AttachmentType })
+  attachmentType?: AttachmentType;
 
-  /** Unit of measurement (days / hours) */
-  @Prop({ default: 'Days', enum: ['Days', 'Hours'] })
-  unit!: LeaveUnit;
+  @Prop({ default: null })
+  minTenureMonths?: number;
 
-  /** Whether documentation is required (e.g. Sick > 1 day) */
-  @Prop({ default: false })
-  requiresDocument!: boolean;
-
-  /** Free text rule, e.g. "Medical certificate for sick > 1 day" */
-  @Prop()
-  documentRule?: string;
-
-  @Prop({ default: 'Active', enum: ['Active', 'Inactive', 'Archived'] })
-  status!: LeaveTypeStatus;
+  @Prop({ default: null })
+  maxDurationDays?: number;
 }
 
-export type LeaveTypeDocument = HydratedDocument<LeaveType>;
 export const LeaveTypeSchema = SchemaFactory.createForClass(LeaveType);

@@ -1,92 +1,51 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-
-import {
-  Candidate,
-  CandidateSchema,
-} from './models/candidate.schema';
-
-import {
-  CandidateApplication,
-  CandidateApplicationSchema,
-} from './models/candidate-application.schema';
-
-import {
-  HiringProcessTemplate,
-  HiringProcessTemplateSchema,
-} from './models/hiring-process-template.schema';
-
-import {
-  JobTemplate,
-  JobTemplateSchema,
-} from './models/job-template.schema';
-
-import {
-  JobRequisition,
-  JobRequisitionSchema,
-} from './models/job-requisition.schema';
-
-import {
-  Interview,
-  InterviewSchema,
-} from './models/interview.schema';
-
-import {
-  Offer,
-  OfferSchema,
-} from './models/offer.schema';
-
-import {
-  OnboardingChecklist,
-  OnboardingChecklistSchema,
-} from './models/onboarding-checklist.schema';
-
-import {
-  OffboardingChecklist,
-  OffboardingChecklistSchema,
-} from './models/offboarding-checklist.schema';
-
-import {
-  SeparationRequest,
-  SeparationRequestSchema,
-} from './models/resignation-request.schema';
-
-// If you already created these, just adjust the paths:
-import { RecruitmentService } from './recruitment.service';
 import { RecruitmentController } from './recruitment.controller';
+import { RecruitmentService } from './recruitment.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { JwtModule } from '@nestjs/jwt';
+import { JobTemplate, JobTemplateSchema } from './models/job-template.schema';
+import { JobRequisition,JobRequisitionSchema } from './models/job-requisition.schema';
+import { Application,ApplicationSchema } from './models/application.schema';
+import { ApplicationStatusHistory,ApplicationStatusHistorySchema } from './models/application-history.schema';
+import { Interview,InterviewSchema } from './models/interview.schema';
+import { AssessmentResult,AssessmentResultSchema } from './models/assessment-result.schema';
+import { Referral,ReferralSchema } from './models/referral.schema';
+import { Offer,OfferSchema } from './models/offer.schema';
+import { Contract,ContractSchema } from './models/contract.schema';
+import { Document,DocumentSchema } from './models/document.schema';
+import { TerminationRequest,TerminationRequestSchema } from './models/termination-request.schema';
+import { ClearanceChecklist,ClearanceChecklistSchema } from './models/clearance-checklist.schema';
+import { EmployeeProfileModule } from '../employee-profile/employee-profile.module';
+import { EmployeeProfile, EmployeeProfileSchema } from '../employee-profile/models/employee-profile.schema';
 
 @Module({
-  imports: [
+  imports:[
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'your-secret-key',
+      signOptions: { expiresIn: '24h' },
+    }),
     MongooseModule.forFeature([
-      { name: Candidate.name, schema: CandidateSchema },
-      {
-        name: CandidateApplication.name,
-        schema: CandidateApplicationSchema,
-      },
-      {
-        name: HiringProcessTemplate.name,
-        schema: HiringProcessTemplateSchema,
-      },
       { name: JobTemplate.name, schema: JobTemplateSchema },
       { name: JobRequisition.name, schema: JobRequisitionSchema },
+      { name: Application.name, schema: ApplicationSchema },
+      { name: ApplicationStatusHistory.name, schema: ApplicationStatusHistorySchema },
       { name: Interview.name, schema: InterviewSchema },
+      { name: AssessmentResult.name, schema: AssessmentResultSchema },
+      { name: Referral.name, schema: ReferralSchema },
       { name: Offer.name, schema: OfferSchema },
-      {
-        name: OnboardingChecklist.name,
-        schema: OnboardingChecklistSchema,
-      },
-      {
-        name: OffboardingChecklist.name,
-        schema: OffboardingChecklistSchema,
-      },
-      {
-        name: SeparationRequest.name,
-        schema: SeparationRequestSchema,
-      },
+      { name: Contract.name, schema: ContractSchema },
+      { name: Document.name, schema: DocumentSchema },
+      { name: TerminationRequest.name, schema: TerminationRequestSchema },
+      { name: ClearanceChecklist.name, schema: ClearanceChecklistSchema },
+      { name: EmployeeProfile.name, schema: EmployeeProfileSchema },
+      // Register as 'User' alias for backward compatibility with schema refs
+      { name: 'User', schema: EmployeeProfileSchema },
     ]),
+    EmployeeProfileModule
   ],
   controllers: [RecruitmentController],
   providers: [RecruitmentService],
-  exports: [RecruitmentService],
+  exports:[RecruitmentService]
+
 })
 export class RecruitmentModule {}

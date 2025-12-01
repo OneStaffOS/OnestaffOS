@@ -1,80 +1,78 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MSchema, Types } from 'mongoose';
-
-export type OfferStatus =
-  | 'Draft'
-  | 'PendingApproval'
-  | 'Approved'
-  | 'Sent'
-  | 'Accepted'
-  | 'Rejected'
-  | 'Withdrawn'
-  | 'Expired';
+import { HydratedDocument, Types } from 'mongoose';
+import { OfferResponseStatus } from '../enums/offer-response-status.enum';
+import { OfferFinalStatus } from '../enums/offer-final-status.enum';
+import { ApprovalStatus } from '../enums/approval-status.enum';
 
 @Schema({ timestamps: true })
 export class Offer {
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'CandidateApplication', required: true })
-  applicationId!: Types.ObjectId;
 
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Candidate', required: true })
-  candidateId!: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'Application', required: true })
+  applicationId: Types.ObjectId;
 
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'JobRequisition', required: true })
-  requisitionId!: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'Candidate', required: true })
+  candidateId: Types.ObjectId;
 
-  @Prop()
-  positionTitle?: string;
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  hrEmployeeId: Types.ObjectId;
 
-  @Prop()
-  payGrade?: string;
-
-  @Prop()
-  baseSalary?: number;
+  // COMPENSATION
+  @Prop({ required: true })
+  grossSalary: number;
 
   @Prop()
-  currency?: string; // "EGP", "USD"
+  signingBonus?: number;
 
   @Prop()
-  benefitsSummary?: string;
+  benefits?: [string];
 
   @Prop()
-  startDate?: Date;
+  conditions?: string;
 
   @Prop()
-  expiryDate?: Date;
+  insurances?: string;
+
+  @Prop()
+  content: string;
+
+  @Prop()
+  role: string;
+
+  @Prop()
+  deadline: Date;
 
   @Prop({
-    default: 'Draft',
-    enum: [
-      'Draft',
-      'PendingApproval',
-      'Approved',
-      'Sent',
-      'Accepted',
-      'Rejected',
-      'Withdrawn',
-      'Expired',
-    ],
+    enum: OfferResponseStatus,
+    default: OfferResponseStatus.PENDING
   })
-  status!: OfferStatus;
+  applicantResponse: OfferResponseStatus;
+
+  @Prop([
+    {
+      employeeId: { type: Types.ObjectId, ref: 'User' },
+      role: String,
+      status: { type: String, enum: ApprovalStatus },
+      actionDate: Date,
+      comment: String,
+    }
+  ])
+  approvers: any[];
+
+  @Prop({
+    enum: OfferFinalStatus,
+    default: OfferFinalStatus.PENDING
+  })
+  finalStatus: OfferFinalStatus;
+
+  // SIGNATURES
+  @Prop()
+  candidateSignedAt?: Date;
 
   @Prop()
-  approvalWorkflowRef?: string; // id of approval workflow instance
+  hrSignedAt?: Date;
 
   @Prop()
-  offerDocumentKey?: string; // PDF offer letter
-
-  @Prop()
-  signedDocumentKey?: string;
-
-  @Prop()
-  signedAt?: Date;
-
-  @Prop({ default: false })
-  onboardingTriggered!: boolean; // REC-029
-
-  @Prop()
-  onboardingChecklistId?: Types.ObjectId; // link to ONB checklist when created
+  managerSignedAt?: Date;
 }
 
 export type OfferDocument = HydratedDocument<Offer>;

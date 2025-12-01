@@ -53,10 +53,11 @@ export class AuthController {
         secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
         maxAge: expiresSec * 1000, // Cookie expiration time in milliseconds
       });
-      // Return success response
+      // Return success response with accessToken
       return {
         statusCode: HttpStatus.OK,
         message: 'Login successful',
+        accessToken: result.accessToken,
         user: result.payload,
       };
     } catch (error) {
@@ -95,7 +96,7 @@ export class AuthController {
     return { ok: true, message: 'Logged out' };
   }
 
-  @Roles(Role.Employee, Role.Manager, Role.Department_Manager, Role.Head_of_Department, Role.HR_Employee, Role.HR_Manager, Role.HR_Admin, Role.System, Role.Admin)
+  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.DEPARTMENT_HEAD, Role.HR_EMPLOYEE, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.SYSTEM_ADMIN)
   @UseGuards(authorizationGaurd)
   @Get('me')
   @HttpCode(HttpStatus.OK)

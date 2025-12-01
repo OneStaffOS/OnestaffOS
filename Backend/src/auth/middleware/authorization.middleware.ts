@@ -18,17 +18,27 @@ export class authorizationGaurd implements CanActivate {
       if (!user) throw new UnauthorizedException('no user attached');
 
       // Normalize roles: support older `role` string and new `roles` array.
-      const userRoles: string[] = Array.isArray(user.roles)
+      const rawUserRoles: string[] = Array.isArray(user.roles)
         ? user.roles
         : user.role
           ? [String(user.role)]
           : [];
 
+      // Normalize helper: remove non-alphanumeric, underscores/spaces -> single space, lowercase
+      const normalize = (s: string) => String(s || '')
+        .replace(/[_\-]+/g, ' ')
+        .replace(/[^a-zA-Z0-9 ]+/g, '')
+        .trim()
+        .toLowerCase();
+
+      const userRoles = rawUserRoles.map(r => normalize(r));
+      const requiredNorm = requiredRoles.map(r => normalize(r as any));
+
       // If user has no roles, deny access
       if (userRoles.length === 0) throw new UnauthorizedException('unauthorized access');
 
-      // Check if any of the user's roles match required roles
-      const hasRole = requiredRoles.some((r) => userRoles.includes(r));
+      // Check if any of the user's normalized roles match any required normalized role
+      const hasRole = requiredNorm.some(reqR => userRoles.includes(reqR));
       if (!hasRole) throw new UnauthorizedException('unauthorized access');
        
     return true;

@@ -1,50 +1,42 @@
-// src/payroll-execution/payroll-execution.module.ts
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-
-import {
-  PayrollArea,
-  PayrollAreaSchema,
-} from './models/payroll-area.schema';
-import {
-  PayrollSchemaConfig,
-  PayrollSchemaConfigSchema,
-} from './models/payroll-schema-config.schema';
-import {
-  PayrollInitiation,
-  PayrollInitiationSchema,
-} from './models/payroll-initiation.schema';
-import {
-  SigningBonusInstance,
-  SigningBonusInstanceSchema,
-} from './models/signing-bonus-instance.schema';
-import {
-  ExitBenefitInstance,
-  ExitBenefitInstanceSchema,
-} from './models/exit-benefit-instance.schema';
-import {
-  PayrollRun,
-  PayrollRunSchema,
-} from './models/payroll-run.schema';
-import {
-  PayrollRunItem,
-  PayrollRunItemSchema,
-} from './models/payroll-run-item.schema';
-import { Employee, EmployeeSchema } from '../employee/models/employee.schema';
+import { JwtModule } from '@nestjs/jwt';
+import { PayrollExecutionController } from './payroll-execution.controller';
+import { PayrollExecutionService } from './payroll-execution.service';
+import { EmployeeTerminationResignation, EmployeeTerminationResignationSchema } from './models/EmployeeTerminationResignation.schema';
+import { employeePayrollDetails, employeePayrollDetailsSchema } from './models/employeePayrollDetails.schema';
+import { employeePenalties, employeePenaltiesSchema } from './models/employeePenalties.schema';
+import { employeeSigningBonus, employeeSigningBonusSchema } from './models/EmployeeSigningBonus.schema';
+import { payrollRuns, payrollRunsSchema } from './models/payrollRuns.schema';
+import { paySlip, paySlipSchema } from './models/payslip.schema';
+import { PayrollTrackingModule } from '../payroll-tracking/payroll-tracking.module';
+import { PayrollConfigurationModule } from '../payroll-configuration/payroll-configuration.module';
+import { TimeManagementModule } from '../time-management/time-management.module';
+import { EmployeeProfileModule } from '../employee-profile/employee-profile.module';
+import { LeavesModule } from '../leaves/leaves.module';
 
 @Module({
   imports: [
+    forwardRef(() => PayrollTrackingModule), 
+    PayrollConfigurationModule, 
+    TimeManagementModule, 
+    EmployeeProfileModule, 
+    LeavesModule,
     MongooseModule.forFeature([
-      { name: PayrollArea.name, schema: PayrollAreaSchema },
-      { name: PayrollSchemaConfig.name, schema: PayrollSchemaConfigSchema },
-      { name: PayrollInitiation.name, schema: PayrollInitiationSchema },
-      { name: SigningBonusInstance.name, schema: SigningBonusInstanceSchema },
-      { name: ExitBenefitInstance.name, schema: ExitBenefitInstanceSchema },
-      { name: PayrollRun.name, schema: PayrollRunSchema },
-      { name: PayrollRunItem.name, schema: PayrollRunItemSchema },
-      { name: Employee.name, schema: EmployeeSchema },
+      { name: payrollRuns.name, schema: payrollRunsSchema },
+      { name: paySlip.name, schema: paySlipSchema },
+      { name: employeePayrollDetails.name, schema: employeePayrollDetailsSchema },
+      { name: employeeSigningBonus.name, schema: employeeSigningBonusSchema },
+      { name: EmployeeTerminationResignation.name, schema: EmployeeTerminationResignationSchema },
+      { name: employeePenalties.name, schema: employeePenaltiesSchema },
     ]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
-  exports: [MongooseModule],
+  controllers: [PayrollExecutionController],
+  providers: [PayrollExecutionService],
+  exports: [PayrollExecutionService]
 })
-export class PayrollExecutionModule {}
+export class PayrollExecutionModule { }

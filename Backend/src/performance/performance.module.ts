@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { JwtModule } from '@nestjs/jwt';
 import { PerformanceController } from './performance.controller';
 import { PerformanceService } from './performance.service';
-import { PerformanceService } from './performance.service';
-
+import { EmployeeProfileModule } from '../employee-profile/employee-profile.module';
+import { AuditModule } from '../audit/audit.module';
+import { NotificationModule } from '../notifications/notification.module';
 import {
   AppraisalTemplate,
   AppraisalTemplateSchema,
@@ -13,25 +15,41 @@ import {
   AppraisalCycleSchema,
 } from './models/appraisal-cycle.schema';
 import {
-  PerformanceReview,
-  PerformanceReviewSchema,
-} from './models/performance-review.schema';
+  AppraisalAssignment,
+  AppraisalAssignmentSchema,
+} from './models/appraisal-assignment.schema';
 import {
-  ReviewDispute,
-  ReviewDisputeSchema,
-} from './models/review-dispute.schema';
-import { Employee, EmployeeSchema } from '../employee/models/employee.schema';
-import { PerformanceController } from './performance.controller';
+  AppraisalRecord,
+  AppraisalRecordSchema,
+} from './models/appraisal-record.schema';
+import {
+  AppraisalDispute,
+  AppraisalDisputeSchema,
+} from './models/appraisal-dispute.schema';
+import {
+  EmployeeProfile,
+  EmployeeProfileSchema,
+} from '../employee-profile/models/employee-profile.schema';
+import { Department, DepartmentSchema } from '../organization-structure/models/department.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: AppraisalTemplate.name, schema: AppraisalTemplateSchema },
       { name: AppraisalCycle.name, schema: AppraisalCycleSchema },
-      { name: PerformanceReview.name, schema: PerformanceReviewSchema },
-      { name: ReviewDispute.name, schema: ReviewDisputeSchema },
-      { name: Employee.name, schema: EmployeeSchema },
+      { name: AppraisalAssignment.name, schema: AppraisalAssignmentSchema },
+      { name: AppraisalRecord.name, schema: AppraisalRecordSchema },
+      { name: AppraisalDispute.name, schema: AppraisalDisputeSchema },
+      { name: Department.name, schema: DepartmentSchema },
+      { name: EmployeeProfile.name, schema: EmployeeProfileSchema },
     ]),
+    EmployeeProfileModule,
+    AuditModule,
+    NotificationModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'your-secret-key',
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
   controllers: [PerformanceController],
   providers: [PerformanceService],

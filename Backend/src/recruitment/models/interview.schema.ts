@@ -1,85 +1,47 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MSchema, Types } from 'mongoose';
-
-export type InterviewStatus =
-  | 'Planned'
-  | 'Completed'
-  | 'Cancelled'
-  | 'NoShow';
-
-@Schema({ _id: false })
-class PanelMember {
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Employee' })
-  employeeId?: Types.ObjectId;
-
-  @Prop()
-  name?: string;
-
-  @Prop()
-  email?: string;
-}
-
-@Schema({ _id: false })
-class InterviewFeedbackEntry {
-  @Prop()
-  criterionKey?: string; // e.g. "TECH_SKILL"
-
-  @Prop()
-  criterionLabel?: string;
-
-  @Prop()
-  score?: number;        // numeric rating
-
-  @Prop()
-  comment?: string;
-}
-
-@Schema({ _id: false })
-class PanelFeedback {
-  @Prop({ type: PanelMember, required: true })
-  reviewer!: PanelMember;
-
-  @Prop({ type: [InterviewFeedbackEntry], default: [] })
-  entries!: InterviewFeedbackEntry[];
-
-  @Prop()
-  overallComment?: string;
-
-  @Prop()
-  overallScore?: number;
-
-  @Prop({ default: Date.now })
-  submittedAt!: Date;
-}
+import { HydratedDocument, Types } from 'mongoose';
+import { InterviewMethod } from '../enums/interview-method.enum';
+import { InterviewStatus } from '../enums/interview-status.enum';
+import { ApplicationStage } from '../enums/application-stage.enum';
 
 @Schema({ timestamps: true })
 export class Interview {
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'CandidateApplication', required: true })
-  applicationId!: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Application', required: true })
+  applicationId: Types.ObjectId;
+
+  @Prop({
+    enum: ApplicationStage,
+    required: true
+  })
+  stage: ApplicationStage;
 
   @Prop()
-  mode?: string; // "Onsite", "Online"
+  scheduledDate: Date;
+
+  @Prop({ enum: InterviewMethod })
+  method: InterviewMethod;
+
+  @Prop([{ type: Types.ObjectId, ref: 'User' }])
+  panel: Types.ObjectId[];
 
   @Prop()
-  location?: string;
-
-  @Prop({ required: true })
-  scheduledStart!: Date;
+  calendarEventId?: string;
 
   @Prop()
-  scheduledEnd?: Date;
+  videoLink?: string;
 
-  @Prop({ type: [PanelMember], default: [] })
-  panel!: PanelMember[];
+  @Prop({
+    enum: InterviewStatus,
+    default: InterviewStatus.SCHEDULED
+  })
+  status: InterviewStatus;
 
-  @Prop({ default: 'Planned', enum: ['Planned', 'Completed', 'Cancelled', 'NoShow'] })
-  status!: InterviewStatus;
+  @Prop({ type: Types.ObjectId, ref: 'AssessmentResult' })
+  feedbackId?: Types.ObjectId;
 
   @Prop()
-  calendarEventId?: string; // for integration with external calendars
-
-  @Prop({ type: [PanelFeedback], default: [] })
-  feedback!: PanelFeedback[];
+  candidateFeedback?: string;
 }
 
 export type InterviewDocument = HydratedDocument<Interview>;

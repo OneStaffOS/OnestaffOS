@@ -7,18 +7,17 @@ export const Roles = (...roles: Role[]) =>SetMetadata(ROLES_KEY, roles);
 
 
 export enum Role {
-    Admin = 'SYSTEM_ADMIN',
-    Manager = 'MANAGER',
-    Employee = 'EMPLOYEE',
-    HR_Admin = 'HR_ADMIN',
-    HR_Manager = 'HR_MANAGER',
-    HR_Employee = 'HR_EMPLOYEE',
-    HR_Officer = 'HR_OFFICER',
-    Payroll_Officer= 'PAYROLL_OFFICER',
-    Candidate = 'CANDIDATE',
-    New_Hire = 'NEW_HIRE',
-    System= 'SYSTEM',
-    Department_Manager = 'DEPARTMENT_MANAGER',
-    Head_of_Department = 'HEAD_OF_DEPARTMENT',
-  }
+  DEPARTMENT_EMPLOYEE = 'department employee',
+  DEPARTMENT_HEAD = 'department head',
+  HR_MANAGER = 'HR Manager',
+  HR_EMPLOYEE = 'HR Employee',
+  PAYROLL_SPECIALIST = 'Payroll Specialist',
+  PAYROLL_MANAGER = 'Payroll Manager',
+  SYSTEM_ADMIN = 'System Admin',
+  LEGAL_POLICY_ADMIN = 'Legal & Policy Admin',
+  RECRUITER = 'Recruiter',
+  FINANCE_STAFF = 'Finance Staff',
+  JOB_CANDIDATE = 'Job Candidate',
+  HR_ADMIN = 'HR Admin'
+}
   

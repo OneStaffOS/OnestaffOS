@@ -1,65 +1,36 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MSchema, Types } from 'mongoose';
-
-export type RequisitionStatus =
-  | 'Draft'
-  | 'PendingApproval'
-  | 'Open'
-  | 'OnHold'
-  | 'Closed'
-  | 'Cancelled';
+import { HydratedDocument, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class JobRequisition {
-  @Prop({ required: true, unique: true })
-  code!: string; // e.g. "REQ-2025-001"
 
   @Prop({ required: true })
-  title!: string;
+  requisitionId: string;
 
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'JobTemplate' })
-  jobTemplateId?: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'JobTemplate' })
+  templateId: Types.ObjectId;
 
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'HiringProcessTemplate' })
-  processTemplateId?: Types.ObjectId;
-
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Department' })
-  deptId?: Types.ObjectId;
-
-  @Prop({ type: MSchema.Types.ObjectId, ref: 'Position' })
-  positionId?: Types.ObjectId;
+  @Prop({ required: true })
+  openings: number;
 
   @Prop()
-  location?: string;
+  location: string;
 
-  @Prop({ default: 1 })
-  openings!: number;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  hiringManagerId: Types.ObjectId;
 
-  @Prop()
-  employmentType?: string; // e.g. "FullTime", "Intern"
-
-  @Prop()
-  description?: string;
-
-  @Prop({ default: 'Draft', enum: ['Draft', 'PendingApproval', 'Open', 'OnHold', 'Closed', 'Cancelled'] })
-  status!: RequisitionStatus;
+  @Prop({
+    enum: ['draft', 'published', 'closed'],
+    default: 'draft'
+  })
+  publishStatus: string;
 
   @Prop()
-  publishedAt?: Date;
+  postingDate?: Date;
 
   @Prop()
-  externalUrl?: string; // careers page link
-
-  @Prop()
-  employerBrandContent?: string; // used for REC-023
-
-  @Prop()
-  createdBy?: string; // HR user id/email
-
-  @Prop()
-  approvedBy?: string;
+  expiryDate?: Date;
 }
 
 export type JobRequisitionDocument = HydratedDocument<JobRequisition>;
-export const JobRequisitionSchema =
-  SchemaFactory.createForClass(JobRequisition);
+export const JobRequisitionSchema = SchemaFactory.createForClass(JobRequisition);

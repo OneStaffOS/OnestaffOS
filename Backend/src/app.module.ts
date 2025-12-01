@@ -1,36 +1,36 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import 'dotenv/config';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
-import { EmployeeModule } from './employee/employee.module';
-import { OrgModule } from './org/org.module';
-import { PerformanceModule } from './performance/performance.module';
-import { AuthModule } from './auth/auth.module';
 import { TimeManagementModule } from './time-management/time-management.module';
 import { RecruitmentModule } from './recruitment/recruitment.module';
 import { LeavesModule } from './leaves/leaves.module';
-import { PayrollConfigModule } from './payroll-config/payroll-config.module';
-import { PayrollExecutionModule } from './payroll-execution/payroll-execution.module';
+import { AuthModule } from './auth/auth.module';
 import { PayrollTrackingModule } from './payroll-tracking/payroll-tracking.module';
+import { EmployeeProfileModule } from './employee-profile/employee-profile.module';
+import { OrganizationStructureModule } from './organization-structure/organization-structure.module';
+import { PerformanceModule } from './performance/performance.module';
+import { NotificationModule } from './notifications/notification.module';
+import { RegisterModule } from './register/register.module';
+import { PayrollConfigurationModule } from './payroll-configuration/payroll-configuration.module';
+import { PayrollExecutionModule } from './payroll-execution/payroll-execution.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGO_URI as string),
-    EmployeeModule,
-    OrgModule,
-    PerformanceModule,
+    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/onestaff'),
     AuthModule,
-    TimeManagementModule,
-    RecruitmentModule,
-    LeavesModule,
-    PayrollConfigModule,
-    PayrollExecutionModule,
-    PayrollTrackingModule,
+    TimeManagementModule, 
+    RecruitmentModule, 
+    LeavesModule, 
+    PayrollExecutionModule, 
+    PayrollConfigurationModule, 
+    PayrollTrackingModule, 
+    EmployeeProfileModule, 
+    OrganizationStructureModule, 
+    PerformanceModule,
+    RegisterModule,
+    // Notifications
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

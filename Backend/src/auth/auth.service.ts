@@ -6,10 +6,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { EmployeeService } from '../employee/employee.service';
+import { EmployeeProfileService } from '../employee-profile/employee-profile.service';
 
 type SignInPayload = {
   sub: string;
+  employeeId?: string;
   email: string;
   roles: string[];
 };
@@ -22,7 +23,7 @@ type SignInResult = {
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly employeeService: EmployeeService,
+    private readonly employeeService: EmployeeProfileService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -54,15 +55,18 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const roles: string[] = Array.isArray((user as any).roles)
-      ? (user as any).roles
-      : (user as any).roles
-      ? [String((user as any).roles)]
-      : [];
+    // Extract roles from accessProfileId if populated
+    let roles: string[] = [];
+    const accessProfile = (user as any).accessProfileId;
+    
+    if (accessProfile && typeof accessProfile === 'object' && Array.isArray(accessProfile.roles)) {
+      roles = accessProfile.roles.filter((role: any) => role); // Filter out null/undefined
+    }
 
     const payload: SignInPayload = {
       sub: String((user as any)._id as Types.ObjectId),
-      email: (user as any).email,
+      employeeId: String((user as any)._id as Types.ObjectId),
+      email: (user as any).personalEmail || (user as any).workEmail || email,
       roles,
     };
 
