@@ -1,0 +1,470 @@
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.header {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.refreshButton {
+  background: #f3f4f6;
+  color: #1a1a1a;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refreshButton:hover {
+  background: #e5e7eb;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.subtitle {
+  color: #666;
+  margin: 0.5rem 0 0 0;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.error {
+  background: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.statIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.statValue.warning {
+  color: #d97706;
+}
+
+.statValue.info {
+  color: #0ea5e9;
+}
+
+.statValue.success {
+  color: #059669;
+}
+
+.statValue.danger {
+  color: #dc2626;
+}
+
+.cyclesSection {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem 0;
+}
+
+.cyclesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.cycleCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.cycleName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.cycleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cycleDetail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.cycleLabel {
+  opacity: 0.9;
+}
+
+.cycleValue {
+  font-weight: 600;
+}
+
+.cycleStatus {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  width: fit-content;
+}
+
+.filtersSection {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filterControls {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.quickFilters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.filterChip {
+  background: #f3f4f6;
+  color: #1a1a1a;
+  border: 2px solid transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filterChip:hover {
+  background: #e5e7eb;
+}
+
+.filterChip.active {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #2563eb;
+}
+
+.filterChip.overdueChip {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #dc2626;
+}
+
+.filterChip.overdueChip:hover {
+  background: #fecaca;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filterLabel {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.filterSelect {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  min-width: 200px;
+  cursor: pointer;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.assignmentsSection {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.assignmentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.assignmentCard {
+  background: #f8f9fa;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.assignmentCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.assignmentCard.overdue {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.overdueLabel {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background: #dc2626;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.assignmentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.employeeName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.employeeNumber {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0.25rem 0 0 0;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusBadge.notstarted {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.statusBadge.inprogress {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.statusBadge.managersubmitted {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.statusBadge.hrpublished {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.assignmentBody {
+  margin-bottom: 1rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+}
+
+.infoLabel {
+  color: #666;
+  font-weight: 500;
+}
+
+.infoValue {
+  color: #1a1a1a;
+  font-weight: 600;
+  text-align: right;
+}
+
+.infoValue.overdueText {
+  color: #dc2626;
+}
+
+.assignmentActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  flex: 1;
+  min-width: 150px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.primaryButton:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.secondaryButton {
+  flex: 1;
+  min-width: 150px;
+  background: white;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.secondaryButton:hover {
+  background: #eff6ff;
+}
+
+.infoButton {
+  flex: 1;
+  min-width: 130px;
+  background: #f3f4f6;
+  color: #1a1a1a;
+  border: 2px solid #e5e7eb;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.infoButton:hover {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cyclesGrid,
+  .assignmentsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtersSection {
+    flex-direction: column;
+  }
+
+  .filterGroup {
+    width: 100%;
+  }
+
+  .filterSelect {
+    flex: 1;
+  }
+}

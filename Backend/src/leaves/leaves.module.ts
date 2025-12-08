@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { LeavesController } from './leaves.controller';
 import { LeavesService } from './leaves.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,6 +13,8 @@ import { Calendar, CalendarSchema} from './models/calendar.schema';
 import { Attachment,AttachmentSchema } from './models/attachment.schema';
 import { EmployeeProfileModule } from '../employee-profile/employee-profile.module';
 import { TimeManagementModule } from '../time-management/time-management.module';
+import { NotificationModule } from '../notifications/notification.module';
+import { LeaveGridFSService } from './leave-gridfs.service';
 
 @Module({
   imports:[
@@ -31,10 +33,11 @@ import { TimeManagementModule } from '../time-management/time-management.module'
       signOptions: { expiresIn: '1d' },
     }),
     EmployeeProfileModule,
-    TimeManagementModule
+    TimeManagementModule,
+    forwardRef(() => NotificationModule),
   ],
   controllers: [LeavesController],
-  providers: [LeavesService],
+  providers: [LeavesService, LeaveGridFSService],
   exports:[LeavesService]
 })
 export class LeavesModule {}

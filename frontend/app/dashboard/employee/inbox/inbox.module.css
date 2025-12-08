@@ -1,0 +1,22 @@
+.container {
+  padding: 16px;
+}
+.list {
+  list-style: none;
+  padding: 0;
+}
+.unread {
+  border-left: 4px solid #0070f3;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+}
+.read {
+  border-left: 4px solid #ddd;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fafafa;
+}
+.header { display:flex; justify-content:space-between; }
+.date { color:#666; font-size:12px; }
+.actions { margin-top:8px; }

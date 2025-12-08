@@ -8,11 +8,6 @@ export class CreateInsuranceBracketDto {
     @IsNumber()
     @Min(0)
     @IsNotEmpty()
-    amount: number;
-
-    @IsNumber()
-    @Min(0)
-    @IsNotEmpty()
     minSalary: number;
 
     @IsNumber()

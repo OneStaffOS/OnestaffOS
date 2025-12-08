@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { RecruitmentController } from './recruitment.controller';
 import { RecruitmentService } from './recruitment.service';
+import { GridFSService } from './gridfs.service';
+import { DeadlineReminderService } from './deadline-reminder.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { JobTemplate, JobTemplateSchema } from './models/job-template.schema';
@@ -15,8 +17,14 @@ import { Contract,ContractSchema } from './models/contract.schema';
 import { Document,DocumentSchema } from './models/document.schema';
 import { TerminationRequest,TerminationRequestSchema } from './models/termination-request.schema';
 import { ClearanceChecklist,ClearanceChecklistSchema } from './models/clearance-checklist.schema';
+import { Onboarding,OnboardingSchema } from './models/onboarding.schema';
 import { EmployeeProfileModule } from '../employee-profile/employee-profile.module';
 import { EmployeeProfile, EmployeeProfileSchema } from '../employee-profile/models/employee-profile.schema';
+import { EmployeeSystemRole, EmployeeSystemRoleSchema } from '../employee-profile/models/employee-system-role.schema';
+import { NotificationModule } from '../notifications/notification.module';
+import { Candidate, CandidateSchema } from '../employee-profile/models/candidate.schema';
+import { Department, DepartmentSchema } from '../organization-structure/models/department.schema';
+import { Position, PositionSchema } from '../organization-structure/models/position.schema';
 
 @Module({
   imports:[
@@ -37,14 +45,20 @@ import { EmployeeProfile, EmployeeProfileSchema } from '../employee-profile/mode
       { name: Document.name, schema: DocumentSchema },
       { name: TerminationRequest.name, schema: TerminationRequestSchema },
       { name: ClearanceChecklist.name, schema: ClearanceChecklistSchema },
+      { name: Onboarding.name, schema: OnboardingSchema },
       { name: EmployeeProfile.name, schema: EmployeeProfileSchema },
       // Register as 'User' alias for backward compatibility with schema refs
       { name: 'User', schema: EmployeeProfileSchema },
+      { name: EmployeeSystemRole.name, schema: EmployeeSystemRoleSchema },
+      { name: Candidate.name, schema: CandidateSchema },
+      { name: Department.name, schema: DepartmentSchema },
+      { name: Position.name, schema: PositionSchema },
     ]),
-    EmployeeProfileModule
+    EmployeeProfileModule,
+    NotificationModule
   ],
   controllers: [RecruitmentController],
-  providers: [RecruitmentService],
+  providers: [RecruitmentService, GridFSService, DeadlineReminderService],
   exports:[RecruitmentService]
 
 })

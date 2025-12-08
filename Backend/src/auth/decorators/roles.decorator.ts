@@ -18,6 +18,7 @@ export enum Role {
   RECRUITER = 'Recruiter',
   FINANCE_STAFF = 'Finance Staff',
   JOB_CANDIDATE = 'Job Candidate',
-  HR_ADMIN = 'HR Admin'
+  HR_ADMIN = 'HR Admin',
+  NEW_HIRE = 'New Hire',
 }
   

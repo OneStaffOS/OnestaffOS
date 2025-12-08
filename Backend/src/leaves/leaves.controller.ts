@@ -9,8 +9,17 @@ import {
   Query,
   UseGuards,
   Request,
+  UseInterceptors,
+  UploadedFile,
+  Res,
+  StreamableFile,
+  BadRequestException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+import type { Response } from 'express';
 import { LeavesService } from './leaves.service';
+import { LeaveGridFSService } from './leave-gridfs.service';
 import { CreateLeaveTypeDto } from './dto/create-leave-type.dto';
 import { CreateLeaveCategoryDto } from './dto/create-leave-category.dto';
 import { CreateLeavePolicyDto } from './dto/create-leave-policy.dto';
@@ -28,11 +37,15 @@ import { AuthGuard } from '../auth/gaurds/authentication.guard';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
 import { LeaveStatus } from './enums/leave-status.enum';
+import { ObjectId } from 'mongodb';
 
 @Controller('leaves')
 @UseGuards(AuthGuard, authorizationGaurd)
 export class LeavesController {
-  constructor(private readonly leavesService: LeavesService) {}
+  constructor(
+    private readonly leavesService: LeavesService,
+    private readonly gridFSService: LeaveGridFSService,
+  ) {}
 
   // ========== PHASE 1: POLICY CONFIGURATION AND SETUP ==========
 
@@ -61,6 +74,26 @@ export class LeavesController {
   )
   async getAllLeaveCategories() {
     return this.leavesService.getAllLeaveCategories();
+  }
+
+  /**
+   * Update leave category
+   * Accessible by: HR Admin, System Admin
+   */
+  @Put('categories/:id')
+  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  async updateLeaveCategory(@Param('id') id: string, @Body() updateDto: CreateLeaveCategoryDto) {
+    return this.leavesService.updateLeaveCategory(id, updateDto);
+  }
+
+  /**
+   * Delete leave category
+   * Accessible by: HR Admin, System Admin
+   */
+  @Delete('categories/:id')
+  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  async deleteLeaveCategory(@Param('id') id: string) {
+    return this.leavesService.deleteLeaveCategory(id);
   }
 
   /**
@@ -110,6 +143,26 @@ export class LeavesController {
   }
 
   /**
+   * Update leave type
+   * Accessible by: HR Admin, System Admin
+   */
+  @Put('types/:id')
+  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  async updateLeaveType(@Param('id') id: string, @Body() updateDto: CreateLeaveTypeDto) {
+    return this.leavesService.updateLeaveType(id, updateDto);
+  }
+
+  /**
+   * Delete leave type
+   * Accessible by: HR Admin, System Admin
+   */
+  @Delete('types/:id')
+  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  async deleteLeaveType(@Param('id') id: string) {
+    return this.leavesService.deleteLeaveType(id);
+  }
+
+  /**
    * REQ-003, REQ-009: Configure leave policy
    * Accessible by: HR Admin, System Admin
    */
@@ -127,6 +180,16 @@ export class LeavesController {
   @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
   async updateLeavePolicy(@Param('id') id: string, @Body() updateDto: UpdateLeavePolicyDto) {
     return this.leavesService.updateLeavePolicy(id, updateDto);
+  }
+
+  /**
+   * Delete leave policy
+   * Accessible by: HR Admin, System Admin
+   */
+  @Delete('policies/:id')
+  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  async deleteLeavePolicy(@Param('id') id: string) {
+    return this.leavesService.deleteLeavePolicy(id);
   }
 
   /**
@@ -171,6 +234,16 @@ export class LeavesController {
   @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async createLeaveEntitlement(@Body() createDto: CreateLeaveEntitlementDto) {
     return this.leavesService.createLeaveEntitlement(createDto);
+  }
+
+  /**
+   * Bulk assign entitlements to all employees based on policies
+   * Accessible by: HR Admin, System Admin
+   */
+  @Post('entitlements/bulk-assign')
+  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  async bulkAssignEntitlements(@Body() body?: { policyId?: string; positionId?: string; contractType?: string }) {
+    return this.leavesService.bulkAssignEntitlements(body?.policyId, body?.positionId, body?.contractType);
   }
 
   /**
@@ -287,8 +360,61 @@ export class LeavesController {
   }
 
   /**
+   * Get requests pending HR finalization
+   * Accessible by: HR Admin, HR Manager
+   * NOTE: This route MUST be defined before 'requests/:id' to avoid route collision
+   */
+  @Get('requests/pending-hr-finalization')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER)
+  async getRequestsPendingHRFinalization() {
+    return this.leavesService.getRequestsPendingHRFinalization();
+  }
+
+  /**
+   * Get requests available for HR override
+   * Accessible by: HR Admin, HR Manager
+   * NOTE: This route MUST be defined before 'requests/:id' to avoid route collision
+   */
+  @Get('requests/for-override')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER)
+  async getRequestsForOverride() {
+    return this.leavesService.getRequestsForOverride();
+  }
+
+  /**
+   * REQ-028: Get requests requiring medical verification
+   * Accessible by: HR Admin, HR Manager
+   * NOTE: This route MUST be defined before 'requests/:id' to avoid route collision
+   */
+  @Get('requests/medical-verification')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER)
+  async getRequestsRequiringMedicalVerification() {
+    return this.leavesService.getRequestsRequiringMedicalVerification();
+  }
+
+  /**
+   * REQ-020: Get leave requests by department for manager review
+   * Accessible by: Managers (Department Head, HR Manager)
+   * NOTE: This route MUST be defined before 'requests/:id' to avoid route collision
+   */
+  @Get('requests/department/:departmentId')
+  @Roles(
+    Role.DEPARTMENT_HEAD,
+    Role.HR_MANAGER,
+    Role.HR_ADMIN,
+    Role.SYSTEM_ADMIN,
+  )
+  async getLeaveRequestsByDepartment(
+    @Param('departmentId') departmentId: string,
+    @Query('status') status?: LeaveStatus,
+  ) {
+    return this.leavesService.getLeaveRequestsByDepartment(departmentId, status);
+  }
+
+  /**
    * Get leave request by ID
    * Accessible by: Employees (own), Managers (team), HR (all)
+   * NOTE: This parameterized route MUST come AFTER all specific 'requests/...' routes
    */
   @Get('requests/:id')
   @Roles(
@@ -462,7 +588,69 @@ export class LeavesController {
   }
 
   /**
-   * REQ-016: Upload attachment
+   * REQ-016: Upload attachment with file
+   * Accessible by: Employees, HR
+   */
+  @Post('attachments/upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      fileFilter: (req, file, callback) => {
+        const allowedMimeTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'image/jpeg',
+          'image/png',
+        ];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          callback(null, true);
+        } else {
+          callback(new BadRequestException('Only PDF, DOC, DOCX, JPG, and PNG files are allowed'), false);
+        }
+      },
+      limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB
+      },
+    }),
+  )
+  @Roles(
+    Role.DEPARTMENT_EMPLOYEE,
+    Role.DEPARTMENT_HEAD,
+    Role.DEPARTMENT_HEAD,
+    Role.HR_ADMIN,
+    Role.HR_MANAGER,
+    Role.HR_EMPLOYEE,
+    Role.SYSTEM_ADMIN,
+  )
+  async uploadAttachmentFile(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    // Upload to GridFS
+    const gridFsFileId = await this.gridFSService.uploadFile(
+      file.buffer,
+      file.originalname,
+      {
+        contentType: file.mimetype,
+        size: file.size,
+      },
+    );
+
+    // Create attachment record
+    const attachment = await this.leavesService.uploadAttachmentWithGridFS({
+      originalName: file.originalname,
+      fileType: file.mimetype,
+      size: file.size,
+      gridFsFileId: gridFsFileId.toString(),
+    });
+    
+    return attachment;
+  }
+
+  /**
+   * REQ-016: Upload attachment (legacy - metadata only)
    * Accessible by: Employees, HR
    */
   @Post('attachments')
@@ -495,5 +683,135 @@ export class LeavesController {
   )
   async getAttachmentById(@Param('id') id: string) {
     return this.leavesService.getAttachmentById(id);
+  }
+
+  /**
+   * Download attachment file
+   * Accessible by: Employees (own), Managers (team), HR (all)
+   */
+  @Get('attachments/:id/download')
+  @Roles(
+    Role.DEPARTMENT_EMPLOYEE,
+    Role.DEPARTMENT_HEAD,
+    Role.DEPARTMENT_HEAD,
+    Role.HR_ADMIN,
+    Role.HR_MANAGER,
+    Role.HR_EMPLOYEE,
+    Role.SYSTEM_ADMIN,
+  )
+  async downloadAttachment(
+    @Param('id') id: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const attachment = await this.leavesService.getAttachmentById(id);
+    
+    // Check if file is stored in GridFS
+    if (attachment.gridFsFileId) {
+      const fileId = new ObjectId(attachment.gridFsFileId.toString());
+      const stream = this.gridFSService.getDownloadStream(fileId);
+
+      res.set({
+        'Content-Type': attachment.fileType || 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${attachment.originalName}"`,
+      });
+
+      return new StreamableFile(stream);
+    }
+    
+    // Legacy: file stored on disk
+    if (attachment.filePath) {
+      const fs = require('fs');
+      const path = require('path');
+      const filePath = path.join(process.cwd(), attachment.filePath);
+      
+      if (!fs.existsSync(filePath)) {
+        throw new BadRequestException('File not found on disk');
+      }
+      
+      const fileStream = fs.createReadStream(filePath);
+      
+      res.set({
+        'Content-Type': attachment.fileType || 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${attachment.originalName}"`,
+      });
+
+      return new StreamableFile(fileStream);
+    }
+    
+    throw new BadRequestException('No file associated with this attachment');
+  }
+
+  // ========== PHASE 4: HR FINALIZATION AND ADVANCED OPERATIONS ==========
+
+  /**
+   * REQ-025: HR Finalize Approved Requests
+   * Accessible by: HR Admin, HR Manager
+   */
+  @Post('requests/:id/hr-finalize')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER)
+  async hrFinalizeLeaveRequest(
+    @Param('id') id: string,
+    @Body() body: { hrUserId: string; comments?: string },
+  ) {
+    return this.leavesService.hrFinalizeLeaveRequest(id, body.hrUserId, body.comments);
+  }
+
+  /**
+   * REQ-026: HR Override Manager Decision
+   * Accessible by: HR Admin, HR Manager
+   */
+  @Post('requests/:id/hr-override')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER)
+  async hrOverrideManagerDecision(
+    @Param('id') id: string,
+    @Body() body: { 
+      hrUserId: string; 
+      newDecision: 'approved' | 'rejected'; 
+      reason: string;
+      allowNegativeBalance?: boolean;
+    },
+  ) {
+    return this.leavesService.hrOverrideManagerDecision(
+      id,
+      body.hrUserId,
+      body.newDecision,
+      body.reason,
+      body.allowNegativeBalance,
+    );
+  }
+
+  /**
+   * REQ-027: Bulk Request Processing
+   * Accessible by: HR Admin, HR Manager
+   */
+  @Post('requests/bulk-process')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER)
+  async bulkProcessLeaveRequests(
+    @Body() body: { 
+      requestIds: string[]; 
+      action: 'approve' | 'reject'; 
+      hrUserId: string;
+      reason?: string;
+    },
+  ) {
+    return this.leavesService.bulkProcessLeaveRequests(
+      body.requestIds,
+      body.action,
+      body.hrUserId,
+      body.reason,
+    );
+  }
+
+  /**
+   * REQ-028: Verify medical document
+   * Accessible by: HR Admin, HR Manager
+   */
+  @Post('requests/:id/verify-medical')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER)
+  async verifyMedicalDocument(
+    @Param('id') id: string,
+    @Body() body: { hrUserId: string; verified: boolean; notes?: string },
+  ) {
+    return this.leavesService.verifyMedicalDocument(id, body.hrUserId, body.verified, body.notes);
   }
 }

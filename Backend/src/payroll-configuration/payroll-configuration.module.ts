@@ -12,6 +12,7 @@ import { signingBonus, signingBonusSchema } from './models/signingBonus.schema';
 import { taxRules, taxRulesSchema } from './models/taxRules.schema';
 import { terminationAndResignationBenefits, terminationAndResignationBenefitsSchema } from './models/terminationAndResignationBenefits';
 import { payGrade, payGradeSchema } from './models/payGrades.schema';
+import { Backup, BackupSchema } from './models/backup.schema';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { payGrade, payGradeSchema } from './models/payGrades.schema';
       { name: payrollPolicies.name, schema: payrollPoliciesSchema },
       { name: terminationAndResignationBenefits.name, schema: terminationAndResignationBenefitsSchema },
       { name: CompanyWideSettings.name, schema: CompanyWideSettingsSchema },
-      { name: payGrade.name, schema: payGradeSchema }
+      { name: payGrade.name, schema: payGradeSchema },
+      { name: Backup.name, schema: BackupSchema }
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,

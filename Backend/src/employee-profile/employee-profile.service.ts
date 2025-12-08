@@ -1020,5 +1020,79 @@ export class EmployeeProfileService {
 
     return { message: `Employee status updated to ${status}` };
   }
+
+  /**
+   * Patch employee profile - partial update (e.g., status field)
+   */
+  async patchEmployeeProfile(employeeId: string, updateDto: any): Promise<EmployeeProfile> {
+    const profile = await this.employeeProfileModel.findById(employeeId);
+
+    if (!profile) {
+      throw new NotFoundException('Employee profile not found');
+    }
+
+    // Handle 'status' field - validate against EmployeeStatus enum
+    if (updateDto.status !== undefined) {
+      const validStatuses = Object.values(EmployeeStatus);
+      if (!validStatuses.includes(updateDto.status)) {
+        throw new BadRequestException(`Invalid status. Must be one of: ${validStatuses.join(', ')}`);
+      }
+      profile.status = updateDto.status;
+      profile.statusEffectiveFrom = new Date();
+      
+      // Set contract end date for terminal statuses
+      if (updateDto.status === EmployeeStatus.TERMINATED || updateDto.status === EmployeeStatus.RETIRED) {
+        profile.contractEndDate = new Date();
+      }
+    }
+
+    // Handle 'active' field (legacy support) - map to status
+    if (updateDto.active !== undefined) {
+      profile.status = updateDto.active === false ? EmployeeStatus.INACTIVE : EmployeeStatus.ACTIVE;
+      profile.statusEffectiveFrom = new Date();
+      if (!updateDto.active && updateDto.active !== null) {
+        profile.contractEndDate = new Date();
+      }
+    }
+
+    // Handle other fields
+    const allowedFields = ['firstName', 'lastName', 'middleName', 'workEmail', 'personalEmail', 
+                           'mobilePhone', 'homePhone', 'address', 'biography', 'profilePictureUrl',
+                           'nationalId', 'gender', 'maritalStatus', 'dateOfBirth', 'payGradeId',
+                           'primaryPositionId', 'primaryDepartmentId', 'supervisorPositionId', 'dateOfHire'];
+    
+    allowedFields.forEach(field => {
+      if (updateDto[field] !== undefined) {
+        profile[field] = updateDto[field];
+      }
+    });
+
+    // Handle ObjectId fields separately to ensure proper type conversion
+    if (updateDto.payGradeId !== undefined) {
+      profile.payGradeId = updateDto.payGradeId ? new Types.ObjectId(updateDto.payGradeId) : undefined;
+    }
+    
+    if (updateDto.primaryPositionId !== undefined) {
+      profile.primaryPositionId = updateDto.primaryPositionId ? new Types.ObjectId(updateDto.primaryPositionId) : undefined;
+    }
+
+    if (updateDto.primaryDepartmentId !== undefined) {
+      profile.primaryDepartmentId = updateDto.primaryDepartmentId ? new Types.ObjectId(updateDto.primaryDepartmentId) : undefined;
+    }
+
+    if (updateDto.supervisorPositionId !== undefined) {
+      profile.supervisorPositionId = updateDto.supervisorPositionId ? new Types.ObjectId(updateDto.supervisorPositionId) : undefined;
+    }
+
+    // Update full name if name fields changed
+    if (updateDto.firstName || updateDto.middleName || updateDto.lastName) {
+      const firstName = updateDto.firstName || profile.firstName;
+      const middleName = updateDto.middleName !== undefined ? updateDto.middleName : profile.middleName;
+      const lastName = updateDto.lastName || profile.lastName;
+      profile.fullName = `${firstName} ${middleName || ''} ${lastName}`.trim();
+    }
+
+    return await profile.save();
+  }
 }
 

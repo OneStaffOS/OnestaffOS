@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   Body,
   Param,
   Query,
@@ -10,6 +11,8 @@ import {
   Request,
 } from '@nestjs/common';
 import { TimeManagementService } from './time-management.service';
+import { OfflineSyncService } from './services/offline-sync.service';
+import { BackupRetentionService } from './services/backup-retention.service';
 import { CreateShiftTypeDto } from './dto/create-shift-type.dto';
 import { CreateShiftDto } from './dto/create-shift.dto';
 import { UpdateShiftDto } from './dto/update-shift.dto';
@@ -18,6 +21,7 @@ import { UpdateShiftAssignmentDto } from './dto/update-shift-assignment.dto';
 import { CreateScheduleRuleDto } from './dto/create-schedule-rule.dto';
 import { UpdateScheduleRuleDto } from './dto/update-schedule-rule.dto';
 import { ClockPunchDto } from './dto/clock-punch.dto';
+import { ClockPunchByIdDto } from './dto/clock-punch-by-id.dto';
 import { ManualAttendanceCorrectionDto } from './dto/manual-attendance-correction.dto';
 import { CreateCorrectionRequestDto } from './dto/create-correction-request.dto';
 import { ProcessCorrectionRequestDto } from './dto/process-correction-request.dto';
@@ -32,6 +36,7 @@ import { UpdateHolidayDto } from './dto/update-holiday.dto';
 import { AuthGuard } from '../auth/middleware/authentication.middleware';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import {
   ShiftAssignmentStatus,
   CorrectionRequestStatus,
@@ -42,7 +47,11 @@ import {
 @Controller('time-management')
 @UseGuards(AuthGuard, authorizationGaurd)
 export class TimeManagementController {
-  constructor(private readonly timeManagementService: TimeManagementService) {}
+  constructor(
+    private readonly timeManagementService: TimeManagementService,
+    private readonly offlineSyncService: OfflineSyncService,
+    private readonly backupRetentionService: BackupRetentionService,
+  ) {}
 
   // ========== PHASE 1: SHIFT TYPE CONFIGURATION ==========
 
@@ -308,12 +317,38 @@ export class TimeManagementController {
   }
 
   /**
+   * US-5: Employee clock in/out using employee number (for kiosk/external systems)
+   * Public endpoint - no authentication required (for physical time clocks/kiosks)
+   */
+  @Public()
+  @Post('attendance/clock-by-id')
+  async clockPunchById(@Body() punchDto: ClockPunchByIdDto) {
+    return this.timeManagementService.clockPunchById(punchDto);
+  }
+
+  /**
+   * Get attendance records from CSV file
+   * Accessible by: All authenticated users
+   */
+  @Get('attendance/csv-records')
+  @Roles(
+    Role.DEPARTMENT_EMPLOYEE,
+    Role.DEPARTMENT_HEAD,
+    Role.HR_MANAGER,
+    Role.HR_ADMIN,
+    Role.HR_EMPLOYEE,
+    Role.SYSTEM_ADMIN,
+  )
+  async getAttendanceFromCSV(@Query('employeeNumber') employeeNumber?: string) {
+    return this.timeManagementService.getAttendanceFromCSV(employeeNumber);
+  }
+
+  /**
    * US-6: Manual attendance correction (Line Manager)
    * Accessible by: Department Managers, Head of Department, HR roles
    */
   @Post('attendance/manual-correction')
   @Roles(
-    Role.DEPARTMENT_HEAD,
     Role.DEPARTMENT_HEAD,
     Role.HR_MANAGER,
     Role.HR_ADMIN,
@@ -325,7 +360,7 @@ export class TimeManagementController {
 
   /**
    * Get attendance records
-   * Accessible by: Managers (for their team), HR roles, Employees (own records)
+   * Accessible by: Managers (for their team), HR roles, Payroll roles, Employees (own records)
    */
   @Get('attendance/records')
   @Roles(
@@ -335,6 +370,8 @@ export class TimeManagementController {
     Role.HR_MANAGER,
     Role.HR_ADMIN,
     Role.HR_EMPLOYEE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
     Role.SYSTEM_ADMIN,
   )
   async getAttendanceRecords(
@@ -343,8 +380,13 @@ export class TimeManagementController {
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ) {
-    // If employee is querying, default to their own records
-    const targetEmployeeId = employeeId || req.user.employeeId;
+    // Payroll officers and HR can query all records (no employeeId filter)
+    // Regular employees can only see their own records
+    const isPayrollOrHR = req.user.roles?.some((role: string) => 
+      ['Payroll Specialist', 'Payroll Manager', 'HR Manager', 'HR Admin', 'System Admin'].includes(role)
+    );
+    
+    const targetEmployeeId = isPayrollOrHR ? employeeId : (employeeId || req.user.employeeId);
 
     return this.timeManagementService.getAttendanceRecords(
       targetEmployeeId,
@@ -597,7 +639,6 @@ export class TimeManagementController {
   @Put('time-exceptions/:id/process')
   @Roles(
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_MANAGER,
     Role.HR_ADMIN,
     Role.SYSTEM_ADMIN,
@@ -614,10 +655,15 @@ export class TimeManagementController {
 
   /**
    * Attach a time exception to its attendance record and mark it approved for payroll processing
-   * Accessible by: HR Manager, HR Admin, System Admin
+   * Accessible by: Managers, HR roles, System Admin
    */
   @Post('time-exceptions/:id/attach')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Roles(
+    Role.DEPARTMENT_HEAD,
+    Role.HR_MANAGER,
+    Role.HR_ADMIN,
+    Role.SYSTEM_ADMIN,
+  )
   async attachTimeExceptionToAttendance(@Request() req, @Param('id') id: string) {
     const processorId = req.user?.employeeId;
     return this.timeManagementService.attachTimeExceptionToAttendance(id, processorId);
@@ -631,9 +677,9 @@ export class TimeManagementController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_MANAGER,
     Role.HR_ADMIN,
+    Role.PAYROLL_SPECIALIST,
     Role.SYSTEM_ADMIN,
   )
   async getTimeExceptions(
@@ -814,7 +860,7 @@ export class TimeManagementController {
    * Accessible by: HR Officer, Payroll Officer, HR roles
    */
   @Get('reports/overtime')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.PAYROLL_SPECIALIST, Role.SYSTEM_ADMIN)
   async generateOvertimeReport(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
@@ -830,7 +876,7 @@ export class TimeManagementController {
    * Accessible by: HR Officer, Payroll Officer, HR roles
    */
   @Get('reports/lateness')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.PAYROLL_SPECIALIST, Role.SYSTEM_ADMIN)
   async generateLatenessReport(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
@@ -903,5 +949,180 @@ export class TimeManagementController {
     const date = body?.date;
     const missingType = body?.missingType;
     return this.timeManagementService.triggerMissedPunchAlert(empId, date, missingType);
+  }
+
+  // ========== BR-TM-13: OFFLINE SYNC ENDPOINTS ==========
+
+  /**
+   * Queue offline punches from reconnected device
+   * Accessible by: System Admin, HR Admin (device sync)
+   */
+  @Post('offline-sync/queue')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async queueOfflinePunches(
+    @Body() body: { deviceId: string; punches: any[] }
+  ) {
+    this.offlineSyncService.queueBulkOfflinePunches(body.deviceId, body.punches);
+    return { message: 'Punches queued for sync', count: body.punches.length };
+  }
+
+  /**
+   * Get sync queue status
+   * Accessible by: System Admin, HR Admin
+   */
+  @Get('offline-sync/status')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN, Role.HR_MANAGER)
+  async getSyncStatus() {
+    return this.offlineSyncService.getQueueStatus();
+  }
+
+  /**
+   * Manually trigger sync for a specific device
+   * Accessible by: System Admin, HR Admin
+   */
+  @Post('offline-sync/sync-device/:deviceId')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async syncDevice(@Param('deviceId') deviceId: string) {
+    return this.offlineSyncService.syncDevice(deviceId);
+  }
+
+  /**
+   * Clear queue for a device
+   * Accessible by: System Admin only
+   */
+  @Post('offline-sync/clear-queue/:deviceId')
+  @Roles(Role.SYSTEM_ADMIN)
+  async clearQueue(@Param('deviceId') deviceId: string) {
+    const count = this.offlineSyncService.clearDeviceQueue(deviceId);
+    return { message: 'Queue cleared', count };
+  }
+
+  // ========== BR-TM-25: BACKUP & RETENTION ENDPOINTS ==========
+
+  /**
+   * Create manual backup
+   * Accessible by: System Admin, HR Admin
+   */
+  @Post('backup/create')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async createBackup() {
+    return this.backupRetentionService.createBackup();
+  }
+
+  /**
+   * List all available backups
+   * Accessible by: System Admin, HR Admin, HR Manager
+   */
+  @Get('backup/list')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN, Role.HR_MANAGER)
+  async listBackups() {
+    return this.backupRetentionService.listBackups();
+  }
+
+  /**
+   * Restore from backup
+   * Accessible by: System Admin only
+   */
+  @Post('backup/restore/:backupId')
+  @Roles(Role.SYSTEM_ADMIN)
+  async restoreBackup(@Param('backupId') backupId: string) {
+    return this.backupRetentionService.restoreBackup(backupId);
+  }
+
+  /**
+   * Clean up old backups manually
+   * Accessible by: System Admin, HR Admin
+   */
+  @Post('backup/cleanup')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async cleanupBackups() {
+    const deletedCount = await this.backupRetentionService.cleanupOldBackups();
+    return { message: 'Cleanup completed', deletedCount };
+  }
+
+  /**
+   * Get backup configuration
+   * Accessible by: System Admin, HR Admin
+   */
+  @Get('backup/config')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async getBackupConfig() {
+    return this.backupRetentionService.getConfig();
+  }
+
+  /**
+   * Update backup configuration
+   * Accessible by: System Admin only
+   */
+  @Put('backup/config')
+  @Roles(Role.SYSTEM_ADMIN)
+  async updateBackupConfig(@Body() config: any) {
+    this.backupRetentionService.updateConfig(config);
+    return { message: 'Configuration updated', config: this.backupRetentionService.getConfig() };
+  }
+
+  // ========== ESCALATION RULES (Stored in NotificationLog) ==========
+
+  /**
+   * Create escalation rule
+   * Accessible by: System Admin, HR Admin
+   */
+  @Post('escalation-rules')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async createEscalationRule(@Body() createDto: any) {
+    return this.timeManagementService.createEscalationRule(createDto);
+  }
+
+  /**
+   * Get all escalation rules
+   * Accessible by: System Admin, HR Admin, HR Manager
+   */
+  @Get('escalation-rules')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN, Role.HR_MANAGER)
+  async getAllEscalationRules() {
+    return this.timeManagementService.getAllEscalationRules();
+  }
+
+  /**
+   * Update escalation rule
+   * Accessible by: System Admin, HR Admin
+   */
+  @Put('escalation-rules/:id')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async updateEscalationRule(
+    @Param('id') id: string,
+    @Body() updateDto: any,
+  ) {
+    return this.timeManagementService.updateEscalationRule(id, updateDto);
+  }
+
+  /**
+   * Delete escalation rule
+   * Accessible by: System Admin, HR Admin
+   */
+  @Delete('escalation-rules/:id')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async deleteEscalationRule(@Param('id') id: string) {
+    return this.timeManagementService.deleteEscalationRule(id);
+  }
+
+  /**
+   * Get system settings
+   * Accessible by: System Admin, HR Admin, HR Manager
+   */
+  @Get('settings')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN, Role.HR_MANAGER)
+  async getSystemSettings() {
+    return this.timeManagementService.getSystemSettings();
+  }
+
+  /**
+   * Update system settings
+   * Accessible by: System Admin, HR Admin
+   */
+  @Put('settings')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_ADMIN)
+  async updateSystemSettings(@Body() settings: any) {
+    return this.timeManagementService.updateSystemSettings(settings);
   }
 }

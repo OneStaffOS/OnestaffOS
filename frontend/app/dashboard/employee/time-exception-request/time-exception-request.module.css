@@ -1,0 +1,52 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.formRow {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.label {
+  font-weight: 600;
+}
+.input, .select, .textarea {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+.textarea { min-height: 120px; }
+.help { font-size: 0.85rem; color: #6b7280; }
+.actions { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+.primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.secondary {
+  background: #f3f4f6;
+  color: #111827;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.error { color: #dc2626; font-weight: 600; }

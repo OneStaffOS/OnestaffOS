@@ -1,0 +1,200 @@
+/* Styles for Leader Notifications composer page */
+
+.container {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+}
+
+.container h1 {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.field input[type="text"],
+.field input[type="datetime-local"],
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.field textarea { 
+  min-height: 120px;
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.row > div {
+  flex: 1 1 240px;
+}
+
+.inlineLabel {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 0.9rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.field .smallInput {
+  padding: 8px 10px;
+  min-width: 180px;
+}
+
+.container .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.container button {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.container button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.container button.primary {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.12);
+}
+
+.container button.ghost {
+  background: transparent;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.container button.primary:hover {
+  transform: translateY(-1px);
+}
+
+.field select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #6b7280 50%), linear-gradient(135deg, #6b7280 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(1.2em + 2px), calc(100% - 13px) calc(1.2em + 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 36px;
+}
+
+/* date/time smaller input inline */
+.smallDate {
+  width: 220px;
+}
+
+@media (max-width: 640px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .container {
+    margin: 12px;
+    padding: 14px;
+  }
+}
+
+/* Clean up duplicate overrides and standardize field appearances */
+.row .field { margin-bottom: 0; }
+.row label { display: block; margin-bottom: 6px; }
+
+/* Inline grouping helpers used by the page */
+.inlineControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Date/time input polish - scope to local class to satisfy CSS modules */
+.smallDate {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  height: 38px;
+}
+
+/* Make selects and normal inputs visually consistent */
+.field select, .field input {
+  height: 40px;
+}
+
+/* Small select for role targeting when inline */
+.smallSelect {
+  min-width: 180px;
+  padding: 8px 10px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+/* Position IDs raw input helper */
+.positionInput {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Button look: ensure prominent primary appearance even without extra class */
+.container button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  background: #2563eb;
+  color: #fff;
+}
+
+.container button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37,99,235,0.12);
+}
+

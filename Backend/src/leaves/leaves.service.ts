@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { LeaveType, LeaveTypeDocument } from './models/leave-type.schema';
@@ -24,6 +24,8 @@ import { UploadAttachmentDto } from './dto/upload-attachment.dto';
 import { FlagIrregularPatternDto } from './dto/flag-irregular-pattern.dto';
 import { LeaveStatus } from './enums/leave-status.enum';
 import { RoundingRule } from './enums/rounding-rule.enum';
+import { EmployeeProfileService } from '../employee-profile/employee-profile.service';
+import { NotificationService } from '../notifications/notification.service';
 
 @Injectable()
 export class LeavesService {
@@ -36,6 +38,8 @@ export class LeavesService {
     @InjectModel(LeaveAdjustment.name) private leaveAdjustmentModel: Model<LeaveAdjustmentDocument>,
     @InjectModel(Calendar.name) private calendarModel: Model<CalendarDocument>,
     @InjectModel(Attachment.name) private attachmentModel: Model<AttachmentDocument>,
+    private employeeProfileService: EmployeeProfileService,
+    @Inject(forwardRef(() => NotificationService)) private notificationService: NotificationService,
   ) {}
 
   // ==================== PHASE 1: POLICY CONFIGURATION AND SETUP ====================
@@ -54,6 +58,35 @@ export class LeavesService {
    */
   async getAllLeaveCategories(): Promise<LeaveCategory[]> {
     return this.leaveCategoryModel.find().exec();
+  }
+
+  /**
+   * Update leave category
+   */
+  async updateLeaveCategory(id: string, updateDto: CreateLeaveCategoryDto): Promise<LeaveCategory> {
+    const category = await this.leaveCategoryModel.findById(id).exec();
+    if (!category) {
+      throw new NotFoundException(`Leave category with ID ${id} not found`);
+    }
+    Object.assign(category, updateDto);
+    return category.save();
+  }
+
+  /**
+   * Delete leave category
+   */
+  async deleteLeaveCategory(id: string): Promise<{ deleted: boolean }> {
+    // Check if any leave types use this category
+    const typesUsingCategory = await this.leaveTypeModel.findOne({ categoryId: new Types.ObjectId(id) }).exec();
+    if (typesUsingCategory) {
+      throw new BadRequestException('Cannot delete category: it is being used by one or more leave types');
+    }
+
+    const result = await this.leaveCategoryModel.findByIdAndDelete(id).exec();
+    if (!result) {
+      throw new NotFoundException(`Leave category with ID ${id} not found`);
+    }
+    return { deleted: true };
   }
 
   /**
@@ -92,6 +125,53 @@ export class LeavesService {
   }
 
   /**
+   * Update leave type
+   */
+  async updateLeaveType(id: string, updateDto: CreateLeaveTypeDto): Promise<LeaveType> {
+    const leaveType = await this.leaveTypeModel.findById(id).exec();
+    if (!leaveType) {
+      throw new NotFoundException(`Leave type with ID ${id} not found`);
+    }
+
+    // Check if code is being changed and if new code already exists
+    if (updateDto.code && updateDto.code !== leaveType.code) {
+      const existingType = await this.leaveTypeModel.findOne({ code: updateDto.code }).exec();
+      if (existingType) {
+        throw new BadRequestException(`Leave type with code ${updateDto.code} already exists`);
+      }
+    }
+
+    Object.assign(leaveType, {
+      ...updateDto,
+      categoryId: updateDto.categoryId ? new Types.ObjectId(updateDto.categoryId) : leaveType.categoryId,
+    });
+    return leaveType.save();
+  }
+
+  /**
+   * Delete leave type
+   */
+  async deleteLeaveType(id: string): Promise<{ deleted: boolean }> {
+    // Check if any policies use this leave type
+    const policiesUsingType = await this.leavePolicyModel.findOne({ leaveTypeId: new Types.ObjectId(id) }).exec();
+    if (policiesUsingType) {
+      throw new BadRequestException('Cannot delete leave type: it has associated policies');
+    }
+
+    // Check if any entitlements use this leave type
+    const entitlementsUsingType = await this.leaveEntitlementModel.findOne({ leaveTypeId: new Types.ObjectId(id) }).exec();
+    if (entitlementsUsingType) {
+      throw new BadRequestException('Cannot delete leave type: it has associated entitlements');
+    }
+
+    const result = await this.leaveTypeModel.findByIdAndDelete(id).exec();
+    if (!result) {
+      throw new NotFoundException(`Leave type with ID ${id} not found`);
+    }
+    return { deleted: true };
+  }
+
+  /**
    * REQ-003, REQ-009: Configure leave settings
    * BR 9, 10, 20, 42
    */
@@ -112,8 +192,25 @@ export class LeavesService {
       throw new NotFoundException(`Leave policy with ID ${id} not found`);
     }
 
-    Object.assign(policy, updateDto);
+    // Convert leaveTypeId to ObjectId if provided
+    const updateData = {
+      ...updateDto,
+      ...(updateDto.leaveTypeId && { leaveTypeId: new Types.ObjectId(updateDto.leaveTypeId) }),
+    };
+
+    Object.assign(policy, updateData);
     return policy.save();
+  }
+
+  /**
+   * Delete leave policy
+   */
+  async deleteLeavePolicy(id: string): Promise<{ deleted: boolean }> {
+    const result = await this.leavePolicyModel.findByIdAndDelete(id).exec();
+    if (!result) {
+      throw new NotFoundException(`Leave policy with ID ${id} not found`);
+    }
+    return { deleted: true };
   }
 
   /**
@@ -155,19 +252,138 @@ export class LeavesService {
   }
 
   /**
+   * Bulk assign entitlements to employees based on configured policies
+   * @param policyId - Optional: Assign only for specific policy
+   * @param positionId - Optional: Filter employees by position
+   * @param contractType - Optional: Filter employees by contract type
+   */
+  async bulkAssignEntitlements(
+    policyId?: string,
+    positionId?: string,
+    contractType?: string,
+  ): Promise<{ created: number; skipped: number; errors: string[] }> {
+    // Get policies - either specific one or all
+    let policies;
+    if (policyId) {
+      const policy = await this.leavePolicyModel.findById(policyId).populate('leaveTypeId').exec();
+      policies = policy ? [policy] : [];
+    } else {
+      policies = await this.leavePolicyModel.find().populate('leaveTypeId').exec();
+    }
+
+    const allEmployees = await this.employeeProfileService.getAllEmployeeProfiles();
+    
+    // Filter employees if position or contract type specified
+    let employees = allEmployees;
+    if (positionId) {
+      employees = employees.filter((emp: any) => {
+        const primaryPos = emp.primaryPositionId;
+        const empPositionId = primaryPos?._id?.toString() || primaryPos?.toString() || '';
+        return empPositionId === positionId;
+      });
+    }
+    if (contractType) {
+      employees = employees.filter((emp: any) => emp.contractType === contractType);
+    }
+    
+    let created = 0;
+    let skipped = 0;
+    const errors: string[] = [];
+
+    for (const policy of policies) {
+      const leaveTypeId = (policy.leaveTypeId as any)._id || policy.leaveTypeId;
+      const yearlyEntitlement = policy.yearlyRate || 0;
+
+      for (const employee of employees) {
+        const employeeId = (employee as any)._id;
+        try {
+          // Check eligibility based on policy rules (only if not filtering manually)
+          const eligibility = policy.eligibility || {};
+          
+          // Check position eligibility - use primaryPositionId from employee profile
+          // Skip this check if we're already filtering by position
+          if (!positionId && eligibility.positionsAllowed && eligibility.positionsAllowed.length > 0) {
+            const primaryPos = (employee as any).primaryPositionId;
+            const employeePositionId = primaryPos?._id?.toString() || primaryPos?.toString() || '';
+            if (!eligibility.positionsAllowed.includes(employeePositionId)) {
+              skipped++;
+              continue;
+            }
+          }
+
+          // Check contract type eligibility
+          // Skip this check if we're already filtering by contract type
+          if (!contractType && eligibility.contractTypesAllowed && eligibility.contractTypesAllowed.length > 0) {
+            const employeeContractType = (employee as any).contractType || '';
+            if (!eligibility.contractTypesAllowed.includes(employeeContractType)) {
+              skipped++;
+              continue;
+            }
+          }
+
+          // Check if entitlement already exists
+          const existingEntitlement = await this.leaveEntitlementModel.findOne({
+            employeeId: new Types.ObjectId(employeeId.toString()),
+            leaveTypeId: new Types.ObjectId(leaveTypeId.toString()),
+          }).exec();
+
+          if (existingEntitlement) {
+            // Update existing entitlement
+            existingEntitlement.yearlyEntitlement = yearlyEntitlement;
+            existingEntitlement.remaining = yearlyEntitlement + (existingEntitlement.carryForward || 0) - (existingEntitlement.taken || 0);
+            await existingEntitlement.save();
+            skipped++;
+          } else {
+            // Create new entitlement
+            const entitlement = new this.leaveEntitlementModel({
+              employeeId: new Types.ObjectId(employeeId.toString()),
+              leaveTypeId: new Types.ObjectId(leaveTypeId.toString()),
+              yearlyEntitlement: yearlyEntitlement,
+              carryForward: 0,
+              remaining: yearlyEntitlement,
+            });
+            await entitlement.save();
+            created++;
+          }
+        } catch (err: any) {
+          errors.push(`Failed to assign entitlement to employee ${employeeId}: ${err.message}`);
+        }
+      }
+    }
+
+    return { created, skipped, errors };
+  }
+
+  /**
    * REQ-010: Configure calendar & blocked days
    * BR 33, 55
+   * Creates or updates a calendar for a given year
    */
   async createCalendar(createDto: CreateCalendarDto): Promise<Calendar> {
     const existingCalendar = await this.calendarModel.findOne({ year: createDto.year }).exec();
+    
+    // Convert blocked periods with string dates to Date objects
+    const blockedPeriods = (createDto.blockedPeriods || []).map(bp => ({
+      from: new Date(bp.from),
+      to: new Date(bp.to),
+      reason: bp.reason,
+    }));
+
+    // Convert holiday IDs to ObjectIds
+    const holidayIds = (createDto.holidays || []).map(id => new Types.ObjectId(id));
+
     if (existingCalendar) {
-      throw new BadRequestException(`Calendar for year ${createDto.year} already exists`);
+      // Update existing calendar
+      existingCalendar.holidays = holidayIds;
+      existingCalendar.blockedPeriods = blockedPeriods;
+      return existingCalendar.save();
     }
 
+    // Create new calendar
     const calendar = new this.calendarModel({
       year: createDto.year,
-      holidays: createDto.holidays?.map(id => new Types.ObjectId(id)) || [],
-      blockedPeriods: createDto.blockedPeriods || [],
+      holidays: holidayIds,
+      blockedPeriods: blockedPeriods,
     });
     return calendar.save();
   }
@@ -185,6 +401,9 @@ export class LeavesService {
 
   // ==================== PHASE 2: LEAVE REQUEST MANAGEMENT & WORKFLOW ====================
 
+  // Static HR Manager Position ID
+  private readonly HR_MANAGER_POSITION_ID = '6926fa8ecec472d756f0646a';
+
   /**
    * REQ-015: Submit new leave request
    * BR 25, 29, 31
@@ -200,20 +419,50 @@ export class LeavesService {
     }
 
     // Get employee's entitlement
-    const entitlement = await this.leaveEntitlementModel
+    let entitlement = await this.leaveEntitlementModel
       .findOne({ employeeId, leaveTypeId })
       .exec();
 
+    // Auto-create entitlement if not found and policy exists
     if (!entitlement) {
-      throw new NotFoundException('Leave entitlement not found for this employee and leave type');
+      const policy = await this.leavePolicyModel.findOne({ leaveTypeId }).exec();
+      if (policy) {
+        // Create entitlement based on policy
+        const yearlyEntitlement = policy.yearlyRate || 0;
+        entitlement = new this.leaveEntitlementModel({
+          employeeId,
+          leaveTypeId,
+          yearlyEntitlement,
+          carryForward: 0,
+          remaining: yearlyEntitlement,
+          pending: 0,
+          used: 0,
+        });
+        await entitlement.save();
+      } else {
+        // No policy exists - create with zero entitlement for non-deductible types
+        if (!leaveType.deductible) {
+          entitlement = new this.leaveEntitlementModel({
+            employeeId,
+            leaveTypeId,
+            yearlyEntitlement: 0,
+            carryForward: 0,
+            remaining: 999, // Unlimited for non-deductible leave
+            pending: 0,
+            used: 0,
+          });
+          await entitlement.save();
+        } else {
+          throw new NotFoundException(
+            'Leave entitlement not found for this employee and leave type. Please contact HR to set up your leave entitlement.',
+          );
+        }
+      }
     }
 
-    // BR 31: Check available balance
-    if (leaveType.deductible && createDto.durationDays > entitlement.remaining) {
-      throw new BadRequestException(
-        `Insufficient leave balance. Available: ${entitlement.remaining} days, Requested: ${createDto.durationDays} days`,
-      );
-    }
+    // BR 31: Allow leaves to exceed balance
+    // If paid leave exceeds balance, extra days will be treated as unpaid during payroll
+    // No balance check needed here
 
     // BR 31: Check for overlapping leaves
     const overlappingLeaves = await this.leaveRequestModel
@@ -234,6 +483,9 @@ export class LeavesService {
     }
 
     // Create leave request
+    // The approvalFlow uses simple role names. The system determines who can approve:
+    // - Manager: The employee who holds the supervisorPositionId of the requesting employee
+    // - HR: The employee who holds the HR Manager Position (6926fa8ecec472d756f0646a)
     const leaveRequest = new this.leaveRequestModel({
       employeeId,
       leaveTypeId,
@@ -259,9 +511,9 @@ export class LeavesService {
 
     const saved = await leaveRequest.save();
 
-    // BR 32: Update pending balance
+    // BR 32: Update pending balance (allow negative balance)
     entitlement.pending += createDto.durationDays;
-    entitlement.remaining -= createDto.durationDays;
+    entitlement.remaining -= createDto.durationDays; // Can go negative
     await entitlement.save();
 
     return saved;
@@ -360,29 +612,41 @@ export class LeavesService {
 
   /**
    * REQ-021: Manager approval
-   * BR 25
+   * BR 25 - Manager approves only their own step (first step - index 0)
    */
   async approveLeaveRequest(requestId: string, approvalDto: ApproveLeaveDto): Promise<LeaveRequest> {
-    const leaveRequest = await this.leaveRequestModel.findById(requestId).exec();
+    const leaveRequest = await this.leaveRequestModel.findById(requestId).populate('employeeId').exec();
     if (!leaveRequest) {
       throw new NotFoundException('Leave request not found');
     }
 
-    // Find the approval step for this role
-    const approvalStep = leaveRequest.approvalFlow.find(
-      step => step.role === approvalDto.approverRole && step.status === 'pending',
-    );
-
-    if (!approvalStep) {
-      throw new BadRequestException(`No pending approval found for role ${approvalDto.approverRole}`);
+    // Authorization: Check if approver is in the same department as the employee
+    const approverProfile = await this.employeeProfileService.getEmployeeProfileById(approvalDto.approverId);
+    const employeeDeptId = (leaveRequest.employeeId as any)?.primaryDepartmentId?.toString();
+    const approverDeptId = (approverProfile as any)?.primaryDepartmentId?._id?.toString() || 
+                           (approverProfile as any)?.primaryDepartmentId?.toString();
+    
+    if (employeeDeptId && approverDeptId && employeeDeptId !== approverDeptId) {
+      throw new BadRequestException('You can only approve leave requests from employees in your department');
     }
 
-    // Update approval step
-    approvalStep.status = 'approved';
-    approvalStep.decidedBy = new Types.ObjectId(approvalDto.approverId);
-    approvalStep.decidedAt = new Date();
+    // Manager can only approve the FIRST step (index 0) - their own manager approval
+    const managerStep = leaveRequest.approvalFlow[0];
+    
+    if (!managerStep) {
+      throw new BadRequestException('No approval step found for this leave request');
+    }
 
-    // Check if all approvals are complete
+    if (managerStep.status !== 'pending') {
+      throw new BadRequestException('Manager approval has already been processed');
+    }
+
+    // Update only the manager's approval step (first step)
+    managerStep.status = 'approved';
+    managerStep.decidedBy = new Types.ObjectId(approvalDto.approverId);
+    managerStep.decidedAt = new Date();
+
+    // Check if all approvals are complete (both manager and HR)
     const allApproved = leaveRequest.approvalFlow.every(step => step.status === 'approved');
 
     if (allApproved) {
@@ -408,26 +672,41 @@ export class LeavesService {
 
   /**
    * REQ-022: Manager rejection
-   * BR 25
+   * BR 25 - Manager rejects only their own step (first step - index 0)
    */
   async rejectLeaveRequest(requestId: string, rejectionDto: RejectLeaveDto): Promise<LeaveRequest> {
-    const leaveRequest = await this.leaveRequestModel.findById(requestId).exec();
+    const leaveRequest = await this.leaveRequestModel.findById(requestId).populate('employeeId').exec();
     if (!leaveRequest) {
       throw new NotFoundException('Leave request not found');
     }
 
-    const approvalStep = leaveRequest.approvalFlow.find(
-      step => step.role === rejectionDto.approverRole && step.status === 'pending',
-    );
-
-    if (!approvalStep) {
-      throw new BadRequestException(`No pending approval found for role ${rejectionDto.approverRole}`);
+    // Authorization: Check if approver is in the same department as the employee
+    const approverProfile = await this.employeeProfileService.getEmployeeProfileById(rejectionDto.approverId);
+    const employeeDeptId = (leaveRequest.employeeId as any)?.primaryDepartmentId?.toString();
+    const approverDeptId = (approverProfile as any)?.primaryDepartmentId?._id?.toString() || 
+                           (approverProfile as any)?.primaryDepartmentId?.toString();
+    
+    if (employeeDeptId && approverDeptId && employeeDeptId !== approverDeptId) {
+      throw new BadRequestException('You can only reject leave requests from employees in your department');
     }
 
-    approvalStep.status = 'rejected';
-    approvalStep.decidedBy = new Types.ObjectId(rejectionDto.approverId);
-    approvalStep.decidedAt = new Date();
+    // Manager can only reject the FIRST step (index 0) - their own manager approval
+    const managerStep = leaveRequest.approvalFlow[0];
+    
+    if (!managerStep) {
+      throw new BadRequestException('No approval step found for this leave request');
+    }
 
+    if (managerStep.status !== 'pending') {
+      throw new BadRequestException('Manager approval has already been processed');
+    }
+
+    // Update only the manager's step (first step)
+    managerStep.status = 'rejected';
+    managerStep.decidedBy = new Types.ObjectId(rejectionDto.approverId);
+    managerStep.decidedAt = new Date();
+
+    // Any rejection immediately rejects the entire request
     leaveRequest.status = LeaveStatus.REJECTED;
 
     const saved = await leaveRequest.save();
@@ -447,6 +726,43 @@ export class LeavesService {
     }
 
     return saved;
+  }
+
+  /**
+   * REQ-020: Get leave requests by department for manager review
+   * Filters requests where the employee belongs to the specified department
+   */
+  async getLeaveRequestsByDepartment(departmentId: string, status?: LeaveStatus): Promise<LeaveRequest[]> {
+    // Get all employees and filter by department
+    const allEmployees = await this.employeeProfileService.getAllEmployeeProfiles();
+    const employeesInDept = allEmployees.filter(emp => {
+      const empDeptId = (emp as any).primaryDepartmentId?._id?.toString() || (emp as any).primaryDepartmentId?.toString();
+      return empDeptId === departmentId;
+    });
+    const employeeIds = employeesInDept.map(emp => (emp as any)._id);
+
+    if (employeeIds.length === 0) {
+      return [];
+    }
+
+    const query: any = {
+      employeeId: { $in: employeeIds },
+    };
+
+    // Default to pending status if not specified
+    if (status) {
+      query.status = status;
+    } else {
+      query.status = LeaveStatus.PENDING;
+    }
+
+    return this.leaveRequestModel
+      .find(query)
+      .populate('employeeId')
+      .populate('leaveTypeId')
+      .populate('attachmentId')
+      .sort({ createdAt: -1 })
+      .exec();
   }
 
   /**
@@ -708,6 +1024,24 @@ export class LeavesService {
   }
 
   /**
+   * REQ-016: Upload attachment with GridFS file
+   */
+  async uploadAttachmentWithGridFS(data: {
+    originalName: string;
+    fileType: string;
+    size: number;
+    gridFsFileId: string;
+  }): Promise<Attachment> {
+    const attachment = new this.attachmentModel({
+      originalName: data.originalName,
+      fileType: data.fileType,
+      size: data.size,
+      gridFsFileId: new Types.ObjectId(data.gridFsFileId),
+    });
+    return attachment.save();
+  }
+
+  /**
    * Get attachment by ID
    */
   async getAttachmentById(id: string): Promise<Attachment> {
@@ -716,6 +1050,422 @@ export class LeavesService {
       throw new NotFoundException('Attachment not found');
     }
     return attachment;
+  }
+
+  // ==================== PHASE 4: HR FINALIZATION AND ADVANCED OPERATIONS ====================
+
+  /**
+   * REQ-025: HR Finalize Approved Requests
+   * HR Admin reviews for compliance with HR leaves' guidelines and finalizes
+   * This updates the HR step (index 1) and triggers balance update + notifications
+   */
+  async hrFinalizeLeaveRequest(
+    requestId: string,
+    hrUserId: string,
+    comments?: string,
+  ): Promise<LeaveRequest> {
+    const leaveRequest = await this.leaveRequestModel
+      .findById(requestId)
+      .populate('employeeId')
+      .populate('leaveTypeId')
+      .exec();
+
+    if (!leaveRequest) {
+      throw new NotFoundException('Leave request not found');
+    }
+
+    // Check if manager has already approved (first step must be approved)
+    const managerStep = leaveRequest.approvalFlow[0];
+    if (!managerStep || managerStep.status !== 'approved') {
+      throw new BadRequestException('Manager approval is required before HR finalization');
+    }
+
+    // Check HR step
+    const hrStep = leaveRequest.approvalFlow[1];
+    if (!hrStep) {
+      throw new BadRequestException('No HR approval step found for this leave request');
+    }
+
+    if (hrStep.status !== 'pending') {
+      throw new BadRequestException('HR approval has already been processed');
+    }
+
+    // Update HR step
+    hrStep.status = 'approved';
+    hrStep.decidedBy = new Types.ObjectId(hrUserId);
+    hrStep.decidedAt = new Date();
+
+    // Mark overall request as approved
+    leaveRequest.status = LeaveStatus.APPROVED;
+
+    const saved = await leaveRequest.save();
+
+    // REQ-029: Update balance - move from pending to taken
+    const entitlement = await this.leaveEntitlementModel
+      .findOne({
+        employeeId: leaveRequest.employeeId,
+        leaveTypeId: leaveRequest.leaveTypeId,
+      })
+      .exec();
+
+    if (entitlement) {
+      entitlement.pending -= leaveRequest.durationDays;
+      entitlement.taken += leaveRequest.durationDays;
+      await entitlement.save();
+    }
+
+    // REQ-030: Send finalization notifications
+    await this.sendFinalizationNotifications(leaveRequest, hrUserId, 'approved', comments);
+
+    return saved;
+  }
+
+  /**
+   * REQ-026: HR Override Manager Decision
+   * HR can escalate employee requests and override managers' decisions if needed
+   * System must not allow negative vacation balances unless explicitly permitted by policy or HR override
+   */
+  async hrOverrideManagerDecision(
+    requestId: string,
+    hrUserId: string,
+    newDecision: 'approved' | 'rejected',
+    reason: string,
+    allowNegativeBalance?: boolean,
+  ): Promise<LeaveRequest> {
+    const leaveRequest = await this.leaveRequestModel
+      .findById(requestId)
+      .populate('employeeId')
+      .populate('leaveTypeId')
+      .exec();
+
+    if (!leaveRequest) {
+      throw new NotFoundException('Leave request not found');
+    }
+
+    if (!reason || reason.trim().length === 0) {
+      throw new BadRequestException('Override reason is required');
+    }
+
+    const previousStatus = leaveRequest.status;
+    const previousManagerDecision = leaveRequest.approvalFlow[0]?.status;
+
+    // Balance check removed - all leaves allowed to exceed balance
+    // If paid leave exceeds balance, payroll will treat extra days as unpaid
+
+    // Update both approval steps with HR override
+    leaveRequest.approvalFlow[0] = {
+      role: 'Manager',
+      status: newDecision,
+      decidedBy: new Types.ObjectId(hrUserId),
+      decidedAt: new Date(),
+    };
+
+    leaveRequest.approvalFlow[1] = {
+      role: 'HR',
+      status: newDecision,
+      decidedBy: new Types.ObjectId(hrUserId),
+      decidedAt: new Date(),
+    };
+
+    // Update overall status
+    leaveRequest.status = newDecision === 'approved' ? LeaveStatus.APPROVED : LeaveStatus.REJECTED;
+
+    const saved = await leaveRequest.save();
+
+    // Update entitlement based on new decision
+    const entitlement = await this.leaveEntitlementModel
+      .findOne({
+        employeeId: leaveRequest.employeeId,
+        leaveTypeId: leaveRequest.leaveTypeId,
+      })
+      .exec();
+
+    if (entitlement) {
+      if (previousStatus === LeaveStatus.PENDING) {
+        if (newDecision === 'approved') {
+          // Move from pending to taken
+          entitlement.pending -= leaveRequest.durationDays;
+          entitlement.taken += leaveRequest.durationDays;
+        } else {
+          // Return to remaining
+          entitlement.pending -= leaveRequest.durationDays;
+          entitlement.remaining += leaveRequest.durationDays;
+        }
+      } else if (previousStatus === LeaveStatus.REJECTED && newDecision === 'approved') {
+        // Was rejected, now approving - deduct from remaining
+        entitlement.remaining -= leaveRequest.durationDays;
+        entitlement.taken += leaveRequest.durationDays;
+      } else if (previousStatus === LeaveStatus.APPROVED && newDecision === 'rejected') {
+        // Was approved, now rejecting - return to remaining
+        entitlement.taken -= leaveRequest.durationDays;
+        entitlement.remaining += leaveRequest.durationDays;
+      }
+      await entitlement.save();
+    }
+
+    // REQ-030: Send notifications about override
+    await this.sendFinalizationNotifications(leaveRequest, hrUserId, newDecision, `HR Override: ${reason}`);
+
+    return saved;
+  }
+
+  /**
+   * REQ-027: Bulk Request Processing
+   * Process multiple leave requests at once for efficient management
+   */
+  async bulkProcessLeaveRequests(
+    requestIds: string[],
+    action: 'approve' | 'reject',
+    hrUserId: string,
+    reason?: string,
+  ): Promise<{ processed: number; failed: string[]; results: any[] }> {
+    if (!requestIds || requestIds.length === 0) {
+      throw new BadRequestException('No request IDs provided');
+    }
+
+    if (action === 'reject' && (!reason || reason.trim().length === 0)) {
+      throw new BadRequestException('Rejection reason is required for bulk rejection');
+    }
+
+    const results: any[] = [];
+    const failed: string[] = [];
+    let processed = 0;
+
+    for (const requestId of requestIds) {
+      try {
+        let result;
+        if (action === 'approve') {
+          result = await this.hrFinalizeLeaveRequest(requestId, hrUserId, reason);
+        } else {
+          result = await this.hrRejectLeaveRequest(requestId, hrUserId, reason!);
+        }
+        results.push({ requestId, status: 'success', data: result });
+        processed++;
+      } catch (error: any) {
+        results.push({ requestId, status: 'failed', error: error.message });
+        failed.push(requestId);
+      }
+    }
+
+    return { processed, failed, results };
+  }
+
+  /**
+   * HR Reject Leave Request (for bulk processing)
+   */
+  async hrRejectLeaveRequest(
+    requestId: string,
+    hrUserId: string,
+    reason: string,
+  ): Promise<LeaveRequest> {
+    const leaveRequest = await this.leaveRequestModel
+      .findById(requestId)
+      .populate('employeeId')
+      .populate('leaveTypeId')
+      .exec();
+
+    if (!leaveRequest) {
+      throw new NotFoundException('Leave request not found');
+    }
+
+    // Update HR step
+    const hrStep = leaveRequest.approvalFlow[1];
+    if (hrStep) {
+      hrStep.status = 'rejected';
+      hrStep.decidedBy = new Types.ObjectId(hrUserId);
+      hrStep.decidedAt = new Date();
+    }
+
+    // Mark overall request as rejected
+    const previousStatus = leaveRequest.status;
+    leaveRequest.status = LeaveStatus.REJECTED;
+
+    const saved = await leaveRequest.save();
+
+    // Return days to balance
+    const entitlement = await this.leaveEntitlementModel
+      .findOne({
+        employeeId: leaveRequest.employeeId,
+        leaveTypeId: leaveRequest.leaveTypeId,
+      })
+      .exec();
+
+    if (entitlement && previousStatus === LeaveStatus.PENDING) {
+      entitlement.pending -= leaveRequest.durationDays;
+      entitlement.remaining += leaveRequest.durationDays;
+      await entitlement.save();
+    }
+
+    // Send notifications
+    await this.sendFinalizationNotifications(leaveRequest, hrUserId, 'rejected', reason);
+
+    return saved;
+  }
+
+  /**
+   * REQ-028: Verify Medical Documents
+   * Get leave requests requiring medical document verification
+   * Medical certificate required for sick leave > 1 day
+   */
+  async getRequestsRequiringMedicalVerification(): Promise<LeaveRequest[]> {
+    // Get sick leave type(s)
+    const sickLeaveTypes = await this.leaveTypeModel
+      .find({ code: { $regex: /sick/i } })
+      .exec();
+
+    const sickLeaveTypeIds = sickLeaveTypes.map(t => t._id);
+
+    // Find pending requests with sick leave > 1 day
+    return this.leaveRequestModel
+      .find({
+        leaveTypeId: { $in: sickLeaveTypeIds },
+        durationDays: { $gt: 1 },
+        status: LeaveStatus.PENDING,
+      })
+      .populate({
+        path: 'employeeId',
+        populate: { path: 'primaryDepartmentId', select: 'name' }
+      })
+      .populate('leaveTypeId')
+      .populate('attachmentId')
+      .sort({ createdAt: -1 })
+      .exec();
+  }
+
+  /**
+   * REQ-028: Verify Medical Document for a specific request
+   */
+  async verifyMedicalDocument(
+    requestId: string,
+    hrUserId: string,
+    verified: boolean,
+    notes?: string,
+  ): Promise<LeaveRequest> {
+    const leaveRequest = await this.leaveRequestModel.findById(requestId).exec();
+
+    if (!leaveRequest) {
+      throw new NotFoundException('Leave request not found');
+    }
+
+    if (!leaveRequest.attachmentId) {
+      throw new BadRequestException('No medical document attached to this request');
+    }
+
+    // If not verified, reject the request
+    if (!verified) {
+      return this.hrRejectLeaveRequest(
+        requestId,
+        hrUserId,
+        notes || 'Medical document verification failed',
+      );
+    }
+
+    // Document verified - can proceed with normal approval flow
+    return leaveRequest;
+  }
+
+  /**
+   * Get all leave requests pending HR finalization
+   * (Manager approved, HR pending)
+   */
+  async getRequestsPendingHRFinalization(): Promise<LeaveRequest[]> {
+    return this.leaveRequestModel
+      .find({
+        status: LeaveStatus.PENDING,
+        'approvalFlow.0.status': 'approved',
+        'approvalFlow.1.status': 'pending',
+      })
+      .populate({
+        path: 'employeeId',
+        populate: { path: 'primaryDepartmentId', select: 'name' }
+      })
+      .populate('leaveTypeId')
+      .populate('attachmentId')
+      .sort({ createdAt: -1 })
+      .exec();
+  }
+
+  /**
+   * Get requests available for HR override
+   * (Rejected by manager OR already processed)
+   */
+  async getRequestsForOverride(): Promise<LeaveRequest[]> {
+    return this.leaveRequestModel
+      .find({
+        $or: [
+          { status: LeaveStatus.REJECTED },
+          { 'approvalFlow.0.status': 'rejected' },
+          { status: LeaveStatus.APPROVED },
+        ],
+      })
+      .populate({
+        path: 'employeeId',
+        populate: { path: 'primaryDepartmentId', select: 'name' }
+      })
+      .populate('leaveTypeId')
+      .populate('attachmentId')
+      .sort({ createdAt: -1 })
+      .exec();
+  }
+
+  /**
+   * REQ-030: Send finalization notifications
+   * Notify employee, manager, and attendance coordinator
+   */
+  private async sendFinalizationNotifications(
+    leaveRequest: any,
+    hrUserId: string,
+    decision: 'approved' | 'rejected',
+    comments?: string,
+  ): Promise<void> {
+    try {
+      const employee = leaveRequest.employeeId;
+      const leaveType = leaveRequest.leaveTypeId;
+      
+      const employeeId = employee?._id?.toString() || employee?.toString();
+      const employeeName = employee?.firstName && employee?.lastName 
+        ? `${employee.firstName} ${employee.lastName}` 
+        : 'Employee';
+      const leaveTypeName = leaveType?.name || 'Leave';
+
+      const dateFrom = new Date(leaveRequest.dates.from).toLocaleDateString();
+      const dateTo = new Date(leaveRequest.dates.to).toLocaleDateString();
+
+      const title = decision === 'approved' 
+        ? `✅ Leave Request Finalized - ${leaveTypeName}` 
+        : `❌ Leave Request Rejected - ${leaveTypeName}`;
+
+      const message = decision === 'approved'
+        ? `Your ${leaveTypeName} request from ${dateFrom} to ${dateTo} (${leaveRequest.durationDays} days) has been finalized and approved by HR. Your leave balance has been updated.${comments ? `\n\nComments: ${comments}` : ''}`
+        : `Your ${leaveTypeName} request from ${dateFrom} to ${dateTo} (${leaveRequest.durationDays} days) has been rejected.${comments ? `\n\nReason: ${comments}` : ''}`;
+
+      // Notify the employee
+      await this.notificationService.createNotification(hrUserId, {
+        title,
+        message,
+        targetEmployeeIds: [employeeId],
+      });
+
+      // Get the employee's manager (supervisor) for notification
+      if (employee?.supervisorPositionId) {
+        const allEmployees = await this.employeeProfileService.getAllEmployeeProfiles();
+        const manager = allEmployees.find(
+          (emp: any) => emp.primaryPositionId?._id?.toString() === employee.supervisorPositionId?.toString() ||
+                        emp.primaryPositionId?.toString() === employee.supervisorPositionId?.toString()
+        );
+
+        if (manager) {
+          await this.notificationService.createNotification(hrUserId, {
+            title: `Leave Request ${decision === 'approved' ? 'Finalized' : 'Rejected'} - ${employeeName}`,
+            message: `${employeeName}'s ${leaveTypeName} request from ${dateFrom} to ${dateTo} has been ${decision} by HR.${comments ? `\n\nComments: ${comments}` : ''}`,
+            targetEmployeeIds: [(manager as any)._id.toString()],
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to send finalization notifications:', error);
+      // Don't throw - notifications are not critical for the main operation
+    }
   }
 
   // ==================== HELPER METHODS ====================

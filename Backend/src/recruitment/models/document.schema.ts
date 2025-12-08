@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import { DocumentType } from '../enums/document-type.enum';
 
 @Schema({ timestamps: true })
@@ -15,7 +16,17 @@ export class Document {
   type: DocumentType;
 
   @Prop({ required: true })
-  filePath: string;
+  fileName: string;
+
+  // GridFS file ID reference
+  @Prop({ required: true, type: Types.ObjectId })
+  gridFsFileId: ObjectId;
+
+  @Prop({ required: true })
+  mimeType: string;
+
+  @Prop({ required: true })
+  fileSize: number;
 
   @Prop()
   uploadedAt: Date;

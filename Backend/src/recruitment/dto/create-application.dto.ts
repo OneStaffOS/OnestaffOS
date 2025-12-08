@@ -14,4 +14,12 @@ export class CreateApplicationDto {
   @IsString()
   @IsOptional()
   coverLetter?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  dataProcessingConsent?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  backgroundCheckConsent?: boolean;
 }

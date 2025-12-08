@@ -61,7 +61,6 @@ export class AuthController {
         user: result.payload,
       };
     } catch (error) {
-        console.log(error)
       // Handle specific errors
       if (error instanceof HttpException) {
         throw error; // Pass through known exceptions
@@ -96,7 +95,7 @@ export class AuthController {
     return { ok: true, message: 'Logged out' };
   }
 
-  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.DEPARTMENT_HEAD, Role.HR_EMPLOYEE, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.SYSTEM_ADMIN)
+  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.DEPARTMENT_HEAD, Role.HR_EMPLOYEE, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.SYSTEM_ADMIN,Role.PAYROLL_MANAGER,Role.PAYROLL_SPECIALIST,Role.FINANCE_STAFF,Role.LEGAL_POLICY_ADMIN,Role.RECRUITER,Role.JOB_CANDIDATE)
   @UseGuards(authorizationGaurd)
   @Get('me')
   @HttpCode(HttpStatus.OK)

@@ -1,0 +1,46 @@
+.container {
+  padding: 18px;
+  background: var(--background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.title { font-size:1.15rem; font-weight:700 }
+
+.controls { display:flex; gap:8px; align-items:center }
+
+.list { margin-top:12px; display:grid; gap:10px }
+
+.card { padding:12px; background:#fff; border:1px solid #eef2f7; border-radius:8px; display:flex; justify-content:space-between; align-items:flex-start }
+
+.meta { color:var(--accent); font-size:0.9rem }
+
+.actions { display:flex; gap:8px }
+
+.btn { padding:6px 10px; border-radius:6px; border:none; cursor:pointer }
+.btnPrimary { background:var(--primary); color:white }
+.btnDanger { background:var(--error); color:white }
+.small { padding:4px 8px; font-size:0.85rem }
+
+.formGrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:800px }
+.field { display:flex; flex-direction:column; gap:6px }
+.label { font-size:0.85rem; color:#333 }
+.input, .select { padding:8px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; color:inherit }
+
+/* Improve native select appearance and reduce heavy OS shadowing */
+.select {
+  -webkit-appearance: menulist-button;
+  appearance: menulist-button;
+}
+
+.select:focus {
+  outline: 2px solid rgba(15, 99, 255, 0.12);
+  outline-offset: 0px;
+}

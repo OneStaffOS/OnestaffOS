@@ -33,10 +33,22 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    // Enforce active status
-    const status = (user as any).employment?.status;
-    if (status && status !== 'Active') {
-      throw new UnauthorizedException('Account is not active');
+    // Check employee status - only ACTIVE employees can access the system
+    const status = (user as any).status;
+    if (status && status !== 'ACTIVE') {
+      // Return detailed error message with the current status
+      const statusMessage = {
+        INACTIVE: 'Your account is currently inactive',
+        ON_LEAVE: 'Your account is on leave',
+        SUSPENDED: 'Your account has been suspended',
+        TERMINATED: 'Your account has been terminated',
+        RETIRED: 'Your account is marked as retired',
+        PROBATION: 'Your account is in probation status'
+      }[status] || 'Your account is not active';
+      
+      throw new UnauthorizedException(
+        `${statusMessage}. You are not allowed to access the system. If you believe this is a mistake, please contact your line manager or IT department. (Status: ${status})`
+      );
     }
 
     if (!password) {

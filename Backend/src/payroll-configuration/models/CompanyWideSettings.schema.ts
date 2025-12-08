@@ -5,12 +5,12 @@ export type CompanyWideSettingsDocument=HydratedDocument<CompanyWideSettings>
 
 @Schema({timestamps: true})
 export class CompanyWideSettings {
-    @Prop({ required: true, })
+    @Prop({ required: true })
     payDate: Date; 
     @Prop({ required: true,})
     timeZone: string;
     @Prop({ required: true, default:'EGP' })
-    currency: string; //will allow only egp
+    currency: string;
 }
 
 export const CompanyWideSettingsSchema = SchemaFactory.createForClass(CompanyWideSettings);

@@ -1,9 +1,14 @@
-import { IsNumber, IsArray, IsOptional, ValidateNested } from 'class-validator';
+import { IsNumber, IsArray, IsOptional, ValidateNested, IsDateString, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class BlockedPeriodDto {
-  from: Date;
-  to: Date;
+  @IsDateString()
+  from: string;
+
+  @IsDateString()
+  to: string;
+
+  @IsString()
   reason: string;
 }
 

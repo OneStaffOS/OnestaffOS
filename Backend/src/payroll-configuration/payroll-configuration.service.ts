@@ -1,6 +1,12 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
+import * as fs from 'fs';
+import * as path from 'path';
+import { promisify } from 'util';
+import { exec } from 'child_process';
+
+const execAsync = promisify(exec);
 import { payrollPolicies, payrollPoliciesDocument } from './models/payrollPolicies.schema';
 import { payGrade, payGradeDocument } from './models/payGrades.schema';
 import { payType, payTypeDocument } from './models/payType.schema';
@@ -9,6 +15,7 @@ import { signingBonus, signingBonusDocument } from './models/signingBonus.schema
 import { terminationAndResignationBenefits, terminationAndResignationBenefitsDocument } from './models/terminationAndResignationBenefits';
 import { taxRules, taxRulesDocument } from './models/taxRules.schema';
 import { insuranceBrackets, insuranceBracketsDocument } from './models/insuranceBrackets.schema';
+import { CompanyWideSettings, CompanyWideSettingsDocument } from './models/CompanyWideSettings.schema';
 import { ConfigStatus } from './enums/payroll-configuration-enums';
 import { CreatePayrollPolicyDto } from './dto/create-payroll-policy.dto';
 import { UpdatePayrollPolicyDto } from './dto/update-payroll-policy.dto';
@@ -25,6 +32,9 @@ import { CreateTaxRuleDto } from './dto/create-tax-rule.dto';
 import { UpdateTaxRuleDto } from './dto/update-tax-rule.dto';
 import { CreateInsuranceBracketDto } from './dto/create-insurance-bracket.dto';
 import { UpdateInsuranceBracketDto } from './dto/update-insurance-bracket.dto';
+import { CreateCompanySettingsDto } from './dto/create-company-settings.dto';
+import { UpdateCompanySettingsDto } from './dto/update-company-settings.dto';
+import { Backup, BackupDocument } from './models/backup.schema';
 
 @Injectable()
 export class PayrollConfigurationService {
@@ -37,6 +47,8 @@ export class PayrollConfigurationService {
         @InjectModel(terminationAndResignationBenefits.name) private terminationBenefitsModel: Model<terminationAndResignationBenefitsDocument>,
         @InjectModel(taxRules.name) private taxRulesModel: Model<taxRulesDocument>,
         @InjectModel(insuranceBrackets.name) private insuranceBracketsModel: Model<insuranceBracketsDocument>,
+        @InjectModel(CompanyWideSettings.name) private companySettingsModel: Model<CompanyWideSettingsDocument>,
+        @InjectModel(Backup.name) private backupModel: Model<BackupDocument>,
     ) {}
 
     // =====================================================
@@ -847,5 +859,189 @@ export class PayrollConfigurationService {
 
     async getApprovedInsuranceBrackets(): Promise<insuranceBrackets[]> {
         return await this.insuranceBracketsModel.find({ status: ConfigStatus.APPROVED }).exec();
+    }
+
+    // =====================================================
+    // Company-Wide Settings
+    // =====================================================
+
+    async createCompanySettings(dto: CreateCompanySettingsDto): Promise<CompanyWideSettings> {
+        // Check if settings already exist (should only be one document)
+        const existing = await this.companySettingsModel.findOne();
+        if (existing) {
+            throw new BadRequestException('Company settings already exist. Use update instead.');
+        }
+
+        // Convert payDate number to Date (day of month)
+        const settings = new this.companySettingsModel({
+            payDate: new Date(2000, 0, dto.payDate), // Store as date with day of month
+            timeZone: dto.timeZone,
+            currency: dto.currency,
+        });
+        return await settings.save();
+    }
+
+    async updateCompanySettings(dto: UpdateCompanySettingsDto): Promise<CompanyWideSettings> {
+        // Find the existing settings (should only be one document)
+        const settings = await this.companySettingsModel.findOne();
+        if (!settings) {
+            throw new NotFoundException('Company settings not found. Create them first.');
+        }
+
+        if (dto.payDate !== undefined) {
+            settings.payDate = new Date(2000, 0, dto.payDate);
+        }
+        if (dto.timeZone !== undefined) {
+            settings.timeZone = dto.timeZone;
+        }
+        if (dto.currency !== undefined) {
+            settings.currency = dto.currency;
+        }
+
+        return await settings.save();
+    }
+
+    async getCompanySettings(): Promise<CompanyWideSettings | null> {
+        return await this.companySettingsModel.findOne().exec();
+    }
+
+    // =====================================================
+    // Backup Management
+    // =====================================================
+
+    async createBackup(userId: string): Promise<Backup> {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const fileName = `backup-${timestamp}.gz`;
+        const backupDir = path.join(process.cwd(), 'backups');
+        const filePath = path.join(backupDir, fileName);
+
+        // Create backups directory if it doesn't exist
+        if (!fs.existsSync(backupDir)) {
+            fs.mkdirSync(backupDir, { recursive: true });
+        }
+
+        // Create backup record
+        const backup = new this.backupModel({
+            fileName,
+            filePath,
+            fileSize: 0,
+            status: 'in_progress',
+            type: 'manual',
+            createdBy: new Types.ObjectId(userId),
+        });
+        await backup.save();
+
+        try {
+            // Get MongoDB connection URI from environment
+            const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/onestaff';
+            
+            // Extract database name from URI
+            const dbName = mongoUri.split('/').pop()?.split('?')[0] || 'onestaff';
+            
+            // Create mongodump command
+            const command = `mongodump --uri="${mongoUri}" --archive="${filePath}" --gzip`;
+            
+            // Execute backup
+            await execAsync(command);
+            
+            // Get file size
+            const stats = fs.statSync(filePath);
+            
+            // Update backup record
+            backup.fileSize = stats.size;
+            backup.status = 'completed';
+            await backup.save();
+            
+            return backup;
+        } catch (error) {
+            // Update backup record with error
+            backup.status = 'failed';
+            backup.errorMessage = error.message;
+            await backup.save();
+            throw new Error(`Backup failed: ${error.message}`);
+        }
+    }
+
+    async getAllBackups(): Promise<Backup[]> {
+        return await this.backupModel
+            .find()
+            .populate('createdBy', 'firstName lastName')
+            .populate('restoredBy', 'firstName lastName')
+            .sort({ createdAt: -1 })
+            .exec();
+    }
+
+    async getBackupById(backupId: string): Promise<Backup> {
+        const backup = await this.backupModel
+            .findById(backupId)
+            .populate('createdBy', 'firstName lastName')
+            .populate('restoredBy', 'firstName lastName')
+            .exec();
+        
+        if (!backup) {
+            throw new NotFoundException('Backup not found');
+        }
+        
+        return backup;
+    }
+
+    async downloadBackup(backupId: string): Promise<{ filePath: string; fileName: string }> {
+        const backup = await this.getBackupById(backupId);
+        
+        if (backup.status !== 'completed') {
+            throw new BadRequestException('Backup is not available for download');
+        }
+        
+        if (!fs.existsSync(backup.filePath)) {
+            throw new NotFoundException('Backup file not found on disk');
+        }
+        
+        return {
+            filePath: backup.filePath,
+            fileName: backup.fileName,
+        };
+    }
+
+    async restoreBackup(backupId: string, userId: string): Promise<void> {
+        const backup = await this.getBackupById(backupId);
+        
+        if (backup.status !== 'completed') {
+            throw new BadRequestException('Cannot restore incomplete backup');
+        }
+        
+        if (!fs.existsSync(backup.filePath)) {
+            throw new NotFoundException('Backup file not found on disk');
+        }
+
+        try {
+            // Get MongoDB connection URI from environment
+            const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/onestaff';
+            
+            // Create mongorestore command
+            const command = `mongorestore --uri="${mongoUri}" --archive="${backup.filePath}" --gzip --drop`;
+            
+            // Execute restore
+            await execAsync(command);
+            
+            // Update backup record
+            await this.backupModel.findByIdAndUpdate(backupId, {
+                restoredAt: new Date(),
+                restoredBy: new Types.ObjectId(userId),
+            });
+        } catch (error) {
+            throw new Error(`Restore failed: ${error.message}`);
+        }
+    }
+
+    async deleteBackup(backupId: string): Promise<void> {
+        const backup = await this.getBackupById(backupId);
+        
+        // Delete file from disk if it exists
+        if (fs.existsSync(backup.filePath)) {
+            fs.unlinkSync(backup.filePath);
+        }
+        
+        // Delete backup record
+        await this.backupModel.findByIdAndDelete(backupId);
     }
 }

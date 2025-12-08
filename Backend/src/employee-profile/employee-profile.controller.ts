@@ -42,7 +42,7 @@ export class EmployeeProfileController {
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
+    Role.SYSTEM_ADMIN
   )
   async getMyProfile(@Request() req) {
     return this.employeeProfileService.getMyProfile(req.user.sub);
@@ -260,10 +260,10 @@ export class EmployeeProfileController {
 
   /**
    * Get all employee profiles
-   * Accessible by: HR Admin, HR Manager, System Admin
+   * Accessible by: HR Admin, HR Manager, Payroll Specialist, Payroll Manager, System Admin
    */
   @Get()
-  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
   async getAllEmployeeProfiles() {
     return this.employeeProfileService.getAllEmployeeProfiles();
   }
@@ -340,6 +340,16 @@ export class EmployeeProfileController {
   @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async updateEmployeeProfile(@Param('id') id: string, @Body() updateDto: UpdateEmployeeProfileDto) {
     return this.employeeProfileService.updateEmployeeProfile(id, updateDto);
+  }
+
+  /**
+   * Partial update employee profile (e.g., set active status, assign pay grade)
+   * Accessible by: HR Admin, HR Manager, System Admin, Payroll Specialist, Payroll Manager
+   */
+  @Patch(':id')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER)
+  async patchEmployeeProfile(@Param('id') id: string, @Body() updateDto: any) {
+    return this.employeeProfileService.patchEmployeeProfile(id, updateDto);
   }
 
   /**

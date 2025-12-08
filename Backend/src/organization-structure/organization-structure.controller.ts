@@ -170,6 +170,8 @@ export class OrganizationStructureController {
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
     Role.SYSTEM_ADMIN,
   )
   async getAllPositions(@Query('includeInactive') includeInactive?: string) {

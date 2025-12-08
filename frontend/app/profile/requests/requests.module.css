@@ -1,0 +1,364 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  margin: 0;
+  color: #333;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.secondaryButton {
+  background: white;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+}
+
+.secondaryButton:hover {
+  background: #f0f4ff;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.emptyState h2 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.emptyState p {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.requestsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.requestCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.requestCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.requestHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.requestInfo {
+  flex: 1;
+}
+
+.requestTitle {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+  text-transform: capitalize;
+}
+
+.requestDate {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.statusBadge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.statusPending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.statusApproved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.statusRejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.requestBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.valueComparison {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.oldValue,
+.newValue {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.valueLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.oldValue .valueLabel {
+  color: #dc3545;
+}
+
+.newValue .valueLabel {
+  color: #28a745;
+}
+
+.valueBox {
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.oldValue .valueBox {
+  background: #fff;
+  border: 2px solid #dc3545;
+  color: #721c24;
+}
+
+.newValue .valueBox {
+  background: #fff;
+  border: 2px solid #28a745;
+  color: #155724;
+}
+
+.changeArrow {
+  font-size: 2rem;
+  color: #2563eb;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.requestDescription {
+  color: #333;
+}
+
+.requestDescription p {
+  margin: 0.5rem 0 0 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #333;
+  font-size: 1rem;
+}
+
+.requestField {
+  color: #333;
+  font-size: 1rem;
+}
+
+.requestValues {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.valueItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.valueLabel {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.valueText {
+  font-size: 1rem;
+  color: #333;
+}
+
+.valueArrow {
+  font-size: 1.5rem;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.requestReason {
+  color: #333;
+}
+
+.requestReason p {
+  margin: 0.5rem 0 0 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #666;
+}
+
+.requestFooter {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.footerText {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.rejectionReason {
+  margin: 0.5rem 0 0 0;
+  padding: 0.75rem;
+  background: #f8d7da;
+  border-radius: 6px;
+  color: #721c24;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .requestHeader {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .valueComparison {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .changeArrow {
+    transform: rotate(90deg);
+    align-self: center;
+    font-size: 1.5rem;
+  }
+
+  .requestValues {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .valueArrow {
+    transform: rotate(90deg);
+    align-self: center;
+  }
+}

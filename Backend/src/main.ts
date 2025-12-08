@@ -7,20 +7,30 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: false, // Disable default body parser for multipart/form-data
+  });
   app.setGlobalPrefix('api/v1');
+  
+  // Enhanced CORS for multipart/form-data
   app.enableCors({
-    origin: 'http://localhost:3001', // Allow requests from Next.js server
-    methods: 'GET,POST,PUT,PATCH,DELETE',
+    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: 'Content-Type,Authorization,Cookie',
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Accept', 'Accept-Encoding', 'Accept-Language'],
+    exposedHeaders: ['Set-Cookie'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
 
-  // Increase body size limit for image uploads
-  app.use(require('express').json({ limit: '10mb' }));
-  app.use(require('express').urlencoded({ limit: '10mb', extended: true }));
-  // No temporary request-logging middleware in production.
-  // Debug middleware removed per cleanup request.
+  // Body parser for JSON and urlencoded (but not for multipart)
+  const express = require('express');
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ limit: '50mb', extended: true }));
+  
+  // Serve static files for offer letters
+  const path = require('path');
+  app.use('/offer-letters', express.static(path.join(process.cwd(), 'uploads', 'offer-letters')));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -37,7 +47,7 @@ async function bootstrap() {
   const jwtService = app.get(JwtService);
   app.useGlobalGuards(new AuthGuard(jwtService, reflector));
 
-  await app.listen(process.env.PORT || 5000);
-  console.log(`✅ Server running on port ${process.env.PORT || 5000}`);
+  await app.listen(process.env.PORT || 3000);
+  console.log(`✅ Server running on port ${process.env.PORT || 3000}`);
 }
 bootstrap();

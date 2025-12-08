@@ -1,4 +1,4 @@
-import { IsString, IsBoolean } from 'class-validator';
+import { IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class FlagIrregularPatternDto {
   @IsString()
@@ -7,9 +7,11 @@ export class FlagIrregularPatternDto {
   @IsBoolean()
   irregularPatternFlag: boolean;
 
+  @IsOptional()
   @IsString()
-  flaggedBy: string;
+  flaggedBy?: string;
 
+  @IsOptional()
   @IsString()
-  reason: string;
+  reason?: string;
 }

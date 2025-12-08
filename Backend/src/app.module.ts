@@ -29,7 +29,6 @@ import { PayrollExecutionModule } from './payroll-execution/payroll-execution.mo
     OrganizationStructureModule, 
     PerformanceModule,
     RegisterModule,
-    // Notifications
     NotificationModule,
   ],
   controllers: [AppController],

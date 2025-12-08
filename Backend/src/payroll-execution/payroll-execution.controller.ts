@@ -20,7 +20,7 @@ export class PayrollExecutionController {
 
     @Get('signing-bonuses/pending')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
     async getPendingSigningBonuses() {
         return await this.payrollExecutionService.getPendingSigningBonuses();
     }
@@ -45,7 +45,7 @@ export class PayrollExecutionController {
 
     @Get('termination-benefits/pending')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
     async getPendingTerminationBenefits() {
         return await this.payrollExecutionService.getPendingTerminationBenefits();
     }
@@ -70,23 +70,30 @@ export class PayrollExecutionController {
 
     @Post('runs')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async createPayrollRun(@Body() dto: CreatePayrollRunDto, @Req() req: any) {
         return await this.payrollExecutionService.createPayrollRun(dto, req.user.userId);
     }
 
     @Get('runs')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.FINANCE_STAFF, Role.PAYROLL_MANAGER)
     async getAllPayrollRuns(@Query('status') status?: PayRollStatus) {
         return await this.payrollExecutionService.getAllPayrollRuns(status);
     }
 
     @Get('runs/:id')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.FINANCE_STAFF, Role.PAYROLL_MANAGER)
     async getPayrollRunById(@Param('id') id: string) {
         return await this.payrollExecutionService.getPayrollRunById(id);
+    }
+
+    @Get('runs/:id/employee-details')
+    @UseGuards(AuthGuard, authorizationGaurd)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.FINANCE_STAFF, Role.PAYROLL_MANAGER)
+    async getEmployeePayrollDetailsByRunId(@Param('id') id: string) {
+        return await this.payrollExecutionService.getEmployeePayrollDetailsByRunId(id);
     }
 
     // =====================================================
@@ -95,7 +102,7 @@ export class PayrollExecutionController {
 
     @Post('runs/:id/flag-exceptions')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async flagExceptions(@Param('id') id: string) {
         return await this.payrollExecutionService.flagExceptions(id);
     }
@@ -106,9 +113,16 @@ export class PayrollExecutionController {
 
     @Post('runs/:id/publish')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async publishForReview(@Param('id') id: string) {
         return await this.payrollExecutionService.publishForReview(id);
+    }
+
+    @Post('runs/:id/submit-for-review')
+    @UseGuards(AuthGuard, authorizationGaurd)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.SYSTEM_ADMIN)
+    async submitForReview(@Param('id') id: string) {
+        return await this.payrollExecutionService.submitForReview(id);
     }
 
     @Post('runs/:id/manager-approve')
@@ -120,28 +134,28 @@ export class PayrollExecutionController {
 
     @Post('runs/:id/finance-approve')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.SYSTEM_ADMIN)
+    @Roles(Role.SYSTEM_ADMIN, Role.FINANCE_STAFF)
     async financeApprovePayroll(@Param('id') id: string, @Req() req: any) {
         return await this.payrollExecutionService.financeApprovePayroll(id, req.user.userId);
     }
 
     @Post('runs/:id/reject')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.FINANCE_STAFF)
     async rejectPayroll(@Param('id') id: string, @Body() dto: RejectPayrollDto, @Req() req: any) {
         return await this.payrollExecutionService.rejectPayroll(id, req.user.userId, dto.rejectionReason);
     }
 
     @Post('runs/:id/lock')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.PAYROLL_MANAGER)
     async lockPayroll(@Param('id') id: string, @Req() req: any) {
         return await this.payrollExecutionService.lockPayroll(id, req.user.userId);
     }
 
     @Post('runs/:id/unlock')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.PAYROLL_MANAGER)
     async unlockPayroll(@Param('id') id: string, @Body() dto: UnlockPayrollDto, @Req() req: any) {
         return await this.payrollExecutionService.unlockPayroll(id, req.user.userId, dto.unlockReason);
     }
@@ -152,21 +166,21 @@ export class PayrollExecutionController {
 
     @Post('runs/:id/generate-payslips')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async generatePayslips(@Param('id') id: string) {
         return await this.payrollExecutionService.generatePayslips(id);
     }
 
     @Get('runs/:id/payslips')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
     async getPayslipsByRunId(@Param('id') id: string) {
         return await this.payrollExecutionService.getPayslipsByRunId(id);
     }
 
     @Get('employees/:employeeId/payslips')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.DEPARTMENT_EMPLOYEE, Role.PAYROLL_SPECIALIST, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.DEPARTMENT_EMPLOYEE, Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
     async getEmployeePayslips(@Param('employeeId') employeeId: string) {
         return await this.payrollExecutionService.getEmployeePayslips(employeeId);
     }

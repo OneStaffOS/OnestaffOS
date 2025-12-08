@@ -34,7 +34,7 @@ export class LeaveRequest {
   justification?: string;
 
   // SUPPORTING DOCUMENT (MEDICAL CERTIFICATE, ETC.)
-  @Prop({ type: Types.ObjectId, ref: 'Document' })
+  @Prop({ type: Types.ObjectId, ref: 'Attachment' })
   attachmentId?: Types.ObjectId;
 
   // APPROVAL WORKFLOW HISTORY

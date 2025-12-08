@@ -4,688 +4,773 @@ import {
   Post,
   Put,
   Patch,
+  Delete,
   Body,
   Param,
   Query,
+  Req,
   UseGuards,
-  Request,
+  BadRequestException,
   UseInterceptors,
   UploadedFile,
-  BadRequestException,
+  Request,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { RecruitmentService } from './recruitment.service';
 import { CreateJobTemplateDto } from './dto/create-job-template.dto';
 import { CreateJobRequisitionDto } from './dto/create-job-requisition.dto';
 import { PublishJobDto } from './dto/publish-job.dto';
-import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationStageDto } from './dto/update-application-stage.dto';
-import { ScheduleInterviewDto } from './dto/schedule-interview.dto';
-import { SubmitInterviewFeedbackDto } from './dto/submit-interview-feedback.dto';
-import { CreateOfferDto } from './dto/create-offer.dto';
-import { ProcessOfferApprovalDto } from './dto/process-offer-approval.dto';
-import { RespondToOfferDto } from './dto/respond-to-offer.dto';
-import { CreateContractDto } from './dto/create-contract.dto';
-import { CreateTerminationRequestDto } from './dto/create-termination-request.dto';
-import { ProcessTerminationDto } from './dto/process-termination.dto';
-import { UpdateClearanceItemDto, UpdateEquipmentReturnDto } from './dto/update-clearance.dto';
 import { NotifyCandidateStatusDto } from './dto/notify-candidate-status.dto';
 import { RejectApplicationDto } from './dto/reject-application.dto';
-import { TagReferralDto } from './dto/tag-referral.dto';
-import { UpdateInterviewStatusDto } from './dto/update-interview-status.dto';
-import { UpdateCardReturnDto } from './dto/update-card-return.dto';
-import { ProcessFinalSettlementDto } from './dto/process-final-settlement.dto';
-import { CreateOnboardingChecklistDto } from './dto/create-onboarding-checklist.dto';
-import { AuthGuard } from '../auth/gaurds/authentication.guard';
+import { AuthGuard } from '../auth/middleware/authentication.middleware';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
 import { Public } from '../auth/decorators/public.decorator';
-import { ApplicationStatus } from './enums/application-status.enum';
-import { ApplicationStage } from './enums/application-stage.enum';
-import { OfferFinalStatus } from './enums/offer-final-status.enum';
-import { TerminationStatus } from './enums/termination-status.enum';
-import { InterviewStatus } from './enums/interview-status.enum';
 
 @Controller('recruitment')
 @UseGuards(AuthGuard, authorizationGaurd)
 export class RecruitmentController {
-  constructor(private readonly recruitmentService: RecruitmentService) {}
+  constructor(
+    private readonly recruitmentService: RecruitmentService,
+  ) {}
 
-  // ========== PHASE 1: JOB DESIGN & POSTING ==========
+  // ==================== JOB TEMPLATES ====================
 
-  /**
-   * REC-003: Create job description template
-   * Accessible by: HR Manager, HR Admin, System Admin
-   */
   @Post('job-templates')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
-  async createJobTemplate(@Body() createDto: CreateJobTemplateDto) {
-    return this.recruitmentService.createJobTemplate(createDto);
+  @Roles(Role.HR_MANAGER)
+  async createJobTemplate(@Body() dto: CreateJobTemplateDto) {
+    return this.recruitmentService.createJobTemplate(dto);
   }
 
-  /**
-   * Get all job templates
-   * Accessible by: HR roles
-   */
   @Get('job-templates')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async getAllJobTemplates() {
-    return this.recruitmentService.getAllJobTemplates();
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async findAllJobTemplates() {
+    return this.recruitmentService.findAllJobTemplates();
   }
 
-  /**
-   * Get job template by ID
-   * Accessible by: HR roles
-   */
   @Get('job-templates/:id')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async getJobTemplateById(@Param('id') id: string) {
-    return this.recruitmentService.getJobTemplateById(id);
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async findJobTemplateById(@Param('id') id: string) {
+    return this.recruitmentService.findJobTemplateById(id);
   }
 
-  /**
-   * REC-004: Create job requisition
-   * Accessible by: HR Manager, HR Admin
-   */
+  @Put('job-templates/:id')
+  @Roles(Role.HR_MANAGER)
+  async updateJobTemplate(
+    @Param('id') id: string,
+    @Body() dto: Partial<CreateJobTemplateDto>,
+  ) {
+    return this.recruitmentService.updateJobTemplate(id, dto);
+  }
+
+  @Delete('job-templates/:id')
+  @Roles(Role.HR_MANAGER)
+  async deleteJobTemplate(@Param('id') id: string) {
+    return this.recruitmentService.deleteJobTemplate(id);
+  }
+
+  // ==================== JOB REQUISITIONS ====================
+
   @Post('job-requisitions')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
-  async createJobRequisition(@Body() createDto: CreateJobRequisitionDto) {
-    return this.recruitmentService.createJobRequisition(createDto);
+  @Roles(Role.HR_MANAGER)
+  async createJobRequisition(@Body() dto: CreateJobRequisitionDto) {
+    return this.recruitmentService.createJobRequisition(dto);
   }
 
-  /**
-   * Get all job requisitions
-   * Accessible by: HR roles, Managers
-   */
+  @Get('job-requisitions/published')
+  @Roles(
+    Role.HR_EMPLOYEE,
+    Role.HR_MANAGER,
+    Role.JOB_CANDIDATE,
+    Role.DEPARTMENT_EMPLOYEE,
+    Role.DEPARTMENT_HEAD,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.SYSTEM_ADMIN,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER,
+    Role.FINANCE_STAFF,
+    Role.HR_ADMIN
+  )
+  async getPublishedJobsPublic() {
+    return this.recruitmentService.getPublishedJobs();
+  }
+
   @Get('job-requisitions')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async getAllJobRequisitions(@Query('publishStatus') publishStatus?: string) {
-    return this.recruitmentService.getAllJobRequisitions({ publishStatus });
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async findAllJobRequisitions() {
+    return this.recruitmentService.findAllJobRequisitions();
   }
 
-  /**
-   * Get job requisition by ID
-   * Accessible by: HR roles, Managers
-   */
   @Get('job-requisitions/:id')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async getJobRequisitionById(@Param('id') id: string) {
-    return this.recruitmentService.getJobRequisitionById(id);
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async findJobRequisitionById(@Param('id') id: string) {
+    return this.recruitmentService.findJobRequisitionById(id);
   }
 
-  /**
-   * REC-023: Publish job to careers page
-   * Accessible by: HR Employee, HR Manager, HR Admin
-   */
-  @Put('job-requisitions/:id/publish')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async publishJob(@Param('id') id: string, @Body() publishDto: PublishJobDto) {
-    return this.recruitmentService.publishJob(id, publishDto);
+  @Put('job-requisitions/:id')
+  @Roles(Role.HR_MANAGER)
+  async updateJobRequisition(
+    @Param('id') id: string,
+    @Body() dto: Partial<CreateJobRequisitionDto>,
+  ) {
+    return this.recruitmentService.updateJobRequisition(id, dto);
   }
 
-  /**
-   * REC-023: Unpublish/update job status (PATCH for partial updates)
-   * Accessible by: HR Employee, HR Manager, HR Admin
-   */
   @Patch('job-requisitions/:id/publish')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async updateJobPublishStatus(@Param('id') id: string, @Body() publishDto: PublishJobDto) {
-    return this.recruitmentService.publishJob(id, publishDto);
+  @Roles(Role.HR_EMPLOYEE, Role.HR_MANAGER)
+  async publishJobRequisition(
+    @Param('id') id: string,
+    @Body() dto: PublishJobDto,
+  ) {
+    return this.recruitmentService.publishJobRequisition(id, dto);
   }
 
-  // ========== PHASE 1: CANDIDATE APPLICATION ==========
+  @Delete('job-requisitions/:id')
+  @Roles(Role.HR_MANAGER)
+  async deleteJobRequisition(@Param('id') id: string) {
+    return this.recruitmentService.deleteJobRequisition(id);
+  }
 
-  /**
-   * REC-007: Candidate applies for position (Public endpoint)
-   * REC-028: Implicit consent for data processing
-   */
+  @Get('published-jobs')
+  @Roles(Role.HR_EMPLOYEE, Role.HR_MANAGER)
+  async getPublishedJobs() {
+    return this.recruitmentService.getPublishedJobs();
+  }
+
+  // ==================== APPLICATIONS ====================
+
+  @Get('applications')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async getAllApplications() {
+    return this.recruitmentService.getAllApplications();
+  }
+
   @Post('applications')
   @Public()
   @UseInterceptors(
     FileInterceptor('cv', {
-      storage: diskStorage({
-        destination: './uploads/cvs',
-        filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          cb(null, `cv-${uniqueSuffix}${ext}`);
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        const allowedExtensions = /pdf|doc|docx/;
-        const ext = extname(file.originalname).toLowerCase().substring(1);
-        if (allowedExtensions.test(ext)) {
-          cb(null, true);
+      fileFilter: (req, file, callback) => {
+        const allowedMimeTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          callback(null, true);
         } else {
-          cb(new BadRequestException('Only PDF, DOC, and DOCX files are allowed'), false);
+          callback(new BadRequestException('Only PDF, DOC, and DOCX files are allowed'), false);
         }
       },
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB limit
+        fileSize: 5 * 1024 * 1024, // 5MB
       },
     }),
   )
   async createApplication(
-    @Body() createDto: CreateApplicationDto,
     @UploadedFile() cvFile: Express.Multer.File,
+    @Body('candidateId') candidateId: string,
+    @Body('requisitionId') requisitionId: string,
+    @Body('coverLetter') coverLetter?: string,
   ) {
-    if (!cvFile) {
-      throw new BadRequestException('CV file is required');
+    // Validate required fields
+    if (!candidateId || !requisitionId || !cvFile) {
+      throw new BadRequestException('candidateId, requisitionId, and cv file are required');
     }
-    return this.recruitmentService.createApplication(createDto, cvFile);
+
+    // Validate MongoDB IDs
+    if (!candidateId.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BadRequestException('Invalid candidateId');
+    }
+    if (!requisitionId.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BadRequestException('Invalid requisitionId');
+    }
+
+    return this.recruitmentService.createApplication(
+      {
+        candidateId,
+        requisitionId,
+        coverLetter,
+      },
+      cvFile,
+    );
   }
 
-  /**
-   * REC-008: Update application stage
-   * Accessible by: HR Employee, HR Manager
-   */
-  @Put('applications/:id/stage')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async updateApplicationStage(
+  // ==================== APPLICATION STATUS MANAGEMENT ====================
+
+  @Patch('applications/:id/status')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async updateApplicationStatus(
     @Param('id') id: string,
-    @Body() updateDto: UpdateApplicationStageDto,
+    @Body() dto: UpdateApplicationStageDto,
+    @Request() req: any,
   ) {
-    return this.recruitmentService.updateApplicationStage(id, updateDto);
+    const userId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.updateApplicationStatus(id, dto, userId);
   }
 
-  /**
-   * Get applications with filters
-   * Accessible by: HR roles, Managers
-   */
-  @Get('applications')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async getApplications(
-    @Query('requisitionId') requisitionId?: string,
-    @Query('candidateId') candidateId?: string,
-    @Query('status') status?: ApplicationStatus,
-    @Query('currentStage') currentStage?: ApplicationStage,
-  ) {
-    return this.recruitmentService.getApplications({
-      requisitionId,
-      candidateId,
-      status,
-      currentStage,
-    });
-  }
-
-  /**
-   * Get application by ID
-   * Accessible by: HR roles, Managers
-   */
-  @Get('applications/:id')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async getApplicationById(@Param('id') id: string) {
-    return this.recruitmentService.getApplicationById(id);
-  }
-
-  // ========== PHASE 1: CANDIDATE COMMUNICATION ==========
-
-  /**
-   * REC-017: Notify candidate of application status updates
-   * Accessible by: HR roles
-   */
-  @Put('applications/:id/notify-status')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async notifyCandidateStatus(
+  @Post('applications/:id/notify')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async notifyCandidate(
     @Param('id') id: string,
     @Body() dto: NotifyCandidateStatusDto,
   ) {
-    return this.recruitmentService.notifyCandidateStatus(id, dto.message);
+    await this.recruitmentService.sendCustomNotificationToCandidate(id, dto);
+    return { success: true, message: 'Notification sent to candidate' };
   }
 
-  /**
-   * REC-022: Send automated rejection notification
-   * Accessible by: HR roles
-   */
-  @Put('applications/:id/reject')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
+  @Get('applications/candidate/:candidateId')
+  @Public()
+  async getCandidateApplications(@Param('candidateId') candidateId: string) {
+    return this.recruitmentService.getCandidateApplications(candidateId);
+  }
+
+  @Get('applications/my-applications')
+  @Roles(Role.JOB_CANDIDATE)
+  async getMyApplications(@Request() req: any) {
+    const userId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.getMyApplications(userId);
+  }
+
+  @Get('applications/:id/history')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER, Role.JOB_CANDIDATE)
+  async getApplicationHistory(@Param('id') id: string) {
+    return this.recruitmentService.getApplicationHistory(id);
+  }
+
+  // ==================== APPLICATION REJECTION ====================
+
+  @Post('applications/:id/reject')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
   async rejectApplication(
     @Param('id') id: string,
     @Body() dto: RejectApplicationDto,
+    @Request() req: any,
   ) {
-    return this.recruitmentService.rejectApplication(id, dto.reason);
+    const userId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.rejectApplication(id, dto, userId);
   }
 
-  /**
-   * REC-030: Tag candidate as referral
-   * Accessible by: HR Employee, HR Manager
-   */
-  @Put('applications/:id/referral')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async tagReferral(
+  @Post('applications/bulk-reject')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async bulkRejectApplications(
+    @Body() body: { applicationIds: string[]; rejection: RejectApplicationDto },
+    @Request() req: any,
+  ) {
+    const userId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.bulkRejectApplications(
+      body.applicationIds,
+      body.rejection,
+      userId,
+    );
+  }
+
+  // ==================== INTERVIEW SCHEDULING ====================
+
+  @Post('applications/:id/schedule-interview')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async scheduleInterviewSlots(
     @Param('id') id: string,
-    @Body() dto: TagReferralDto,
+    @Body() body: {
+      stage: string;
+      method: string;
+      timeSlots: string[];
+      panel?: string[];
+      videoLink?: string;
+    },
   ) {
-    return this.recruitmentService.tagReferral(id, dto.referral);
+    return this.recruitmentService.scheduleInterviewSlots(id, {
+      stage: body.stage as any,
+      method: body.method as any,
+      timeSlots: body.timeSlots.map(slot => new Date(slot)),
+      panel: body.panel,
+      videoLink: body.videoLink,
+    });
   }
 
-  /**
-   * REC-009: Get recruitment progress dashboard
-   * Accessible by: HR Manager, HR Admin
-   */
-  @Get('dashboard/progress')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
-  async getRecruitmentProgressDashboard() {
-    return this.recruitmentService.getRecruitmentProgressDashboard();
+  @Get('applications/:id/interviews')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER, Role.JOB_CANDIDATE)
+  async getApplicationInterviews(@Param('id') id: string) {
+    return this.recruitmentService.getApplicationInterviews(id);
   }
 
-  // ========== PHASE 1: INTERVIEW & EVALUATION ==========
-
-  /**
-   * REC-010, REC-021: Schedule interview
-   * Accessible by: HR Employee, HR Manager
-   */
-  @Post('interviews')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async scheduleInterview(@Body() scheduleDto: ScheduleInterviewDto) {
-    return this.recruitmentService.scheduleInterview(scheduleDto);
-  }
-
-  /**
-   * Get interviews for application
-   * Accessible by: HR roles, Interview Panel Members
-   */
-  @Get('applications/:applicationId/interviews')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async getInterviewsByApplication(@Param('applicationId') applicationId: string) {
-    return this.recruitmentService.getInterviewsByApplication(applicationId);
-  }
-
-  /**
-   * Update interview status
-   * Accessible by: HR Employee, HR Manager
-   */
-  @Put('interviews/:id/status')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async updateInterviewStatus(
+  @Post('interviews/:id/confirm')
+  async confirmInterviewSlot(
     @Param('id') id: string,
-    @Body() dto: UpdateInterviewStatusDto,
+    @Request() req: any,
   ) {
-    return this.recruitmentService.updateInterviewStatus(id, dto.status);
+    const candidateId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.confirmInterviewSlot(id, candidateId);
   }
 
-  /**
-   * REC-011, REC-020: Submit interview feedback and score
-   * Accessible by: Interview Panel Members, HR roles, Managers
-   */
-  @Post('interviews/feedback')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async submitInterviewFeedback(@Body() feedbackDto: SubmitInterviewFeedbackDto) {
-    return this.recruitmentService.submitInterviewFeedback(feedbackDto);
+  @Post('interviews/:id/feedback')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async provideInterviewFeedback(
+    @Param('id') id: string,
+    @Body() body: { score: number; comments?: string },
+    @Request() req: any,
+  ) {
+    const interviewerId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.provideInterviewFeedback(id, interviewerId, body);
   }
 
-  /**
-   * Get assessment results for interview
-   * Accessible by: HR roles, Managers
-   */
-  @Get('interviews/:interviewId/assessments')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async getAssessmentsByInterview(@Param('interviewId') interviewId: string) {
-    return this.recruitmentService.getAssessmentsByInterview(interviewId);
+  @Get('interviews/:id/feedback')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async getInterviewFeedback(@Param('id') id: string) {
+    return this.recruitmentService.getInterviewFeedback(id);
   }
 
-  /**
-   * Calculate average score for application
-   * Accessible by: HR roles, Managers
-   */
-  @Get('applications/:applicationId/score')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async calculateApplicationScore(@Param('applicationId') applicationId: string) {
-    const score = await this.recruitmentService.calculateApplicationScore(applicationId);
-    return { applicationId, averageScore: score };
+  @Get('applications/:id/interviews-with-feedback')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER)
+  async getApplicationInterviewsWithFeedback(@Param('id') id: string) {
+    return this.recruitmentService.getApplicationInterviewsWithFeedback(id);
   }
 
-  // ========== PHASE 1: OFFER MANAGEMENT (Creation & Approval) ==========
+  // ==================== REFERRAL MANAGEMENT ====================
 
-  /**
-   * REC-014, REC-018: Create job offer
-   * Accessible by: HR Manager, HR Employee
-   */
+  @Post('applications/:id/tag-referral')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async tagCandidateAsReferral(
+    @Param('id') applicationId: string,
+    @Body() body: { referringEmployeeId?: string; role?: string; level?: string },
+    @Request() req: any,
+  ) {
+    const referringEmployeeId = body.referringEmployeeId || req.user?.userId || req.user?.sub;
+    
+    return this.recruitmentService.tagCandidateAsReferral(
+      applicationId,
+      referringEmployeeId,
+      body.role,
+      body.level
+    );
+  }
+
+  @Delete('applications/:id/referral-tag')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async removeReferralTag(@Param('id') applicationId: string) {
+    return this.recruitmentService.removeReferralTag(applicationId);
+  }
+
+  @Get('applications/:id/referral-info')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async getReferralInfo(@Param('id') applicationId: string) {
+    return this.recruitmentService.getReferralInfo(applicationId);
+  }
+
+  // ==================== JOB OFFERS ====================
+
   @Post('offers')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async createOffer(@Request() req, @Body() createDto: CreateOfferDto) {
-    return this.recruitmentService.createOffer(createDto, req.user.employeeId);
-  }
-
-  /**
-   * Get offers with filters
-   * Accessible by: HR roles, Managers
-   */
-  @Get('offers')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
-  async getOffers(
-    @Query('applicationId') applicationId?: string,
-    @Query('candidateId') candidateId?: string,
-    @Query('finalStatus') finalStatus?: OfferFinalStatus,
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async createOffer(
+    @Body() dto: any,
+    @Request() req: any,
   ) {
-    return this.recruitmentService.getOffers({ applicationId, candidateId, finalStatus });
+    const hrEmployeeId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.createOffer(dto, hrEmployeeId);
   }
 
-  /**
-   * Get offer by ID
-   * Accessible by: HR roles, Managers
-   */
+  @Get('offers')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async getAllOffers() {
+    return this.recruitmentService.getAllOffers();
+  }
+
+  @Get('offers/pending')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.SYSTEM_ADMIN)
+  async getPendingOffers() {
+    return this.recruitmentService.getPendingOffers();
+  }
+
   @Get('offers/:id')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN,
-  )
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.SYSTEM_ADMIN)
   async getOfferById(@Param('id') id: string) {
     return this.recruitmentService.getOfferById(id);
   }
 
-  /**
-   * Process offer approval (HR Manager, Financial approval)
-   * Accessible by: HR Manager, Managers
-   */
-  @Post('offers/:id/approve')
-  @Roles(Role.DEPARTMENT_HEAD, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
-  async processOfferApproval(
-    @Request() req,
-    @Param('id') id: string,
-    @Body() approvalDto: ProcessOfferApprovalDto,
-    @Query('role') approverRole?: string,
+  @Get('candidates/:candidateId/offers')
+  async getOffersByCandidate(
+    @Param('candidateId') candidateId: string,
+    @Request() req: any,
   ) {
-    return this.recruitmentService.processOfferApproval(
-      id,
-      req.user.employeeId,
-      approverRole || 'HR_Manager',
-      approvalDto,
+    // Verify candidate is the logged-in user or HR/Manager
+    const userId = req.user?.userId || req.user?.sub;
+    const userRoles = req.user?.roles || [];
+    
+    if (userId !== candidateId && !userRoles.some((r: string) => 
+      [Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN].includes(r as Role)
+    )) {
+      throw new BadRequestException('Access denied');
+    }
+
+    return this.recruitmentService.getOffersByCandidate(candidateId);
+  }
+
+  @Post('offers/:id/approve')
+  @Roles(Role.HR_MANAGER, Role.DEPARTMENT_HEAD, Role.SYSTEM_ADMIN)
+  async approveOffer(
+    @Param('id') offerId: string,
+    @Body() dto: any,
+    @Request() req: any,
+  ) {
+    const employeeId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.processOfferApproval(offerId, employeeId, dto);
+  }
+
+  @Post('offers/:id/respond')
+  async respondToOffer(
+    @Param('id') offerId: string,
+    @Body() dto: any,
+    @Request() req: any,
+  ) {
+    const candidateId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.respondToOffer(offerId, candidateId, dto);
+  }
+
+  @Put('offers/:id')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async updateOffer(
+    @Param('id') offerId: string,
+    @Body() updates: any,
+  ) {
+    return this.recruitmentService.updateOffer(offerId, updates);
+  }
+
+  @Delete('offers/:id')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async deleteOffer(@Param('id') offerId: string) {
+    return this.recruitmentService.deleteOffer(offerId);
+  }
+
+  @Post('offers/:id/generate-letter')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async generateOfferLetter(
+    @Param('id') offerId: string,
+    @Request() req: any,
+  ) {
+    const hrEmployeeId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.generateOfferLetter(offerId, hrEmployeeId);
+  }
+
+  @Post('offers/:id/send-for-signature')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async sendOfferForSignature(
+    @Param('id') offerId: string,
+    @Body('message') message: string,
+    @Request() req: any,
+  ) {
+    const hrEmployeeId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.sendOfferForSignature(offerId, hrEmployeeId, message);
+  }
+
+  @Post('offers/:id/sign')
+  async signOffer(
+    @Param('id') offerId: string,
+    @Body('signature') signature: string,
+    @Body('signedDate') signedDate: Date,
+    @Request() req: any,
+  ) {
+    const candidateId = req.user?.userId || req.user?.sub;
+    const ipAddress = req.ip || req.connection?.remoteAddress || 'unknown';
+    return this.recruitmentService.signOffer(offerId, candidateId, signature, signedDate, ipAddress);
+  }
+
+  @Get('offers/:id/letter')
+  async getOfferLetter(@Param('id') offerId: string, @Request() req: any) {
+    const userId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.getOfferLetter(offerId, userId);
+  }
+
+  @Get('offers/:id/signature-status')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async getSignatureStatus(@Param('id') offerId: string) {
+    return this.recruitmentService.getSignatureStatus(offerId);
+  }
+
+  // ==================== ONBOARDING CHECKLISTS ====================
+
+  @Post('onboarding')
+  @Roles(Role.HR_MANAGER)
+  async createOnboardingChecklist(
+    @Body() data: {
+      employeeId: string;
+      contractId: string;
+      tasks: Array<{
+        name: string;
+        department: string;
+        deadline?: Date;
+        notes?: string;
+      }>;
+    }
+  ) {
+    return this.recruitmentService.createOnboardingChecklist(data);
+  }
+
+  @Get('onboarding')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE)
+  async getAllOnboardingChecklists() {
+    return this.recruitmentService.getAllOnboardingChecklists();
+  }
+
+  @Get('onboarding/employee/:employeeId')
+  async getOnboardingChecklistByEmployee(@Param('employeeId') employeeId: string) {
+    return this.recruitmentService.getOnboardingChecklistByEmployee(employeeId);
+  }
+
+  @Patch('onboarding/:id/tasks/:taskIndex')
+  async updateOnboardingTask(
+    @Param('id') checklistId: string,
+    @Param('taskIndex') taskIndex: string,
+    @Body() updates: {
+      status?: string;
+      completedAt?: Date;
+      notes?: string;
+    }
+  ) {
+    return this.recruitmentService.updateOnboardingTask(
+      checklistId,
+      parseInt(taskIndex),
+      updates
     );
   }
 
-  /**
-   * Candidate responds to offer (Public endpoint for candidate portal)
-   */
-  @Put('offers/:id/respond')
-  @Public()
-  async respondToOffer(@Param('id') id: string, @Body() responseDto: RespondToOfferDto) {
-    return this.recruitmentService.respondToOffer(id, responseDto);
+  @Delete('onboarding/:id')
+  @Roles(Role.HR_MANAGER)
+  async deleteOnboardingChecklist(@Param('id') id: string) {
+    return this.recruitmentService.deleteOnboardingChecklist(id);
   }
 
-  // ========== PHASE 1: OFFER MANAGEMENT (Pre-boarding) ==========
-
-  /**
-   * REC-029: Trigger pre-boarding tasks after offer acceptance
-   * Accessible by: HR Employee, HR Manager
-   */
-  @Post('offers/:id/preboarding')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async triggerPreboardingTasks(@Param('id') id: string) {
-    return this.recruitmentService.triggerPreboardingTasks(id);
+  @Post('onboarding/:id/tasks/:taskIndex/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadTaskDocument(
+    @Param('id') checklistId: string,
+    @Param('taskIndex') taskIndex: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: any,
+  ) {
+    const userId = req.user?.userId || req.user?.sub;
+    return this.recruitmentService.uploadTaskDocument(
+      checklistId,
+      parseInt(taskIndex),
+      file,
+      userId
+    );
   }
 
-  // ========== PHASE 2: ONBOARDING - CONTRACT CREATION ==========
-
-  /**
-   * ONB-002: Create contract from accepted offer
-   * Accessible by: HR Manager, HR Employee
-   */
-  @Post('contracts')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async createContract(@Body() createDto: CreateContractDto) {
-    return this.recruitmentService.createContract(createDto);
+  @Get('onboarding/:id/tasks/:taskIndex/document')
+  async getTaskDocument(
+    @Param('id') checklistId: string,
+    @Param('taskIndex') taskIndex: string,
+  ) {
+    return this.recruitmentService.getTaskDocument(checklistId, parseInt(taskIndex));
   }
 
-  /**
-   * Get contracts
-   * Accessible by: HR roles
-   */
-  @Get('contracts')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async getContracts(@Query('offerId') offerId?: string) {
-    return this.recruitmentService.getContracts({ offerId });
+  // ==================== SIGNED CONTRACTS FOR HR ====================
+
+  @Get('signed-contracts')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.HR_ADMIN)
+  async getSignedContracts() {
+    return this.recruitmentService.getSignedContracts();
   }
 
-  /**
-   * Get contract by ID
-   * Accessible by: HR roles
-   */
   @Get('contracts/:id')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.HR_ADMIN)
   async getContractById(@Param('id') id: string) {
     return this.recruitmentService.getContractById(id);
   }
 
-  // ========== PHASE 2: ONBOARDING - TASK CHECKLIST ==========
+  // ==================== DEADLINE REMINDERS ====================
 
-  /**
-   * ONB-001: Create onboarding task checklist
-   * Accessible by: HR Manager, HR Employee
-   */
-  @Post('onboarding/checklists')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
-  async createOnboardingChecklist(@Body() dto: CreateOnboardingChecklistDto) {
-    return this.recruitmentService.createOnboardingChecklist(dto.contractId);
+  @Post('send-deadline-reminders')
+  @Roles(Role.SYSTEM_ADMIN, Role.HR_MANAGER)
+  async sendDeadlineReminders() {
+    return this.recruitmentService.sendTaskDeadlineReminders();
   }
 
-  // ========== PHASE 3: OFFBOARDING - TERMINATION & RESIGNATION ==========
+  // ==================== EQUIPMENT & ACCESS TRACKING ====================
 
-  /**
-   * OFF-001, OFF-018: Create termination/resignation request
-   * Accessible by: Employees (resignation), HR Manager (termination)
-   */
-  @Post('terminations')
-  @Roles(
-    Role.DEPARTMENT_EMPLOYEE,
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.SYSTEM_ADMIN,
-  )
-  async createTerminationRequest(@Body() createDto: CreateTerminationRequestDto) {
-    return this.recruitmentService.createTerminationRequest(createDto);
-  }
-
-  /**
-   * OFF-019: Get termination requests (track resignation status)
-   * Accessible by: Employees (own requests), HR roles (all), Managers (team)
-   */
-  @Get('terminations')
-  @Roles(
-    Role.DEPARTMENT_EMPLOYEE,
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.SYSTEM_ADMIN,
-  )
-  async getTerminationRequests(
-    @Request() req,
-    @Query('employeeId') employeeId?: string,
-    @Query('status') status?: TerminationStatus,
+  @Put('onboarding/:id/equipment')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD)
+  async updateEquipmentTracking(
+    @Param('id') onboardingId: string,
+    @Body() body: { equipment: Array<{ name: string; issued: boolean; issuedDate?: Date; serialNumber?: string }> }
   ) {
-    // If employee is querying, default to their own requests unless they're HR/Manager
-    const targetEmployeeId = employeeId || req.user.employeeId;
-    return this.recruitmentService.getTerminationRequests({ employeeId: targetEmployeeId, status });
+    return this.recruitmentService.updateEquipmentTracking(onboardingId, body.equipment);
   }
 
-  /**
-   * Get termination request by ID
-   * Accessible by: Employees (own), HR roles, Managers
-   */
-  @Get('terminations/:id')
-  @Roles(
-    Role.DEPARTMENT_EMPLOYEE,
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.SYSTEM_ADMIN,
-  )
-  async getTerminationRequestById(@Param('id') id: string) {
-    return this.recruitmentService.getTerminationRequestById(id);
+  @Get('onboarding/:id/equipment')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.NEW_HIRE, Role.DEPARTMENT_EMPLOYEE)
+  async getEquipmentTracking(@Param('id') onboardingId: string) {
+    return this.recruitmentService.getEquipmentTracking(onboardingId);
   }
 
-  /**
-   * Process termination request (approve/reject)
-   * Accessible by: HR Manager, System Admin
-   */
-  @Put('terminations/:id/process')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
-  async processTerminationRequest(
+  @Put('onboarding/:id/desk')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD)
+  async updateDeskAllocation(
+    @Param('id') onboardingId: string,
+    @Body() deskInfo: { building?: string; floor?: string; deskNumber?: string; allocatedDate?: Date }
+  ) {
+    return this.recruitmentService.updateDeskAllocation(onboardingId, deskInfo);
+  }
+
+  @Get('onboarding/:id/desk')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.NEW_HIRE, Role.DEPARTMENT_EMPLOYEE)
+  async getDeskAllocation(@Param('id') onboardingId: string) {
+    return this.recruitmentService.getDeskAllocation(onboardingId);
+  }
+
+  @Put('onboarding/:id/access-card')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD)
+  async updateAccessCardInfo(
+    @Param('id') onboardingId: string,
+    @Body() cardInfo: { cardNumber?: string; issuedDate?: Date; expiryDate?: Date; status?: string }
+  ) {
+    return this.recruitmentService.updateAccessCardInfo(onboardingId, cardInfo);
+  }
+
+  @Get('onboarding/:id/access-card')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.NEW_HIRE, Role.DEPARTMENT_EMPLOYEE)
+  async getAccessCardInfo(@Param('id') onboardingId: string) {
+    return this.recruitmentService.getAccessCardInfo(onboardingId);
+  }
+
+  // ==================== EMPLOYEE RESIGNATION ====================
+
+  @Post('termination/resignation')
+  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.NEW_HIRE)
+  async createResignation(@Req() req, @Body() dto: any) {
+    const userId = req.user.sub;
+    return this.recruitmentService.createResignation(userId, dto);
+  }
+
+  @Get('termination/my-resignations')
+  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.NEW_HIRE)
+  async getMyResignations(@Req() req) {
+    const userId = req.user.sub;
+    return this.recruitmentService.getMyResignationStatus(userId);
+  }
+
+  // ==================== HR TERMINATION MANAGEMENT ====================
+
+  @Post('termination')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN)
+  async initiateTermination(@Req() req, @Body() dto: any) {
+    const userId = req.user.sub;
+    return this.recruitmentService.initiateTermination(userId, dto);
+  }
+
+  @Get('termination/statistics')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN)
+  async getTerminationStatistics() {
+    return this.recruitmentService.getTerminationStatistics();
+  }
+
+  @Get('termination')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE)
+  async getAllTerminations(
+    @Query('status') status?: string,
+    @Query('initiator') initiator?: string,
+  ) {
+    return this.recruitmentService.getAllTerminations({ status, initiator });
+  }
+
+  @Get('termination/:id')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.HR_EMPLOYEE, Role.DEPARTMENT_EMPLOYEE, Role.NEW_HIRE)
+  async getTerminationById(@Param('id') id: string) {
+    return this.recruitmentService.getTerminationById(id);
+  }
+
+  @Put('termination/:id')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN)
+  async updateTermination(
     @Param('id') id: string,
-    @Body() processDto: ProcessTerminationDto,
+    @Req() req,
+    @Body() dto: any,
   ) {
-    return this.recruitmentService.processTerminationRequest(id, processDto);
+    const userId = req.user.sub;
+    return this.recruitmentService.updateTermination(id, userId, dto);
   }
 
-  // ========== PHASE 3: OFFBOARDING - FINAL SETTLEMENT ==========
+  // ==================== CLEARANCE MANAGEMENT ====================
 
-  /**
-   * OFF-013: Trigger final settlement (benefits termination, final pay calculation)
-   * Accessible by: HR Manager, HR Admin
-   */
-  @Put('terminations/:id/settlement')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
-  async processFinalSettlement(
-    @Param('id') id: string,
-    @Body() dto: ProcessFinalSettlementDto,
+  @Post('termination/:id/clearance')
+  @Roles(
+    Role.HR_MANAGER, 
+    Role.HR_ADMIN, 
+    Role.SYSTEM_ADMIN
+  )
+  async createClearanceChecklist(
+    @Param('id') terminationId: string,
+    @Body() dto: any,
+    @Req() req
   ) {
-    return this.recruitmentService.processFinalSettlement(id, dto.includeUnusedLeave);
+    const userId = req.user.sub;
+    return this.recruitmentService.createClearanceChecklist(terminationId, dto, userId);
   }
 
-  // ========== PHASE 3: OFFBOARDING - CLEARANCE & ASSET RECOVERY ==========
-
-  /**
-   * OFF-006: Create clearance checklist (automatically created on termination approval)
-   * Accessible by: HR Manager, HR Admin
-   */
-  @Post('clearance/:terminationId')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
-  async createClearanceChecklist(@Param('terminationId') terminationId: string) {
-    return this.recruitmentService.createClearanceChecklist(terminationId);
-  }
-
-  /**
-   * Get clearance checklist by termination ID
-   * Accessible by: HR roles, Department heads (for their dept sign-off)
-   */
-  @Get('clearance/termination/:terminationId')
+  @Get('termination/:id/clearance')
   @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.SYSTEM_ADMIN,
+    Role.HR_MANAGER, 
+    Role.HR_ADMIN, 
+    Role.DEPARTMENT_HEAD, 
+    Role.SYSTEM_ADMIN
   )
-  async getClearanceChecklistByTermination(@Param('terminationId') terminationId: string) {
-    return this.recruitmentService.getClearanceChecklistByTermination(terminationId);
+  async getClearanceChecklist(@Param('id') terminationId: string) {
+    return this.recruitmentService.getClearanceChecklist(terminationId);
   }
 
-  /**
-   * OFF-010: Update clearance item (department sign-off)
-   * Accessible by: Department heads, HR roles
-   */
-  @Put('clearance/:checklistId/items')
+  @Put('termination/:id/clearance')
   @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.HR_MANAGER,
-    Role.HR_ADMIN,
-    Role.SYSTEM_ADMIN,
+    Role.HR_MANAGER, 
+    Role.HR_ADMIN, 
+    Role.SYSTEM_ADMIN
   )
+  async updateClearanceChecklist(
+    @Param('id') terminationId: string,
+    @Body() dto: any,
+    @Req() req
+  ) {
+    const userId = req.user.sub;
+    return this.recruitmentService.updateClearanceChecklist(terminationId, dto, userId);
+  }
+
+  @Put('termination/:id/clearance/sign-off')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.DEPARTMENT_HEAD, Role.SYSTEM_ADMIN)
   async updateClearanceItem(
-    @Request() req,
-    @Param('checklistId') checklistId: string,
-    @Body() updateDto: UpdateClearanceItemDto,
+    @Param('id') terminationId: string,
+    @Req() req,
+    @Body() dto: any,
   ) {
-    return this.recruitmentService.updateClearanceItem(
-      checklistId,
-      req.user.employeeId,
-      updateDto,
-    );
+    const userId = req.user.sub;
+    return this.recruitmentService.updateClearanceItem(terminationId, userId, dto);
   }
 
-  /**
-   * Update equipment return status
-   * Accessible by: HR roles, Facilities/IT
-   */
-  @Put('clearance/:checklistId/equipment')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Put('termination/:id/clearance/equipment')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.DEPARTMENT_HEAD)
   async updateEquipmentReturn(
-    @Param('checklistId') checklistId: string,
-    @Body() updateDto: UpdateEquipmentReturnDto,
+    @Param('id') terminationId: string,
+    @Req() req,
+    @Body() dto: any[],
   ) {
-    return this.recruitmentService.updateEquipmentReturn(checklistId, updateDto);
+    const userId = req.user.sub;
+    return this.recruitmentService.updateEquipmentReturn(terminationId, userId, dto);
   }
 
-  /**
-   * Update card return status
-   * Accessible by: HR roles, Facilities
-   */
-  @Put('clearance/:checklistId/card')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Put('termination/:id/clearance/card')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.DEPARTMENT_HEAD)
   async updateCardReturn(
-    @Param('checklistId') checklistId: string,
-    @Body() dto: UpdateCardReturnDto,
+    @Param('id') terminationId: string,
+    @Body() body: { cardReturned: boolean },
   ) {
-    return this.recruitmentService.updateCardReturn(checklistId, dto.returned);
+    return this.recruitmentService.updateCardReturn(terminationId, body.cardReturned);
   }
 
-  /**
-   * Check if clearance is complete
-   * Accessible by: HR roles
-   */
-  @Get('clearance/:checklistId/complete')
-  @Roles(Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN)
-  async isClearanceComplete(@Param('checklistId') checklistId: string) {
-    const isComplete = await this.recruitmentService.isClearanceComplete(checklistId);
-    return { checklistId, isComplete };
+  // ==================== OFFBOARDING NOTIFICATIONS ====================
+
+  @Post('termination/:id/trigger-offboarding')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN)
+  async triggerOffboarding(@Param('id') terminationId: string, @Req() req) {
+    const userId = req.user.sub;
+    return this.recruitmentService.triggerOffboardingNotifications(terminationId, userId);
   }
 }

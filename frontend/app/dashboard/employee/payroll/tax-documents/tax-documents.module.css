@@ -1,0 +1,403 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Navigation */
+.navigation {
+  margin-bottom: 25px;
+}
+
+.backLink {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.backLink:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Info Banner */
+.infoBanner {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left: 4px solid #3b82f6;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  display: flex;
+  gap: 15px;
+}
+
+.infoIcon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.infoContent h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.infoContent p {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Year Selector */
+.yearSelector {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.yearLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.yearSelect {
+  padding: 10px 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.yearSelect:hover {
+  border-color: #94a3b8;
+}
+
+.yearSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Summary Section */
+.summarySection {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.summarySection h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.summaryCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s;
+}
+
+.summaryCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.summaryIcon {
+  font-size: 36px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.summaryContent {
+  flex: 1;
+}
+
+.summaryLabel {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.summaryValue {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Tax Breakdown Section */
+.taxBreakdownSection {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.taxBreakdownSection h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+}
+
+.taxTable {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.taxTableHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 15px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.taxTableRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.2s;
+}
+
+.taxTableRow:hover {
+  background: #f8fafc;
+}
+
+.taxType {
+  font-size: 14px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.taxAmount {
+  font-size: 14px;
+  color: #1e293b;
+  font-weight: 600;
+  text-align: right;
+}
+
+.taxTableFooter {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  padding: 15px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.taxTableFooter div:last-child {
+  text-align: right;
+}
+
+/* Download Section */
+.downloadSection {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.downloadSection h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+}
+
+.downloadGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.downloadCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 10px;
+  padding: 25px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s;
+}
+
+.downloadCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+.downloadIcon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.downloadContent h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.downloadContent p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 15px 0;
+}
+
+.btnDownload {
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.btnDownload:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+/* Disclaimer */
+.disclaimer {
+  background: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.disclaimer h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #78350f;
+  margin: 0 0 10px 0;
+}
+
+.disclaimer p {
+  font-size: 14px;
+  color: #92400e;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Empty State */
+.emptyState {
+  background: white;
+  border-radius: 12px;
+  padding: 60px 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.emptyState h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 10px 0;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Error Message */
+.errorMessage {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border-left: 4px solid #dc2626;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .downloadGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .yearSelector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .yearSelect {
+    width: 100%;
+  }
+
+  .taxTableHeader,
+  .taxTableRow,
+  .taxTableFooter {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .infoBanner {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,274 @@
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.headerInfo h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  color: #111827;
+}
+
+.headerInfo p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.headerActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.exportButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.exportButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterGroup label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.searchInput,
+.filterSelect {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus,
+.filterSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.resultCount {
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.noRecords {
+  text-align: center;
+  padding: 4rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  color: #6b7280;
+}
+
+.noRecords p {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.clearFiltersButton {
+  padding: 0.75rem 1.5rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tableContainer {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.recordsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recordsTable thead {
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  color: white;
+}
+
+.recordsTable th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.recordsTable tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s;
+}
+
+.recordsTable tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.recordsTable td {
+  padding: 1rem;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.employeeCell,
+.cycleCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.employeeCell strong,
+.cycleCell strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.employeeNumber,
+.cycleDates {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.cycleType {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.score {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #f3f4f6;
+  color: #111827;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.ratingBadge {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.ratingBadge.excellent {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.ratingBadge.good {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.ratingBadge.satisfactory {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ratingBadge.needsimprovement {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.ratingBadge.unsatisfactory {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.ratingBadge.unknown {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.viewButton {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.viewButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 1024px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+  
+  .tableContainer {
+    overflow-x: auto;
+  }
+  
+  .recordsTable {
+    min-width: 1000px;
+  }
+}

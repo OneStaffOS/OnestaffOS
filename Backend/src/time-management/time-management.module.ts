@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TimeManagementController } from './time-management.controller';
 import { TimeManagementService } from './time-management.service';
+import { OfflineSyncService } from './services/offline-sync.service';
+import { BackupRetentionService } from './services/backup-retention.service';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
 import { EmployeeProfile, EmployeeProfileSchema } from '../employee-profile/models/employee-profile.schema';
 import { Department, DepartmentSchema } from '../organization-structure/models/department.schema';
 import { NotificationModule } from '../notifications/notification.module';
@@ -39,6 +42,7 @@ import { Position, PositionSchema } from '../organization-structure/models/posit
       { name: Holiday.name, schema: HolidaySchema },
       // VacationPackage and EmployeeVacation use was removed per request
     ]),
+    ScheduleModule.forRoot(),
     NotificationModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -46,7 +50,7 @@ import { Position, PositionSchema } from '../organization-structure/models/posit
     }),
   ],
   controllers: [TimeManagementController],
-  providers: [TimeManagementService],
-  exports: [TimeManagementService],
+  providers: [TimeManagementService, OfflineSyncService, BackupRetentionService],
+  exports: [TimeManagementService, OfflineSyncService, BackupRetentionService],
 })
 export class TimeManagementModule {}

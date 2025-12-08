@@ -1,0 +1,42 @@
+.container {
+  padding: 1rem;
+}
+.list {
+  display: grid;
+  gap: 12px;
+}
+.card {
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+}
+.row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.punchList {
+  margin: 6px 0 0 1rem;
+}
+.actions {
+  margin-top: 8px;
+}
+.primary {
+  padding: 0.4rem 0.8rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+}
+.secondary {
+  padding: 0.35rem 0.75rem;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+.correctionForm {
+  margin-top: 8px;
+  border-top: 1px dashed #e5e7eb;
+  padding-top: 8px;
+}

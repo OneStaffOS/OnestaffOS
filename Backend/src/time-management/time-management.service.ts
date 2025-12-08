@@ -14,6 +14,8 @@ import { Holiday, HolidayDocument } from './models/holiday.schema';
 import { NotificationLog, NotificationLogDocument } from './models/notification-log.schema';
 import { NotificationService } from '../notifications/notification.service';
 import * as os from 'os';
+import * as fs from 'fs';
+import * as path from 'path';
 import { EmployeeProfile, EmployeeProfileDocument } from '../employee-profile/models/employee-profile.schema';
 import { Position, PositionDocument } from '../organization-structure/models/position.schema';
 import { Department, DepartmentDocument } from '../organization-structure/models/department.schema';
@@ -25,6 +27,7 @@ import { UpdateShiftAssignmentDto } from './dto/update-shift-assignment.dto';
 import { CreateScheduleRuleDto } from './dto/create-schedule-rule.dto';
 import { UpdateScheduleRuleDto } from './dto/update-schedule-rule.dto';
 import { ClockPunchDto } from './dto/clock-punch.dto';
+import { ClockPunchByIdDto } from './dto/clock-punch-by-id.dto';
 import { ManualAttendanceCorrectionDto } from './dto/manual-attendance-correction.dto';
 import { CreateCorrectionRequestDto } from './dto/create-correction-request.dto';
 import { ProcessCorrectionRequestDto } from './dto/process-correction-request.dto';
@@ -455,6 +458,7 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
 
   /**
    * US-5: Employee clock in/out
+   * BR-TM-10: Restrict early/late clock-ins based on shift configuration
    */
   async clockPunch(employeeId: string, punchDto: ClockPunchDto): Promise<AttendanceRecord> {
     // Determine the calendar date for the punch based on the punch timestamp
@@ -463,6 +467,59 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
     punchDateStart.setHours(0, 0, 0, 0);
     const punchDateEnd = new Date(punchDateStart);
     punchDateEnd.setDate(punchDateEnd.getDate() + 1);
+
+    // BR-TM-10: Validate clock-in restrictions based on assigned shift
+    const shiftAssignment = await this.shiftAssignmentModel
+      .findOne({
+        employeeId: new Types.ObjectId(employeeId),
+        status: ShiftAssignmentStatus.APPROVED,
+        startDate: { $lte: punchTime },
+        $or: [{ endDate: { $gte: punchTime } }, { endDate: null }],
+      })
+      .populate('shiftId')
+      .exec();
+
+    if (shiftAssignment && shiftAssignment.shiftId) {
+      const shift = shiftAssignment.shiftId as any;
+      if (shift && shift.startTime && shift.endTime) {
+        const [startHour, startMinute] = shift.startTime.split(':').map(Number);
+        const [endHour, endMinute] = shift.endTime.split(':').map(Number);
+        
+        const shiftStartTime = new Date(punchTime);
+        shiftStartTime.setHours(startHour, startMinute, 0, 0);
+        
+        const shiftEndTime = new Date(punchTime);
+        shiftEndTime.setHours(endHour, endMinute, 0, 0);
+
+        // Apply grace period for clock-in
+        const graceInMs = (shift.graceInMinutes || 0) * 60 * 1000;
+        const graceOutMs = (shift.graceOutMinutes || 0) * 60 * 1000;
+        
+        const earliestAllowedIn = new Date(shiftStartTime.getTime() - graceInMs);
+        const latestAllowedOut = new Date(shiftEndTime.getTime() + graceOutMs);
+
+        if (punchDto.type === PunchType.IN && punchTime < earliestAllowedIn) {
+          throw new BadRequestException(`Clock-in not allowed before ${earliestAllowedIn.toLocaleTimeString()}. Too early for your shift.`);
+        }
+        
+        if (punchDto.type === PunchType.OUT && punchTime > latestAllowedOut) {
+          throw new BadRequestException(`Clock-out not allowed after ${latestAllowedOut.toLocaleTimeString()}. Too late for your shift without overtime approval.`);
+        }
+      }
+    }
+
+    // Fetch employee profile for CSV logging
+    const employee = await this.employeeProfileModel.findById(new Types.ObjectId(employeeId)).exec();
+    
+    // Save to CSV file for external systems (if employee has employeeNumber)
+    if (employee && employee.employeeNumber) {
+      await this.saveAttendanceToCSV({
+        employeeNumber: employee.employeeNumber,
+        employeeName: `${employee.firstName} ${employee.lastName}`,
+        type: punchDto.type,
+        time: punchTime,
+      });
+    }
 
     // Find or create the attendance record for the punch's calendar date.
     // Query by punches.time so this works even when schema doesn't have timestamps.
@@ -483,22 +540,22 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
       });
     }
 
-    // Enforce one IN and one OUT per calendar day
-    // Count punches only within the same calendar date range
-    const existingInCount = attendanceRecord.punches.filter(
-      (p) => p.type === PunchType.IN && new Date(p.time) >= punchDateStart && new Date(p.time) < punchDateEnd,
-    ).length;
-    const existingOutCount = attendanceRecord.punches.filter(
-      (p) => p.type === PunchType.OUT && new Date(p.time) >= punchDateStart && new Date(p.time) < punchDateEnd,
-    ).length;
-    if (punchDto.type === PunchType.IN && existingInCount >= 1) {
-      throw new BadRequestException('Employee has already clocked IN for this calendar day');
-    }
-    if (punchDto.type === PunchType.OUT && existingOutCount >= 1) {
-      throw new BadRequestException('Employee has already clocked OUT for this calendar day');
+    // Allow multiple punches per day
+    // Get today's punches to check logical sequence
+    const todayPunches = attendanceRecord.punches.filter(
+      (p) => new Date(p.time) >= punchDateStart && new Date(p.time) < punchDateEnd,
+    );
+    
+    // Check if last punch was same type (prevent double IN or double OUT in sequence)
+    if (todayPunches.length > 0) {
+      const lastPunch = todayPunches[todayPunches.length - 1];
+      if (lastPunch.type === punchDto.type) {
+        const action = punchDto.type === PunchType.IN ? 'clock in' : 'clock out';
+        throw new BadRequestException(`You cannot ${action} twice in a row. Please ${punchDto.type === PunchType.IN ? 'clock out' : 'clock in'} first.`);
+      }
     }
 
-    // Add punch
+    // Add punch (metadata tracked via DTO for external systems)
     attendanceRecord.punches.push({
       type: punchDto.type,
       time: punchTime,
@@ -572,6 +629,102 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
     }
 
     return attendanceRecord.save();
+  }
+
+  /**
+   * US-5: Employee clock in/out using employee number (for kiosk/external systems)
+   * Looks up employee by employeeNumber and calls clockPunch
+   */
+  async clockPunchById(punchDto: ClockPunchByIdDto): Promise<AttendanceRecord> {
+    // Find employee by employeeNumber
+    const employee = await this.employeeProfileModel.findOne({
+      employeeNumber: punchDto.employeeNumber,
+    }).exec();
+
+    if (!employee) {
+      throw new NotFoundException(`Employee with number ${punchDto.employeeNumber} not found`);
+    }
+
+    // Save to CSV file for external systems
+    await this.saveAttendanceToCSV({
+      employeeNumber: punchDto.employeeNumber,
+      employeeName: `${employee.firstName} ${employee.lastName}`,
+      type: punchDto.type,
+      time: punchDto.time || new Date(),
+    });
+
+    // Call the existing clockPunch method with the employee's _id
+    return this.clockPunch(employee._id.toString(), {
+      type: punchDto.type,
+      time: punchDto.time,
+    });
+  }
+
+  /**
+   * Save attendance punch to external CSV file
+   */
+  private async saveAttendanceToCSV(data: {
+    employeeNumber: string;
+    employeeName: string;
+    type: PunchType;
+    time: Date;
+  }): Promise<void> {
+    const csvDir = path.join(process.cwd(), 'uploads', 'attendance-logs');
+    const csvFile = path.join(csvDir, 'attendance.csv');
+
+    // Ensure directory exists
+    if (!fs.existsSync(csvDir)) {
+      fs.mkdirSync(csvDir, { recursive: true });
+    }
+
+    const timestamp = new Date(data.time).toISOString();
+    const date = timestamp.split('T')[0];
+    const time = new Date(data.time).toLocaleTimeString('en-US', { hour12: false });
+    
+    const csvRow = `${data.employeeNumber},${data.employeeName},${data.type},${date},${time},${timestamp}\n`;
+
+    // Check if file exists, if not create with header
+    if (!fs.existsSync(csvFile)) {
+      const header = 'EmployeeNumber,EmployeeName,PunchType,Date,Time,Timestamp\n';
+      fs.writeFileSync(csvFile, header, 'utf8');
+    }
+
+    // Append the new record
+    fs.appendFileSync(csvFile, csvRow, 'utf8');
+  }
+
+  /**
+   * Read attendance records from CSV file
+   */
+  async getAttendanceFromCSV(employeeNumber?: string): Promise<any[]> {
+    const csvFile = path.join(process.cwd(), 'uploads', 'attendance-logs', 'attendance.csv');
+
+    if (!fs.existsSync(csvFile)) {
+      return [];
+    }
+
+    const content = fs.readFileSync(csvFile, 'utf8');
+    const lines = content.split('\n').filter(line => line.trim());
+    
+    // Skip header
+    const records = lines.slice(1).map(line => {
+      const [empNum, empName, type, date, time, timestamp] = line.split(',');
+      return {
+        employeeNumber: empNum,
+        employeeName: empName,
+        punchType: type,
+        date,
+        time,
+        timestamp,
+      };
+    });
+
+    // Filter by employee number if provided
+    if (employeeNumber) {
+      return records.filter(r => r.employeeNumber === employeeNumber);
+    }
+
+    return records;
   }
 
   /**
@@ -651,15 +804,26 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
     startDate?: Date,
     endDate?: Date,
   ): Promise<AttendanceRecord[]> {
-    const query: any = { employeeId: new Types.ObjectId(employeeId) };
+    const query: any = {};
 
-    if (startDate || endDate) {
-      query.createdAt = {};
-      if (startDate) query.createdAt.$gte = startDate;
-      if (endDate) query.createdAt.$lte = endDate;
+    // If employeeId is provided, filter by employee
+    if (employeeId) {
+      query.employeeId = new Types.ObjectId(employeeId);
     }
 
-    return this.attendanceRecordModel.find(query).exec();
+    // Filter by punch time if dates are provided
+    if (startDate || endDate) {
+      const dateFilter: any = {};
+      if (startDate) dateFilter.$gte = startDate;
+      if (endDate) dateFilter.$lte = endDate;
+      query['punches.time'] = dateFilter;
+    }
+
+    return this.attendanceRecordModel
+      .find(query)
+      .populate('employeeId', 'firstName lastName employeeNumber')
+      .sort({ 'punches.0.time': -1 })
+      .exec();
   }
 
   // ==================== PHASE 3: ATTENDANCE CORRECTION REQUESTS ====================
@@ -1643,5 +1807,152 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
   onModuleDestroy() {
     if (this.weeklyIntervalHandle) clearInterval(this.weeklyIntervalHandle);
     if (this.repeatedLatenessHandle) clearInterval(this.repeatedLatenessHandle);
+  }
+
+  // ========== ESCALATION RULES (Using existing NotificationLog schema) ==========
+
+  /**
+   * Create a new escalation rule using NotificationLog
+   * Stores escalation config as JSON string in the message field
+   */
+  async createEscalationRule(createDto: any): Promise<any> {
+    const rule = new this.notificationLogModel({
+      to: null, // System-level rule
+      type: 'ESCALATION_RULE',
+      message: JSON.stringify({
+        ruleType: createDto.ruleType,
+        hoursBeforePayrollCutoff: createDto.hoursBeforePayrollCutoff,
+        escalateToRoles: createDto.escalateToRoles,
+        notificationTemplate: createDto.notificationTemplate,
+        isActive: createDto.isActive,
+      }),
+    });
+    await rule.save();
+    return { _id: rule._id, ...createDto };
+  }
+
+  /**
+   * Get all escalation rules from NotificationLog where type = 'ESCALATION_RULE'
+   */
+  async getAllEscalationRules(): Promise<any[]> {
+    const logs = await this.notificationLogModel.find({ type: 'ESCALATION_RULE' }).exec();
+    return logs.map(log => {
+      try {
+        const data = JSON.parse(log.message || '{}');
+        return {
+          _id: log._id,
+          ruleType: data.ruleType,
+          hoursBeforePayrollCutoff: data.hoursBeforePayrollCutoff,
+          escalateToRoles: data.escalateToRoles,
+          notificationTemplate: data.notificationTemplate,
+          isActive: data.isActive,
+        };
+      } catch (e) {
+        return null;
+      }
+    }).filter(r => r !== null);
+  }
+
+  /**
+   * Update an escalation rule
+   */
+  async updateEscalationRule(id: string, updateDto: any): Promise<any> {
+    const log = await this.notificationLogModel.findById(id).exec();
+    if (!log || log.type !== 'ESCALATION_RULE') {
+      throw new NotFoundException(`Escalation rule ${id} not found`);
+    }
+    
+    const data = JSON.parse(log.message || '{}');
+    if (updateDto.ruleType !== undefined) data.ruleType = updateDto.ruleType;
+    if (updateDto.hoursBeforePayrollCutoff !== undefined) data.hoursBeforePayrollCutoff = updateDto.hoursBeforePayrollCutoff;
+    if (updateDto.escalateToRoles !== undefined) data.escalateToRoles = updateDto.escalateToRoles;
+    if (updateDto.notificationTemplate !== undefined) data.notificationTemplate = updateDto.notificationTemplate;
+    if (updateDto.isActive !== undefined) data.isActive = updateDto.isActive;
+    
+    log.message = JSON.stringify(data);
+    await log.save();
+    
+    return {
+      _id: log._id,
+      ...data,
+    };
+  }
+
+  /**
+   * Delete an escalation rule
+   */
+  async deleteEscalationRule(id: string): Promise<{ message: string }> {
+    const result = await this.notificationLogModel.findOneAndDelete({ _id: id, type: 'ESCALATION_RULE' }).exec();
+    if (!result) {
+      throw new NotFoundException(`Escalation rule ${id} not found`);
+    }
+    return { message: 'Escalation rule deleted successfully' };
+  }
+
+  /**
+   * Get system settings using NotificationLog for config storage
+   */
+  async getSystemSettings(): Promise<any> {
+    let settings = await this.notificationLogModel.findOne({ 
+      type: 'SYSTEM_SETTINGS',
+      to: null 
+    }).exec();
+    
+    if (!settings) {
+      // Create default settings
+      settings = new this.notificationLogModel({
+        to: null,
+        type: 'SYSTEM_SETTINGS',
+        message: JSON.stringify({
+          module: 'time-management',
+          payrollCutoffDay: 25,
+          additionalSettings: {},
+        }),
+      });
+      await settings.save();
+    }
+    
+    const data = JSON.parse(settings.message || '{}');
+    return {
+      module: data.module || 'time-management',
+      payrollCutoffDay: data.payrollCutoffDay || 25,
+      additionalSettings: data.additionalSettings || {},
+    };
+  }
+
+  /**
+   * Update system settings
+   */
+  async updateSystemSettings(updateDto: any): Promise<any> {
+    let settings = await this.notificationLogModel.findOne({ 
+      type: 'SYSTEM_SETTINGS',
+      to: null 
+    }).exec();
+    
+    if (!settings) {
+      settings = new this.notificationLogModel({
+        to: null,
+        type: 'SYSTEM_SETTINGS',
+        message: JSON.stringify({
+          module: 'time-management',
+          payrollCutoffDay: updateDto.payrollCutoffDay || 25,
+          additionalSettings: updateDto.additionalSettings || {},
+        }),
+      });
+    } else {
+      const data = JSON.parse(settings.message || '{}');
+      if (updateDto.payrollCutoffDay !== undefined) data.payrollCutoffDay = updateDto.payrollCutoffDay;
+      if (updateDto.additionalSettings !== undefined) data.additionalSettings = updateDto.additionalSettings;
+      settings.message = JSON.stringify(data);
+    }
+    
+    await settings.save();
+    
+    const data = JSON.parse(settings.message || '{}');
+    return {
+      module: data.module || 'time-management',
+      payrollCutoffDay: data.payrollCutoffDay || 25,
+      additionalSettings: data.additionalSettings || {},
+    };
   }
 }

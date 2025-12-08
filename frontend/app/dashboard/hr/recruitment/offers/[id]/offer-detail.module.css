@@ -1,0 +1,406 @@
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.backButton {
+  padding: 0.75rem 1.5rem;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backButton:hover {
+  background: #e5e7eb;
+}
+
+.headerBadges {
+  display: flex;
+  gap: 1rem;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.card {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h3 {
+  font-size: 1.1rem;
+  color: #374151;
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.section p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.role {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #7c3aed !important;
+}
+
+.infoGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.infoItem {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.infoLabel {
+  font-weight: 600;
+  color: #374151;
+  min-width: 100px;
+}
+
+.infoValue {
+  color: #6b7280;
+}
+
+.compensationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.compensationItem {
+  background: #f9fafb;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.compensationLabel {
+  display: block;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.compensationValue {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #059669;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.benefitsList li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.benefitsList li:last-child {
+  border-bottom: none;
+}
+
+.benefitsList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #059669;
+  font-weight: bold;
+}
+
+.conditions {
+  background: #fef3c7;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border-left: 4px solid #f59e0b;
+  color: #78350f !important;
+}
+
+.content {
+  background: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusPending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusApproved {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.statusRejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.responsePending {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.responseAccepted {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.responseDeclined {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.approversList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.approverItem {
+  background: #f9fafb;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.approverHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.approverName {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.approverRole {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.approverComment {
+  background: white;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.approverDate {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.noApprovers {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.approvalActions {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.approvalActions h3 {
+  font-size: 1.1rem;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem;
+}
+
+.approvalOptions {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.radioLabel:hover {
+  border-color: #7c3aed;
+  background: #faf5ff;
+}
+
+.radioLabel input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: #7c3aed;
+}
+
+.radioLabel span {
+  font-weight: 500;
+  color: #374151;
+}
+
+.commentTextarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
+.commentTextarea:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #6d28d9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+}
+
+.submitButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.finalStatusMessage {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.finalStatusMessage p {
+  color: #166534;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .headerBadges {
+    flex-wrap: wrap;
+  }
+
+  .compensationGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .approvalOptions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

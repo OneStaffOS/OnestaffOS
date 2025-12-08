@@ -1,0 +1,353 @@
+/* Employee ID Card Page Styles */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  min-height: 500px;
+}
+
+.cardWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* ID Card Styles */
+.idCard {
+  width: 400px;
+  aspect-ratio: 1.586;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.idCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.cardType {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.photoSection {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.photoPlaceholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 4px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.detailsSection {
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.employeeName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.employeeId {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.department {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.position {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.email {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.barcodeSection {
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.barcode {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  align-items: flex-end;
+  height: 50px;
+  margin-bottom: 0.5rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.barcodeLine {
+  width: 3px;
+  background: #000;
+  border-radius: 1px;
+}
+
+.barcodeLine:nth-child(odd) {
+  height: 40px;
+}
+
+.barcodeLine:nth-child(even) {
+  height: 30px;
+}
+
+.barcodeLine:nth-child(3n) {
+  height: 45px;
+}
+
+.barcodeLine:nth-child(5n) {
+  height: 25px;
+}
+
+.cardNumber {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Card Information Panel */
+.cardInfo {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardInfo h3 {
+  margin: 0 0 1.5rem;
+  font-size: 1.5rem;
+  color: #1f2937;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.infoLabel {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.infoValue {
+  font-size: 1rem;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.notice {
+  background: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  padding: 1rem;
+  border-radius: 6px;
+  color: #92400e;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.notice strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* No Card State */
+.noCard {
+  background: white;
+  border-radius: 12px;
+  padding: 4rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.noCardIcon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.noCard h2 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  color: #1f2937;
+}
+
+.noCard p {
+  margin: 0 0 2rem;
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.requestButton {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.requestButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.requestButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.requestSuccess {
+  background: #d1fae5;
+  border: 2px solid #10b981;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 1rem;
+}
+
+.successIcon {
+  width: 60px;
+  height: 60px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 auto 1rem;
+}
+
+.requestSuccess h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: #065f46;
+}
+
+.requestSuccess p {
+  margin: 0;
+  font-size: 1rem;
+  color: #047857;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .idCard {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .cardInfo {
+    padding: 1.5rem;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .noCard {
+    padding: 3rem 1.5rem;
+  }
+
+  .noCardIcon {
+    font-size: 4rem;
+  }
+
+  .noCard h2 {
+    font-size: 1.5rem;
+  }
+}

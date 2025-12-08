@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, Min, IsOptional } from 'class-validator';
 
 export class CreateTerminationBenefitsDto {
     @IsString()
@@ -9,4 +9,8 @@ export class CreateTerminationBenefitsDto {
     @Min(0)
     @IsNotEmpty()
     amount: number;
+
+    @IsString()
+    @IsOptional()
+    terms?: string; // Optional terms and conditions
 }
