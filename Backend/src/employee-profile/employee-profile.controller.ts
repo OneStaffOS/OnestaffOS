@@ -38,11 +38,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
-    Role.SYSTEM_ADMIN
+    Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async getMyProfile(@Request() req) {
     return this.employeeProfileService.getMyProfile(req.user.sub);
@@ -56,11 +61,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async updateSelfService(@Request() req, @Body() updateDto: UpdateSelfServiceDto) {
     return this.employeeProfileService.updateSelfService(req.user.sub, updateDto);
@@ -74,11 +84,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async updateMyProfile(@Request() req, @Body() updateDto: any) {
     return this.employeeProfileService.updateSelfService(req.user.sub, updateDto);
@@ -92,11 +107,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async uploadProfilePhoto(@Request() req, @Body() body: any) {
     // For now, just accept the photo data
@@ -112,11 +132,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async createChangeRequest(@Request() req, @Body() createDto: CreateChangeRequestDto) {
     return this.employeeProfileService.createChangeRequest(req.user.sub, createDto);
@@ -130,11 +155,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async getMyChangeRequests(@Request() req) {
     return this.employeeProfileService.getMyChangeRequests(req.user.sub);
@@ -148,11 +178,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async addMyQualification(@Request() req, @Body() createDto: CreateQualificationDto) {
     return this.employeeProfileService.addQualification(req.user.sub, createDto);
@@ -166,11 +201,16 @@ export class EmployeeProfileController {
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async getMyQualifications(@Request() req) {
     return this.employeeProfileService.getMyQualifications(req.user.sub);

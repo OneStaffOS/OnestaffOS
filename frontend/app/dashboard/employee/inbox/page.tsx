@@ -63,7 +63,7 @@ export default function InboxPage() {
   };
 
   return (
-    <ProtectedRoute requiredRoles={[SystemRole.DEPARTMENT_EMPLOYEE,SystemRole.DEPARTMENT_HEAD, SystemRole.HR_MANAGER, SystemRole.HR_ADMIN, SystemRole.SYSTEM_ADMIN]}>
+    <ProtectedRoute requiredRoles={[SystemRole.DEPARTMENT_EMPLOYEE,SystemRole.DEPARTMENT_HEAD, SystemRole.HR_MANAGER, SystemRole.HR_ADMIN, SystemRole.SYSTEM_ADMIN, SystemRole.NEW_HIRE, SystemRole.JOB_CANDIDATE, SystemRole.PAYROLL_SPECIALIST, SystemRole.PAYROLL_MANAGER, SystemRole.LEGAL_POLICY_ADMIN, SystemRole.RECRUITER]}>
       <DashboardLayout title="Inbox" role="Employee">
         <div className={styles.container}>
           {/* Page Header */}

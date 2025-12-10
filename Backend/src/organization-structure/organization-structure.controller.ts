@@ -357,17 +357,22 @@ export class OrganizationStructureController {
 
   /**
    * Get current assignment for an employee
-   * Accessible by: HR roles and managers, and employees (for their own profile)
+   * Accessible by: All authenticated employees (for viewing their own assignment)
    */
   @Get('employees/:employeeId/current-assignment')
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
     Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
   )
   async getCurrentAssignment(@Param('employeeId') employeeId: string) {
     return this.organizationStructureService.getCurrentAssignment(employeeId);

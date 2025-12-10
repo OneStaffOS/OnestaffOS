@@ -20,7 +20,7 @@ export class NotificationController {
 
   // Employee inbox
   @Get('my')
-  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.NEW_HIRE)
+  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.NEW_HIRE, Role.JOB_CANDIDATE, Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.LEGAL_POLICY_ADMIN, Role.RECRUITER)
   async my(@Req() req: any) {
     const emp = req?.user?.employeeId || req?.user?.sub;
     const positionId = req?.user?.positionId;
@@ -39,14 +39,14 @@ export class NotificationController {
   }
 
   @Put(':id/read')
-  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.NEW_HIRE)
+  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.NEW_HIRE, Role.JOB_CANDIDATE, Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.LEGAL_POLICY_ADMIN, Role.RECRUITER)
   async markRead(@Param('id') id: string, @Req() req: any) {
     const emp = req?.user?.employeeId || req?.user?.sub;
     return await this.svc.markRead(id, emp);
   }
 
   @Put(':id/archive')
-    @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.NEW_HIRE)
+    @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.NEW_HIRE, Role.JOB_CANDIDATE, Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.LEGAL_POLICY_ADMIN, Role.RECRUITER)
   async archive(@Param('id') id: string, @Req() req: any) {
     const emp = req?.user?.employeeId || req?.user?.sub;
     return await this.svc.archiveForUser(id, emp);
