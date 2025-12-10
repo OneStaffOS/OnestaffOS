@@ -63,8 +63,6 @@ export default function NewHireDashboard() {
     } catch (err: any) {
       if (err.response?.status === 404) {
         setError('No onboarding checklist has been created yet. Your HR manager will set this up for you.');
-      } else {
-        console.error('Error fetching checklist:', err);
       }
       return null;
     } finally {
@@ -86,6 +84,7 @@ export default function NewHireDashboard() {
       setSuccess(`Task status updated!`);
       setTaskNotes('');
       setTimeout(() => setSuccess(''), 3000);
+      
       const updatedChecklist = await fetchOnboardingChecklist();
       
       // Check if onboarding is completed
@@ -152,6 +151,7 @@ export default function NewHireDashboard() {
 
       setSuccess('File uploaded successfully!');
       setTimeout(() => setSuccess(''), 3000);
+      
       const updatedChecklist = await fetchOnboardingChecklist();
       
       // Check if onboarding is completed
@@ -159,7 +159,6 @@ export default function NewHireDashboard() {
         setShowCompletionModal(true);
       }
     } catch (err: any) {
-      console.error('Failed to upload file:', err);
       setError(err.response?.data?.message || 'Failed to upload file');
     } finally {
       setUploadingFile(false);
@@ -178,7 +177,6 @@ export default function NewHireDashboard() {
         window.open(`/api/recruitment/documents/${response.data._id}`, '_blank');
       }
     } catch (err: any) {
-      console.error('Failed to get document:', err);
       setError('Failed to retrieve document');
     }
   };
@@ -457,7 +455,10 @@ export default function NewHireDashboard() {
                   Your role has been updated from <strong>New Hire</strong> to <strong>Department Employee</strong>.
                 </p>
                 <p className={styles.completionMessage}>
-                  Please log out and log back in for the changes to take effect.
+                  ✅ <strong>Leave entitlements have been automatically assigned</strong> to your account with zero carry-over balance.
+                </p>
+                <p className={styles.completionMessage}>
+                  Please log out and log back in for all changes to take effect.
                 </p>
               </div>
               <div className={styles.modalFooter}>

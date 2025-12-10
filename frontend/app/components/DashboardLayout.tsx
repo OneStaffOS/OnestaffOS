@@ -7,7 +7,9 @@
 
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import styles from './DashboardLayout.module.css';
+import Spinner from './Spinner';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -16,8 +18,18 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children, title, role }: DashboardLayoutProps) {
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by not rendering until mounted and auth is ready
+  if (!mounted || isLoading) {
+    return <Spinner fullScreen size="lg" />;
+  }
 
   return (
     <div className={styles.container}>

@@ -2,9 +2,8 @@
  * Loading Component
  * Global loading state for Next.js App Router
  * Displayed during page transitions and data fetching
+ * Works with React 19 Suspense boundaries
  */
-
-'use client';
 
 import Spinner from './components/Spinner';
 

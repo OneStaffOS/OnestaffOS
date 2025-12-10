@@ -46,6 +46,14 @@ import { TerminationInitiation } from './enums/termination-initiation.enum';
 import { CreateTerminationDto } from './dto/create-termination.dto';
 import { UpdateTerminationDto } from './dto/update-termination.dto';
 import { UpdateClearanceItemDto, UpdateEquipmentReturnDto } from './dto/update-clearance.dto';
+import { employeeSigningBonus, employeeSigningBonusDocument } from '../payroll-execution/models/EmployeeSigningBonus.schema';
+import { signingBonus, signingBonusDocument } from '../payroll-configuration/models/signingBonus.schema';
+import { payGrade, payGradeDocument } from '../payroll-configuration/models/payGrades.schema';
+import { taxRules, taxRulesDocument } from '../payroll-configuration/models/taxRules.schema';
+import { insuranceBrackets, insuranceBracketsDocument } from '../payroll-configuration/models/insuranceBrackets.schema';
+import { BonusStatus } from '../payroll-execution/enums/payroll-execution-enum';
+import { ConfigStatus } from '../payroll-configuration/enums/payroll-configuration-enums';
+import { LeavesService } from '../leaves/leaves.service';
 
 @Injectable()
 export class RecruitmentService {
@@ -82,8 +90,19 @@ export class RecruitmentService {
     private terminationModel: Model<TerminationRequestDocument>,
     @InjectModel(ClearanceChecklist.name)
     private clearanceModel: Model<ClearanceChecklistDocument>,
+    @InjectModel(employeeSigningBonus.name)
+    private employeeSigningBonusModel: Model<employeeSigningBonusDocument>,
+    @InjectModel(signingBonus.name)
+    private signingBonusModel: Model<signingBonusDocument>,
+    @InjectModel(payGrade.name)
+    private payGradeModel: Model<payGradeDocument>,
+    @InjectModel(taxRules.name)
+    private taxRulesModel: Model<taxRulesDocument>,
+    @InjectModel(insuranceBrackets.name)
+    private insuranceBracketsModel: Model<insuranceBracketsDocument>,
     private readonly gridFSService: GridFSService,
     private readonly notificationService: NotificationService,
+    private readonly leavesService: LeavesService,
   ) {}
 
   // ==================== JOB TEMPLATES ====================
@@ -1270,6 +1289,49 @@ ${message}
       await application.save();
     }
 
+    // Create signing bonus record if applicable
+    if (contract.signingBonus && contract.signingBonus > 0) {
+      try {
+        const candidate = await this.candidateModel.findById(offer.candidateId).exec();
+        if (candidate) {
+          // Find approved signing bonus configuration for the role
+          const signingBonusConfig = await this.signingBonusModel
+            .findOne({ 
+              positionName: contract.role,
+              status: ConfigStatus.APPROVED
+            })
+            .exec();
+
+          if (signingBonusConfig) {
+            // Check if signing bonus record already exists
+            const existingBonus = await this.employeeSigningBonusModel
+              .findOne({ 
+                employeeId: candidate._id,
+                signingBonusId: signingBonusConfig._id
+              })
+              .exec();
+
+            if (!existingBonus) {
+              const signingBonusRecord = new this.employeeSigningBonusModel({
+                employeeId: candidate._id,
+                signingBonusId: signingBonusConfig._id,
+                givenAmount: contract.signingBonus, // Can be edited by HR if different from config
+                status: BonusStatus.PENDING,
+              });
+              await signingBonusRecord.save();
+
+              console.log(`Created signing bonus record (${contract.signingBonus}) in PENDING status for candidate ${candidate._id}`);
+            }
+          } else {
+            console.warn(`No approved signing bonus configuration found for role: ${contract.role}`);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to create signing bonus record:', error);
+        // Don't throw error - bonus creation is not critical for contract signing
+      }
+    }
+
     // Update candidate role from JOB_CANDIDATE to NEW_HIRE
     try {
       const candidate = await this.candidateModel.findById(offer.candidateId).exec();
@@ -1303,7 +1365,7 @@ ${message}
     const hrEmployee: any = offer.hrEmployeeId;
     const hrEmployeeIdString = hrEmployee._id ? hrEmployee._id.toString() : offer.hrEmployeeId.toString();
     
-    await this.notificationService.createNotification('system', {
+    await this.notificationService.createNotification(candidateId, {
       title: 'Offer Letter Signed',
       message: `Candidate has signed the offer letter for ${offer.role}. The hiring process is complete!`,
       targetEmployeeIds: [hrEmployeeIdString],
@@ -1634,13 +1696,48 @@ HR Department
       task => task.status === 'completed' && task.documentId
     );
     
-    console.log('Update - All tasks completed with docs:', allTasksCompletedWithDocuments);
-    console.log('Update - Checklist already completed:', checklist.completed);
-    console.log('Update - Tasks status:', checklist.tasks.map(t => ({ status: t.status, hasDoc: !!t.documentId })));
-    
     if (allTasksCompletedWithDocuments && !checklist.completed) {
       checklist.completed = true;
       checklist.completedAt = new Date();
+      
+      // Get employee profile
+      const employee = await this.employeeProfileModel.findById(checklist.employeeId).exec();
+      
+      if (employee) {
+        // Find the employee's contract using the contractId from the checklist
+        let contract = await this.contractModel.findById(checklist.contractId).exec();
+        
+        // If contract not found by checklist's contractId, try to find by employeeId
+        if (!contract) {
+          // Find all offers for this candidate/employee
+          const offers = await this.offerModel.find({ 
+            candidateId: checklist.employeeId,
+            finalStatus: 'approved'
+          }).sort({ createdAt: -1 }).exec();
+          
+          if (offers.length > 0) {
+            // Get the most recent offer (first in sorted array)
+            const latestOffer = offers[0];
+            
+            // Find contract by offerId
+            contract = await this.contractModel.findOne({ offerId: latestOffer._id }).exec();
+          }
+        }
+        
+        if (contract && contract.grossSalary) {
+          // Auto-assign pay grade, tax rule, and insurance bracket based on salary
+          await this.autoAssignPayrollConfigurations(employee, contract.grossSalary);
+        }
+
+        // Auto-assign leave entitlements
+        try {
+          await this.leavesService.autoAssignLeaveEntitlementsForNewHire(
+            checklist.employeeId.toString()
+          );
+        } catch (leaveError) {
+          // Don't throw - allow onboarding completion to proceed even if leave assignment fails
+        }
+      }
       
       // Find the employee role document
       const employeeRole = await this.employeeSystemRoleModel.findOne({
@@ -1669,6 +1766,38 @@ HR Department
       throw new NotFoundException(`Onboarding checklist with ID ${id} not found`);
     }
     return { deleted: true };
+  }
+
+  /**
+   * Auto-assign pay grade, tax rule, and insurance bracket based on employee's gross salary
+   * This is called when onboarding is completed
+   */
+  private async autoAssignPayrollConfigurations(employee: any, grossSalary: number): Promise<void> {
+    try {
+      // 1. Find and assign pay grade based on gross salary range
+      const payGrades = await this.payGradeModel.find({ status: ConfigStatus.APPROVED }).exec();
+      let matchedPayGrade: payGradeDocument | null = null;
+      
+      for (const grade of payGrades) {
+        // Match if employee's salary falls within the pay grade's base-gross range
+        if (grossSalary >= grade.baseSalary && grossSalary <= grade.grossSalary) {
+          matchedPayGrade = grade;
+          break;
+        }
+      }
+      
+      if (matchedPayGrade) {
+        employee.payGradeId = matchedPayGrade._id;
+        await employee.save();
+      }
+      
+      // Note: Tax rules and insurance brackets are stored for reference but not assigned to employee profile
+      // They will be looked up during payroll execution based on the employee's salary
+      
+    } catch (error) {
+      console.error('Failed to auto-assign payroll configurations:', error);
+      // Don't throw error - this is not critical for onboarding completion
+    }
   }
 
   async uploadTaskDocument(
@@ -1715,13 +1844,39 @@ HR Department
       task => task.status === 'completed' && task.documentId
     );
     
-    console.log('Upload - All tasks completed with docs:', allTasksCompletedWithDocuments);
-    console.log('Upload - Checklist already completed:', checklist.completed);
-    console.log('Upload - Tasks status:', checklist.tasks.map(t => ({ status: t.status, hasDoc: !!t.documentId })));
-    
     if (allTasksCompletedWithDocuments && !checklist.completed) {
       checklist.completed = true;
       checklist.completedAt = new Date();
+      
+      // Get employee profile
+      const employee = await this.employeeProfileModel.findById(checklist.employeeId).exec();
+      
+      if (employee) {
+        // Find the employee's contract using the contractId from the checklist
+        let contract = await this.contractModel.findById(checklist.contractId).exec();
+        
+        // If contract not found by checklist's contractId, try to find by employeeId
+        if (!contract) {
+          // Find all offers for this candidate/employee
+          const offers = await this.offerModel.find({ 
+            candidateId: checklist.employeeId,
+            finalStatus: 'approved'
+          }).sort({ createdAt: -1 }).exec();
+          
+          if (offers.length > 0) {
+            // Get the most recent offer (first in sorted array)
+            const latestOffer = offers[0];
+            
+            // Find contract by offerId
+            contract = await this.contractModel.findOne({ offerId: latestOffer._id }).exec();
+          }
+        }
+        
+        if (contract && contract.grossSalary) {
+          // Auto-assign pay grade, tax rule, and insurance bracket based on salary
+          await this.autoAssignPayrollConfigurations(employee, contract.grossSalary);
+        }
+      }
       
       // Find the employee role document
       const employeeRole = await this.employeeSystemRoleModel.findOne({

@@ -252,6 +252,87 @@ export class LeavesService {
   }
 
   /**
+   * Auto-assign leave entitlements to new hire after onboarding completion
+   * Sets carryForward to 0 for all leave types
+   * @param employeeId - The ID of the employee to assign entitlements to
+   */
+  async autoAssignLeaveEntitlementsForNewHire(employeeId: string): Promise<{
+    success: boolean;
+    assigned: number;
+    errors: string[];
+  }> {
+    const errors: string[] = [];
+    let assigned = 0;
+
+    try {
+      // Get all leave types
+      const leaveTypes = await this.leaveTypeModel.find().exec();
+
+      if (leaveTypes.length === 0) {
+        errors.push('No leave types found in the system');
+        return { success: false, assigned: 0, errors };
+      }
+
+      // Get employee profile to check if already has entitlements
+      const existingEntitlements = await this.leaveEntitlementModel
+        .find({ employeeId: new Types.ObjectId(employeeId) })
+        .exec();
+
+      for (const leaveType of leaveTypes) {
+        try {
+          // Check if entitlement already exists for this leave type
+          const exists = existingEntitlements.some(
+            (ent) => ent.leaveTypeId.toString() === leaveType._id.toString()
+          );
+
+          if (exists) {
+            continue;
+          }
+
+          // Get the default yearly entitlement from policy (default to 0 days if not specified)
+          let yearlyEntitlement = 0;
+          
+          // Try to find a matching policy for this leave type
+          const policy = await this.leavePolicyModel
+            .findOne({ leaveTypeId: leaveType._id })
+            .exec();
+          
+          if (policy && policy.yearlyRate) {
+            yearlyEntitlement = policy.yearlyRate;
+          }
+
+          // Create entitlement with carryForward set to 0
+          const createDto: CreateLeaveEntitlementDto = {
+            employeeId: employeeId,
+            leaveTypeId: leaveType._id.toString(),
+            yearlyEntitlement: yearlyEntitlement,
+            carryForward: 0, // Always 0 for new hires
+            nextResetDate: new Date(new Date().getFullYear() + 1, 0, 1).toISOString(), // Next January 1st
+          };
+
+          await this.createLeaveEntitlement(createDto);
+          assigned++;
+        } catch (error) {
+          errors.push(`Failed to assign ${leaveType.name}: ${error.message}`);
+        }
+      }
+
+      return {
+        success: assigned > 0,
+        assigned,
+        errors,
+      };
+    } catch (error) {
+      errors.push(`Critical error in auto-assignment: ${error.message}`);
+      return {
+        success: false,
+        assigned: 0,
+        errors,
+      };
+    }
+  }
+
+  /**
    * Bulk assign entitlements to employees based on configured policies
    * @param policyId - Optional: Assign only for specific policy
    * @param positionId - Optional: Filter employees by position

@@ -1690,17 +1690,36 @@ export class PerformanceService {
     let sent = 0;
     let failed = 0;
 
-    // TODO: Integrate with actual notification service
-    // For now, we'll just log the reminders and return the data
+    // Send notifications to each manager with pending appraisals
     for (const [managerId, data] of managerMap) {
       try {
-        // In production, send email/notification here
+        const pendingCount = data.pendingAppraisals.length;
+        const managerName = `${data.manager.firstName} ${data.manager.lastName}`;
+        
+        // Build detailed message with list of pending appraisals
+        let message = `You have ${pendingCount} pending appraisal${pendingCount > 1 ? 's' : ''} to complete:\n\n`;
+        
+        data.pendingAppraisals.forEach((appraisal, index) => {
+          const dueDate = appraisal.dueDate ? new Date(appraisal.dueDate).toLocaleDateString() : 'No due date';
+          message += `${index + 1}. ${appraisal.employeeName} (${appraisal.employeeNumber}) - ${appraisal.cycleName}\n`;
+          message += `   Status: ${appraisal.status.replace(/_/g, ' ')} | Due: ${dueDate}\n\n`;
+        });
+        
+        message += 'Please complete these appraisals at your earliest convenience.';
+
+        // Send notification using the notification service
+        await this.notificationService.createNotification(hrEmployeeId, {
+          title: `Appraisal Reminder: ${pendingCount} Pending Appraisal${pendingCount > 1 ? 's' : ''}`,
+          message: message,
+          targetEmployeeIds: [managerId],
+          sendAt: new Date().toISOString(),
+        });
         
         recipients.push({
           managerId,
-          managerName: `${data.manager.firstName} ${data.manager.lastName}`,
+          managerName,
           managerEmail: data.manager.email,
-          pendingCount: data.pendingAppraisals.length,
+          pendingCount,
           appraisals: data.pendingAppraisals,
         });
         sent++;

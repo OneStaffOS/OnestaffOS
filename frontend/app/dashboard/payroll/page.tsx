@@ -158,14 +158,6 @@ export default function PayrollDashboardPage() {
       stats: stats?.allowances,
     },
     {
-      id: 'signing-bonuses',
-      title: 'Signing Bonuses',
-      description: 'Configure onboarding bonuses based on positions for new hires.',
-      icon: '✍️',
-      path: '/dashboard/payroll/signing-bonuses',
-      stats: stats?.signingBonuses,
-    },
-    {
       id: 'termination-benefits',
       title: 'Termination Benefits',
       description: 'Define end-of-service gratuity and resignation benefits.',

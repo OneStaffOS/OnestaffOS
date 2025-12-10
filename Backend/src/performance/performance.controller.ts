@@ -545,11 +545,10 @@ export class PerformanceController {
   /**
    * REQ-AE-10: HR Dashboard (Consolidated View)
    * Get consolidated dashboard with appraisal completion tracking across all departments
-   * Accessible by: HR Admin, System Admin
-   * Note: HR Managers use the common manager dashboard
+   * Accessible by: HR Admin, HR Manager, System Admin
    */
   @Get('dashboard/hr-admin')
-  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async getHRAdminDashboard(@Query('cycleId') cycleId?: string) {
     return this.performanceService.getHRManagerDashboard(cycleId);
   }

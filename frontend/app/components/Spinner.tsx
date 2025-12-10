@@ -6,6 +6,7 @@
 'use client';
 
 import React from 'react';
+import styles from './Spinner.module.css';
 
 interface SpinnerProps {
   /** Whether to show full-screen overlay backdrop */
@@ -26,61 +27,32 @@ export default function Spinner({ fullScreen = false, size = 'md', message }: Sp
   const { width, border } = sizeMap[size];
 
   const spinnerElement = (
-    <div style={{ textAlign: 'center' }}>
+    <div className={styles.spinnerContainer}>
       <div
+        className={styles.spinner}
         style={{
           width: `${width}px`,
           height: `${width}px`,
-          border: `${border}px solid #e0e0e0`,
-          borderTopColor: '#00c853',
-          borderRadius: '50%',
-          animation: 'spin 0.9s linear infinite',
-          margin: message ? '0 auto 12px' : '0 auto',
+          borderWidth: `${border}px`,
+          marginBottom: message ? '12px' : '0',
         }}
       />
       {message && (
-        <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>{message}</p>
+        <p className={styles.message}>{message}</p>
       )}
-      <style jsx>{`
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </div>
   );
 
   if (fullScreen) {
     return (
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(255, 255, 255, 0.6)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 9999,
-        }}
-      >
+      <div className={styles.fullScreenOverlay}>
         {spinnerElement}
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '40px 20px',
-      }}
-    >
+    <div className={styles.inlineWrapper}>
       {spinnerElement}
     </div>
   );
@@ -92,25 +64,11 @@ export default function Spinner({ fullScreen = false, size = 'md', message }: Sp
 export function InlineSpinner({ size = 16 }: { size?: number }) {
   return (
     <span
+      className={styles.inlineSpinner}
       style={{
-        display: 'inline-block',
         width: `${size}px`,
         height: `${size}px`,
-        border: '2px solid #e0e0e0',
-        borderTopColor: '#00c853',
-        borderRadius: '50%',
-        animation: 'spin 0.9s linear infinite',
-        verticalAlign: 'middle',
-        marginRight: '8px',
       }}
-    >
-      <style jsx>{`
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
-    </span>
+    />
   );
 }

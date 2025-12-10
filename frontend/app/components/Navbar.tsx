@@ -2,13 +2,20 @@
 
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
 import { SystemRole } from '@/lib/roles';
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering auth-dependent content after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -27,7 +34,10 @@ export default function Navbar() {
             Home
           </Link>
           
-          {user ? (
+          {!mounted || isLoading ? (
+            // Render placeholder during SSR and initial load to prevent hydration mismatch
+            <div style={{ width: '200px', height: '40px' }} />
+          ) : user ? (
             <>
               <Link href="/profile" className={styles.navLink}>
                 Profile

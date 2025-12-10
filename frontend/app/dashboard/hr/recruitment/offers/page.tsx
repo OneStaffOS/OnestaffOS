@@ -784,7 +784,7 @@ export default function OffersPage() {
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label htmlFor="grossSalary">Annual Gross Salary ($) <span className={styles.required}>*</span></label>
+                  <label htmlFor="grossSalary">Annual Gross Salary (EGP) <span className={styles.required}>*</span></label>
                   <input
                     type="number"
                     id="grossSalary"
@@ -797,7 +797,7 @@ export default function OffersPage() {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="signingBonus">Signing Bonus ($)</label>
+                  <label htmlFor="signingBonus">Signing Bonus (EGP)</label>
                   <input
                     type="number"
                     id="signingBonus"

@@ -22,9 +22,15 @@ import { EmployeeProfileModule } from '../employee-profile/employee-profile.modu
 import { EmployeeProfile, EmployeeProfileSchema } from '../employee-profile/models/employee-profile.schema';
 import { EmployeeSystemRole, EmployeeSystemRoleSchema } from '../employee-profile/models/employee-system-role.schema';
 import { NotificationModule } from '../notifications/notification.module';
+import { LeavesModule } from '../leaves/leaves.module';
 import { Candidate, CandidateSchema } from '../employee-profile/models/candidate.schema';
 import { Department, DepartmentSchema } from '../organization-structure/models/department.schema';
 import { Position, PositionSchema } from '../organization-structure/models/position.schema';
+import { employeeSigningBonus, employeeSigningBonusSchema } from '../payroll-execution/models/EmployeeSigningBonus.schema';
+import { signingBonus, signingBonusSchema } from '../payroll-configuration/models/signingBonus.schema';
+import { payGrade, payGradeSchema } from '../payroll-configuration/models/payGrades.schema';
+import { taxRules, taxRulesSchema } from '../payroll-configuration/models/taxRules.schema';
+import { insuranceBrackets, insuranceBracketsSchema } from '../payroll-configuration/models/insuranceBrackets.schema';
 
 @Module({
   imports:[
@@ -53,9 +59,15 @@ import { Position, PositionSchema } from '../organization-structure/models/posit
       { name: Candidate.name, schema: CandidateSchema },
       { name: Department.name, schema: DepartmentSchema },
       { name: Position.name, schema: PositionSchema },
+      { name: employeeSigningBonus.name, schema: employeeSigningBonusSchema },
+      { name: signingBonus.name, schema: signingBonusSchema },
+      { name: payGrade.name, schema: payGradeSchema },
+      { name: taxRules.name, schema: taxRulesSchema },
+      { name: insuranceBrackets.name, schema: insuranceBracketsSchema },
     ]),
     EmployeeProfileModule,
-    NotificationModule
+    NotificationModule,
+    LeavesModule
   ],
   controllers: [RecruitmentController],
   providers: [RecruitmentService, GridFSService, DeadlineReminderService],

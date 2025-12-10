@@ -298,7 +298,7 @@ export default function AdminDashboard() {
               </Link>
 
               <Link href="/dashboard/admin/escalation-settings" className={styles.actionCard}>
-                <h3>⚡ Escalation Settings</h3>
+                <h3>Escalation Settings</h3>
                 <p>Configure automatic escalation rules for pending requests</p>
               </Link>
 

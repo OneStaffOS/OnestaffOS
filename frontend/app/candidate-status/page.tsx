@@ -512,14 +512,14 @@ export default function CandidateStatusPage() {
                           <div className={styles.compensationItem}>
                             <label>Annual Gross Salary:</label>
                             <span className={styles.salaryAmount}>
-                              ${offer.grossSalary.toLocaleString()}
+                              EGP{offer.grossSalary.toLocaleString()}
                             </span>
                           </div>
                           {offer.signingBonus && offer.signingBonus > 0 && (
                             <div className={styles.compensationItem}>
                               <label>Signing Bonus:</label>
                               <span className={styles.bonusAmount}>
-                                ${offer.signingBonus.toLocaleString()}
+                                EGP{offer.signingBonus.toLocaleString()}
                               </span>
                             </div>
                           )}

@@ -119,10 +119,20 @@ export default function HRPerformanceDashboard() {
     if (!confirm(message)) return;
     
     try {
-      // This would trigger notification system
-      alert('Reminders sent successfully (notification system integration needed)');
+      const payload: { cycleId?: string; departmentId?: string } = {};
+      
+      if (selectedCycle) {
+        payload.cycleId = selectedCycle;
+      }
+      
+      if (departmentId) {
+        payload.departmentId = departmentId;
+      }
+      
+      await axios.post('/performance/reminders/send', payload);
+      alert('Reminders sent successfully to all pending appraisals');
     } catch (err: any) {
-      alert('Failed to send reminders');
+      alert(err.response?.data?.message || 'Failed to send reminders');
     }
   };
 
@@ -157,16 +167,11 @@ export default function HRPerformanceDashboard() {
     }
   };
 
-  if (loading) {
-    return (
-      <ProtectedRoute requiredRoles={[Role.HR_ADMIN, Role.SYSTEM_ADMIN]}>
-        <Spinner fullScreen message="Loading dashboard..." />
-      </ProtectedRoute>
-    );
-  }
-
   return (
-    <ProtectedRoute requiredRoles={[Role.HR_ADMIN, Role.SYSTEM_ADMIN]}>
+    <ProtectedRoute requiredRoles={[Role.HR_MANAGER,Role.HR_ADMIN, Role.SYSTEM_ADMIN]}>
+      {loading ? (
+        <Spinner fullScreen message="Loading dashboard..." />
+      ) : (
       <div className={styles.container}>
         <div className={styles.header}>
           <div>
@@ -424,6 +429,7 @@ export default function HRPerformanceDashboard() {
           </>
         )}
       </div>
+      )}
     </ProtectedRoute>
   );
 }

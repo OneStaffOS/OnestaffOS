@@ -231,7 +231,7 @@ export class LeavesController {
    * Accessible by: HR Admin, HR Manager
    */
   @Post('entitlements')
-  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN, Role.NEW_HIRE)
   async createLeaveEntitlement(@Body() createDto: CreateLeaveEntitlementDto) {
     return this.leavesService.createLeaveEntitlement(createDto);
   }

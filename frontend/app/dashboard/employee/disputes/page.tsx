@@ -1,11 +1,19 @@
+/**
+ * Employee Disputes Page (Route: /dashboard/employee/disputes)
+ * REQ-AE-07: View and track disputes raised about appraisals
+ * Displays all disputes submitted by the employee with status and resolution
+ */
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
 import DashboardLayout from '@/app/components/DashboardLayout';
+import Spinner from '@/app/components/Spinner';
 import axios from '@/lib/axios-config';
 import { SystemRole } from '@/lib/roles';
 import { useRouter } from 'next/navigation';
+import styles from './disputes.module.css';
 
 interface DisputeSummary {
   _id: string;
@@ -14,12 +22,15 @@ interface DisputeSummary {
   status?: string;
   submittedAt?: string;
   resolutionSummary?: string;
+  resolvedBy?: string;
+  resolvedAt?: string;
 }
 
 export default function MyDisputesPage() {
   const [disputes, setDisputes] = useState<DisputeSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [filter, setFilter] = useState<'all' | 'pending' | 'resolved'>('all');
   const router = useRouter();
 
   useEffect(() => {
@@ -40,41 +51,138 @@ export default function MyDisputesPage() {
     }
   };
 
+  const getStatusBadge = (status: string) => {
+    const statusLower = status?.toLowerCase() || '';
+    if (statusLower.includes('pending') || statusLower.includes('open')) {
+      return <span className={styles.statusPending}>⏳ Pending</span>;
+    }
+    if (statusLower.includes('approved') || statusLower.includes('resolved')) {
+      return <span className={styles.statusApproved}>✅ Resolved</span>;
+    }
+    if (statusLower.includes('rejected') || statusLower.includes('denied')) {
+      return <span className={styles.statusRejected}>❌ Rejected</span>;
+    }
+    return <span className={styles.statusDefault}>{status}</span>;
+  };
+
+  const filteredDisputes = disputes.filter(d => {
+    if (filter === 'all') return true;
+    const statusLower = d.status?.toLowerCase() || '';
+    if (filter === 'pending') return statusLower.includes('pending') || statusLower.includes('open');
+    if (filter === 'resolved') return statusLower.includes('resolved') || statusLower.includes('approved') || statusLower.includes('rejected');
+    return true;
+  });
+
+  if (loading) {
+    return (
+      <ProtectedRoute requiredRoles={[SystemRole.DEPARTMENT_EMPLOYEE]}>
+        <DashboardLayout title="My Disputes" role="Employee">
+          <Spinner fullScreen message="Loading disputes..." />
+        </DashboardLayout>
+      </ProtectedRoute>
+    );
+  }
+
   return (
     <ProtectedRoute requiredRoles={[SystemRole.DEPARTMENT_EMPLOYEE]}>
       <DashboardLayout title="My Disputes" role="Employee">
-        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-          <h2>My Raised Disputes</h2>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <div>
+              <h1 className={styles.title}>⚖️ My Disputes</h1>
+              <p className={styles.subtitle}>Track appraisal disputes you've submitted</p>
+            </div>
+          </div>
 
-          {loading && <p>Loading disputes...</p>}
-          {error && <div style={{ color: '#b91c1c', background: '#fee2e2', padding: '1rem', borderRadius: 6 }}>{error}</div>}
-
-          {!loading && disputes.length === 0 && (
-            <div style={{ padding: '1rem', background: '#f3f4f6', borderRadius: 6 }}>You have not submitted any disputes.</div>
+          {error && (
+            <div className={styles.errorBanner}>
+              <span>⚠️</span>
+              <span>{error}</span>
+            </div>
           )}
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
-            {disputes.map(d => (
-              <div key={d._id} style={{ padding: 14, borderRadius: 8, border: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontWeight: 600 }}>{d.reason || 'No reason provided'}</div>
-                  <div style={{ color: '#6b7280', fontSize: 13 }}>{d.status || 'UNKNOWN'} • {d.submittedAt ? new Date(d.submittedAt).toLocaleDateString() : ''}</div>
-                  {d.resolutionSummary && <div style={{ marginTop: 8, fontSize: 13 }}><strong>Resolution:</strong> {d.resolutionSummary}</div>}
-                </div>
-
-                <div style={{ textAlign: 'right' }}>
-                  {d.appraisalId && (
-                    <button onClick={() => {
-                      const aid = typeof d.appraisalId === 'string' ? d.appraisalId : (d.appraisalId as any)._id;
-                      if (aid) router.push(`/dashboard/employee/appraisals/${aid}`);
-                    }} style={{ padding: '6px 10px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer' }}>
-                      View Appraisal
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+          {/* Filter Tabs */}
+          <div className={styles.filterTabs}>
+            <button
+              className={`${styles.filterTab} ${filter === 'all' ? styles.active : ''}`}
+              onClick={() => setFilter('all')}
+            >
+              All ({disputes.length})
+            </button>
+            <button
+              className={`${styles.filterTab} ${filter === 'pending' ? styles.active : ''}`}
+              onClick={() => setFilter('pending')}
+            >
+              Pending ({disputes.filter(d => d.status?.toLowerCase().includes('pending') || d.status?.toLowerCase().includes('open')).length})
+            </button>
+            <button
+              className={`${styles.filterTab} ${filter === 'resolved' ? styles.active : ''}`}
+              onClick={() => setFilter('resolved')}
+            >
+              Resolved ({disputes.filter(d => d.status?.toLowerCase().includes('resolved') || d.status?.toLowerCase().includes('approved') || d.status?.toLowerCase().includes('rejected')).length})
+            </button>
           </div>
+
+          {filteredDisputes.length === 0 ? (
+            <div className={styles.emptyState}>
+              <div className={styles.emptyIcon}>📋</div>
+              <h3>No Disputes Found</h3>
+              <p>
+                {filter === 'all' 
+                  ? "You haven't submitted any disputes yet."
+                  : `No ${filter} disputes to display.`}
+              </p>
+            </div>
+          ) : (
+            <div className={styles.disputesList}>
+              {filteredDisputes.map(dispute => (
+                <div key={dispute._id} className={styles.disputeCard}>
+                  <div className={styles.disputeHeader}>
+                    <div className={styles.disputeTitle}>
+                      <h3>{dispute.reason || 'Appraisal Dispute'}</h3>
+                      {getStatusBadge(dispute.status || 'UNKNOWN')}
+                    </div>
+                    <div className={styles.disputeMeta}>
+                      <span>📅 Submitted: {dispute.submittedAt ? new Date(dispute.submittedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}</span>
+                    </div>
+                  </div>
+
+                  {dispute.resolutionSummary && (
+                    <div className={styles.resolutionBox}>
+                      <div className={styles.resolutionHeader}>
+                        <strong>📝 Resolution</strong>
+                        {dispute.resolvedAt && (
+                          <span className={styles.resolutionDate}>
+                            {new Date(dispute.resolvedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+                      <p className={styles.resolutionText}>{dispute.resolutionSummary}</p>
+                      {dispute.resolvedBy && (
+                        <p className={styles.resolvedBy}>Resolved by: {dispute.resolvedBy}</p>
+                      )}
+                    </div>
+                  )}
+
+                  <div className={styles.disputeActions}>
+                    {dispute.appraisalId && (
+                      <button
+                        onClick={() => {
+                          const aid = typeof dispute.appraisalId === 'string' 
+                            ? dispute.appraisalId 
+                            : (dispute.appraisalId as any)._id;
+                          if (aid) router.push(`/dashboard/employee/appraisals/${aid}`);
+                        }}
+                        className={styles.viewButton}
+                      >
+                        View Appraisal →
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </DashboardLayout>
     </ProtectedRoute>
