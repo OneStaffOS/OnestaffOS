@@ -873,6 +873,50 @@ export default function ManagerDashboard() {
               >
                 📬 Inbox
               </button>
+
+              {/* REQ-OSM-03: Request Organizational Changes */}
+              <button 
+                onClick={() => router.push('/org-structure/change-requests/create')}
+                style={{
+                  background: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  boxShadow: '0 4px 12px rgba(168, 85, 247, 0.3)',
+                  transition: 'all 0.3s ease',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                🏗️ Request Position/Team Change
+              </button>
+
+              {/* REQ-OSM-03: View My Change Requests */}
+              <button 
+                onClick={() => router.push('/org-structure/my-change-requests')}
+                style={{
+                  background: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  boxShadow: '0 4px 12px rgba(100, 116, 139, 0.3)',
+                  transition: 'all 0.3s ease',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                📋 My Change Requests
+              </button>
             </div>
             </div>
           </div>

@@ -324,10 +324,10 @@ export class EmployeeProfileController {
 
   /**
    * Get employee profile by ID
-   * Accessible by: HR Admin, HR Manager, System Admin
+   * Accessible by: Department Head, HR Admin, HR Manager, System Admin
    */
   @Get(':id')
-  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
+  @Roles(Role.DEPARTMENT_HEAD, Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
   async getEmployeeProfileById(@Param('id') id: string) {
     return this.employeeProfileService.getEmployeeProfileById(id);
   }
@@ -417,10 +417,10 @@ export class EmployeeProfileController {
 
   /**
    * Get employee qualifications
-   * Accessible by: HR Admin, HR Manager, System Admin
+   * Accessible by: Department Head, HR Admin, HR Manager, System Admin
    */
   @Get(':id/qualifications')
-  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
+  @Roles(Role.DEPARTMENT_HEAD, Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
   async getEmployeeQualifications(@Param('id') id: string) {
     return this.employeeProfileService.getEmployeeQualifications(id);
   }

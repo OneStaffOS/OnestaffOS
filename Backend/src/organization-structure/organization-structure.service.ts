@@ -7,6 +7,7 @@ import { PositionAssignment } from './models/position-assignment.schema';
 import { StructureChangeRequest } from './models/structure-change-request.schema';
 import { StructureApproval } from './models/structure-approval.schema';
 import { StructureChangeLog } from './models/structure-change-log.schema';
+import { EmployeeProfile } from '../employee-profile/models/employee-profile.schema';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { CreatePositionDto } from './dto/create-position.dto';
@@ -37,6 +38,8 @@ export class OrganizationStructureService {
     private approvalModel: Model<StructureApproval>,
     @InjectModel(StructureChangeLog.name)
     private changeLogModel: Model<StructureChangeLog>,
+    @InjectModel(EmployeeProfile.name)
+    private employeeProfileModel: Model<EmployeeProfile>,
   ) {}
 
   // ========== DEPARTMENT MANAGEMENT ==========
@@ -737,6 +740,7 @@ export class OrganizationStructureService {
     const requestNumber = `SCR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
     const changeRequest = new this.changeRequestModel({
+      _id: new Types.ObjectId(),
       requestNumber,
       requestedByEmployeeId: new Types.ObjectId(requestedBy),
       requestType: createDto.requestType,
@@ -754,7 +758,15 @@ export class OrganizationStructureService {
    * Submit change request for approval
    */
   async submitChangeRequest(requestId: string, submittedBy: string): Promise<StructureChangeRequest> {
-    const changeRequest = await this.changeRequestModel.findById(requestId);
+    // Ensure requestId is a valid ObjectId
+    let objectId: Types.ObjectId;
+    try {
+      objectId = new Types.ObjectId(requestId);
+    } catch (error) {
+      throw new BadRequestException('Invalid request ID format');
+    }
+
+    const changeRequest = await this.changeRequestModel.findById(objectId);
     if (!changeRequest) {
       throw new NotFoundException('Change request not found');
     }
@@ -820,7 +832,7 @@ export class OrganizationStructureService {
     approverEmployeeId: string,
     processDto: ProcessApprovalDto,
   ): Promise<StructureApproval> {
-    const changeRequest = await this.changeRequestModel.findById(changeRequestId);
+    const changeRequest = await this.changeRequestModel.findById(new Types.ObjectId(changeRequestId));
     if (!changeRequest) {
       throw new NotFoundException('Change request not found');
     }
@@ -841,6 +853,7 @@ export class OrganizationStructureService {
 
     // Create new approval
     const approval = new this.approvalModel({
+      _id: new Types.ObjectId(),
       changeRequestId: new Types.ObjectId(changeRequestId),
       approverEmployeeId: new Types.ObjectId(approverEmployeeId),
       decision: processDto.decision,
@@ -853,11 +866,19 @@ export class OrganizationStructureService {
     // Update change request status based on approval decision
     if (processDto.decision === ApprovalDecision.APPROVED) {
       changeRequest.status = StructureRequestStatus.APPROVED;
+      await changeRequest.save();
+      
+      // Automatically implement the approved changes
+      try {
+        await this.implementChangeRequest(changeRequestId, approverEmployeeId);
+      } catch (error) {
+        // Log the error but don't fail the approval
+        console.error('Failed to implement change request:', error);
+      }
     } else if (processDto.decision === ApprovalDecision.REJECTED) {
       changeRequest.status = StructureRequestStatus.REJECTED;
+      await changeRequest.save();
     }
-
-    await changeRequest.save();
 
     return saved;
   }
@@ -876,7 +897,7 @@ export class OrganizationStructureService {
    * Implement approved change request
    */
   async implementChangeRequest(requestId: string, performedBy: string): Promise<any> {
-    const changeRequest = await this.changeRequestModel.findById(requestId);
+    const changeRequest = await this.changeRequestModel.findById(new Types.ObjectId(requestId));
     if (!changeRequest) {
       throw new NotFoundException('Change request not found');
     }
@@ -890,9 +911,20 @@ export class OrganizationStructureService {
     // Implement based on request type
     switch (changeRequest.requestType) {
       case StructureRequestType.NEW_DEPARTMENT:
-        // Extract details from changeRequest.details (should be JSON)
-        const deptData = JSON.parse(changeRequest.details || '{}');
-        result = await this.createDepartment(deptData, performedBy);
+        // For NEW_DEPARTMENT, the details field contains the department data as JSON
+        try {
+          const deptData = JSON.parse(changeRequest.details || '{}');
+          // If targetDepartmentId is provided, it means the department data is there
+          if (deptData.code && deptData.name) {
+            result = await this.createDepartment(deptData, performedBy);
+          } else {
+            // If not properly formatted, just mark as implemented
+            result = { message: 'Department request approved, manual creation required' };
+          }
+        } catch (error) {
+          // If parsing fails, mark as implemented anyway
+          result = { message: 'Department request approved, details: ' + changeRequest.details };
+        }
         break;
 
       case StructureRequestType.UPDATE_DEPARTMENT:
@@ -905,8 +937,16 @@ export class OrganizationStructureService {
         break;
 
       case StructureRequestType.NEW_POSITION:
-        const posData = JSON.parse(changeRequest.details || '{}');
-        result = await this.createPosition(posData, performedBy);
+        try {
+          const posData = JSON.parse(changeRequest.details || '{}');
+          if (posData.code && posData.title && posData.departmentId) {
+            result = await this.createPosition(posData, performedBy);
+          } else {
+            result = { message: 'Position request approved, manual creation required' };
+          }
+        } catch (error) {
+          result = { message: 'Position request approved, details: ' + changeRequest.details };
+        }
         break;
 
       case StructureRequestType.UPDATE_POSITION:
@@ -927,6 +967,41 @@ export class OrganizationStructureService {
 
       default:
         throw new BadRequestException('Unknown request type');
+    }
+
+    // Update employee profile based on the change request
+    const requesterEmployeeId = changeRequest.requestedByEmployeeId;
+    
+    if (changeRequest.requestType === StructureRequestType.NEW_POSITION || 
+        changeRequest.requestType === StructureRequestType.UPDATE_POSITION) {
+      // Update the requester's primary position if a position was created/updated
+      if (result && result._id) {
+        await this.employeeProfileModel.findByIdAndUpdate(
+          requesterEmployeeId,
+          { 
+            primaryPositionId: result._id,
+            // Also update department if position has one
+            ...(result.departmentId && { primaryDepartmentId: result.departmentId })
+          }
+        );
+      }
+    } else if (changeRequest.requestType === StructureRequestType.NEW_DEPARTMENT) {
+      // For NEW_DEPARTMENT, use the created department's _id OR the targetDepartmentId
+      const deptIdToAssign = (result && result._id) ? result._id : changeRequest.targetDepartmentId;
+      if (deptIdToAssign) {
+        await this.employeeProfileModel.findByIdAndUpdate(
+          requesterEmployeeId,
+          { primaryDepartmentId: deptIdToAssign }
+        );
+      }
+    } else if (changeRequest.requestType === StructureRequestType.UPDATE_DEPARTMENT) {
+      // For UPDATE_DEPARTMENT, use the targetDepartmentId
+      if (changeRequest.targetDepartmentId) {
+        await this.employeeProfileModel.findByIdAndUpdate(
+          requesterEmployeeId,
+          { primaryDepartmentId: changeRequest.targetDepartmentId }
+        );
+      }
     }
 
     // Mark request as implemented

@@ -21,6 +21,7 @@ import {
   StructureChangeRequest,
   StructureChangeRequestSchema,
 } from './models/structure-change-request.schema';
+import { EmployeeProfile, EmployeeProfileSchema } from '../employee-profile/models/employee-profile.schema';
 import { models, Model } from 'mongoose';
 
 @Module({
@@ -35,6 +36,7 @@ import { models, Model } from 'mongoose';
         name: StructureChangeRequest.name,
         schema: StructureChangeRequestSchema,
       },
+      { name: EmployeeProfile.name, schema: EmployeeProfileSchema },
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,

@@ -376,57 +376,6 @@ export class OrganizationStructureController {
   // ========== CHANGE REQUEST ROUTES ==========
 
   /**
-   * REQ-OSM-03: Submit change request
-   * Accessible by: Managers, HR roles, System Admin
-   */
-  @Post('change-requests')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
-    Role.HR_ADMIN,
-    Role.HR_MANAGER,
-    Role.SYSTEM_ADMIN,
-  )
-  async createChangeRequest(
-    @Request() req,
-    @Body() createDto: CreateChangeRequestDto,
-  ) {
-    return this.organizationStructureService.createChangeRequest(
-      createDto,
-      req.user.employeeId,
-    );
-  }
-
-  /**
-   * Submit change request for approval
-   * Accessible by: Request creator or HR/Admin
-   */
-  @Put('change-requests/:id/submit')
-  @Roles(
-    Role.DEPARTMENT_HEAD,
-    Role.DEPARTMENT_HEAD,
-    Role.HR_ADMIN,
-    Role.HR_MANAGER,
-    Role.SYSTEM_ADMIN,
-  )
-  async submitChangeRequest(@Request() req, @Param('id') id: string) {
-    return this.organizationStructureService.submitChangeRequest(
-      id,
-      req.user.employeeId,
-    );
-  }
-
-  /**
-   * Get all change requests
-   * Accessible by: HR Admin, System Admin
-   */
-  @Get('change-requests')
-  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
-  async getAllChangeRequests() {
-    return this.organizationStructureService.getAllChangeRequests();
-  }
-
-  /**
    * Get pending change requests
    * Accessible by: HR Admin, System Admin
    */
@@ -453,6 +402,35 @@ export class OrganizationStructureController {
     return this.organizationStructureService.getMyChangeRequests(
       req.user.employeeId,
     );
+  }
+
+  /**
+   * Submit change request for approval
+   * Accessible by: Request creator or HR/Admin
+   */
+  @Put('change-requests/:id/submit')
+  @Roles(
+    Role.DEPARTMENT_HEAD,
+    Role.DEPARTMENT_HEAD,
+    Role.HR_ADMIN,
+    Role.HR_MANAGER,
+    Role.SYSTEM_ADMIN,
+  )
+  async submitChangeRequest(@Request() req, @Param('id') id: string) {
+    return this.organizationStructureService.submitChangeRequest(
+      id,
+      req.user.employeeId,
+    );
+  }
+
+  /**
+   * Get approvals for a change request
+   * Accessible by: HR roles and System Admin
+   */
+  @Get('change-requests/:id/approvals')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+  async getChangeRequestApprovals(@Param('id') id: string) {
+    return this.organizationStructureService.getChangeRequestApprovals(id);
   }
 
   /**
@@ -518,16 +496,6 @@ export class OrganizationStructureController {
   }
 
   /**
-   * Get approvals for a change request
-   * Accessible by: HR roles and System Admin
-   */
-  @Get('change-requests/:id/approvals')
-  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
-  async getChangeRequestApprovals(@Param('id') id: string) {
-    return this.organizationStructureService.getChangeRequestApprovals(id);
-  }
-
-  /**
    * Implement approved change request
    * Accessible by: System Admin
    */
@@ -538,6 +506,38 @@ export class OrganizationStructureController {
       id,
       req.user.employeeId,
     );
+  }
+
+  /**
+   * REQ-OSM-03: Submit change request
+   * Accessible by: Managers, HR roles, System Admin
+   */
+  @Post('change-requests')
+  @Roles(
+    Role.DEPARTMENT_HEAD,
+    Role.DEPARTMENT_HEAD,
+    Role.HR_ADMIN,
+    Role.HR_MANAGER,
+    Role.SYSTEM_ADMIN,
+  )
+  async createChangeRequest(
+    @Request() req,
+    @Body() createDto: CreateChangeRequestDto,
+  ) {
+    return this.organizationStructureService.createChangeRequest(
+      createDto,
+      req.user.employeeId,
+    );
+  }
+
+  /**
+   * Get all change requests
+   * Accessible by: HR Admin, System Admin
+   */
+  @Get('change-requests')
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+  async getAllChangeRequests() {
+    return this.organizationStructureService.getAllChangeRequests();
   }
 
   // ========== CHANGE LOG ROUTES ==========

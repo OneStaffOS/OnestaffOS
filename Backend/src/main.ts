@@ -14,7 +14,7 @@ async function bootstrap() {
   
   // Enhanced CORS for multipart/form-data
   app.enableCors({
-    origin: ['http://localhost:3001', 'http://localhost:3000',' https://onestaffos.digital','https://www.onestaffos.digital'],
+    origin: ['http://localhost:3001', 'http://localhost:3000', 'http://44.197.111.203'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Accept', 'Accept-Encoding', 'Accept-Language'],

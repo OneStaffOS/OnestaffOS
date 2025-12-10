@@ -17,13 +17,15 @@ import styles from './change-requests.module.css';
 
 export default function ChangeRequestsPage() {
   const router = useRouter();
-  const [requests, setRequests] = useState<StructureChangeRequest[]>([]);
+  const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('PENDING');
-  const [selectedRequest, setSelectedRequest] = useState<StructureChangeRequest | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>('SUBMITTED');
+  const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
   const [reviewComment, setReviewComment] = useState('');
   const [processing, setProcessing] = useState(false);
+  const [departmentNames, setDepartmentNames] = useState<Record<string, string>>({});
+  const [positionTitles, setPositionTitles] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetchRequests();
@@ -33,7 +35,58 @@ export default function ChangeRequestsPage() {
     try {
       setLoading(true);
       const response = await axios.get('/organization-structure/change-requests');
-      setRequests(response.data);
+      const requestsData = response.data;
+      setRequests(requestsData);
+
+      // Fetch department and position names for any IDs
+      const deptIds = new Set<string>();
+      const posIds = new Set<string>();
+
+      requestsData.forEach((req: any) => {
+        if (req.targetDepartmentId && typeof req.targetDepartmentId === 'string') {
+          deptIds.add(req.targetDepartmentId);
+        }
+        if (req.targetPositionId && typeof req.targetPositionId === 'string') {
+          posIds.add(req.targetPositionId);
+        }
+      });
+
+      // Fetch department names
+      if (deptIds.size > 0) {
+        const deptPromises = Array.from(deptIds).map(async (id) => {
+          try {
+            const res = await axios.get(`/organization-structure/departments/${id}`);
+            return { id, name: res.data.name };
+          } catch {
+            return { id, name: id };
+          }
+        });
+        const deptResults = await Promise.all(deptPromises);
+        const deptMap: Record<string, string> = {};
+        deptResults.forEach(({ id, name }) => {
+          deptMap[id] = name;
+        });
+        setDepartmentNames(deptMap);
+      }
+
+      // Fetch position titles
+      if (posIds.size > 0) {
+        const posPromises = Array.from(posIds).map(async (id) => {
+          try {
+            const res = await axios.get(`/organization-structure/positions/${id}`);
+            return { id, title: res.data.title };
+          } catch {
+            return { id, title: id };
+          }
+        });
+        const posResults = await Promise.all(posPromises);
+        const posMap: Record<string, string> = {};
+        posResults.forEach(({ id, title }) => {
+          posMap[id] = title;
+        });
+        setPositionTitles(posMap);
+      }
+
       setError('');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load change requests');
@@ -128,22 +181,22 @@ export default function ChangeRequestsPage() {
         {/* Filter Tabs */}
         <div className={styles.tabs}>
           <button
-            className={`${styles.tab} ${filterStatus === 'PENDING' ? styles.activeTab : ''}`}
-            onClick={() => setFilterStatus('PENDING')}
+            className={`${styles.tab} ${filterStatus === 'SUBMITTED' ? styles.activeTab : ''}`}
+            onClick={() => setFilterStatus('SUBMITTED')}
           >
-            Pending ({requests.filter(r => r.status === StructureChangeStatus.PENDING).length})
+            Submitted ({requests.filter(r => r.status === 'SUBMITTED').length})
           </button>
           <button
             className={`${styles.tab} ${filterStatus === 'APPROVED' ? styles.activeTab : ''}`}
             onClick={() => setFilterStatus('APPROVED')}
           >
-            Approved ({requests.filter(r => r.status === StructureChangeStatus.APPROVED).length})
+            Approved ({requests.filter(r => r.status === 'APPROVED').length})
           </button>
           <button
             className={`${styles.tab} ${filterStatus === 'REJECTED' ? styles.activeTab : ''}`}
             onClick={() => setFilterStatus('REJECTED')}
           >
-            Rejected ({requests.filter(r => r.status === StructureChangeStatus.REJECTED).length})
+            Rejected ({requests.filter(r => r.status === 'REJECTED').length})
           </button>
           <button
             className={`${styles.tab} ${filterStatus === 'ALL' ? styles.activeTab : ''}`}
@@ -176,41 +229,35 @@ export default function ChangeRequestsPage() {
 
                 <div className={styles.requestBody}>
                   <div className={styles.requesterInfo}>
-                    <strong>Requested by:</strong> {request.requestedBy.name}
+                    <strong>Requested by:</strong> {request.requestedByEmployeeId?.firstName} {request.requestedByEmployeeId?.lastName}
                     <br />
-                    <span className={styles.position}>{request.requestedBy.position}</span>
+                    <span className={styles.position}>Employee ID: {request.requestedByEmployeeId?.employeeNumber || 'N/A'}</span>
                   </div>
 
                   <div className={styles.description}>
                     <strong>Description:</strong>
-                    <p>{request.changeDescription}</p>
+                    <p>{request.details || 'No details provided'}</p>
                   </div>
 
                   <div className={styles.justification}>
-                    <strong>Justification:</strong>
-                    <p>{request.justification}</p>
+                    <strong>Reason:</strong>
+                    <p>{request.reason || 'No reason provided'}</p>
                   </div>
 
                   <div className={styles.timestamp}>
-                    Submitted: {new Date(request.submittedAt).toLocaleDateString()} at {new Date(request.submittedAt).toLocaleTimeString()}
+                    Submitted: {request.submittedAt ? new Date(request.submittedAt).toLocaleDateString() : 'Not yet submitted'} {request.submittedAt ? 'at ' + new Date(request.submittedAt).toLocaleTimeString() : ''}
                   </div>
 
-                  {request.reviewedBy && (
+                  {request.submittedByEmployeeId && (
                     <div className={styles.reviewInfo}>
-                      <strong>Reviewed by:</strong> {request.reviewedBy.name}
+                      <strong>Submitted by:</strong> {request.submittedByEmployeeId.firstName} {request.submittedByEmployeeId.lastName}
                       <br />
-                      <strong>Review Date:</strong> {new Date(request.reviewedAt!).toLocaleDateString()}
-                      {request.reviewComments && (
-                        <>
-                          <br />
-                          <strong>Comments:</strong> {request.reviewComments}
-                        </>
-                      )}
+                      <strong>Submit Date:</strong> {request.submittedAt ? new Date(request.submittedAt).toLocaleDateString() : 'N/A'}
                     </div>
                   )}
                 </div>
 
-                {request.status === StructureChangeStatus.PENDING && (
+                {(request.status === 'SUBMITTED' || request.status === 'UNDER_REVIEW') && (
                   <div className={styles.requestActions}>
                     <button
                       className={styles.reviewButton}
@@ -248,9 +295,23 @@ export default function ChangeRequestsPage() {
               <div className={styles.modalBody}>
                 <div className={styles.reviewInfo}>
                   <p><strong>Type:</strong> {selectedRequest.requestType.replace(/_/g, ' ')}</p>
-                  <p><strong>Requested by:</strong> {selectedRequest.requestedBy.name} ({selectedRequest.requestedBy.position})</p>
-                  <p><strong>Description:</strong> {selectedRequest.changeDescription}</p>
-                  <p><strong>Justification:</strong> {selectedRequest.justification}</p>
+                  <p><strong>Requested by:</strong> {selectedRequest.requestedByEmployeeId?.firstName} {selectedRequest.requestedByEmployeeId?.lastName} ({selectedRequest.requestedByEmployeeId?.employeeNumber})</p>
+                  <p><strong>Description:</strong> {selectedRequest.details || 'No details provided'}</p>
+                  <p><strong>Reason:</strong> {selectedRequest.reason || 'No reason provided'}</p>
+                  {selectedRequest.targetDepartmentId && (
+                    <p><strong>Target Department:</strong> {
+                      typeof selectedRequest.targetDepartmentId === 'object' 
+                        ? selectedRequest.targetDepartmentId.name 
+                        : departmentNames[selectedRequest.targetDepartmentId] || selectedRequest.targetDepartmentId
+                    }</p>
+                  )}
+                  {selectedRequest.targetPositionId && (
+                    <p><strong>Target Position:</strong> {
+                      typeof selectedRequest.targetPositionId === 'object' 
+                        ? selectedRequest.targetPositionId.title 
+                        : positionTitles[selectedRequest.targetPositionId] || selectedRequest.targetPositionId
+                    }</p>
+                  )}
                 </div>
 
                 <div className={styles.validationNotice}>

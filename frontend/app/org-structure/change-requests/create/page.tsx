@@ -11,25 +11,22 @@ import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
 import axios from '@/lib/axios-config';
 import { 
-  StructureChangeType, 
   Department, 
-  Position,
-  SubmitStructureChangeDto 
+  Position
 } from '@/lib/types/organizational-structure.types';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './create-request.module.css';
 
 export default function CreateChangeRequestPage() {
   const router = useRouter();
-  const [requestType, setRequestType] = useState<StructureChangeType>(StructureChangeType.CHANGE_REPORTING_LINE);
+  const [requestType, setRequestType] = useState<string>('NEW_POSITION');
   const [departments, setDepartments] = useState<Department[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
   const [formData, setFormData] = useState({
-    targetEntity: '',
-    changeDescription: '',
-    justification: '',
-    newReportingLine: '',
-    newDepartment: '',
+    targetDepartmentId: '',
+    targetPositionId: '',
+    details: '',
+    reason: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -54,13 +51,13 @@ export default function CreateChangeRequestPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.changeDescription.trim()) {
-      setError('Change description is required');
+    if (!formData.details.trim()) {
+      setError('Change details are required');
       return;
     }
 
-    if (!formData.justification.trim() || formData.justification.length < 20) {
-      setError('Justification is required and must be at least 20 characters');
+    if (!formData.reason.trim() || formData.reason.length < 20) {
+      setError('Reason is required and must be at least 20 characters');
       return;
     }
 
@@ -68,24 +65,30 @@ export default function CreateChangeRequestPage() {
     setError('');
 
     try {
-      const requestData: SubmitStructureChangeDto = {
+      const requestData: any = {
         requestType,
-        targetEntity: formData.targetEntity,
-        changeDescription: formData.changeDescription,
-        justification: formData.justification,
-        proposedChanges: {}
+        details: formData.details,
+        reason: formData.reason,
       };
 
-      // Add specific data based on request type
-      if (requestType === StructureChangeType.CHANGE_REPORTING_LINE) {
-        requestData.proposedChanges.positionData = {
-          reportsToPositionId: formData.newReportingLine as any
-        };
+      // Add target IDs based on request type
+      if (requestType === 'NEW_POSITION' || requestType === 'UPDATE_POSITION' || requestType === 'CLOSE_POSITION') {
+        if (formData.targetPositionId) {
+          requestData.targetPositionId = formData.targetPositionId;
+        }
+      }
+      
+      if (requestType === 'NEW_DEPARTMENT' || requestType === 'UPDATE_DEPARTMENT') {
+        if (formData.targetDepartmentId) {
+          requestData.targetDepartmentId = formData.targetDepartmentId;
+        }
       }
 
-      await axios.post('/organization-structure/change-requests', requestData);
-      alert('Change request submitted successfully! Requires approval.');
-      router.push('/org-structure/change-requests');
+      // Create the change request
+      const createResponse = await axios.post('/organization-structure/change-requests', requestData);
+      
+      alert('Change request created successfully! Please submit it for approval from "My Change Requests" page.');
+      router.push('/org-structure/my-change-requests');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to submit change request');
     } finally {
@@ -95,18 +98,20 @@ export default function CreateChangeRequestPage() {
 
   const renderFormFields = () => {
     switch (requestType) {
-      case StructureChangeType.CHANGE_REPORTING_LINE:
+      case 'NEW_POSITION':
+      case 'UPDATE_POSITION':
+      case 'CLOSE_POSITION':
         return (
           <>
             <div className={styles.formGroup}>
               <label className={styles.label}>
-                Select Position <span className={styles.required}>*</span>
+                Select Position {requestType === 'NEW_POSITION' ? '(Optional)' : <span className={styles.required}>*</span>}
               </label>
               <select
                 className={styles.select}
-                value={formData.targetEntity}
-                onChange={(e) => setFormData({ ...formData, targetEntity: e.target.value })}
-                required
+                value={formData.targetPositionId}
+                onChange={(e) => setFormData({ ...formData, targetPositionId: e.target.value })}
+                required={requestType !== 'NEW_POSITION'}
               >
                 <option value="">Select a position</option>
                 {positions.map((pos) => (
@@ -119,60 +124,39 @@ export default function CreateChangeRequestPage() {
 
             <div className={styles.formGroup}>
               <label className={styles.label}>
-                New Reporting Line <span className={styles.required}>*</span>
-                <span className={styles.hint}>(System validates for circular reporting)</span>
+                Target Department (Optional)
               </label>
               <select
                 className={styles.select}
-                value={formData.newReportingLine}
-                onChange={(e) => setFormData({ ...formData, newReportingLine: e.target.value })}
-                required
+                value={formData.targetDepartmentId}
+                onChange={(e) => setFormData({ ...formData, targetDepartmentId: e.target.value })}
               >
-                <option value="">-- Select New Manager Position --</option>
-                {positions
-                  .filter(pos => pos._id !== formData.targetEntity) // Prevent self-reporting
-                  .map((pos) => (
-                    <option key={pos._id} value={pos._id}>
-                      {pos.title} - {pos.departmentId?.name || 'Unknown'}
-                    </option>
-                  ))}
+                <option value="">Select a department</option>
+                {departments.map((dept) => (
+                  <option key={dept._id} value={dept._id}>
+                    {dept.name}
+                  </option>
+                ))}
               </select>
             </div>
           </>
         );
 
-      case StructureChangeType.UPDATE_POSITION:
+      case 'NEW_DEPARTMENT':
+      case 'UPDATE_DEPARTMENT':
         return (
           <>
             <div className={styles.formGroup}>
               <label className={styles.label}>
-                Select Position <span className={styles.required}>*</span>
+                Select Department {requestType === 'NEW_DEPARTMENT' ? '(Optional)' : <span className={styles.required}>*</span>}
               </label>
               <select
                 className={styles.select}
-                value={formData.targetEntity}
-                onChange={(e) => setFormData({ ...formData, targetEntity: e.target.value })}
-                required
+                value={formData.targetDepartmentId}
+                onChange={(e) => setFormData({ ...formData, targetDepartmentId: e.target.value })}
+                required={requestType !== 'NEW_DEPARTMENT'}
               >
-                <option value="">Select a position</option>
-                {positions.map((pos) => (
-                  <option key={pos._id} value={pos._id}>
-                    {pos.title} - {pos.departmentId?.name || 'Unknown'}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles.formGroup}>
-              <label className={styles.label}>
-                New Department (Optional)
-              </label>
-              <select
-                className={styles.select}
-                value={formData.newDepartment}
-                onChange={(e) => setFormData({ ...formData, newDepartment: e.target.value })}
-              >
-                <option value="">-- Keep Current Department --</option>
+                <option value="">Select a department</option>
                 {departments.map((dept) => (
                   <option key={dept._id} value={dept._id}>
                     {dept.name}
@@ -224,21 +208,14 @@ export default function CreateChangeRequestPage() {
               <select
                 className={styles.select}
                 value={requestType}
-                onChange={(e) => setRequestType(e.target.value as StructureChangeType)}
+                onChange={(e) => setRequestType(e.target.value)}
                 required
               >
-                <option value={StructureChangeType.CHANGE_REPORTING_LINE}>
-                  Change Reporting Line
-                </option>
-                <option value={StructureChangeType.UPDATE_POSITION}>
-                  Update Position Details
-                </option>
-                <option value={StructureChangeType.UPDATE_DEPARTMENT}>
-                  Update Department
-                </option>
-                <option value={StructureChangeType.CREATE_POSITION}>
-                  Request New Position
-                </option>
+                <option value="NEW_POSITION">Request New Position</option>
+                <option value="UPDATE_POSITION">Update Position Details</option>
+                <option value="CLOSE_POSITION">Close Position</option>
+                <option value="NEW_DEPARTMENT">Request New Department</option>
+                <option value="UPDATE_DEPARTMENT">Update Department</option>
               </select>
             </div>
           </div>
@@ -250,12 +227,12 @@ export default function CreateChangeRequestPage() {
 
             <div className={styles.formGroup}>
               <label className={styles.label}>
-                Change Description <span className={styles.required}>*</span>
+                Change Details <span className={styles.required}>*</span>
               </label>
               <textarea
                 className={styles.textarea}
-                value={formData.changeDescription}
-                onChange={(e) => setFormData({ ...formData, changeDescription: e.target.value })}
+                value={formData.details}
+                onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                 placeholder="Describe the proposed change in detail..."
                 rows={4}
                 required
@@ -264,19 +241,19 @@ export default function CreateChangeRequestPage() {
 
             <div className={styles.formGroup}>
               <label className={styles.label}>
-                Business Justification <span className={styles.required}>*</span>
+                Business Reason <span className={styles.required}>*</span>
                 <span className={styles.hint}>(Minimum 20 characters)</span>
               </label>
               <textarea
                 className={styles.textarea}
-                value={formData.justification}
-                onChange={(e) => setFormData({ ...formData, justification: e.target.value })}
+                value={formData.reason}
+                onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                 placeholder="Explain why this change is necessary and how it benefits the organization..."
                 rows={5}
                 required
               />
               <div className={styles.charCount}>
-                {formData.justification.length} / 20 minimum
+                {formData.reason.length} / 20 minimum
               </div>
             </div>
           </div>
