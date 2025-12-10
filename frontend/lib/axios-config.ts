@@ -13,7 +13,7 @@ import axiosLib from 'axios';
 
 // Default to the backend Nest server port (3000) when running locally.
 // Override with NEXT_PUBLIC_API_URL in your environment when needed (e.g. staging).
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.onestaffos.digital/api/v1';
 
 // Create axios instance
 export const axios = axiosLib.create({
