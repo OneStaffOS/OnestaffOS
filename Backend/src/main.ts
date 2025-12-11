@@ -74,10 +74,10 @@ async function bootstrap() {
     'http://localhost:3000/api/v1',
     'http://52.44.26.177',
     'http://52.44.26.177/api/v1',
-    'https://www.onestaff.digital',
-    'https://www.onestaff.digital/api/v1',
-    'https://onestaff.digital',
-    'https://onestaff.digital/api/v1',
+    'https://onestaffos.digital',
+    'https://onestaffos.digital/api/v1',
+    'https://www.onestaffos.digital',
+    'https://www.onestaffos.digital/api/v1',
   ];
 
   app.enableCors({
