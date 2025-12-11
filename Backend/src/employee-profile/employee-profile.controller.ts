@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
   Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { EmployeeProfileService } from './employee-profile.service';
 import { CreateEmployeeProfileDto } from './dto/create-employee-profile.dto';
@@ -369,6 +370,9 @@ export class EmployeeProfileController {
   @Get(':id')
   @Roles(Role.DEPARTMENT_HEAD, Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.SYSTEM_ADMIN)
   async getEmployeeProfileById(@Param('id') id: string) {
+    if (!id || id.trim() === '') {
+      throw new BadRequestException('Employee ID is required');
+    }
     return this.employeeProfileService.getEmployeeProfileById(id);
   }
 

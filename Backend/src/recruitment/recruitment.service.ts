@@ -963,6 +963,22 @@ ${message}
 
     const savedOffer = await offer.save();
 
+    // Create signing bonus record in DRAFT status if signing bonus is provided
+    if (dto.signingBonus && dto.signingBonus > 0) {
+      try {
+        const signingBonusRecord = new this.signingBonusModel({
+          positionName: dto.role,
+          amount: dto.signingBonus,
+          status: ConfigStatus.DRAFT,
+          createdBy: new Types.ObjectId(hrEmployeeId),
+        });
+        await signingBonusRecord.save();
+      } catch (error) {
+        // Log error but don't fail the offer creation
+        console.error('Failed to create signing bonus record:', error);
+      }
+    }
+
     // Update application status to OFFER
     application.status = ApplicationStatus.OFFER;
     application.currentStage = ApplicationStage.OFFER;
@@ -1315,15 +1331,11 @@ ${message}
               const signingBonusRecord = new this.employeeSigningBonusModel({
                 employeeId: candidate._id,
                 signingBonusId: signingBonusConfig._id,
-                givenAmount: contract.signingBonus, // Can be edited by HR if different from config
-                status: BonusStatus.PENDING,
+                givenAmount: contract.signingBonus,
+                status: BonusStatus.APPROVED,
               });
               await signingBonusRecord.save();
-
-              console.log(`Created signing bonus record (${contract.signingBonus}) in PENDING status for candidate ${candidate._id}`);
             }
-          } else {
-            console.warn(`No approved signing bonus configuration found for role: ${contract.role}`);
           }
         }
       } catch (error) {

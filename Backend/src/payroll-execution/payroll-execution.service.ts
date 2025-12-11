@@ -8,6 +8,7 @@ import { employeeSigningBonus, employeeSigningBonusDocument } from './models/Emp
 import { EmployeeTerminationResignation, EmployeeTerminationResignationDocument } from './models/EmployeeTerminationResignation.schema';
 import { employeePenalties, employeePenaltiesDocument } from './models/employeePenalties.schema';
 import { PayRollStatus, PayRollPaymentStatus, BonusStatus, BenefitStatus, BankStatus } from './enums/payroll-execution-enum';
+import { ConfigStatus } from '../payroll-configuration/enums/payroll-configuration-enums';
 import { CreatePayrollRunDto } from './dto/create-payroll-run.dto';
 import { EmployeeProfile, EmployeeProfileDocument } from '../employee-profile/models/employee-profile.schema';
 import { payGrade, payGradeDocument } from '../payroll-configuration/models/payGrades.schema';
@@ -18,6 +19,9 @@ import { AttendanceRecord, AttendanceRecordDocument } from '../time-management/m
 import { LeaveRequest, LeaveRequestDocument } from '../leaves/models/leave-request.schema';
 import { LeaveType, LeaveTypeDocument } from '../leaves/models/leave-type.schema';
 import { LeaveEntitlement, LeaveEntitlementDocument } from '../leaves/models/leave-entitlement.schema';
+import { signingBonus, signingBonusDocument } from '../payroll-configuration/models/signingBonus.schema';
+import { Contract, ContractDocument } from '../recruitment/models/contract.schema';
+import { Offer, OfferDocument } from '../recruitment/models/offer.schema';
 
 @Injectable()
 export class PayrollExecutionService {
@@ -37,6 +41,9 @@ export class PayrollExecutionService {
         @InjectModel(LeaveRequest.name) private leaveRequestModel: Model<LeaveRequestDocument>,
         @InjectModel(LeaveType.name) private leaveTypeModel: Model<LeaveTypeDocument>,
         @InjectModel(LeaveEntitlement.name) private leaveEntitlementModel: Model<LeaveEntitlementDocument>,
+        @InjectModel(signingBonus.name) private signingBonusConfigModel: Model<signingBonusDocument>,
+        @InjectModel(Contract.name) private contractModel: Model<ContractDocument>,
+        @InjectModel(Offer.name) private offerModel: Model<OfferDocument>,
     ) {}
 
     // =====================================================
@@ -119,7 +126,71 @@ export class PayrollExecutionService {
     // PHASE 1: Payroll Run Initiation with Automatic Calculation
     // =====================================================
 
+    /**
+     * Auto-approve signing bonus execution records where the config is already approved.
+     * This ensures bonuses created before the auto-approval fix are included in payroll.
+     */
+    private async autoApproveSigningBonusExecutionRecords(): Promise<void> {
+        try {
+            // RETROACTIVE FIX: Create missing execution records for signed contracts
+            const contractsWithBonus = await this.contractModel.find({ signingBonus: { $exists: true, $gt: 0 } }).populate('offerId').exec();
+            const signedContracts = contractsWithBonus.filter(c => c.employeeSignedAt);
+            
+            for (const contract of signedContracts) {
+                const offer = contract.offerId as any;
+                if (!offer || !offer.candidateId) {
+                    continue;
+                }
+                
+                const candidateId = offer.candidateId;
+                
+                // Check if execution record already exists
+                const existingRecord = await this.employeeSigningBonusModel.findOne({
+                    employeeId: candidateId
+                }).exec();
+                
+                if (!existingRecord) {
+                    // Find approved signing bonus config for the role
+                    const signingBonusConfig = await this.signingBonusConfigModel.findOne({
+                        positionName: contract.role,
+                        status: ConfigStatus.APPROVED
+                    }).exec();
+                    
+                    if (signingBonusConfig) {
+                        const newRecord = new this.employeeSigningBonusModel({
+                            employeeId: candidateId,
+                            signingBonusId: signingBonusConfig._id,
+                            givenAmount: contract.signingBonus,
+                            status: BonusStatus.APPROVED
+                        });
+                        await newRecord.save();
+                    }
+                }
+            }
+            
+            // Find all PENDING signing bonus execution records
+            const pendingBonuses = await this.employeeSigningBonusModel
+                .find({ status: BonusStatus.PENDING })
+                .populate('signingBonusId')
+                .exec();
+
+            for (const bonus of pendingBonuses) {
+                // Check if the config is approved
+                if (bonus.signingBonusId && (bonus.signingBonusId as any).status === ConfigStatus.APPROVED) {
+                    bonus.status = BonusStatus.APPROVED;
+                    await bonus.save();
+                }
+            }
+        } catch (error) {
+            console.error('Error auto-approving signing bonus execution records:', error);
+            // Don't throw - this is not critical
+        }
+    }
+
     async createPayrollRun(dto: CreatePayrollRunDto, createdById: string): Promise<payrollRuns> {
+        // Auto-approve signing bonus execution records where config is already approved
+        await this.autoApproveSigningBonusExecutionRecords();
+
         // Generate unique runId
         const runCount = await this.payrollRunsModel.countDocuments();
         const runId = `PR-${new Date().getFullYear()}-${String(runCount + 1).padStart(4, '0')}`;

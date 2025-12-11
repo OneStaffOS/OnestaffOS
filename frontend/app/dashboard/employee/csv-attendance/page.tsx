@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import DashboardLayout from '../../../components/DashboardLayout';
+import Spinner from '../../../components/Spinner';
 import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './csvAttendance.module.css';
@@ -102,10 +103,7 @@ export default function CSVAttendancePage() {
           </div>
 
           {loading && (
-            <div className={styles.loading}>
-              <div className={styles.spinner}></div>
-              <p>Loading records...</p>
-            </div>
+            <Spinner message="Loading records..." />
           )}
 
           {error && (

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from '@/lib/axios-config';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import DashboardLayout from '../../../components/DashboardLayout';
+import Spinner from '../../../components/Spinner';
 import styles from '../../hr/time-management.module.css';
 import { SystemRole } from '@/lib/roles';
 
@@ -162,10 +163,7 @@ export default function AttendanceRecordsPage() {
 
           {/* Loading State */}
           {loading ? (
-            <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>⏳</span>
-              <h3>Loading data...</h3>
-            </div>
+            <Spinner message="Loading attendance data..." />
           ) : (
             <>
               {/* Attendance Records Tab */}

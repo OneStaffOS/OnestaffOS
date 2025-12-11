@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Put, Patch, Delete, Body, Param, Query, UseGuards, Req, Res } from '@nestjs/common';
 import { PayrollConfigurationService } from './payroll-configuration.service';
 import { AuthGuard } from '../auth/gaurds/authentication.guard';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
@@ -249,11 +249,18 @@ export class PayrollConfigurationController {
         return await this.payrollConfigurationService.updateSigningBonus(id, dto, req.user.sub);
     }
 
-    @Get('signing-bonuses')
+    @Patch('signing-bonuses/:id')
     @UseGuards(AuthGuard, authorizationGaurd)
     @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
-    async getAllSigningBonuses(@Query('status') status?: ConfigStatus) {
-        return await this.payrollConfigurationService.getAllSigningBonuses(status);
+    async patchSigningBonus(@Param('id') id: string, @Body() dto: UpdateSigningBonusDto, @Req() req: any) {
+        return await this.payrollConfigurationService.updateSigningBonus(id, dto, req.user.sub);
+    }
+
+    @Get('signing-bonuses/draft')
+    @UseGuards(AuthGuard, authorizationGaurd)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    async getDraftSigningBonuses() {
+        return await this.payrollConfigurationService.getAllSigningBonuses(ConfigStatus.DRAFT);
     }
 
     @Get('signing-bonuses/:id')
@@ -261,6 +268,13 @@ export class PayrollConfigurationController {
     @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async getSigningBonusById(@Param('id') id: string) {
         return await this.payrollConfigurationService.getSigningBonusById(id);
+    }
+
+    @Get('signing-bonuses')
+    @UseGuards(AuthGuard, authorizationGaurd)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    async getAllSigningBonuses(@Query('status') status?: ConfigStatus) {
+        return await this.payrollConfigurationService.getAllSigningBonuses(status);
     }
 
     @Delete('signing-bonuses/:id')
@@ -272,14 +286,14 @@ export class PayrollConfigurationController {
 
     @Post('signing-bonuses/:id/approve')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async approveSigningBonus(@Param('id') id: string, @Req() req: any) {
         return await this.payrollConfigurationService.approveSigningBonus(id, req.user.sub);
     }
 
     @Post('signing-bonuses/:id/reject')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async rejectSigningBonus(@Param('id') id: string, @Req() req: any) {
         return await this.payrollConfigurationService.rejectSigningBonus(id, req.user.sub);
     }

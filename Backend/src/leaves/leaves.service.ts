@@ -756,6 +756,14 @@ export class LeavesService {
    * BR 25 - Manager rejects only their own step (first step - index 0)
    */
   async rejectLeaveRequest(requestId: string, rejectionDto: RejectLeaveDto): Promise<LeaveRequest> {
+    // Validate inputs
+    if (!requestId || !requestId.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BadRequestException('Invalid request ID');
+    }
+    if (!rejectionDto.approverId || !rejectionDto.approverId.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BadRequestException('Invalid approver ID');
+    }
+
     const leaveRequest = await this.leaveRequestModel.findById(requestId).populate('employeeId').exec();
     if (!leaveRequest) {
       throw new NotFoundException('Leave request not found');

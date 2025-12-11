@@ -13,17 +13,18 @@ import styles from '../execution.module.css';
 
 interface SigningBonus {
   _id: string;
-  employeeId: {
+  positionName: string;
+  amount: number;
+  status: string;
+  createdBy?: {
     firstName: string;
     lastName: string;
-    employeeNumber: string;
   };
-  signingBonusId: {
-    positionName: string;
-    amount: number;
+  approvedBy?: {
+    firstName: string;
+    lastName: string;
   };
-  givenAmount: number;
-  status: string;
+  approvedAt?: string;
   createdAt: string;
 }
 
@@ -44,7 +45,7 @@ export default function SigningBonusesPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('/payroll-execution/signing-bonuses/pending');
+      const response = await axios.get('/payroll-configuration/signing-bonuses/draft');
       setBonuses(response.data || []);
     } catch (e: any) {
       setError(e?.response?.data?.message || 'Failed to load signing bonuses');
@@ -58,7 +59,7 @@ export default function SigningBonusesPage() {
     setActionLoading(bonusId);
     setError(null);
     try {
-      await axios.post(`/payroll-execution/signing-bonuses/${bonusId}/approve`);
+      await axios.post(`/payroll-configuration/signing-bonuses/${bonusId}/approve`);
       setSuccess('Signing bonus approved successfully');
       await loadBonuses();
       setTimeout(() => setSuccess(null), 3000);
@@ -74,7 +75,7 @@ export default function SigningBonusesPage() {
     setActionLoading(bonusId);
     setError(null);
     try {
-      await axios.post(`/payroll-execution/signing-bonuses/${bonusId}/reject`);
+      await axios.post(`/payroll-configuration/signing-bonuses/${bonusId}/reject`);
       setSuccess('Signing bonus rejected');
       await loadBonuses();
       setTimeout(() => setSuccess(null), 3000);
@@ -144,7 +145,7 @@ export default function SigningBonusesPage() {
             </div>
             <div className={styles.statCard}>
               <span className={styles.statValue}>
-                {formatCurrency(bonuses.reduce((sum, b) => sum + b.givenAmount, 0))}
+                {formatCurrency(bonuses.reduce((sum, b) => sum + b.amount, 0))}
               </span>
               <span className={styles.statLabel}>Total Pending Amount</span>
             </div>
@@ -164,11 +165,9 @@ export default function SigningBonusesPage() {
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Employee</th>
-                    <th>Employee Number</th>
-                    <th>Position</th>
-                    <th>Configured Amount</th>
-                    <th>Given Amount</th>
+                    <th>Position Name</th>
+                    <th>Amount</th>
+                    <th>Created By</th>
                     <th>Created Date</th>
                     <th>Actions</th>
                   </tr>
@@ -177,17 +176,17 @@ export default function SigningBonusesPage() {
                   {bonuses.map((bonus) => (
                     <tr key={bonus._id}>
                       <td>
-                        <strong>
-                          {bonus.employeeId.firstName} {bonus.employeeId.lastName}
-                        </strong>
+                        <strong>{bonus.positionName}</strong>
                       </td>
-                      <td>{bonus.employeeId.employeeNumber}</td>
-                      <td>{bonus.signingBonusId?.positionName || '-'}</td>
-                      <td>{formatCurrency(bonus.signingBonusId?.amount || 0)}</td>
                       <td>
                         <strong style={{ color: '#2563eb' }}>
-                          {formatCurrency(bonus.givenAmount)}
+                          {formatCurrency(bonus.amount)}
                         </strong>
+                      </td>
+                      <td>
+                        {bonus.createdBy
+                          ? `${bonus.createdBy.firstName} ${bonus.createdBy.lastName}`
+                          : '-'}
                       </td>
                       <td>{formatDate(bonus.createdAt)}</td>
                       <td>

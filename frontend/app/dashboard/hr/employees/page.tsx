@@ -49,7 +49,12 @@ export default function HREmployeesPage() {
   };
 
   const getUniqueDepartments = () => {
-    const departments = employees.map(emp => emp.primaryDepartmentId?.name).filter(Boolean);
+    const departments = employees.map(emp => {
+      const dept = emp.primaryDepartmentId;
+      // Handle both populated (object) and unpopulated (string) department IDs
+      if (typeof dept === 'string') return null;
+      return dept?.name || null;
+    }).filter(Boolean);
     return Array.from(new Set(departments)).sort();
   };
 
@@ -229,8 +234,8 @@ export default function HREmployeesPage() {
               onChange={(e) => setFilterDepartment(e.target.value)}
             >
               <option value="ALL">All Departments</option>
-              {getUniqueDepartments().map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
+              {getUniqueDepartments().map((dept, index) => (
+                <option key={`dept-${dept}-${index}`} value={dept}>{dept}</option>
               ))}
             </select>
 

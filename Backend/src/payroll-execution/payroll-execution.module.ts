@@ -23,6 +23,9 @@ import { AttendanceRecord, AttendanceRecordSchema } from '../time-management/mod
 import { LeaveRequest, LeaveRequestSchema } from '../leaves/models/leave-request.schema';
 import { LeaveType, LeaveTypeSchema } from '../leaves/models/leave-type.schema';
 import { LeaveEntitlement, LeaveEntitlementSchema } from '../leaves/models/leave-entitlement.schema';
+import { signingBonus, signingBonusSchema } from '../payroll-configuration/models/signingBonus.schema';
+import { Contract, ContractSchema } from '../recruitment/models/contract.schema';
+import { Offer, OfferSchema } from '../recruitment/models/offer.schema';
 
 @Module({
   imports: [
@@ -47,6 +50,9 @@ import { LeaveEntitlement, LeaveEntitlementSchema } from '../leaves/models/leave
       { name: LeaveRequest.name, schema: LeaveRequestSchema },
       { name: LeaveType.name, schema: LeaveTypeSchema },
       { name: LeaveEntitlement.name, schema: LeaveEntitlementSchema },
+      { name: signingBonus.name, schema: signingBonusSchema },
+      { name: Contract.name, schema: ContractSchema },
+      { name: Offer.name, schema: OfferSchema },
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,

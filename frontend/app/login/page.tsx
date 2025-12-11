@@ -18,6 +18,7 @@ import { axios } from '@/lib/axios-config';
 import { useAuth } from '../context/AuthContext';
 import { getDashboardRoute, getAvailableDashboards } from '@/lib/roles';
 import RoleSelectionModal from '../components/RoleSelectionModal';
+import { setCsrfToken, sanitizeInput } from '@/lib/security';
 import styles from './login.module.css';
 
 export default function LoginPage() {
@@ -47,11 +48,34 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('/auth/login', formData);
+      // Sanitize inputs before sending
+      const sanitizedData = {
+        email: sanitizeInput(formData.email.trim()),
+        password: formData.password, // Don't sanitize password as it may contain special chars
+      };
+
+      const response = await axios.post('/auth/login', sanitizedData);
       
-      // Backend returns { statusCode, message, user } where user = { sub, email, roles }
+      console.log('[Login] Full response:', response.data);
+      
+      // Backend returns { statusCode, message, accessToken, user, csrfToken }
       const userData = response.data.user || response.data.payload;
       const token = response.data.accessToken;
+      const csrfToken = response.data.csrfToken;
+
+      console.log('[Login] Token:', token ? 'exists' : 'MISSING');
+      console.log('[Login] User data:', userData);
+      console.log('[Login] CSRF token:', csrfToken ? 'exists' : 'MISSING');
+
+      // Validate required data before proceeding
+      if (!token || !userData) {
+        throw new Error('Invalid response from server: missing token or user data');
+      }
+
+      // Store CSRF token
+      if (csrfToken) {
+        setCsrfToken(csrfToken);
+      }
 
       // Use AuthContext login method
       login(token, userData);

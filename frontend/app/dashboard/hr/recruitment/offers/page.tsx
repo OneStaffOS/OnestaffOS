@@ -806,6 +806,9 @@ export default function OffersPage() {
                     placeholder="e.g., 10000"
                     min="0"
                   />
+                  <small style={{ color: '#666', fontSize: '0.85em', marginTop: '4px', display: 'block' }}>
+                    Note: Signing bonus will be saved as DRAFT and requires Payroll Specialist approval before being shown to the employee.
+                  </small>
                 </div>
               </div>
 

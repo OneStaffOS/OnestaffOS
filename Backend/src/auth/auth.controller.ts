@@ -16,12 +16,15 @@ import { SignInDto } from './dto/SignInDto';
 import { Public } from './decorators/public.decorator';
 import { Role, Roles } from './decorators/roles.decorator';
 import { authorizationGaurd } from 'src/auth/middleware/authorization.middleware';
+import { SkipCsrf } from '../common/guards/csrf.guard';
+import { generateSecureToken } from '../common/utils/security.utils';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
+  @SkipCsrf()
   @Post('login')
   async signIn(@Body() signInDto: SignInDto, @Res({ passthrough: true }) res: Response) {
     try {
@@ -48,18 +51,43 @@ export class AuthController {
         return 3600;
       };
       const expiresSec = parseExpirySeconds(process.env.JWT_EXPIRES_IN);
+      
+      // Set access token cookie with security flags
       res.cookie('access_token', result.accessToken, {
-        httpOnly: true, // Prevents client-side JavaScript access
-        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-        maxAge: expiresSec * 1000, // Cookie expiration time in milliseconds
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: expiresSec * 1000,
+        path: '/',
       });
+
+      // Generate and set CSRF token
+      const csrfToken = generateSecureToken();
+      res.cookie('XSRF-TOKEN', csrfToken, {
+        httpOnly: false, // Client needs to read this
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: expiresSec * 1000,
+        path: '/',
+      });
+      
       // Return success response with accessToken
-      return {
+      const response = {
         statusCode: HttpStatus.OK,
         message: 'Login successful',
         accessToken: result.accessToken,
         user: result.payload,
+        csrfToken, // Send token in response body as well
       };
+      
+      console.log('[Auth Controller] Returning response:', {
+        hasAccessToken: !!response.accessToken,
+        hasCsrfToken: !!response.csrfToken,
+        hasUser: !!response.user,
+        tokenLength: response.accessToken?.length,
+      });
+      
+      return response;
     } catch (error) {
       // Handle specific errors
       if (error instanceof HttpException) {
@@ -78,6 +106,7 @@ export class AuthController {
   }
 
   @Public()
+  @SkipCsrf()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   async logout(@Res({ passthrough: true }) res: Response) {
@@ -87,12 +116,38 @@ export class AuthController {
     res.clearCookie('access_token', {
       httpOnly: true,
       secure,
-      sameSite: secure ? 'none' : 'lax',
+      sameSite: secure ? 'strict' : 'lax',
+      path: '/',
+      domain,
+    });
+
+    res.clearCookie('XSRF-TOKEN', {
+      httpOnly: false,
+      secure,
+      sameSite: secure ? 'strict' : 'lax',
       path: '/',
       domain,
     });
 
     return { ok: true, message: 'Logged out' };
+  }
+
+  @Public()
+  @SkipCsrf()
+  @Get('csrf-token')
+  @HttpCode(HttpStatus.OK)
+  async getCsrfToken(@Res({ passthrough: true }) res: Response) {
+    const csrfToken = generateSecureToken();
+    
+    res.cookie('XSRF-TOKEN', csrfToken, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: 3600 * 1000, // 1 hour
+      path: '/',
+    });
+
+    return { csrfToken };
   }
 
   @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.DEPARTMENT_HEAD, Role.HR_EMPLOYEE, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.SYSTEM_ADMIN,Role.PAYROLL_MANAGER,Role.PAYROLL_SPECIALIST,Role.FINANCE_STAFF,Role.LEGAL_POLICY_ADMIN,Role.RECRUITER,Role.JOB_CANDIDATE)

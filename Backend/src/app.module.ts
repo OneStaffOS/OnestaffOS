@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TimeManagementModule } from './time-management/time-management.module';
@@ -14,6 +15,9 @@ import { NotificationModule } from './notifications/notification.module';
 import { RegisterModule } from './register/register.module';
 import { PayrollConfigurationModule } from './payroll-configuration/payroll-configuration.module';
 import { PayrollExecutionModule } from './payroll-execution/payroll-execution.module';
+import { CsrfGuard } from './common/guards/csrf.guard';
+import { SecurityInterceptor } from './common/interceptors/security.interceptor';
+import { NoSQLSanitizeMiddleware } from './common/middleware/nosql-sanitize.middleware';
 
 @Module({
   imports: [
@@ -32,6 +36,24 @@ import { PayrollExecutionModule } from './payroll-execution/payroll-execution.mo
     NotificationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: CsrfGuard,
+    },
+    // SecurityInterceptor disabled - was causing issues with Mongoose object serialization
+    // and React key warnings due to improper object-to-plain conversion
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: SecurityInterceptor,
+    // },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(NoSQLSanitizeMiddleware)
+      .forRoutes('*'); // Apply to all routes
+  }
+}

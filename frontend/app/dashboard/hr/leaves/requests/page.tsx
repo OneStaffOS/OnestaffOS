@@ -122,7 +122,16 @@ export default function LeaveRequestsPage() {
       // Get current user info from localStorage
       const userStr = localStorage.getItem('user');
       const user = userStr ? JSON.parse(userStr) : null;
-      const approverId = user?._id || user?.id || '';
+      const approverId = user?._id || user?.sub || user?.id || user?.employeeId || '';
+
+      if (!approverId) {
+        setError('Unable to identify current user. Please log in again.');
+        setSubmitting(false);
+        return;
+      }
+
+      console.log('[Leave Action] Approver ID:', approverId);
+      console.log('[Leave Action] User object:', user);
 
       if (actionType === 'approve') {
         await axios.post(`/leaves/requests/${selectedRequest._id}/approve`, {
@@ -146,7 +155,9 @@ export default function LeaveRequestsPage() {
       }
 
       handleCloseActionModal();
-      fetchData();
+      // Wait a moment for the backend to commit changes, then refresh
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await fetchData();
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
       console.error('Failed to process request:', err);

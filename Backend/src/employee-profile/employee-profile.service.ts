@@ -626,6 +626,16 @@ export class EmployeeProfileService {
    * Get employee profile by ID (HR Admin)
    */
   async getEmployeeProfileById(employeeId: string): Promise<EmployeeProfile> {
+    // Validate employeeId before querying
+    if (!employeeId || employeeId.trim() === '' || employeeId === 'undefined' || employeeId === 'null') {
+      throw new BadRequestException('Invalid employee ID provided');
+    }
+
+    // Validate ObjectId format
+    if (!employeeId.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BadRequestException('Invalid employee ID format');
+    }
+
     const profile = await this.employeeProfileModel
       .findById(employeeId)
       .populate('primaryPositionId')

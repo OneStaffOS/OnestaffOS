@@ -9,6 +9,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
+import Spinner from '@/app/components/Spinner';
 import axios from '@/lib/axios-config';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './my-requests.module.css';
@@ -125,7 +126,7 @@ export default function MyChangeRequestsPage() {
         Role.SYSTEM_ADMIN
       ]}>
         <div className={styles.container}>
-          <div className={styles.loading}>Loading your change requests...</div>
+          <Spinner message="Loading your change requests..." />
         </div>
       </ProtectedRoute>
     );
