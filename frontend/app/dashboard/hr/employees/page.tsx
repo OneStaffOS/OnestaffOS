@@ -48,13 +48,13 @@ export default function HREmployeesPage() {
     }
   };
 
-  const getUniqueDepartments = () => {
+  const getUniqueDepartments = (): string[] => {
     const departments = employees.map(emp => {
       const dept = emp.primaryDepartmentId;
       // Handle both populated (object) and unpopulated (string) department IDs
       if (typeof dept === 'string') return null;
       return dept?.name || null;
-    }).filter(Boolean);
+    }).filter((name): name is string => Boolean(name));
     return Array.from(new Set(departments)).sort();
   };
 
