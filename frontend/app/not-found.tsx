@@ -13,7 +13,7 @@ export default function NotFound() {
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
       padding: '1rem',
     }}>
       <div style={{
@@ -27,7 +27,7 @@ export default function NotFound() {
         <h1 style={{
           fontSize: '6rem',
           margin: '0 0 1rem',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           fontWeight: '700',
@@ -39,7 +39,7 @@ export default function NotFound() {
         <Link href="/" style={{
           display: 'inline-block',
           padding: '0.75rem 2rem',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
           color: 'white',
           textDecoration: 'none',
           borderRadius: '8px',

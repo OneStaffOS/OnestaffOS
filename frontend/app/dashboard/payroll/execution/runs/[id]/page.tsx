@@ -227,7 +227,12 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
   }
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-EG', { style: 'currency', currency: 'EGP' }).format(amount || 0);
+    return new Intl.NumberFormat('en-EG', { 
+      style: 'currency', 
+      currency: 'EGP',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount || 0);
   };
 
   const formatDate = (dateStr: string) => {
@@ -401,7 +406,8 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
               <div className={styles.cardHeader}>
                 <h2 className={styles.cardTitle}>⚠️ Exceptions ({exceptionsEmployees.length})</h2>
               </div>
-              <table className={styles.table}>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
                 <thead>
                   <tr>
                     <th>Employee</th>
@@ -437,6 +443,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
 
@@ -454,7 +461,8 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                 </p>
               </div>
             ) : (
-              <table className={styles.table}>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
                 <thead>
                   <tr>
                     <th>Employee</th>
@@ -521,8 +529,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                     );
                   })}
                 </tbody>
-              </table>
-            )}
+              </table>              </div>            )}
           </div>
 
           {/* Actions Section */}

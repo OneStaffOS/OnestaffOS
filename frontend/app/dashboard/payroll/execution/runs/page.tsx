@@ -107,7 +107,10 @@ export default function PayrollRunsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>💰 Payroll Runs</h1>
+              <h1 className={styles.pageTitle}>
+                <span className="emoji">💰</span>
+                <span className="text">Payroll Runs</span>
+              </h1>
               <p className={styles.pageSubtitle}>
                 Manage and track all payroll runs across different periods
               </p>
@@ -192,69 +195,71 @@ export default function PayrollRunsPage() {
                 )}
               </div>
             ) : (
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Run ID</th>
-                    <th>Period</th>
-                    <th>Entity</th>
-                    <th>Employees</th>
-                    <th>Exceptions</th>
-                    <th>Total Net Pay</th>
-                    <th>Status</th>
-                    <th>Payment Status</th>
-                    <th>Created By</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {runs.map((run) => (
-                    <tr key={run._id}>
-                      <td>
-                        <strong style={{ color: '#2563eb' }}>{run.runId}</strong>
-                      </td>
-                      <td>{formatDate(run.payrollPeriod)}</td>
-                      <td>{run.entity}</td>
-                      <td>{run.employees || 0}</td>
-                      <td>
-                        {run.exceptions > 0 ? (
-                          <span className={styles.exceptionBadge}>
-                            ⚠️ {run.exceptions}
-                          </span>
-                        ) : (
-                          <span style={{ color: '#10b981' }}>✓ None</span>
-                        )}
-                      </td>
-                      <td>
-                        <strong>{formatCurrency(run.totalnetpay)}</strong>
-                      </td>
-                      <td>
-                        <span className={getStatusBadgeClass(run.status)}>
-                          {run.status}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={getPaymentStatusBadgeClass(run.paymentStatus)}>
-                          {run.paymentStatus}
-                        </span>
-                      </td>
-                      <td>
-                        {run.payrollSpecialistId && typeof run.payrollSpecialistId === 'object'
-                          ? `${run.payrollSpecialistId.firstName} ${run.payrollSpecialistId.lastName}`
-                          : '-'}
-                      </td>
-                      <td>
-                        <button
-                          className={styles.btnSecondary}
-                          onClick={() => router.push(`/dashboard/payroll/execution/runs/${run._id}`)}
-                        >
-                          View Details
-                        </button>
-                      </td>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Run ID</th>
+                      <th>Period</th>
+                      <th>Entity</th>
+                      <th>Employees</th>
+                      <th>Exceptions</th>
+                      <th>Total Net Pay</th>
+                      <th>Status</th>
+                      <th>Payment Status</th>
+                      <th>Created By</th>
+                      <th>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {runs.map((run) => (
+                      <tr key={run._id}>
+                        <td>
+                          <strong style={{ color: '#2563eb' }}>{run.runId}</strong>
+                        </td>
+                        <td>{formatDate(run.payrollPeriod)}</td>
+                        <td>{run.entity}</td>
+                        <td>{run.employees || 0}</td>
+                        <td>
+                          {run.exceptions > 0 ? (
+                            <span className={styles.exceptionBadge}>
+                              ⚠️ {run.exceptions}
+                            </span>
+                          ) : (
+                            <span style={{ color: '#10b981' }}>✓ None</span>
+                          )}
+                        </td>
+                        <td>
+                          <strong>{formatCurrency(run.totalnetpay)}</strong>
+                        </td>
+                        <td>
+                          <span className={getStatusBadgeClass(run.status)}>
+                            {run.status}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={getPaymentStatusBadgeClass(run.paymentStatus)}>
+                            {run.paymentStatus}
+                          </span>
+                        </td>
+                        <td>
+                          {run.payrollSpecialistId && typeof run.payrollSpecialistId === 'object'
+                            ? `${run.payrollSpecialistId.firstName} ${run.payrollSpecialistId.lastName}`
+                            : '-'}
+                        </td>
+                        <td>
+                          <button
+                            className={styles.btnSecondary}
+                            onClick={() => router.push(`/dashboard/payroll/execution/runs/${run._id}`)}
+                          >
+                            View Details
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>

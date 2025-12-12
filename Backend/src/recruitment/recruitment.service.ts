@@ -51,9 +51,11 @@ import { signingBonus, signingBonusDocument } from '../payroll-configuration/mod
 import { payGrade, payGradeDocument } from '../payroll-configuration/models/payGrades.schema';
 import { taxRules, taxRulesDocument } from '../payroll-configuration/models/taxRules.schema';
 import { insuranceBrackets, insuranceBracketsDocument } from '../payroll-configuration/models/insuranceBrackets.schema';
-import { BonusStatus } from '../payroll-execution/enums/payroll-execution-enum';
+import { BonusStatus, BenefitStatus } from '../payroll-execution/enums/payroll-execution-enum';
 import { ConfigStatus } from '../payroll-configuration/enums/payroll-configuration-enums';
 import { LeavesService } from '../leaves/leaves.service';
+import { EmployeeTerminationResignation, EmployeeTerminationResignationDocument } from '../payroll-execution/models/EmployeeTerminationResignation.schema';
+import { terminationAndResignationBenefits, terminationAndResignationBenefitsDocument } from '../payroll-configuration/models/terminationAndResignationBenefits';
 
 @Injectable()
 export class RecruitmentService {
@@ -100,6 +102,10 @@ export class RecruitmentService {
     private taxRulesModel: Model<taxRulesDocument>,
     @InjectModel(insuranceBrackets.name)
     private insuranceBracketsModel: Model<insuranceBracketsDocument>,
+    @InjectModel(EmployeeTerminationResignation.name)
+    private employeeTerminationModel: Model<EmployeeTerminationResignationDocument>,
+    @InjectModel(terminationAndResignationBenefits.name)
+    private terminationBenefitsModel: Model<terminationAndResignationBenefitsDocument>,
     private readonly gridFSService: GridFSService,
     private readonly notificationService: NotificationService,
     private readonly leavesService: LeavesService,
@@ -2334,8 +2340,6 @@ HR Department
       throw new NotFoundException('Termination request not found');
     }
 
-    console.log('Termination data:', JSON.stringify(termination, null, 2));
-
     return termination;
   }
 
@@ -2655,6 +2659,110 @@ HR Department
       total,
       byStatus: { pending, underReview, approved, rejected },
       byInitiator,
+    };
+  }
+
+  /**
+   * Finalize clearance and automatically assign all termination/resignation benefits
+   * This is called when all clearance requirements are completed
+   */
+  async finalizeClearanceAndAssignBenefits(terminationId: string, userId: string) {
+    // Step 1: Verify termination exists
+    const termination = await this.terminationModel.findById(terminationId).populate('employeeId');
+    if (!termination) {
+      throw new NotFoundException('Termination request not found');
+    }
+
+    // Step 2: Verify clearance checklist is complete
+    const clearance = await this.clearanceModel.findOne({ 
+      terminationId: new Types.ObjectId(terminationId) 
+    });
+    
+    if (!clearance) {
+      throw new NotFoundException('Clearance checklist not found');
+    }
+
+    // Check if all clearance items are approved
+    const allCleared = clearance.items.every(item => item.status === ApprovalStatus.APPROVED);
+    const allEquipmentReturned = clearance.equipmentList.every(item => item.returned);
+    const cardReturned = clearance.cardReturned;
+
+    if (!allCleared || !allEquipmentReturned || !cardReturned) {
+      throw new BadRequestException('All clearance requirements must be completed before finalizing');
+    }
+
+    // Step 3: Get employee ID
+    const employeeId = typeof termination.employeeId === 'string' 
+      ? termination.employeeId 
+      : termination.employeeId._id;
+
+    // Step 4: Check if benefits have already been assigned
+    const existingBenefits = await this.employeeTerminationModel.find({
+      terminationId: new Types.ObjectId(terminationId)
+    });
+
+    if (existingBenefits.length > 0) {
+      return {
+        message: 'Clearance already finalized. Benefits were previously assigned.',
+        benefitsCount: existingBenefits.length,
+        benefits: existingBenefits
+      };
+    }
+
+    // Step 5: Get all approved termination/resignation benefits
+    const approvedBenefits = await this.terminationBenefitsModel.find({
+      status: ConfigStatus.APPROVED
+    });
+
+    if (approvedBenefits.length === 0) {
+      throw new BadRequestException('No approved termination benefits configured in the system');
+    }
+
+    // Step 6: Assign all benefits to the employee
+    const assignedBenefits: EmployeeTerminationResignationDocument[] = [];
+    for (const benefit of approvedBenefits) {
+      try {
+        const employeeBenefit = new this.employeeTerminationModel({
+          _id: new Types.ObjectId(),
+          employeeId: new Types.ObjectId(employeeId),
+          benefitId: benefit._id,
+          givenAmount: benefit.amount,
+          terminationId: new Types.ObjectId(terminationId),
+          status: BenefitStatus.APPROVED
+        });
+
+        await employeeBenefit.save();
+        assignedBenefits.push(employeeBenefit);
+      } catch (err) {
+        throw new BadRequestException(`Failed to assign benefit: ${benefit.name}`);
+      }
+    }
+
+    // Step 7: Update termination status to indicate clearance is complete
+    termination.status = TerminationStatus.APPROVED;
+    await termination.save();
+
+    // Step 8: Create notification for employee
+    try {
+      await this.notificationService.createNotification(userId, {
+        title: 'Termination Benefits Assigned',
+        message: `Your clearance has been finalized and ${assignedBenefits.length} termination benefit(s) have been assigned to your account.`,
+        targetEmployeeIds: [employeeId.toString()],
+      });
+    } catch (notifErr) {
+      // Don't fail the whole operation if notification fails
+    }
+
+    return {
+      message: 'Clearance finalized successfully',
+      benefitsAssigned: assignedBenefits.length,
+      totalAmount: assignedBenefits.reduce((sum, b) => sum + b.givenAmount, 0),
+      benefits: assignedBenefits.map(b => ({
+        id: b._id,
+        benefitId: b.benefitId,
+        amount: b.givenAmount,
+        status: b.status
+      }))
     };
   }
 }

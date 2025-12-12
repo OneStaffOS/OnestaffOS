@@ -17,7 +17,7 @@ export default function UnauthorizedPage() {
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
       padding: '1rem',
     }}>
       <div style={{
@@ -49,7 +49,7 @@ export default function UnauthorizedPage() {
           <Link href="/job-offers" style={{
             display: 'inline-block',
             padding: '0.75rem 2rem',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
             color: 'white',
             textDecoration: 'none',
             borderRadius: '8px',

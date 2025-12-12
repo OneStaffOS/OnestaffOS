@@ -77,7 +77,9 @@ export default function UnifiedHRDashboard() {
 
       // Fetch employee statistics (for all HR roles)
       const employeesRes = await axios.get('/employee-profile');
-      const employees = employeesRes.data;
+      const employees = Array.isArray(employeesRes.data) 
+        ? employeesRes.data 
+        : (employeesRes.data?.employees || employeesRes.data?.data || []);
 
       const activeCount = employees.filter((emp: any) => emp.status === 'Active').length;
       const suspendedCount = employees.filter((emp: any) => emp.status === 'Suspended').length;
@@ -95,12 +97,17 @@ export default function UnifiedHRDashboard() {
 
       // Fetch departments
       const deptRes = await axios.get('/organization-structure/departments');
-      const departments = deptRes.data;
+      const departments = Array.isArray(deptRes.data) 
+        ? deptRes.data 
+        : (deptRes.data?.departments || deptRes.data?.data || []);
       const activeDepts = departments.filter((dept: any) => dept.isActive).length;
 
       // Fetch pending change requests
       const changeRequestsRes = await axios.get('/employee-profile/change-requests');
-      const pendingRequests = changeRequestsRes.data.filter(
+      const changeRequests = Array.isArray(changeRequestsRes.data) 
+        ? changeRequestsRes.data 
+        : (changeRequestsRes.data?.requests || changeRequestsRes.data?.data || []);
+      const pendingRequests = changeRequests.filter(
         (req: any) => req.status === 'PENDING'
       ).length;
 

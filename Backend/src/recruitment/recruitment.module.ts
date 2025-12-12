@@ -31,6 +31,8 @@ import { signingBonus, signingBonusSchema } from '../payroll-configuration/model
 import { payGrade, payGradeSchema } from '../payroll-configuration/models/payGrades.schema';
 import { taxRules, taxRulesSchema } from '../payroll-configuration/models/taxRules.schema';
 import { insuranceBrackets, insuranceBracketsSchema } from '../payroll-configuration/models/insuranceBrackets.schema';
+import { EmployeeTerminationResignation, EmployeeTerminationResignationSchema } from '../payroll-execution/models/EmployeeTerminationResignation.schema';
+import { terminationAndResignationBenefits, terminationAndResignationBenefitsSchema } from '../payroll-configuration/models/terminationAndResignationBenefits';
 
 @Module({
   imports:[
@@ -64,6 +66,8 @@ import { insuranceBrackets, insuranceBracketsSchema } from '../payroll-configura
       { name: payGrade.name, schema: payGradeSchema },
       { name: taxRules.name, schema: taxRulesSchema },
       { name: insuranceBrackets.name, schema: insuranceBracketsSchema },
+      { name: EmployeeTerminationResignation.name, schema: EmployeeTerminationResignationSchema },
+      { name: terminationAndResignationBenefits.name, schema: terminationAndResignationBenefitsSchema },
     ]),
     EmployeeProfileModule,
     NotificationModule,

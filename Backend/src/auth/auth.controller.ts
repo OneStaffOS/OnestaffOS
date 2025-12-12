@@ -72,22 +72,13 @@ export class AuthController {
       });
       
       // Return success response with accessToken
-      const response = {
+      return {
         statusCode: HttpStatus.OK,
         message: 'Login successful',
         accessToken: result.accessToken,
         user: result.payload,
         csrfToken, // Send token in response body as well
       };
-      
-      console.log('[Auth Controller] Returning response:', {
-        hasAccessToken: !!response.accessToken,
-        hasCsrfToken: !!response.csrfToken,
-        hasUser: !!response.user,
-        tokenLength: response.accessToken?.length,
-      });
-      
-      return response;
     } catch (error) {
       // Handle specific errors
       if (error instanceof HttpException) {

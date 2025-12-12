@@ -56,16 +56,10 @@ export default function LoginPage() {
 
       const response = await axios.post('/auth/login', sanitizedData);
       
-      console.log('[Login] Full response:', response.data);
-      
       // Backend returns { statusCode, message, accessToken, user, csrfToken }
       const userData = response.data.user || response.data.payload;
       const token = response.data.accessToken;
       const csrfToken = response.data.csrfToken;
-
-      console.log('[Login] Token:', token ? 'exists' : 'MISSING');
-      console.log('[Login] User data:', userData);
-      console.log('[Login] CSRF token:', csrfToken ? 'exists' : 'MISSING');
 
       // Validate required data before proceeding
       if (!token || !userData) {

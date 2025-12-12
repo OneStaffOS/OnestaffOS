@@ -146,19 +146,33 @@ export default function ClearancePage() {
       setSaving(true);
       setError('');
 
+      let response;
       if (checklist._id) {
-        // Update existing
-        await axios.put(`/recruitment/termination/${terminationId}/clearance`, checklist);
+        response = await axios.put(`/recruitment/termination/${terminationId}/clearance`, checklist);
       } else {
-        // Create new
-        const response = await axios.post(`/recruitment/termination/${terminationId}/clearance`, checklist);
+        response = await axios.post(`/recruitment/termination/${terminationId}/clearance`, checklist);
         setChecklist(response.data);
       }
 
-      setSuccess('Clearance checklist saved successfully!');
+      // If all clearance requirements are completed, finalize and assign benefits
+      if (allCleared) {
+        try {
+          const benefitsResponse = await axios.post(
+            `/recruitment/termination/${terminationId}/finalize-clearance`
+          );
+          
+          setSuccess(
+            `Clearance finalized! ${benefitsResponse.data.benefitsAssigned} benefit(s) assigned (Total: ${benefitsResponse.data.totalAmount})`
+          );
+        } catch (benefitErr: any) {
+          setError(benefitErr.response?.data?.message || 'Clearance saved but failed to assign benefits');
+        }
+      } else {
+        setSuccess('Clearance checklist saved successfully!');
+      }
+
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      console.error('Failed to save clearance:', err);
       setError(err.response?.data?.message || 'Failed to save clearance checklist');
     } finally {
       setSaving(false);
@@ -391,6 +405,8 @@ export default function ClearancePage() {
         {allCleared && (
           <div className={styles.completeBanner}>
             ✓ All clearance requirements completed!
+            <br />
+            <small>💰 Termination benefits will be automatically assigned when you save.</small>
           </div>
         )}
         <button
@@ -398,7 +414,7 @@ export default function ClearancePage() {
           disabled={saving}
           className={styles.saveButton}
         >
-          {saving ? 'Saving...' : 'Save Clearance'}
+          {saving ? 'Processing...' : allCleared ? 'Finalize & Assign Benefits' : 'Save Clearance'}
         </button>
       </div>
     </div>

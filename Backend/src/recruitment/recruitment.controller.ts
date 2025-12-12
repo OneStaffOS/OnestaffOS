@@ -765,6 +765,16 @@ export class RecruitmentController {
     return this.recruitmentService.updateCardReturn(terminationId, body.cardReturned);
   }
 
+  @Post('termination/:id/finalize-clearance')
+  @Roles(Role.HR_MANAGER, Role.HR_ADMIN)
+  async finalizeClearance(
+    @Param('id') terminationId: string,
+    @Req() req,
+  ) {
+    const userId = req.user.sub;
+    return this.recruitmentService.finalizeClearanceAndAssignBenefits(terminationId, userId);
+  }
+
   // ==================== OFFBOARDING NOTIFICATIONS ====================
 
   @Post('termination/:id/trigger-offboarding')
