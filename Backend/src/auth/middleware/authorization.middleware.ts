@@ -1,5 +1,5 @@
 
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role, ROLES_KEY } from '../decorators/roles.decorator';
 
@@ -35,11 +35,11 @@ export class authorizationGaurd implements CanActivate {
       const requiredNorm = requiredRoles.map(r => normalize(r as any));
 
       // If user has no roles, deny access
-      if (userRoles.length === 0) throw new UnauthorizedException('unauthorized access');
+      if (userRoles.length === 0) throw new ForbiddenException('You do not have permission to access this resource');
 
       // Check if any of the user's normalized roles match any required normalized role
       const hasRole = requiredNorm.some(reqR => userRoles.includes(reqR));
-      if (!hasRole) throw new UnauthorizedException('unauthorized access');
+      if (!hasRole) throw new ForbiddenException('You do not have the required role to access this resource');
        
     return true;
   }

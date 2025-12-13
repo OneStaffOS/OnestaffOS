@@ -109,6 +109,13 @@ export class EmployeeProfile extends UserProfileBase {
 
   @Prop({ type: String })
   lastDevelopmentPlanSummary?: string;
+
+  // Allowances tracking
+  @Prop({ type: Boolean, default: false })
+  allowancesAssigned?: boolean;
+
+  @Prop({ type: Number, default: 0 })
+  totalAllowances?: number;
 }
 
 export const EmployeeProfileSchema =

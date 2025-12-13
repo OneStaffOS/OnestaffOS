@@ -458,6 +458,9 @@ export default function NewHireDashboard() {
                   ✅ <strong>Leave entitlements have been automatically assigned</strong> to your account with zero carry-over balance.
                 </p>
                 <p className={styles.completionMessage}>
+                  ✅ <strong>All approved allowances have been automatically assigned</strong> to your account and will be included in your payroll.
+                </p>
+                <p className={styles.completionMessage}>
                   Please log out and log back in for all changes to take effect.
                 </p>
               </div>

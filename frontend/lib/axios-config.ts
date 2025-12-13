@@ -74,15 +74,26 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Log security-related errors
+    // Handle 403 Forbidden - authorization failures (insufficient permissions)
     if (error.response?.status === 403) {
-      logSecurityEvent('CSRF or permission denied', {
+      const url = error.config?.url || '';
+      const errorMessage = error.response?.data?.message?.toLowerCase() || '';
+      
+      logSecurityEvent('Permission denied', {
         url: error.config?.url,
         status: error.response.status,
+        message: errorMessage,
       });
+
+      // Redirect to unauthorized page for authorization failures (except CSRF errors)
+      if (!errorMessage.includes('csrf')) {
+        if (typeof window !== 'undefined' && !window.location.pathname.includes('/unauthorized')) {
+          window.location.href = '/unauthorized';
+        }
+      }
     }
 
-    // Only logout on 401 if it's an authentication error (not authorization)
+    // Handle 401 Unauthorized - authentication failures (invalid/missing token)
     if (error.response?.status === 401) {
       const url = error.config?.url || '';
       const errorMessage = error.response?.data?.message?.toLowerCase() || '';
@@ -94,12 +105,12 @@ axios.interceptors.response.use(
       
       const isTokenError = errorMessage.includes('token') || errorMessage.includes('unauthorized') || errorMessage.includes('authentication');
       
-      // Only redirect to login if it's an actual auth failure, not a permissions issue
+      // Only redirect to session-expired page if it's an actual auth failure
       if (isTokenError) {
         if (typeof window !== 'undefined') {
           localStorage.removeItem('accessToken');
           localStorage.removeItem('user');
-          window.location.href = '/login';
+          window.location.href = '/session-expired';
         }
       }
     }

@@ -56,6 +56,7 @@ import { ConfigStatus } from '../payroll-configuration/enums/payroll-configurati
 import { LeavesService } from '../leaves/leaves.service';
 import { EmployeeTerminationResignation, EmployeeTerminationResignationDocument } from '../payroll-execution/models/EmployeeTerminationResignation.schema';
 import { terminationAndResignationBenefits, terminationAndResignationBenefitsDocument } from '../payroll-configuration/models/terminationAndResignationBenefits';
+import { allowance, allowanceDocument } from '../payroll-configuration/models/allowance.schema';
 
 @Injectable()
 export class RecruitmentService {
@@ -106,6 +107,8 @@ export class RecruitmentService {
     private employeeTerminationModel: Model<EmployeeTerminationResignationDocument>,
     @InjectModel(terminationAndResignationBenefits.name)
     private terminationBenefitsModel: Model<terminationAndResignationBenefitsDocument>,
+    @InjectModel(allowance.name)
+    private allowanceModel: Model<allowanceDocument>,
     private readonly gridFSService: GridFSService,
     private readonly notificationService: NotificationService,
     private readonly leavesService: LeavesService,
@@ -1755,6 +1758,13 @@ HR Department
         } catch (leaveError) {
           // Don't throw - allow onboarding completion to proceed even if leave assignment fails
         }
+
+        // Auto-assign all approved allowances to the new hire
+        try {
+          await this.autoAssignAllowancesToNewHire(employee);
+        } catch (allowanceError) {
+          // Don't throw - allow onboarding completion to proceed even if allowance assignment fails
+        }
       }
       
       // Find the employee role document
@@ -1815,6 +1825,38 @@ HR Department
     } catch (error) {
       console.error('Failed to auto-assign payroll configurations:', error);
       // Don't throw error - this is not critical for onboarding completion
+    }
+  }
+
+  /**
+   * Auto-assign all approved allowances to new hire
+   * This is called when onboarding is completed
+   */
+  private async autoAssignAllowancesToNewHire(employee: any): Promise<void> {
+    try {
+      // Fetch all approved allowances
+      const approvedAllowances = await this.allowanceModel
+        .find({ status: ConfigStatus.APPROVED })
+        .exec();
+      
+      if (approvedAllowances.length === 0) {
+        return;
+      }
+
+      // Calculate total allowances amount for the employee profile
+      const totalAllowances = approvedAllowances.reduce((sum, allowance) => sum + allowance.amount, 0);
+
+      // Store allowance details in employee profile for reference
+      // Note: Individual allowance amounts will be retrieved during payroll execution
+      // This field helps track that allowances have been assigned
+      if (!employee.allowancesAssigned) {
+        employee.allowancesAssigned = true;
+        employee.totalAllowances = totalAllowances;
+        await employee.save();
+      }
+    } catch (error) {
+      console.error('Failed to auto-assign allowances:', error.message);
+      throw error;
     }
   }
 

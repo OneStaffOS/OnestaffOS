@@ -33,6 +33,7 @@ import { taxRules, taxRulesSchema } from '../payroll-configuration/models/taxRul
 import { insuranceBrackets, insuranceBracketsSchema } from '../payroll-configuration/models/insuranceBrackets.schema';
 import { EmployeeTerminationResignation, EmployeeTerminationResignationSchema } from '../payroll-execution/models/EmployeeTerminationResignation.schema';
 import { terminationAndResignationBenefits, terminationAndResignationBenefitsSchema } from '../payroll-configuration/models/terminationAndResignationBenefits';
+import { allowance, allowanceSchema } from '../payroll-configuration/models/allowance.schema';
 
 @Module({
   imports:[
@@ -68,6 +69,7 @@ import { terminationAndResignationBenefits, terminationAndResignationBenefitsSch
       { name: insuranceBrackets.name, schema: insuranceBracketsSchema },
       { name: EmployeeTerminationResignation.name, schema: EmployeeTerminationResignationSchema },
       { name: terminationAndResignationBenefits.name, schema: terminationAndResignationBenefitsSchema },
+      { name: allowance.name, schema: allowanceSchema },
     ]),
     EmployeeProfileModule,
     NotificationModule,

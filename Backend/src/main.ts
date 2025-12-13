@@ -40,6 +40,29 @@ async function bootstrap() {
     }),
   );
 
+  // 2. Rate Limiting - DISABLED for development (user makes thousands of requests)
+  // Uncomment in production with appropriate limits
+  // const limiter = rateLimit({
+  //   windowMs: 15 * 60 * 1000, // 15 minutes
+  //   max: 10000, // High limit for production
+  //   message: 'Too many requests from this IP, please try again later.',
+  //   standardHeaders: true,
+  //   legacyHeaders: false,
+  // });
+  // app.use(limiter);
+
+  // Stricter rate limiting for authentication endpoints - DISABLED
+  // const authLimiter = rateLimit({
+  //   windowMs: 15 * 60 * 1000,
+  //   max: 100, // Increased for production
+  //   skipSuccessfulRequests: true,
+  // });
+  // app.use('/api/v1/auth/login', authLimiter);
+  // app.use('/api/v1/auth/register', authLimiter);
+
+  // 3. NoSQL Injection Protection - Using custom middleware in app.module.ts
+  // See: NoSQLSanitizeMiddleware applied globally to all routes
+
   // 4. HTTP Parameter Pollution Protection
   app.use(hpp());
   

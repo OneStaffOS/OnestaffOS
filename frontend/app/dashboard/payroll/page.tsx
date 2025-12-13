@@ -371,26 +371,6 @@ export default function PayrollDashboardPage() {
                       </div>
                     </div>
 
-                    {/* Termination Benefits */}
-                    <div 
-                      className={styles.dashboardCard}
-                      onClick={() => router.push('/dashboard/payroll/execution/termination-benefits')}
-                    >
-                      <span className={styles.dashboardCardIcon}>📤</span>
-                      <h3 className={styles.dashboardCardTitle}>Termination Benefits</h3>
-                      <p className={styles.dashboardCardDescription}>
-                        Review and approve end-of-service benefits for terminated or resigned employees.
-                      </p>
-                      <div className={styles.dashboardCardStats}>
-                        <div className={styles.dashboardCardStat}>
-                          <span className={styles.dashboardCardStatValue} style={{ color: '#f59e0b' }}>
-                            {executionStats.pendingBenefits}
-                          </span>
-                          <span className={styles.dashboardCardStatLabel}>Pending Approval</span>
-                        </div>
-                      </div>
-                    </div>
-
                     {/* Payslips */}
                     <div 
                       className={styles.dashboardCard}
