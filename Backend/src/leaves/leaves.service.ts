@@ -1113,19 +1113,20 @@ export class LeavesService {
   }
 
   /**
-   * REQ-016: Upload attachment with GridFS file
+   * REQ-016: Upload attachment with disk file storage
+   * Stores file metadata from Multer disk storage
    */
-  async uploadAttachmentWithGridFS(data: {
+  async uploadAttachmentWithDisk(data: {
     originalName: string;
+    filePath: string;
     fileType: string;
     size: number;
-    gridFsFileId: string;
   }): Promise<Attachment> {
     const attachment = new this.attachmentModel({
       originalName: data.originalName,
+      filePath: data.filePath,
       fileType: data.fileType,
       size: data.size,
-      gridFsFileId: new Types.ObjectId(data.gridFsFileId),
     });
     return attachment.save();
   }

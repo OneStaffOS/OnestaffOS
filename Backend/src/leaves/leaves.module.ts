@@ -14,7 +14,6 @@ import { Attachment,AttachmentSchema } from './models/attachment.schema';
 import { EmployeeProfileModule } from '../employee-profile/employee-profile.module';
 import { TimeManagementModule } from '../time-management/time-management.module';
 import { NotificationModule } from '../notifications/notification.module';
-import { LeaveGridFSService } from './leave-gridfs.service';
 
 @Module({
   imports:[
@@ -37,7 +36,7 @@ import { LeaveGridFSService } from './leave-gridfs.service';
     forwardRef(() => NotificationModule),
   ],
   controllers: [LeavesController],
-  providers: [LeavesService, LeaveGridFSService],
+  providers: [LeavesService],
   exports:[LeavesService]
 })
 export class LeavesModule {}

@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { RecruitmentController } from './recruitment.controller';
 import { RecruitmentService } from './recruitment.service';
-import { GridFSService } from './gridfs.service';
-import { DeadlineReminderService } from './deadline-reminder.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { JobTemplate, JobTemplateSchema } from './models/job-template.schema';
@@ -76,7 +74,7 @@ import { allowance, allowanceSchema } from '../payroll-configuration/models/allo
     LeavesModule
   ],
   controllers: [RecruitmentController],
-  providers: [RecruitmentService, GridFSService, DeadlineReminderService],
+  providers: [RecruitmentService],
   exports:[RecruitmentService]
 
 })

@@ -4,7 +4,15 @@ import { Model, Types } from 'mongoose';
 import PDFDocument from 'pdfkit';
 import * as fs from 'fs';
 import * as path from 'path';
-import { GridFSService } from './gridfs.service';
+import {
+  UPLOAD_DIRS,
+  ensureUploadDir,
+  generateUniqueFilename,
+  getRelativePath,
+  getAbsolutePath,
+  isPathSafe,
+  fileExists,
+} from '../common/upload/multer.config';
 import { JobTemplate, JobTemplateDocument } from './models/job-template.schema';
 import { JobRequisition, JobRequisitionDocument } from './models/job-requisition.schema';
 import { Application, ApplicationDocument } from './models/application.schema';
@@ -109,7 +117,6 @@ export class RecruitmentService {
     private terminationBenefitsModel: Model<terminationAndResignationBenefitsDocument>,
     @InjectModel(allowance.name)
     private allowanceModel: Model<allowanceDocument>,
-    private readonly gridFSService: GridFSService,
     private readonly notificationService: NotificationService,
     private readonly leavesService: LeavesService,
   ) {}
@@ -305,28 +312,15 @@ export class RecruitmentService {
       await candidate.save();
     }
 
-    // File is already in memory as buffer (MemoryStorage)
-    const fileBuffer = cvFile.buffer;
-
-    // Upload to GridFS
-    const gridFsFileId = await this.gridFSService.uploadFile(
-      fileBuffer,
-      cvFile.originalname,
-      {
-        candidateId: data.candidateId,
-        mimeType: cvFile.mimetype,
-        uploadedAt: new Date(),
-      }
-    );
+    // File is already on disk via Multer diskStorage
+    // cvFile.path contains the absolute path, cvFile.filename is the unique filename
+    const relativeFilePath = path.join('recruitment', 'cvs', cvFile.filename);
 
     // Save CV document metadata to database
     const cvDocument = new this.documentModel({
       ownerId: candidateObjectId,
       type: DocumentType.CV,
-      fileName: cvFile.originalname,
-      gridFsFileId: gridFsFileId,
-      mimeType: cvFile.mimetype,
-      fileSize: cvFile.size,
+      filePath: relativeFilePath,
       uploadedAt: new Date(),
     });
     await cvDocument.save();
@@ -1876,21 +1870,15 @@ HR Department
       throw new BadRequestException('Invalid task index');
     }
 
-    // Upload document using GridFS
-    const gridFsFileId = await this.gridFSService.uploadFile(
-      file.buffer,
-      file.originalname,
-      file.mimetype
-    );
+    // File is already on disk via Multer diskStorage
+    // file.path contains the absolute path, file.filename is the unique filename
+    const relativeFilePath = path.join('recruitment', 'onboarding', file.filename);
 
     // Save document metadata
     const document = new this.documentModel({
       ownerId: new Types.ObjectId(uploadedBy),
       type: DocumentType.CERTIFICATE, // Using CERTIFICATE for onboarding documents
-      fileName: file.originalname,
-      gridFsFileId: gridFsFileId,
-      mimeType: file.mimetype,
-      fileSize: file.size,
+      filePath: relativeFilePath,
       uploadedAt: new Date(),
     });
 
@@ -2806,5 +2794,82 @@ HR Department
         status: b.status
       }))
     };
+  }
+
+  // ==================== FILE DOWNLOAD ====================
+
+  /**
+   * Get document by ID and return file info for download
+   */
+  async getDocumentForDownload(documentId: string): Promise<{
+    filePath: string;
+    absolutePath: string;
+    exists: boolean;
+  }> {
+    const document = await this.documentModel.findById(documentId).exec();
+    
+    if (!document) {
+      throw new NotFoundException(`Document with ID ${documentId} not found`);
+    }
+
+    const absolutePath = getAbsolutePath(document.filePath);
+    
+    // Validate path safety
+    if (!isPathSafe(document.filePath)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
+    return {
+      filePath: document.filePath,
+      absolutePath,
+      exists: fileExists(document.filePath),
+    };
+  }
+
+  /**
+   * Get CV document for a candidate
+   */
+  async getCandidateCvForDownload(candidateId: string): Promise<{
+    document: DocumentDocument;
+    absolutePath: string;
+    exists: boolean;
+  }> {
+    const document = await this.documentModel.findOne({
+      ownerId: new Types.ObjectId(candidateId),
+      type: DocumentType.CV,
+    }).sort({ uploadedAt: -1 }).exec();
+
+    if (!document) {
+      throw new NotFoundException(`CV not found for candidate ${candidateId}`);
+    }
+
+    const absolutePath = getAbsolutePath(document.filePath);
+    
+    if (!isPathSafe(document.filePath)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
+    return {
+      document,
+      absolutePath,
+      exists: fileExists(document.filePath),
+    };
+  }
+
+  /**
+   * Get application CV for download
+   */
+  async getApplicationCvForDownload(applicationId: string): Promise<{
+    document: DocumentDocument;
+    absolutePath: string;
+    exists: boolean;
+  }> {
+    const application = await this.applicationModel.findById(applicationId).exec();
+    
+    if (!application) {
+      throw new NotFoundException(`Application with ID ${applicationId} not found`);
+    }
+
+    return this.getCandidateCvForDownload(application.candidateId.toString());
   }
 }

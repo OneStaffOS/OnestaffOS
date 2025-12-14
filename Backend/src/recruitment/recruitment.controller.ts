@@ -9,12 +9,16 @@ import {
   Param,
   Query,
   Req,
+  Res,
   UseGuards,
   BadRequestException,
+  NotFoundException,
   UseInterceptors,
   UploadedFile,
   Request,
+  StreamableFile,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { RecruitmentService } from './recruitment.service';
 import { CreateJobTemplateDto } from './dto/create-job-template.dto';
@@ -27,6 +31,12 @@ import { AuthGuard } from '../auth/middleware/authentication.middleware';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
 import { Public } from '../auth/decorators/public.decorator';
+import {
+  getCvUploadOptions,
+  getOnboardingDocumentUploadOptions,
+} from '../common/upload/multer.config';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Controller('recruitment')
 @UseGuards(AuthGuard, authorizationGaurd)
@@ -149,25 +159,7 @@ export class RecruitmentController {
 
   @Post('applications')
   @Public()
-  @UseInterceptors(
-    FileInterceptor('cv', {
-      fileFilter: (req, file, callback) => {
-        const allowedMimeTypes = [
-          'application/pdf',
-          'application/msword',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        ];
-        if (allowedMimeTypes.includes(file.mimetype)) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only PDF, DOC, and DOCX files are allowed'), false);
-        }
-      },
-      limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('cv', getCvUploadOptions()))
   async createApplication(
     @UploadedFile() cvFile: Express.Multer.File,
     @Body('candidateId') candidateId: string,
@@ -541,7 +533,7 @@ export class RecruitmentController {
   }
 
   @Post('onboarding/:id/tasks/:taskIndex/upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', getOnboardingDocumentUploadOptions()))
   async uploadTaskDocument(
     @Param('id') checklistId: string,
     @Param('taskIndex') taskIndex: string,
@@ -782,5 +774,76 @@ export class RecruitmentController {
   async triggerOffboarding(@Param('id') terminationId: string, @Req() req) {
     const userId = req.user.sub;
     return this.recruitmentService.triggerOffboardingNotifications(terminationId, userId);
+  }
+
+  // ==================== FILE DOWNLOADS ====================
+
+  @Get('documents/:id/download')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.HR_ADMIN, Role.RECRUITER)
+  async downloadDocument(
+    @Param('id') documentId: string,
+    @Res() res: Response,
+  ) {
+    const fileInfo = await this.recruitmentService.getDocumentForDownload(documentId);
+    
+    if (!fileInfo.exists) {
+      throw new NotFoundException('File not found on disk');
+    }
+
+    // Get original filename from path
+    const filename = path.basename(fileInfo.filePath);
+    
+    // Set headers for download
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    
+    // Stream the file
+    const fileStream = fs.createReadStream(fileInfo.absolutePath);
+    fileStream.pipe(res);
+  }
+
+  @Get('applications/:id/cv/download')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.HR_ADMIN, Role.RECRUITER)
+  async downloadApplicationCv(
+    @Param('id') applicationId: string,
+    @Res() res: Response,
+  ) {
+    const fileInfo = await this.recruitmentService.getApplicationCvForDownload(applicationId);
+    
+    if (!fileInfo.exists) {
+      throw new NotFoundException('CV file not found on disk');
+    }
+
+    // Get original filename from path
+    const filename = path.basename(fileInfo.document.filePath);
+    
+    // Set headers for download
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    
+    // Stream the file
+    const fileStream = fs.createReadStream(fileInfo.absolutePath);
+    fileStream.pipe(res);
+  }
+
+  @Get('candidates/:candidateId/cv/download')
+  @Roles(Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.HR_ADMIN, Role.RECRUITER)
+  async downloadCandidateCv(
+    @Param('candidateId') candidateId: string,
+    @Res() res: Response,
+  ) {
+    const fileInfo = await this.recruitmentService.getCandidateCvForDownload(candidateId);
+    
+    if (!fileInfo.exists) {
+      throw new NotFoundException('CV file not found on disk');
+    }
+
+    // Get original filename from path
+    const filename = path.basename(fileInfo.document.filePath);
+    
+    // Set headers for download
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    
+    // Stream the file
+    const fileStream = fs.createReadStream(fileInfo.absolutePath);
+    fileStream.pipe(res);
   }
 }

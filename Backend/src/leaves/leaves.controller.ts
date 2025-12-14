@@ -14,12 +14,18 @@ import {
   Res,
   StreamableFile,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { memoryStorage } from 'multer';
 import type { Response } from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
 import { LeavesService } from './leaves.service';
-import { LeaveGridFSService } from './leave-gridfs.service';
+import {
+  getLeaveAttachmentUploadOptions,
+  UPLOAD_DIRS,
+  isPathSafe,
+} from '../common/upload/multer.config';
 import { CreateLeaveTypeDto } from './dto/create-leave-type.dto';
 import { CreateLeaveCategoryDto } from './dto/create-leave-category.dto';
 import { CreateLeavePolicyDto } from './dto/create-leave-policy.dto';
@@ -37,14 +43,12 @@ import { AuthGuard } from '../auth/gaurds/authentication.guard';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
 import { LeaveStatus } from './enums/leave-status.enum';
-import { ObjectId } from 'mongodb';
 
 @Controller('leaves')
 @UseGuards(AuthGuard, authorizationGaurd)
 export class LeavesController {
   constructor(
     private readonly leavesService: LeavesService,
-    private readonly gridFSService: LeaveGridFSService,
   ) {}
 
   // ========== PHASE 1: POLICY CONFIGURATION AND SETUP ==========
@@ -592,28 +596,7 @@ export class LeavesController {
    * Accessible by: Employees, HR
    */
   @Post('attachments/upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: memoryStorage(),
-      fileFilter: (req, file, callback) => {
-        const allowedMimeTypes = [
-          'application/pdf',
-          'application/msword',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          'image/jpeg',
-          'image/png',
-        ];
-        if (allowedMimeTypes.includes(file.mimetype)) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only PDF, DOC, DOCX, JPG, and PNG files are allowed'), false);
-        }
-      },
-      limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file', getLeaveAttachmentUploadOptions()))
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
@@ -628,22 +611,15 @@ export class LeavesController {
       throw new BadRequestException('No file uploaded');
     }
 
-    // Upload to GridFS
-    const gridFsFileId = await this.gridFSService.uploadFile(
-      file.buffer,
-      file.originalname,
-      {
-        contentType: file.mimetype,
-        size: file.size,
-      },
-    );
+    // Store relative path for database (e.g., "leaves/attachments/filename.pdf")
+    const relativePath = path.join('leaves', 'attachments', file.filename);
 
-    // Create attachment record
-    const attachment = await this.leavesService.uploadAttachmentWithGridFS({
+    // Create attachment record with disk file metadata
+    const attachment = await this.leavesService.uploadAttachmentWithDisk({
       originalName: file.originalname,
+      filePath: relativePath,
       fileType: file.mimetype,
       size: file.size,
-      gridFsFileId: gridFsFileId.toString(),
     });
     
     return attachment;
@@ -705,40 +681,33 @@ export class LeavesController {
   ): Promise<StreamableFile> {
     const attachment = await this.leavesService.getAttachmentById(id);
     
-    // Check if file is stored in GridFS
-    if (attachment.gridFsFileId) {
-      const fileId = new ObjectId(attachment.gridFsFileId.toString());
-      const stream = this.gridFSService.getDownloadStream(fileId);
-
-      res.set({
-        'Content-Type': attachment.fileType || 'application/octet-stream',
-        'Content-Disposition': `attachment; filename="${attachment.originalName}"`,
-      });
-
-      return new StreamableFile(stream);
+    // Get file from disk storage
+    if (!attachment.filePath) {
+      throw new NotFoundException('No file associated with this attachment');
     }
-    
-    // Legacy: file stored on disk
-    if (attachment.filePath) {
-      const fs = require('fs');
-      const path = require('path');
-      const filePath = path.join(process.cwd(), attachment.filePath);
-      
-      if (!fs.existsSync(filePath)) {
-        throw new BadRequestException('File not found on disk');
-      }
-      
-      const fileStream = fs.createReadStream(filePath);
-      
-      res.set({
-        'Content-Type': attachment.fileType || 'application/octet-stream',
-        'Content-Disposition': `attachment; filename="${attachment.originalName}"`,
-      });
 
-      return new StreamableFile(fileStream);
+    // Build absolute path safely
+    const uploadsBase = path.join(process.cwd(), 'uploads');
+    const absolutePath = path.resolve(uploadsBase, attachment.filePath);
+
+    // Security: Prevent path traversal attacks
+    if (!absolutePath.startsWith(uploadsBase)) {
+      throw new BadRequestException('Invalid file path');
     }
+
+    // Check file exists
+    if (!fs.existsSync(absolutePath)) {
+      throw new NotFoundException('File not found on disk');
+    }
+
+    const fileStream = fs.createReadStream(absolutePath);
     
-    throw new BadRequestException('No file associated with this attachment');
+    res.set({
+      'Content-Type': attachment.fileType || 'application/octet-stream',
+      'Content-Disposition': `attachment; filename="${attachment.originalName}"`,
+    });
+
+    return new StreamableFile(fileStream);
   }
 
   // ========== PHASE 4: HR FINALIZATION AND ADVANCED OPERATIONS ==========

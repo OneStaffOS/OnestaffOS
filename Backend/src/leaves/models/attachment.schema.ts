@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
 export type AttachmentDocument = HydratedDocument<Attachment>;
 
@@ -8,18 +8,14 @@ export class Attachment {
   @Prop({ required: true })
   originalName: string;
 
-  @Prop()
-  filePath?: string;
+  @Prop({ required: true })
+  filePath: string;
 
   @Prop()
   fileType?: string;
 
   @Prop()
   size?: number;
-
-  // GridFS file ID reference
-  @Prop({ type: Types.ObjectId })
-  gridFsFileId?: Types.ObjectId;
 }
 
 export const AttachmentSchema = SchemaFactory.createForClass(Attachment);
