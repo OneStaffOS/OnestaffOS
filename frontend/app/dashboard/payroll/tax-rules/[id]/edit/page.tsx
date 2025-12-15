@@ -76,7 +76,7 @@ export default function EditTaxRulePage() {
 
   if (loading) {
     return (
-      <ProtectedRoute requiredRoles={[SystemRole.PAYROLL_SPECIALIST, SystemRole.SYSTEM_ADMIN]}>
+      <ProtectedRoute requiredRoles={[SystemRole.LEGAL_POLICY_ADMIN, SystemRole.SYSTEM_ADMIN]}>
         <DashboardLayout title="Edit Tax Rule" role="Payroll">
           <Spinner message="Loading tax rule..." />
         </DashboardLayout>
@@ -85,7 +85,7 @@ export default function EditTaxRulePage() {
   }
 
   return (
-    <ProtectedRoute requiredRoles={[SystemRole.PAYROLL_SPECIALIST, SystemRole.SYSTEM_ADMIN]}>
+    <ProtectedRoute requiredRoles={[SystemRole.LEGAL_POLICY_ADMIN, SystemRole.SYSTEM_ADMIN]}>
       <DashboardLayout title="Edit Tax Rule" role="Payroll">
         <div className={styles.container}>
           {/* Back Link */}

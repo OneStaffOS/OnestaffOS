@@ -36,6 +36,7 @@ export default function TaxRulesPage() {
   const isPayrollManager = user?.roles.includes(SystemRole.PAYROLL_MANAGER);
   const isPayrollSpecialist = user?.roles.includes(SystemRole.PAYROLL_SPECIALIST);
   const isSystemAdmin = user?.roles.includes(SystemRole.SYSTEM_ADMIN);
+  const isLegalPolicyAdmin = user?.roles.includes(SystemRole.LEGAL_POLICY_ADMIN);
 
   async function loadTaxRules() {
     setLoading(true);
@@ -43,9 +44,11 @@ export default function TaxRulesPage() {
     try {
       const params = statusFilter !== 'all' ? { status: statusFilter } : {};
       const response = await axios.get('/payroll-configuration/tax-rules', { params });
-      setTaxRules(response.data || []);
+      const data = response.data;
+      setTaxRules(Array.isArray(data) ? data : []);
     } catch (e: any) {
       setError(e?.response?.data?.message || String(e));
+      setTaxRules([]);
     } finally {
       setLoading(false);
     }
@@ -56,8 +59,8 @@ export default function TaxRulesPage() {
   }, [statusFilter]);
 
   const canApprove = isPayrollManager || isSystemAdmin;
-  const canCreate = isPayrollSpecialist || isSystemAdmin;
-  const canDelete = isPayrollManager || isSystemAdmin;
+  const canCreate = isLegalPolicyAdmin; // Only Legal & Policy Admin can create tax rules
+  const canDelete = isPayrollManager || isSystemAdmin || isLegalPolicyAdmin;
 
   async function handleApprove(id: string) {
     if (!confirm('Are you sure you want to approve this tax rule?')) return;
@@ -110,11 +113,9 @@ export default function TaxRulesPage() {
 
   return (
     <ProtectedRoute requiredRoles={[
-      SystemRole.PAYROLL_SPECIALIST,
+      SystemRole.LEGAL_POLICY_ADMIN,
       SystemRole.PAYROLL_MANAGER, 
-      SystemRole.HR_MANAGER, 
-      SystemRole.SYSTEM_ADMIN,
-      SystemRole.LEGAL_POLICY_ADMIN
+      SystemRole.SYSTEM_ADMIN
     ]}>
       <DashboardLayout title="Tax Rules" role="Payroll">
         <div className={styles.container}>

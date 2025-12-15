@@ -42,6 +42,7 @@ export default function PayrollDashboardPage() {
   const isPayrollManager = user?.roles.includes(SystemRole.PAYROLL_MANAGER);
   const isPayrollSpecialist = user?.roles.includes(SystemRole.PAYROLL_SPECIALIST);
   const isSystemAdmin = user?.roles.includes(SystemRole.SYSTEM_ADMIN);
+  const isLegalPolicyAdmin = user?.roles.includes(SystemRole.LEGAL_POLICY_ADMIN);
   const canAccessExecution = user?.roles.includes(SystemRole.PAYROLL_SPECIALIST) || user?.roles.includes(SystemRole.PAYROLL_MANAGER);
 
   async function loadStats() {
@@ -77,21 +78,24 @@ export default function PayrollDashboardPage() {
         canAccessExecution ? axios.get('/payroll-execution/termination-benefits/pending').catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
       ]);
 
-      const calculateStats = (data: any[]) => ({
-        total: data.length,
-        pending: data.filter((item: any) => item.status === 'draft').length,
-        approved: data.filter((item: any) => item.status === 'approved').length,
-      });
+      const calculateStats = (data: any) => {
+        const arr = Array.isArray(data) ? data : [];
+        return {
+          total: arr.length,
+          pending: arr.filter((item: any) => item.status === 'draft').length,
+          approved: arr.filter((item: any) => item.status === 'approved').length,
+        };
+      };
 
       setStats({
-        policies: calculateStats(policies.data || []),
-        payGrades: calculateStats(payGrades.data || []),
-        payTypes: calculateStats(payTypes.data || []),
-        allowances: calculateStats(allowances.data || []),
-        signingBonuses: calculateStats(signingBonuses.data || []),
-        terminationBenefits: calculateStats(terminationBenefits.data || []),
-        taxRules: calculateStats(taxRules.data || []),
-        insuranceBrackets: calculateStats(insuranceBrackets.data || []),
+        policies: calculateStats(policies.data),
+        payGrades: calculateStats(payGrades.data),
+        payTypes: calculateStats(payTypes.data),
+        allowances: calculateStats(allowances.data),
+        signingBonuses: calculateStats(signingBonuses.data),
+        terminationBenefits: calculateStats(terminationBenefits.data),
+        taxRules: calculateStats(taxRules.data),
+        insuranceBrackets: calculateStats(insuranceBrackets.data),
       });
 
       // Set execution stats
@@ -117,7 +121,8 @@ export default function PayrollDashboardPage() {
     loadStats();
   }, []);
 
-  const configModules = [
+  // All configuration modules
+  const allConfigModules = [
     {
       id: 'employee-assignments',
       title: 'Employee Payroll Assignments',
@@ -166,14 +171,6 @@ export default function PayrollDashboardPage() {
       stats: stats?.terminationBenefits,
     },
     {
-      id: 'tax-rules',
-      title: 'Tax Rules',
-      description: 'Configure tax rates and rules for payroll deductions.',
-      icon: '🏛️',
-      path: '/dashboard/payroll/tax-rules',
-      stats: stats?.taxRules,
-    },
-    {
       id: 'insurance-brackets',
       title: 'Insurance Brackets',
       description: 'Define social and health insurance rates based on salary brackets.',
@@ -183,19 +180,43 @@ export default function PayrollDashboardPage() {
     },
   ];
 
+  // Tax Rules module - Only for Legal & Policy Admin
+  const taxRulesModule = {
+    id: 'tax-rules',
+    title: 'Tax Rules',
+    description: 'Configure tax rates and rules for payroll deductions.',
+    icon: '🏛️',
+    path: '/dashboard/payroll/tax-rules',
+    stats: stats?.taxRules,
+  };
+
+  // Filter modules based on role:
+  // - Legal & Policy Admin: Only sees Tax Rules
+  // - Everyone else: Sees all modules except Tax Rules
+  const configModules = isLegalPolicyAdmin 
+    ? [taxRulesModule] 
+    : allConfigModules;
+
   // Exclude insurance brackets from totals calculation (shared dashboard)
-  const totalPending = stats ? 
-    (stats.policies.pending + stats.payGrades.pending + stats.payTypes.pending + 
-     stats.allowances.pending + stats.signingBonuses.pending + stats.terminationBenefits.pending + 
-     stats.taxRules.pending) : 0;
-  const totalApproved = stats ? 
-    (stats.policies.approved + stats.payGrades.approved + stats.payTypes.approved + 
-     stats.allowances.approved + stats.signingBonuses.approved + stats.terminationBenefits.approved + 
-     stats.taxRules.approved) : 0;
-  const totalConfigs = stats ? 
-    (stats.policies.total + stats.payGrades.total + stats.payTypes.total + 
-     stats.allowances.total + stats.signingBonuses.total + stats.terminationBenefits.total + 
-     stats.taxRules.total) : 0;
+  // For Legal & Policy Admin, only count tax rules
+  const totalPending = stats ? (
+    isLegalPolicyAdmin 
+      ? stats.taxRules.pending
+      : (stats.policies.pending + stats.payGrades.pending + stats.payTypes.pending + 
+         stats.allowances.pending + stats.signingBonuses.pending + stats.terminationBenefits.pending)
+  ) : 0;
+  const totalApproved = stats ? (
+    isLegalPolicyAdmin
+      ? stats.taxRules.approved
+      : (stats.policies.approved + stats.payGrades.approved + stats.payTypes.approved + 
+         stats.allowances.approved + stats.signingBonuses.approved + stats.terminationBenefits.approved)
+  ) : 0;
+  const totalConfigs = stats ? (
+    isLegalPolicyAdmin
+      ? stats.taxRules.total
+      : (stats.policies.total + stats.payGrades.total + stats.payTypes.total + 
+         stats.allowances.total + stats.signingBonuses.total + stats.terminationBenefits.total)
+  ) : 0;
 
   // Only Payroll Manager and System Admin can approve configurations
   const canApprove = isPayrollManager || isSystemAdmin;
@@ -208,17 +229,19 @@ export default function PayrollDashboardPage() {
       SystemRole.SYSTEM_ADMIN,
       SystemRole.LEGAL_POLICY_ADMIN
     ]}>
-      <DashboardLayout title="Payroll Configuration" role="Payroll">
+      <DashboardLayout title={isLegalPolicyAdmin ? "Tax Rules Configuration" : "Payroll Configuration"} role="Payroll">
         <div className={styles.container}>
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>💼 Payroll Configuration</h1>
+              <h1 className={styles.pageTitle}>{isLegalPolicyAdmin ? '🏛️ Tax Rules Configuration' : '💼 Payroll Configuration'}</h1>
               <p className={styles.pageSubtitle}>
-                Configure and manage payroll policies, pay grades, allowances, and more
+                {isLegalPolicyAdmin 
+                  ? 'Configure and manage tax rates and rules for payroll deductions'
+                  : 'Configure and manage payroll policies, pay grades, allowances, and more'}
               </p>
             </div>
-            {canApprove && (
+            {canApprove && !isLegalPolicyAdmin && (
               <div className={styles.headerActions}>
                 <button 
                   className={styles.btnPrimary}
@@ -258,7 +281,7 @@ export default function PayrollDashboardPage() {
               </div>
 
               {/* Pending Approvals Section */}
-              {totalPending > 0 && (
+              {totalPending > 0 && !isLegalPolicyAdmin && (
                 <div className={styles.approvalSection}>
                   <h3 className={styles.approvalTitle}>
                     ⚠️ Pending Approvals ({totalPending})
@@ -280,7 +303,7 @@ export default function PayrollDashboardPage() {
 
               {/* Configuration Modules */}
               <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>⚙️ Configuration Modules</h2>
+                <h2 className={styles.sectionTitle}>{isLegalPolicyAdmin ? '🏛️ Tax Configuration' : '⚙️ Configuration Modules'}</h2>
                 <div className={styles.dashboardGrid}>
                   {configModules.map((module) => (
                     <div 
@@ -317,7 +340,7 @@ export default function PayrollDashboardPage() {
               </div>
 
               {/* Payroll Execution & Processing - For Payroll Specialist, Payroll Manager, and System Admin */}
-              {(isPayrollSpecialist || isPayrollManager) && executionStats && (
+              {(isPayrollSpecialist || isPayrollManager) && !isLegalPolicyAdmin && executionStats && (
                 <div className={styles.section} style={{ marginTop: '40px' }}>
                   <h2 className={styles.sectionTitle}>💰 Payroll Execution & Processing</h2>
                   <div className={styles.dashboardGrid}>
@@ -401,7 +424,7 @@ export default function PayrollDashboardPage() {
               )}
 
               {/* Payroll Manager Controls - Only for Payroll Manager and System Admin */}
-              {isPayrollManager && (
+              {isPayrollManager && !isLegalPolicyAdmin && (
                 <div className={styles.section} style={{ marginTop: '40px' }}>
                   <h2 className={styles.sectionTitle}>🔐 Payroll Manager Controls</h2>
                   <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '24px' }}>
@@ -469,7 +492,7 @@ export default function PayrollDashboardPage() {
               )}
 
               {/* Payroll Reports & Disputes - For Payroll Specialist and Manager */}
-              {(isPayrollSpecialist || isPayrollManager) && (
+              {(isPayrollSpecialist || isPayrollManager) && !isLegalPolicyAdmin && (
                 <div className={styles.section} style={{ marginTop: '40px' }}>
                   <h2 className={styles.sectionTitle}>📊 Reports & Dispute Management</h2>
                   <div className={styles.dashboardGrid}>

@@ -357,35 +357,35 @@ export class PayrollConfigurationController {
 
     @Post('tax-rules')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.LEGAL_POLICY_ADMIN, Role.SYSTEM_ADMIN)
     async createTaxRule(@Body() dto: CreateTaxRuleDto, @Req() req: any) {
         return await this.payrollConfigurationService.createTaxRule(dto, req.user.sub);
     }
 
     @Put('tax-rules/:id')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.LEGAL_POLICY_ADMIN, Role.SYSTEM_ADMIN)
     async updateTaxRule(@Param('id') id: string, @Body() dto: UpdateTaxRuleDto, @Req() req: any) {
         return await this.payrollConfigurationService.updateTaxRule(id, dto, req.user.sub);
     }
 
     @Get('tax-rules')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.LEGAL_POLICY_ADMIN, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async getAllTaxRules(@Query('status') status?: ConfigStatus) {
         return await this.payrollConfigurationService.getAllTaxRules(status);
     }
 
     @Get('tax-rules/:id')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_SPECIALIST, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.LEGAL_POLICY_ADMIN, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async getTaxRuleById(@Param('id') id: string) {
         return await this.payrollConfigurationService.getTaxRuleById(id);
     }
 
     @Delete('tax-rules/:id')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.LEGAL_POLICY_ADMIN, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async deleteTaxRule(@Param('id') id: string, @Req() req: any) {
         return await this.payrollConfigurationService.deleteTaxRule(id, req.user.sub);
     }

@@ -15,6 +15,7 @@ import { NotificationModule } from './notifications/notification.module';
 import { RegisterModule } from './register/register.module';
 import { PayrollConfigurationModule } from './payroll-configuration/payroll-configuration.module';
 import { PayrollExecutionModule } from './payroll-execution/payroll-execution.module';
+import { PasswordResetModule } from './password-reset/password-reset.module';
 import { CsrfGuard } from './common/guards/csrf.guard';
 import { SecurityInterceptor } from './common/interceptors/security.interceptor';
 import { NoSQLSanitizeMiddleware } from './common/middleware/nosql-sanitize.middleware';
@@ -34,6 +35,7 @@ import { NoSQLSanitizeMiddleware } from './common/middleware/nosql-sanitize.midd
     PerformanceModule,
     RegisterModule,
     NotificationModule,
+    PasswordResetModule,
   ],
   controllers: [AppController],
   providers: [

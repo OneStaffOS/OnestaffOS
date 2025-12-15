@@ -3,17 +3,21 @@
 import { useEffect, useState } from 'react';
 import axios from '@/lib/axios-config';
 import { SystemRole } from '@/lib/roles';
+import { useAuth } from '@/app/context/AuthContext';
 import DashboardLayout from '../../../components/DashboardLayout';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import Spinner from '../../../components/Spinner';
 import styles from '../../hr/time-management.module.css';
 
 export default function InboxPage() {
+  const { user } = useAuth();
   const [notes, setNotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'ALL' | 'UNREAD' | 'READ'>('ALL');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const employeeId = user?.sub;
 
   useEffect(() => { fetchNotes(); }, []);
 
@@ -42,14 +46,18 @@ export default function InboxPage() {
   };
 
   const filteredNotes = notes.filter(n => {
-    const read = (n.readBy || []).some((r: any) => r.employeeId === (window as any).__EMPLOYEE_ID__);
+    const read = (n.readBy || []).some((r: any) => 
+      r.employeeId === employeeId || r.employeeId?.toString() === employeeId
+    );
     if (filter === 'UNREAD') return !read;
     if (filter === 'READ') return read;
     return true;
   });
 
   const unreadCount = notes.filter(n => {
-    return !(n.readBy || []).some((r: any) => r.employeeId === (window as any).__EMPLOYEE_ID__);
+    return !(n.readBy || []).some((r: any) => 
+      r.employeeId === employeeId || r.employeeId?.toString() === employeeId
+    );
   }).length;
 
   const getNotificationIcon = (type: string) => {
@@ -136,9 +144,15 @@ export default function InboxPage() {
           ) : (
             <div className={styles.cardsGrid}>
               {filteredNotes.map(n => {
-                const read = (n.readBy || []).some((r: any) => r.employeeId === (window as any).__EMPLOYEE_ID__);
+                const read = (n.readBy || []).some((r: any) => 
+                  r.employeeId === employeeId || r.employeeId?.toString() === employeeId
+                );
                 return (
-                  <div key={n._id} className={styles.card}>
+                  <div 
+                    key={n._id} 
+                    className={styles.card}
+                    style={read ? { backgroundColor: '#f3f4f6', opacity: 0.8 } : {}}
+                  >
                     <div className={styles.cardHeader}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '1.5rem' }}>{getNotificationIcon(n.type)}</span>
@@ -174,7 +188,10 @@ export default function InboxPage() {
                       <div className={styles.cardActions}>
                         <button 
                           className={styles.btnPrimary}
-                          onClick={() => markRead(n._id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            markRead(n._id);
+                          }}
                         >
                           ✓ Mark as Read
                         </button>

@@ -75,6 +75,19 @@ export default function LoginPage() {
       // Use AuthContext login method
       login(token, userData);
 
+      // Check if password is expired (90-day policy)
+      try {
+        const expiryResponse = await axios.get(`/password-reset/check-expiry?employeeId=${userData.sub}`);
+        if (expiryResponse.data.isExpired) {
+          // Password expired - redirect to change password page
+          router.push('/change-password?expired=true');
+          return;
+        }
+      } catch (expiryError) {
+        // If expiry check fails, continue with normal login flow
+        console.warn('Password expiry check failed:', expiryError);
+      }
+
       const userRoles = userData?.roles || [];
 
       // Check for redirect parameter
@@ -155,6 +168,10 @@ export default function LoginPage() {
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
+          </div>
+
+          <div className={styles.forgotPasswordLink}>
+            <Link href="/forgot-password">Forgot Password?</Link>
           </div>
 
           <button type="submit" className={styles.submitButton} disabled={loading}>

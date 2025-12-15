@@ -44,7 +44,7 @@ export default function CreateTaxRulePage() {
   };
 
   return (
-    <ProtectedRoute requiredRoles={[SystemRole.PAYROLL_SPECIALIST, SystemRole.SYSTEM_ADMIN]}>
+    <ProtectedRoute requiredRoles={[SystemRole.LEGAL_POLICY_ADMIN, SystemRole.SYSTEM_ADMIN]}>
       <DashboardLayout title="Create Tax Rule" role="Payroll">
         <div className={styles.container}>
           {/* Back Link */}
