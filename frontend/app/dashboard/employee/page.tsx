@@ -711,6 +711,33 @@ export default function EmployeeDashboard() {
                   </button>
                 </div>
               </div>
+
+              {/* Security Settings */}
+              <div style={{
+                ...sectionStyle,
+                background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                borderLeft: '4px solid #f59e0b',
+              }}>
+                <h2 style={sectionTitleStyle}>🔐 Security</h2>
+                <div style={gridStyle}>
+                  <button 
+                    onClick={() => router.push('/dashboard/employee/security')}
+                    style={{ ...buttonStyle.base, ...buttonStyle.warning }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                  >
+                    🔑 Manage Passkeys (MFA)
+                  </button>
+                  <button 
+                    onClick={() => router.push('/change-password')}
+                    style={{ ...buttonStyle.base, ...buttonStyle.gray }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                  >
+                    🔒 Change Password
+                  </button>
+                </div>
+              </div>
             </>
           )}
         </div>

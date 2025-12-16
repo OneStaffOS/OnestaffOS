@@ -16,9 +16,11 @@ import { RegisterModule } from './register/register.module';
 import { PayrollConfigurationModule } from './payroll-configuration/payroll-configuration.module';
 import { PayrollExecutionModule } from './payroll-execution/payroll-execution.module';
 import { PasswordResetModule } from './password-reset/password-reset.module';
+import { PasskeysModule } from './passkeys/passkeys.module';
 import { CsrfGuard } from './common/guards/csrf.guard';
 import { SecurityInterceptor } from './common/interceptors/security.interceptor';
 import { NoSQLSanitizeMiddleware } from './common/middleware/nosql-sanitize.middleware';
+import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { NoSQLSanitizeMiddleware } from './common/middleware/nosql-sanitize.midd
     RegisterModule,
     NotificationModule,
     PasswordResetModule,
+    PasskeysModule,
   ],
   controllers: [AppController],
   providers: [
@@ -54,8 +57,14 @@ import { NoSQLSanitizeMiddleware } from './common/middleware/nosql-sanitize.midd
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    // Apply correlation ID middleware first for request tracing
+    consumer
+      .apply(CorrelationIdMiddleware)
+      .forRoutes('*');
+    
+    // Apply NoSQL injection sanitization
     consumer
       .apply(NoSQLSanitizeMiddleware)
-      .forRoutes('*'); // Apply to all routes
+      .forRoutes('*');
   }
 }

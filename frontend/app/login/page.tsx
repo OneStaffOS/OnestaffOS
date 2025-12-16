@@ -57,10 +57,11 @@ export default function LoginPage() {
 
       const response = await axios.post('/auth/login', sanitizedData);
       
-      // Backend returns { statusCode, message, accessToken, user, csrfToken }
+      // Backend returns { statusCode, message, mfaRequired, accessToken, user, csrfToken }
       const userData = response.data.user || response.data.payload;
       const token = response.data.accessToken;
       const csrfToken = response.data.csrfToken;
+      const mfaRequired = response.data.mfaRequired;
 
       // Validate required data before proceeding
       if (!token || !userData) {
@@ -72,6 +73,17 @@ export default function LoginPage() {
         setCsrfToken(csrfToken);
       }
 
+      // Check if MFA is required
+      if (mfaRequired) {
+        // Redirect to MFA verification page with necessary data
+        const userDataBase64 = btoa(JSON.stringify(userData));
+        const redirect = searchParams.get('redirect') || '';
+        const mfaUrl = `/login/mfa?email=${encodeURIComponent(sanitizedData.email)}&token=${encodeURIComponent(token)}&user=${encodeURIComponent(userDataBase64)}${redirect ? `&redirect=${encodeURIComponent(redirect)}` : ''}`;
+        router.push(mfaUrl);
+        return;
+      }
+
+      // No MFA required - proceed with normal login flow
       // Use AuthContext login method
       login(token, userData);
 
