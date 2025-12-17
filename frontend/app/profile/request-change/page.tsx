@@ -117,7 +117,8 @@ export default function RequestChangePage() {
   const fetchPositions = async () => {
     try {
       const response = await axios.get('/organization-structure/positions');
-      setPositions(response.data.filter((pos: Position) => pos.isActive !== false));
+      const data = Array.isArray(response.data) ? response.data : [];
+      setPositions(data.filter((pos: Position) => pos.isActive !== false));
     } catch (err: any) {
       console.error('Failed to fetch positions:', err);
       // Don't throw error, just set empty array

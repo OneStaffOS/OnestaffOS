@@ -74,12 +74,16 @@ export default function EditPositionPage() {
       setReportsToPositionId(position.reportsToPositionId?._id || '');
       setIsActive(position.isActive);
       
-      setDepartments(deptResponse.data);
-      setPositions(posResponse.data.filter((p: PositionOption) => p._id !== positionId));
+      const deptData = Array.isArray(deptResponse.data) ? deptResponse.data : [];
+      const posData = Array.isArray(posResponse.data) ? posResponse.data : [];
+      setDepartments(deptData);
+      setPositions(posData.filter((p: PositionOption) => p._id !== positionId));
       
       setError('');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load position data');
+      setDepartments([]);
+      setPositions([]);
     } finally {
       setLoading(false);
     }

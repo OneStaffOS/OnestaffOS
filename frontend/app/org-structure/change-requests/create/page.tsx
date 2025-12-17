@@ -41,10 +41,12 @@ export default function CreateChangeRequestPage() {
         axios.get('/organization-structure/departments'),
         axios.get('/organization-structure/positions')
       ]);
-      setDepartments(deptResponse.data);
-      setPositions(posResponse.data);
+      setDepartments(Array.isArray(deptResponse.data) ? deptResponse.data : []);
+      setPositions(Array.isArray(posResponse.data) ? posResponse.data : []);
     } catch (err: any) {
       console.error('Failed to load data:', err);
+      setDepartments([]);
+      setPositions([]);
     }
   };
 

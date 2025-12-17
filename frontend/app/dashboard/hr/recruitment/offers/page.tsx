@@ -114,9 +114,10 @@ export default function OffersPage() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get('/organization-structure/departments');
-      setDepartments(response.data);
+      setDepartments(Array.isArray(response.data) ? response.data : []);
     } catch (err: any) {
       console.error('Failed to fetch departments:', err);
+      setDepartments([]);
     }
   };
 

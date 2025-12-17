@@ -46,10 +46,11 @@ export default function PositionsPage() {
     try {
       setLoading(true);
       const response = await axios.get('/organization-structure/positions');
-      setPositions(response.data);
+      setPositions(Array.isArray(response.data) ? response.data : []);
       setError('');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load positions');
+      setPositions([]);
     } finally {
       setLoading(false);
     }

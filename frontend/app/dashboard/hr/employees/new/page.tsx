@@ -76,18 +76,20 @@ export default function NewEmployeeProfilePage() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get('/organization-structure/departments');
-      setDepartments(response.data);
+      setDepartments(Array.isArray(response.data) ? response.data : []);
     } catch (err: any) {
       console.error('Failed to load departments:', err);
+      setDepartments([]);
     }
   };
 
   const fetchPositions = async () => {
     try {
       const response = await axios.get('/organization-structure/positions');
-      setPositions(response.data);
+      setPositions(Array.isArray(response.data) ? response.data : []);
     } catch (err: any) {
       console.error('Failed to load positions:', err);
+      setPositions([]);
     }
   };
 

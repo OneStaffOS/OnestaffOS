@@ -78,9 +78,10 @@ export default function DepartmentReportsPage() {
   async function loadDepartments() {
     try {
       const response = await axios.get('/payroll-tracking/reports/departments');
-      setDepartments(response.data);
+      setDepartments(Array.isArray(response.data) ? response.data : []);
     } catch (e: any) {
       setError(e?.response?.data?.message || 'Failed to load departments');
+      setDepartments([]);
     }
   }
 

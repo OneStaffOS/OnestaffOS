@@ -53,12 +53,15 @@ export class OrganizationStructureController {
    */
   @Get('departments')
   @Roles(
+    Role.NEW_HIRE,
     Role.DEPARTMENT_EMPLOYEE,
-    Role.DEPARTMENT_HEAD,
     Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
+    Role.RECRUITER,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
     Role.SYSTEM_ADMIN,
   )
   async getAllDepartments(@Query('includeInactive') includeInactive?: string) {
@@ -164,12 +167,13 @@ export class OrganizationStructureController {
    */
   @Get('positions')
   @Roles(
+    Role.NEW_HIRE,
     Role.DEPARTMENT_EMPLOYEE,
-    Role.DEPARTMENT_HEAD,
     Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,
     Role.HR_MANAGER,
     Role.HR_EMPLOYEE,
+    Role.RECRUITER,
     Role.PAYROLL_SPECIALIST,
     Role.PAYROLL_MANAGER,
     Role.SYSTEM_ADMIN,

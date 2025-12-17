@@ -35,13 +35,14 @@ export default function AssignManagerPage() {
       ]);
       
       setDepartment(deptResponse.data);
-      setPositions(posResponse.data);
+      setPositions(Array.isArray(posResponse.data) ? posResponse.data : []);
       
       if (deptResponse.data.headPositionId) {
         setSelectedPositionId(deptResponse.data.headPositionId._id);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load data');
+      setPositions([]);
     } finally {
       setLoading(false);
     }

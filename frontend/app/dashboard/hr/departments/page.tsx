@@ -47,10 +47,11 @@ export default function DepartmentsPage() {
     try {
       setLoading(true);
       const response = await axios.get('/organization-structure/departments?includeInactive=true');
-      setDepartments(response.data);
+      setDepartments(Array.isArray(response.data) ? response.data : []);
       setError('');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load departments');
+      setDepartments([]);
     } finally {
       setLoading(false);
     }

@@ -51,10 +51,11 @@ export default function PerformanceTemplatesPage() {
     try {
       setLoading(true);
       const response = await axios.get(`/performance/templates?includeInactive=${showInactive}`);
-      setTemplates(response.data);
+      setTemplates(Array.isArray(response.data) ? response.data : []);
     } catch (error: any) {
       console.error('Failed to fetch templates:', error);
       alert('Failed to load templates: ' + (error.response?.data?.message || error.message));
+      setTemplates([]);
     } finally {
       setLoading(false);
     }

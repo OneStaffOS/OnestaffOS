@@ -72,9 +72,10 @@ export default function JobRequisitionsPage() {
   const fetchTemplates = async () => {
     try {
       const response = await axios.get('/recruitment/job-templates');
-      setTemplates(response.data);
+      setTemplates(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Failed to fetch templates:', error);
+      setTemplates([]);
     }
   };
 

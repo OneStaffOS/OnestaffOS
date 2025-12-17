@@ -42,10 +42,11 @@ export default function JobTemplatesPage() {
     try {
       setLoading(true);
       const response = await axios.get('/recruitment/job-templates');
-      setTemplates(response.data);
+      setTemplates(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Failed to fetch job templates:', error);
       alert('Failed to load job templates');
+      setTemplates([]);
     } finally {
       setLoading(false);
     }
