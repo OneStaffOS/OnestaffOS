@@ -45,12 +45,29 @@ function MFAVerificationContent() {
     setWebAuthnSupported(browserSupportsWebAuthn());
   }, []);
 
-  // Auto-start verification when page loads
+  // Auto-start verification when page loads (only if document is focused)
   useEffect(() => {
     if (email && webAuthnSupported && !verifying) {
+      // Wait for document to be focused before starting WebAuthn
+      const attemptVerification = () => {
+        if (document.hasFocus()) {
+          handleVerifyPasskey();
+        }
+      };
+
       // Small delay to let the user see the page
       const timer = setTimeout(() => {
-        handleVerifyPasskey();
+        if (document.hasFocus()) {
+          attemptVerification();
+        } else {
+          // If document is not focused, wait for focus event
+          const handleFocus = () => {
+            attemptVerification();
+            window.removeEventListener('focus', handleFocus);
+          };
+          window.addEventListener('focus', handleFocus);
+          return () => window.removeEventListener('focus', handleFocus);
+        }
       }, 500);
       return () => clearTimeout(timer);
     }

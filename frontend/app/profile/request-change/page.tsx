@@ -366,7 +366,7 @@ export default function RequestChangePage() {
                   required
                 >
                   <option value="">Select department</option>
-                  {departments.map(dept => (
+                  {(departments || []).map(dept => (
                     <option key={dept._id} value={dept.name}>
                       {dept.code} - {dept.name}
                     </option>
@@ -380,7 +380,7 @@ export default function RequestChangePage() {
                   required
                 >
                   <option value="">Select position</option>
-                  {positions.map(pos => (
+                  {(positions || []).map(pos => (
                     <option key={pos._id} value={pos.title}>
                       {pos.code} - {pos.title}
                       {pos.departmentId?.name && ` (${pos.departmentId.name})`}

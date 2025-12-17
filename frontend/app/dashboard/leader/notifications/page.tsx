@@ -192,11 +192,11 @@ export default function LeaderNotifications() {
               <div style={{ position: 'relative' }}>
                 <Select
                   isMulti
-                  options={positions.map(p => ({ value: p._id || p.id, label: p.title || p.name || `${p._id}` }))}
-                  value={positions
+                  options={(positions || []).map(p => ({ value: p._id || p.id, label: p.title || p.name || `${p._id}` }))}
+                  value={(positions || [])
                     .map(p => (p._id || p.id))
                     .filter(id => targetPositionIds.includes(id))
-                    .map(id => ({ value: id, label: (positions.find(p => (p._id || p.id) === id)?.title || id) }))}
+                    .map(id => ({ value: id, label: ((positions || []).find(p => (p._id || p.id) === id)?.title || id) }))}
                   onChange={(selected: any) => setTargetPositionIds((selected || []).map((s: any) => s.value))}
                   placeholder="Search and select positions..."
                   styles={{

@@ -484,7 +484,7 @@ export default function EntitlementsPage() {
                               disabled={!!bulkAssigning}
                             >
                               <option value="">By Position...</option>
-                              {positions.map((pos) => (
+                              {(positions || []).map((pos) => (
                                 <option key={pos._id} value={pos._id}>
                                   {pos.title}
                                 </option>

@@ -155,7 +155,7 @@ export default function CreateShiftAssignment() {
                       onChange={(e)=>setForm({...form, departmentId: e.target.value})}
                     >
                       <option value="">-- Select Department --</option>
-                      {departments.map((d: any)=> (
+                      {(departments || []).map((d: any)=> (
                         <option key={d._id} value={d._id}>{d.name}</option>
                       ))}
                     </select>
@@ -169,7 +169,7 @@ export default function CreateShiftAssignment() {
                       onChange={(e)=>setForm({...form, positionId: e.target.value})}
                     >
                       <option value="">-- Select Position --</option>
-                      {positions.map((p: any)=> (
+                      {(positions || []).map((p: any)=> (
                         <option key={p._id} value={p._id}>{p.title}</option>
                       ))}
                     </select>

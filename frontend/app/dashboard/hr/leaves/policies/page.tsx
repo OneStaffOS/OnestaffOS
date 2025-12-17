@@ -638,7 +638,7 @@ export default function LeavePoliciesPage() {
                       <label>Positions Allowed</label>
                       <p className={styles.fieldHint}>Select which positions CAN apply. Leave all unchecked to allow everyone.</p>
                       <div className={styles.checkboxGrid}>
-                        {positions.map((pos) => (
+                        {(positions || []).map((pos) => (
                           <label key={pos._id} className={styles.checkboxItem}>
                             <input
                               type="checkbox"

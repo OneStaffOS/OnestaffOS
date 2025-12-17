@@ -144,7 +144,7 @@ export default function JobTemplatesPage() {
               }}
             >
               <option value="">All Departments</option>
-              {departments.map(dept => (
+              {(departments || []).map(dept => (
                 <option key={dept} value={dept}>{dept}</option>
               ))}
             </select>

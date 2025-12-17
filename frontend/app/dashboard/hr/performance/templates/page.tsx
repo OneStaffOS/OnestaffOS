@@ -128,7 +128,7 @@ export default function PerformanceTemplatesPage() {
             </div>
           ) : (
             <div className={styles.templateGrid}>
-              {templates.map((template) => (
+              {(templates || []).map((template) => (
                 <div
                   key={template._id}
                   className={`${styles.templateCard} ${!template.isActive ? styles.inactive : ''}`}

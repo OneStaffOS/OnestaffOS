@@ -208,13 +208,13 @@ export default function JobRequisitionsPage() {
                     }}
                   >
                     <option value="">Select a job template...</option>
-                    {templates.map(template => (
+                    {(templates || []).map(template => (
                       <option key={template._id} value={template._id}>
                         {template.title} - {template.department}
                       </option>
                     ))}
                   </select>
-                  {templates.length === 0 && (
+                  {(templates || []).length === 0 && (
                     <p style={{ color: '#f59e0b', fontSize: '0.85rem', marginTop: '0.5rem' }}>
                       No templates available. <a href="/dashboard/hr/recruitment/job-templates/create" style={{ color: '#3b82f6', textDecoration: 'underline' }}>Create a template first</a>
                     </p>

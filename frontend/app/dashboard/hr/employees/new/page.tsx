@@ -273,7 +273,7 @@ export default function NewEmployeeProfilePage() {
                   onChange={handleChange}
                 >
                   <option value="">Select Department</option>
-                  {departments.map(dept => (
+                  {(departments || []).map(dept => (
                     <option key={dept._id} value={dept._id}>
                       {dept.name}
                     </option>
@@ -288,7 +288,7 @@ export default function NewEmployeeProfilePage() {
                   onChange={handleChange}
                 >
                   <option value="">Select Position</option>
-                  {positions.map(pos => (
+                  {(positions || []).map(pos => (
                     <option key={pos._id} value={pos._id}>
                       {pos.title}
                     </option>

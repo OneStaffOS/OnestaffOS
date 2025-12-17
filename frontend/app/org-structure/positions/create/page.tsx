@@ -191,7 +191,7 @@ export default function CreatePositionPage() {
                     required
                   >
                     <option value="">Select Department</option>
-                    {departments.map(dept => (
+                    {(departments || []).map(dept => (
                       <option key={dept._id} value={dept._id}>
                         {dept.name} ({dept.code})
                       </option>
@@ -212,7 +212,7 @@ export default function CreatePositionPage() {
                   onChange={(e) => setReportsToPositionId(e.target.value)}
                 >
                   <option value="">No Direct Report (Top Level)</option>
-                  {positions.map(pos => (
+                  {(positions || []).map(pos => (
                     <option key={pos._id} value={pos._id}>
                       {pos.title} ({pos.code})
                     </option>

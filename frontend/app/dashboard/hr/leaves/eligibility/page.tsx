@@ -368,7 +368,7 @@ export default function EligibilityRulesPage() {
                     <label className={styles.label}>Positions</label>
                     <span className={styles.hint}>Select which positions CAN apply for this leave. Leave all unchecked to allow all positions.</span>
                     <div className={styles.checkboxGroup}>
-                      {positions.map((pos) => (
+                      {(positions || []).map((pos) => (
                         <label key={pos._id} className={styles.checkboxLabel}>
                           <input
                             type="checkbox"

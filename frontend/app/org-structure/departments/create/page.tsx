@@ -148,7 +148,7 @@ export default function CreateDepartmentPage() {
                 onChange={(e) => setFormData({ ...formData, headPositionId: e.target.value })}
               >
                 <option value="">-- Select Position --</option>
-                {positions.map((pos) => (
+                {(positions || []).map((pos) => (
                   <option key={pos._id} value={pos._id}>
                     {pos.title} - {pos.departmentId?.name || 'Unknown'}
                   </option>

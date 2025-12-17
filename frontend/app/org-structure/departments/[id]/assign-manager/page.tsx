@@ -126,7 +126,7 @@ export default function AssignManagerPage() {
                 required
               >
                 <option value="">-- Select Position --</option>
-                {positions.map((pos) => (
+                {(positions || []).map((pos) => (
                   <option key={pos._id} value={pos._id}>
                     {pos.title} ({pos.code}) - {pos.departmentId?.name || 'Unknown Dept'}
                   </option>

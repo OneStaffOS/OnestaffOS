@@ -114,7 +114,7 @@ export default function CreateChangeRequestPage() {
                 required={requestType !== 'NEW_POSITION'}
               >
                 <option value="">Select a position</option>
-                {positions.map((pos) => (
+                {(positions || []).map((pos) => (
                   <option key={pos._id} value={pos._id}>
                     {pos.title} - {pos.departmentId?.name || 'Unknown'}
                   </option>
@@ -132,7 +132,7 @@ export default function CreateChangeRequestPage() {
                 onChange={(e) => setFormData({ ...formData, targetDepartmentId: e.target.value })}
               >
                 <option value="">Select a department</option>
-                {departments.map((dept) => (
+                {(departments || []).map((dept) => (
                   <option key={dept._id} value={dept._id}>
                     {dept.name}
                   </option>
@@ -157,7 +157,7 @@ export default function CreateChangeRequestPage() {
                 required={requestType !== 'NEW_DEPARTMENT'}
               >
                 <option value="">Select a department</option>
-                {departments.map((dept) => (
+                {(departments || []).map((dept) => (
                   <option key={dept._id} value={dept._id}>
                     {dept.name}
                   </option>

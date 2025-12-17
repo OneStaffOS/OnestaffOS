@@ -466,7 +466,7 @@ export default function EditCyclePage() {
                           }}
                         >
                           <option value="">Select a template</option>
-                          {templates.map(template => (
+                          {(templates || []).map(template => (
                             <option key={template._id} value={template._id}>
                               {template.name} ({template.templateType})
                             </option>
@@ -512,13 +512,13 @@ export default function EditCyclePage() {
                           padding: '0.5rem',
                           background: 'white'
                         }}>
-                          {departments.length === 0 ? (
+                          {(departments || []).length === 0 ? (
                             <p style={{ color: '#666', textAlign: 'center', padding: '1rem' }}>
                               No departments available
                             </p>
                           ) : (
                             <div style={{ display: 'grid', gap: '0.25rem' }}>
-                              {departments.map(dept => (
+                              {(departments || []).map(dept => (
                                 <label
                                   key={dept._id}
                                   style={{

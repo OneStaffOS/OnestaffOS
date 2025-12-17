@@ -243,7 +243,7 @@ export default function EditJobTemplatePage() {
                     }}
                   >
                     <option value="">Select a department</option>
-                    {departments.map(dept => (
+                    {(departments || []).map(dept => (
                       <option key={dept} value={dept}>{dept}</option>
                     ))}
                   </select>
