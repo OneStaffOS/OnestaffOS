@@ -40,7 +40,7 @@ export default function CreateShiftAssignment() {
       const [empRes, deptRes, posRes, shiftRes] = await Promise.allSettled([
         axios.get('/employee-profile'),
         axios.get('/organization-structure/departments'),
-        axios.get('/org-structure/positions').catch(()=>axios.get('/organization-structure/positions')),
+        axios.get('/organization-structure/positions'),
         axios.get('/time-management/shifts'),
       ]);
 
