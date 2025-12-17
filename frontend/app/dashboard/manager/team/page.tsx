@@ -12,6 +12,7 @@ import Spinner from '@/app/components/Spinner';
 import axios from '@/lib/axios-config';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Employee {
   _id: string;
   firstName: string;

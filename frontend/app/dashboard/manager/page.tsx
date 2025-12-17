@@ -14,6 +14,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import { useAuth } from '../../context/AuthContext';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface DashboardStats {
   directReports: number;
   pendingApprovals: number;

@@ -8,6 +8,7 @@ import { SystemRole } from '@/lib/roles';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface AppraisalSummary {
   _id: string;
   assignmentId?: string;

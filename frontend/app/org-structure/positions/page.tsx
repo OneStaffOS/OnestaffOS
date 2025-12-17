@@ -15,6 +15,7 @@ import { Position, PositionStatus } from '@/lib/types/organizational-structure.t
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './positions.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface PositionAssignment {
   _id: string;
   employeeProfileId: {

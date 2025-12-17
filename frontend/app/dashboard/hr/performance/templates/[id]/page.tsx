@@ -8,6 +8,7 @@ import ProtectedRoute from '@/app/components/ProtectedRoute';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from '../templates.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface RatingScale {
   type: 'THREE_POINT' | 'FIVE_POINT' | 'TEN_POINT';
   min: number;

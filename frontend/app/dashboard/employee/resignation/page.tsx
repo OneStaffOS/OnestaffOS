@@ -13,6 +13,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './resignation.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ResignationPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);

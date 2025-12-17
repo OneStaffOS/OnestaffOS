@@ -13,6 +13,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './idCard.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface EmployeeProfile {
   _id: string;
   firstName: string;

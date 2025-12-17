@@ -15,6 +15,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './reset-rules.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface LeaveYearConfig {
   startMonth: number;
   startDay: number;

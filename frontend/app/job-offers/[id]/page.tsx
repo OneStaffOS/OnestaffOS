@@ -12,6 +12,7 @@ import { axios } from '@/lib/axios-config';
 import Spinner from '@/app/components/Spinner';
 import styles from './job-detail.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface JobRequisition {
   _id: string;
   requisitionId: string;

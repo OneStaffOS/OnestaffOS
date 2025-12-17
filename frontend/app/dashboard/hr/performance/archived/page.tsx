@@ -15,6 +15,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './archived.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface ArchivedRecord {
   _id: string;
   cycleId: {

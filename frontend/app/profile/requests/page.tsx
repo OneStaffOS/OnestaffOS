@@ -14,6 +14,7 @@ import axios from '@/lib/axios-config';
 import { ProfileChangeRequest, ChangeRequestStatus } from '@/lib/types/employee-profile.types';
 import styles from './requests.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function MyRequestsPage() {
   const router = useRouter();
   const [requests, setRequests] = useState<ProfileChangeRequest[]>([]);

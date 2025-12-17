@@ -8,6 +8,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../../../hr/time-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function CreateScheduleRulePage() {
   const router = useRouter();
   const [name, setName] = useState('');

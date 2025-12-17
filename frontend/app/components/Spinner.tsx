@@ -8,6 +8,7 @@
 import React from 'react';
 import styles from './Spinner.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface SpinnerProps {
   /** Whether to show full-screen overlay backdrop */
   fullScreen?: boolean;

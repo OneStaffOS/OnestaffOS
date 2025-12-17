@@ -14,6 +14,7 @@ import { Position } from '@/lib/types/organizational-structure.types';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './view.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function PositionDetailsPage() {
   const router = useRouter();
   const params = useParams();

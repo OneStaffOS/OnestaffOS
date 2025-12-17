@@ -10,6 +10,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../../payroll.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 const POLICY_TYPES = ['Deduction', 'Allowance', 'Benefit', 'Misconduct', 'Leave'];
 const APPLICABILITY_OPTIONS = ['All Employees', 'Full Time Employees', 'Part Time Employees', 'Contractors'];
 

@@ -13,6 +13,7 @@ import Spinner from '@/app/components/Spinner';
 import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function TerminationsPage() {
   const router = useRouter();
   const [terminations, setTerminations] = useState<any[]>([]);

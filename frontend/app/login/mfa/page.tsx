@@ -20,6 +20,7 @@ import { getDashboardRoute, getAvailableDashboards } from '@/lib/roles';
 import RoleSelectionModal from '@/app/components/RoleSelectionModal';
 import styles from './mfa.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 function MFAVerificationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

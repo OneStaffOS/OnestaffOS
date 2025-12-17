@@ -13,6 +13,7 @@ import DashboardLayout from '@/app/components/DashboardLayout';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './roles.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Permission {
   role: string;
   displayName: string;

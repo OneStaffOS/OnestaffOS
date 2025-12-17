@@ -9,6 +9,7 @@ import { Department, Position } from '@/lib/types/organizational-structure.types
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './assign-manager.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function AssignManagerPage() {
   const router = useRouter();
   const params = useParams();

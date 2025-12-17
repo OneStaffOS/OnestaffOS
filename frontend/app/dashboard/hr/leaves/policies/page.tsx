@@ -16,6 +16,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './policies.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface LeaveType {
   _id: string;
   code: string;

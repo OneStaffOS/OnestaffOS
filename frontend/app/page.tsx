@@ -7,6 +7,7 @@
 import Link from "next/link";
 import styles from "./home.module.css";
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function HomePage() {
   return (
     <div className={styles.page}>

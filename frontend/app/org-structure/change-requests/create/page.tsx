@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
 import axios from '@/lib/axios-config';
 import { 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
   Department, 
   Position
 } from '@/lib/types/organizational-structure.types';

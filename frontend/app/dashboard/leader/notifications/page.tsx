@@ -7,6 +7,7 @@ import DashboardLayout from '../../../components/DashboardLayout';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function LeaderNotifications() {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');

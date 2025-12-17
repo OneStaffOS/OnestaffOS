@@ -9,6 +9,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './reports.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 type ReportType = 'taxes' | 'insurance' | 'benefits' | 'month-end' | 'year-end';
 
 export default function FinanceReportsPage() {

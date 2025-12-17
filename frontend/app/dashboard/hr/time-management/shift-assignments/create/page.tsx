@@ -9,6 +9,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../../time-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function CreateShiftAssignment() {
   const router = useRouter();
   const [employees, setEmployees] = useState<any[]>([]);
@@ -43,10 +44,10 @@ export default function CreateShiftAssignment() {
         axios.get('/time-management/shifts'),
       ]);
 
-      if (empRes.status === 'fulfilled') setEmployees(empRes.value.data || []);
-      if (deptRes.status === 'fulfilled') setDepartments(deptRes.value.data || []);
-      if (posRes.status === 'fulfilled') setPositions(posRes.value.data || []);
-      if (shiftRes.status === 'fulfilled') setShifts(shiftRes.value.data || []);
+      if (empRes.status === 'fulfilled') setEmployees(Array.isArray(empRes.value.data) ? empRes.value.data : []);
+      if (deptRes.status === 'fulfilled') setDepartments(Array.isArray(deptRes.value.data) ? deptRes.value.data : []);
+      if (posRes.status === 'fulfilled') setPositions(Array.isArray(posRes.value.data) ? posRes.value.data : []);
+      if (shiftRes.status === 'fulfilled') setShifts(Array.isArray(shiftRes.value.data) ? shiftRes.value.data : []);
     } catch (e) {
       console.error('Failed to load options', e);
       setError('Failed to load options');
@@ -123,7 +124,7 @@ export default function CreateShiftAssignment() {
                       onChange={(e)=>setForm({...form, shiftId: e.target.value})}
                     >
                       <option value="">-- Select Shift --</option>
-                      {shifts.map((s: any)=> (
+                      {(shifts || []).map((s: any)=> (
                         <option key={s._id} value={s._id}>
                           {s.name} ({s.startTime} - {s.endTime})
                         </option>
@@ -139,7 +140,7 @@ export default function CreateShiftAssignment() {
                       onChange={(e)=>setForm({...form, employeeId: e.target.value})}
                     >
                       <option value="">-- Select Employee --</option>
-                      {employees.map((emp: any)=> (
+                      {(employees || []).map((emp: any)=> (
                         <option key={emp._id} value={emp._id}>
                           {emp.firstName} {emp.lastName}
                         </option>

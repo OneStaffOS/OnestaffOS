@@ -7,6 +7,7 @@ import styles from './Navbar.module.css';
 import Link from 'next/link';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function Navbar() {
   const { user, logout, isLoading } = useAuth();
   const router = useRouter();

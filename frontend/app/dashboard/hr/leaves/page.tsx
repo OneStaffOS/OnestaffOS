@@ -13,6 +13,7 @@ import DashboardLayout from '@/app/components/DashboardLayout';
 import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface DashboardStats {
   totalCategories: number;
   totalLeaveTypes: number;

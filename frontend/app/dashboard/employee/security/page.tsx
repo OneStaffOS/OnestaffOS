@@ -19,6 +19,7 @@ import { startRegistration, browserSupportsWebAuthn, platformAuthenticatorIsAvai
 import type { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/browser';
 import styles from './security.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Passkey {
   id: string;
   deviceName: string;

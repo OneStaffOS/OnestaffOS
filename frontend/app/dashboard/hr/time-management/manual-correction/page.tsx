@@ -8,6 +8,7 @@ import { useAuth } from '../../../../context/AuthContext';
 import styles from '../../../dashboard.module.css';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function HRManualAttendanceCorrectionPage() {
   const { user } = useAuth();
   const [employeeId, setEmployeeId] = useState('');

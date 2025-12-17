@@ -7,6 +7,7 @@ import DashboardLayout from '../../../components/DashboardLayout';
 import Spinner from '../../../components/Spinner';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function HrAttendanceCorrectionsPage() {
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

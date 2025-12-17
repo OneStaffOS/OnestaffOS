@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { axios } from '@/lib/axios-config';
 import styles from './register.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({

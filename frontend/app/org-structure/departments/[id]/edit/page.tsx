@@ -9,6 +9,7 @@ import { Department } from '@/lib/types/organizational-structure.types';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from '../../departments.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function EditDepartmentPage() {
   const router = useRouter();
   const params = useParams();

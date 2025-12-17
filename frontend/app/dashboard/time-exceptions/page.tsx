@@ -8,6 +8,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../hr/time-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 type TimeException = {
   _id: string;
   employeeId: any;

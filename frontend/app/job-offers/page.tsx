@@ -14,6 +14,7 @@ import { useAuth } from '../context/AuthContext';
 import Spinner from '@/app/components/Spinner';
 import styles from './job-offers.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface JobRequisition {
   _id: string;
   requisitionId: string;
@@ -54,7 +55,7 @@ export default function JobOffersPage() {
       // Fetch published job requisitions from public endpoint
       const response = await axios.get('/recruitment/job-requisitions/published');
       
-      setJobs(response.data);
+      setJobs(Array.isArray(response.data) ? response.data : []);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load job offers');
       console.error('Error fetching jobs:', err);
@@ -123,14 +124,14 @@ export default function JobOffersPage() {
         </div>
       )}
 
-      {jobs.length === 0 ? (
+      {(jobs || []).length === 0 ? (
         <div className={styles.noJobs}>
           <h2>No Open Positions</h2>
           <p>There are currently no job openings. Please check back later.</p>
         </div>
       ) : (
         <div className={styles.jobGrid}>
-          {jobs.map((job) => (
+          {(jobs || []).map((job) => (
             <div key={job._id} className={styles.jobCard}>
               <div className={styles.jobHeader}>
                 <h2>{job.templateId?.title || 'Untitled Position'}</h2>

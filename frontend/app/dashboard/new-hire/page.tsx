@@ -13,6 +13,7 @@ import { useAuth } from '@/app/context/AuthContext';
 import axios from '@/lib/axios-config';
 import styles from './newHire.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface OnboardingTask {
   name: string;
   department: string;

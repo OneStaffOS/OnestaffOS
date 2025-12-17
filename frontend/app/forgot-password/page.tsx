@@ -13,6 +13,7 @@ import { axios } from '@/lib/axios-config';
 import { sanitizeInput } from '@/lib/security';
 import styles from './forgot-password.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');

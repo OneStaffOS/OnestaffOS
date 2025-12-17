@@ -21,6 +21,7 @@ import RoleSelectionModal from '../components/RoleSelectionModal';
 import { setCsrfToken, sanitizeInput } from '@/lib/security';
 import styles from './login.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

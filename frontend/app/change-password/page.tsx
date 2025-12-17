@@ -13,6 +13,7 @@ import { axios } from '@/lib/axios-config';
 import { useAuth } from '../context/AuthContext';
 import styles from './change-password.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 function ChangePasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();

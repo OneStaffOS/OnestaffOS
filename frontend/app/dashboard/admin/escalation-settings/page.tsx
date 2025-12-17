@@ -7,6 +7,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../hr/time-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 type EscalationRule = {
   _id?: string;
   ruleType: 'LEAVE_REQUEST' | 'TIME_EXCEPTION' | 'ATTENDANCE_CORRECTION' | 'OVERTIME_REQUEST';

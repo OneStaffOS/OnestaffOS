@@ -17,6 +17,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './csvAttendance.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface CSVAttendanceRecord {
   employeeNumber: string;
   employeeName: string;

@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import styles from './DashboardLayout.module.css';
 import Spinner from './Spinner';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface DashboardLayoutProps {
   children: React.ReactNode;
   title: string;

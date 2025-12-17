@@ -17,6 +17,7 @@ import { ProfileChangeRequest, ChangeRequestStatus } from '@/lib/types/employee-
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './change-requests.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function HRChangeRequestsPage() {
   const router = useRouter();
   const [requests, setRequests] = useState<ProfileChangeRequest[]>([]);

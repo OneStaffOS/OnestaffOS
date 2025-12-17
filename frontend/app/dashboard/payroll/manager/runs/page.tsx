@@ -11,6 +11,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../payroll.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface PayrollRun {
   _id: string;
   runId: string;

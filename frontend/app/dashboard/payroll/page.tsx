@@ -10,6 +10,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './payroll.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface ConfigStats {
   policies: { total: number; pending: number; approved: number };
   payGrades: { total: number; pending: number; approved: number };

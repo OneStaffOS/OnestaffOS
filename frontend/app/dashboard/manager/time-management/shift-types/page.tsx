@@ -9,6 +9,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../../hr/time-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ManagerShiftTypesPage() {
   const router = useRouter();
   const [items, setItems] = useState<any[]>([]);

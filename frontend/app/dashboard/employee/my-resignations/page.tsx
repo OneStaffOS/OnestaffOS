@@ -14,6 +14,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './myResignations.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function MyResignationsPage() {
   const router = useRouter();
   const [resignations, setResignations] = useState<any[]>([]);

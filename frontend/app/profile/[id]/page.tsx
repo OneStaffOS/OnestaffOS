@@ -18,6 +18,7 @@ import { EmployeeProfile, EmployeeStatus } from '@/lib/types/employee-profile.ty
 import { SystemRole as Role } from '@/lib/roles';
 import styles from '../page.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface PositionAssignment {
   _id: string;
   employeeProfileId: string;

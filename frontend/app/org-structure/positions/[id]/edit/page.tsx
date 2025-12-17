@@ -14,6 +14,7 @@ import { Position, UpdatePositionDto } from '@/lib/types/organizational-structur
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './edit.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Department {
   _id: string;
   code: string;

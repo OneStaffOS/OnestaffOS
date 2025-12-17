@@ -5,6 +5,7 @@ import axios from '@/lib/axios-config';
 import Spinner from '@/app/components/Spinner';
 import styles from './offers.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Department {
   _id: string;
   name: string;

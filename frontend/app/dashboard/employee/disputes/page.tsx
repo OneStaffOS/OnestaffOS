@@ -15,6 +15,7 @@ import { SystemRole } from '@/lib/roles';
 import { useRouter } from 'next/navigation';
 import styles from './disputes.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface DisputeSummary {
   _id: string;
   appraisalId?: { _id?: string } | string;

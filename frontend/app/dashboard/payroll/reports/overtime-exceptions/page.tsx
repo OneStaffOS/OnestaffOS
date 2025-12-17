@@ -10,6 +10,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './overtime-exceptions.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface OvertimeRecord {
   employeeId: {
     _id: string;

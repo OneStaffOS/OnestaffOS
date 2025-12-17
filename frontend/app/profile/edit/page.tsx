@@ -16,6 +16,7 @@ import axios from '@/lib/axios-config';
 import { EmployeeProfile, Address, EmergencyContact } from '@/lib/types/employee-profile.types';
 import styles from './edit.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ProfileEditPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

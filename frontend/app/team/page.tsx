@@ -18,6 +18,7 @@ import { TeamMemberSummary, EmployeeStatus } from '@/lib/types/employee-profile.
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './team.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function TeamViewPage() {
   const router = useRouter();
   const [teamMembers, setTeamMembers] = useState<TeamMemberSummary[]>([]);

@@ -8,6 +8,7 @@
 import { useRouter } from 'next/navigation';
 import styles from './RoleSelectionModal.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface RoleOption {
   role: string;
   label: string;

@@ -14,6 +14,7 @@ import axios from '@/lib/axios-config';
 import { SystemRole } from '@/lib/roles';
 import styles from './appraisal-form.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface RatingScale {
   type: string;
   min: number;

@@ -18,6 +18,7 @@ import { EmployeeProfile, EmployeeStatus } from '@/lib/types/employee-profile.ty
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './employees.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function HREmployeesPage() {
   const router = useRouter();
   const [employees, setEmployees] = useState<EmployeeProfile[]>([]);

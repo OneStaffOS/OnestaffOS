@@ -8,6 +8,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../time-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function CreateHolidayPage() {
   const router = useRouter();
   const [name, setName] = useState('');

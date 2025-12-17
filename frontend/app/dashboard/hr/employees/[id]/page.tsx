@@ -13,6 +13,7 @@ import axios from '@/lib/axios-config';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './profile.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ViewEmployeeProfilePage() {
   const router = useRouter();
   const params = useParams();

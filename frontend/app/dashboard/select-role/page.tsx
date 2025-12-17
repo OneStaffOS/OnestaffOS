@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import RoleSelectionModal from '../../components/RoleSelectionModal';
 import { getAvailableDashboards } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function SelectRolePage() {
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();

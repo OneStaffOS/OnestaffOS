@@ -14,6 +14,7 @@ import { Department, DepartmentStatus } from '@/lib/types/organizational-structu
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './departments.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function DepartmentsPage() {
   const router = useRouter();
   const [departments, setDepartments] = useState<Department[]>([]);

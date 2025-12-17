@@ -6,6 +6,7 @@ import Spinner from '@/app/components/Spinner';
 import axios from '@/lib/axios-config';
 import styles from './idCard.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface AccessCardInfo {
   cardNumber?: string;
   issuedDate?: string;

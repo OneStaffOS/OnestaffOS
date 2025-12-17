@@ -8,6 +8,7 @@ import Spinner from '../../../components/Spinner';
 import styles from '../../hr/time-management.module.css';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ManagerCorrectionRequestsPage() {
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

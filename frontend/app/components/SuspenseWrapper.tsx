@@ -9,6 +9,7 @@
 import { Suspense, ReactNode } from 'react';
 import Spinner from './Spinner';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface SuspenseWrapperProps {
   children: ReactNode;
   fallback?: ReactNode;

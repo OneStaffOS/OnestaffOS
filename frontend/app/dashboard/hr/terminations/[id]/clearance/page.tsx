@@ -11,6 +11,7 @@ import axios from '@/lib/axios-config';
 import Spinner from '@/app/components/Spinner';
 import styles from './clearance.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface ClearanceItem {
   department: string;
   cleared: boolean;

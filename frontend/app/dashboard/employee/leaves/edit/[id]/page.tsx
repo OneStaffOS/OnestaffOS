@@ -6,6 +6,7 @@ import Spinner from '@/app/components/Spinner';
 import axiosInstance from '@/lib/axios-config';
 import styles from './edit.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface LeaveType {
   _id: string;
   code: string;

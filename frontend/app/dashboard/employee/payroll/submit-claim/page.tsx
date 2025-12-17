@@ -9,6 +9,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './submit-claim.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 const CLAIM_TYPES = [
   { value: 'medical', label: 'Medical Expenses' },
   { value: 'transportation', label: 'Transportation' },

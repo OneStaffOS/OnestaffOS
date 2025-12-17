@@ -10,6 +10,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './tax-documents.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Payslip {
   _id: string;
   payrollRunId: {

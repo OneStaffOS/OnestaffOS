@@ -15,6 +15,7 @@ import styles from './admin.module.css';
 import axios from '@/lib/axios-config';
 import Link from 'next/link';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface DashboardStats {
   totalUsers: number;
   activeEmployees: number;

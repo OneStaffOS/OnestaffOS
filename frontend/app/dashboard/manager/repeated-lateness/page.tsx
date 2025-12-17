@@ -9,6 +9,7 @@ import axios from '@/lib/axios-config';
 import { useAuth } from '@/app/context/AuthContext';
 import styles from '../repeated-lateness.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ManagerRepeatedLateness() {
   const router = useRouter();
   const { user } = useAuth();

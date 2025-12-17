@@ -6,6 +6,7 @@ import axios from '@/lib/axios-config';
 import Spinner from '@/app/components/Spinner';
 import styles from './signedContracts.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface SignedContract {
   _id: string;
   contractId: string;

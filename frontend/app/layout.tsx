@@ -6,6 +6,7 @@ import { ClientProviders } from "./components/ClientProviders";
 import Navbar from "./components/Navbar";
 import Spinner from "./components/Spinner";
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

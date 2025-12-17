@@ -7,6 +7,7 @@ import DashboardLayout from '../../../components/DashboardLayout';
 import styles from './attendance-corrections.module.css';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function AttendanceCorrectionsPage() {
   const [records, setRecords] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);

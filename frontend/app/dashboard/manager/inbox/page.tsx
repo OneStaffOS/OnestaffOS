@@ -9,6 +9,7 @@ import ProtectedRoute from '../../../components/ProtectedRoute';
 import Spinner from '../../../components/Spinner';
 import styles from '../../hr/time-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ManagerInboxPage() {
   const { user } = useAuth();
   const [notes, setNotes] = useState<any[]>([]);

@@ -8,6 +8,7 @@
 import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function UnauthorizedPage() {
   const { user, logout } = useAuth();
 

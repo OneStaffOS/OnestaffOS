@@ -7,6 +7,7 @@ import DashboardLayout from '../../components/DashboardLayout';
 import { SystemRole } from '@/lib/roles';
 import styles from '../dashboard.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function LeaderDashboard() {
   const router = useRouter();
 

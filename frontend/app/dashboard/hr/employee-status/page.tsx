@@ -14,6 +14,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import { EmployeeStatus } from '@/lib/types/employee-profile.types';
 import styles from './employee-status.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Employee {
   _id: string;
   employeeNumber: string;

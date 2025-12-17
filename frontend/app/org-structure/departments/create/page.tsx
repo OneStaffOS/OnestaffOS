@@ -13,6 +13,7 @@ import { CreateDepartmentDto, Department, Position } from '@/lib/types/organizat
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './create.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function CreateDepartmentPage() {
   const router = useRouter();
   const [formData, setFormData] = useState<CreateDepartmentDto>({

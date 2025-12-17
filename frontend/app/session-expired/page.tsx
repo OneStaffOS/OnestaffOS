@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from '@/lib/axios-config';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function SessionExpiredPage() {
   const router = useRouter();
 

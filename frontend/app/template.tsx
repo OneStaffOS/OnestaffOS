@@ -7,6 +7,7 @@
 import { Suspense } from 'react';
 import Spinner from './components/Spinner';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <Suspense fallback={<Spinner fullScreen size="lg" />}>

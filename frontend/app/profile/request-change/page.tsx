@@ -15,6 +15,7 @@ import ProtectedRoute from '@/app/components/ProtectedRoute';
 import Spinner from '@/app/components/Spinner';
 import axios from '@/lib/axios-config';
 import { 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
   EmployeeProfile, 
   ChangeRequestType,
   Gender,

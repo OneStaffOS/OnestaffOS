@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import styles from './candidateStatus.module.css';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Application {
   _id: string;
   candidateId: string;

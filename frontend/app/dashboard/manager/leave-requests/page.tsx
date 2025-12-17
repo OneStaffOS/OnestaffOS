@@ -14,6 +14,7 @@ import Spinner from '../../../components/Spinner';
 import styles from './leave-requests.module.css';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface LeaveRequest {
   _id: string;
   employeeId: {

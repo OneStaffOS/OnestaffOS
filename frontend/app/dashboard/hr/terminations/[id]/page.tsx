@@ -11,6 +11,7 @@ import axios from '@/lib/axios-config';
 import Spinner from '@/app/components/Spinner';
 import styles from './detail.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Termination {
   _id: string;
   employeeId: string | {

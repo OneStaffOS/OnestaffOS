@@ -13,6 +13,7 @@ import { SystemRole } from '@/lib/roles';
 import styles from '../dashboard.module.css';
 import axios from '@/lib/axios-config';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface EmployeeStats {
   leaveBalance: number;
   pendingRequests: number;

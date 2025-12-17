@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { axios } from '@/lib/axios-config';
 import styles from './reset-password.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();

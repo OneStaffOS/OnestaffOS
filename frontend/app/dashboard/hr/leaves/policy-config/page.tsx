@@ -14,6 +14,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './policy-config.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface ConfigurationStatus {
   categories: { count: number; configured: boolean };
   leaveTypes: { count: number; configured: boolean };

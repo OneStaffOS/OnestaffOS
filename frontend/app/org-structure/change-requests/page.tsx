@@ -15,6 +15,7 @@ import { StructureChangeRequest, StructureChangeStatus } from '@/lib/types/organ
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './change-requests.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ChangeRequestsPage() {
   const router = useRouter();
   const [requests, setRequests] = useState<any[]>([]);

@@ -11,6 +11,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../dashboard.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface InsuranceBracket {
   _id: string;
   name: string;

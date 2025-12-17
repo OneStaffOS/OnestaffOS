@@ -6,6 +6,7 @@
 
 import Link from 'next/link';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function NotFound() {
   return (
     <div style={{

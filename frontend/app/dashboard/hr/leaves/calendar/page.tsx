@@ -15,6 +15,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './calendar.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface BlockedPeriod {
   from: string;
   to: string;

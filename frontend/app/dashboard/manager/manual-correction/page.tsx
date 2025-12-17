@@ -9,6 +9,7 @@ import { useAuth } from '../../../context/AuthContext';
 import styles from '../../hr/time-management.module.css';
 import { SystemRole } from '@/lib/roles';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ManualAttendanceCorrectionPage() {
   const { user } = useAuth();
   const [employeeId, setEmployeeId] = useState('');

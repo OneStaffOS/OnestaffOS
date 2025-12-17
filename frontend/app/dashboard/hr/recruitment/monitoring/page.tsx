@@ -6,6 +6,7 @@ import axios from '@/lib/axios-config';
 import Spinner from '@/app/components/Spinner';
 import styles from './monitoring.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Position {
   _id: string;
   requisitionId: string;

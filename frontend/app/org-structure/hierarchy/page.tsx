@@ -17,6 +17,7 @@ import { Department, Position } from '@/lib/types/organizational-structure.types
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './hierarchy.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface DepartmentWithPositions {
   id: string;
   code: string;

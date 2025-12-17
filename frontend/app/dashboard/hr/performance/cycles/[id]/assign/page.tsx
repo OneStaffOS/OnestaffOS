@@ -14,6 +14,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../../../employees/employees.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Cycle {
   _id: string;
   name: string;

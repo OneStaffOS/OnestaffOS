@@ -9,6 +9,7 @@ import { SystemRole } from '@/lib/roles';
 import { useParams, useRouter } from 'next/navigation';
 import styles from './appraisal-detail.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function AppraisalDetailPage() {
   const router = useRouter();
   const [record, setRecord] = useState<any>(null);

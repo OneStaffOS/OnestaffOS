@@ -13,6 +13,7 @@ import { CreatePositionDto, PositionStatus } from '@/lib/types/organizational-st
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './create.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Department {
   _id: string;
   code: string;

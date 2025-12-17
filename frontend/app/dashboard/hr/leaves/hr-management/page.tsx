@@ -22,6 +22,7 @@ import { useAuth } from '@/app/context/AuthContext';
 import axios from '@/lib/axios-config';
 import styles from './hr-management.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Employee {
   _id: string;
   firstName: string;

@@ -15,6 +15,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../../../dashboard.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function CreateJobTemplatePage() {
   const router = useRouter();
   const { user } = useAuth();

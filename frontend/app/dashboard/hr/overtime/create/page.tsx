@@ -8,6 +8,7 @@ import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from './overtime-create.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function CreateOvertimeRulePage() {
   const router = useRouter();
   const [name, setName] = useState('');

@@ -16,6 +16,7 @@ import Spinner from '@/app/components/Spinner';
 import axios from '@/lib/axios-config';
 import { EmployeeProfile, EmployeeStatus } from '@/lib/types/employee-profile.types';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface PositionAssignment {
   _id: string;
   employeeProfileId: string;

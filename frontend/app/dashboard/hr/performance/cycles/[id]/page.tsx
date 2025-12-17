@@ -13,6 +13,7 @@ import { SystemRole as Role } from '@/lib/roles';
 import axios from '@/lib/axios-config';
 import styles from '../../templates/templates.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 interface Template {
   _id: string;
   name: string;

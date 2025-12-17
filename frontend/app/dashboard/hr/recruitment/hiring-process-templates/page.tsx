@@ -14,6 +14,7 @@ import DashboardLayout from '@/app/components/DashboardLayout';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from '../../../dashboard.module.css';
 
+import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 // Fixed hiring process stages as defined in ApplicationStage enum
 const HIRING_STAGES = [
   { 
