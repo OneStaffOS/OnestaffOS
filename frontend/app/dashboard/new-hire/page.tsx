@@ -121,13 +121,13 @@ export default function NewHireDashboard() {
   };
 
   const getProgressPercentage = () => {
-    if (!preBoarding || preBoarding.tasks.length === 0) return 0;
+    if (!preBoarding || !preBoarding.tasks || preBoarding.tasks.length === 0) return 0;
     const completed = preBoarding.tasks.filter(t => t.status === 'completed').length;
     return Math.round((completed / preBoarding.tasks.length) * 100);
   };
 
-  const tasksCompleted = preBoarding?.tasks.filter(t => t.status === 'completed').length || 0;
-  const totalTasks = preBoarding?.tasks.length || 0;
+  const tasksCompleted = preBoarding?.tasks?.filter(t => t.status === 'completed').length || 0;
+  const totalTasks = preBoarding?.tasks?.length || 0;
 
   const handleFileUpload = async (taskIndex: number, file: File) => {
     if (!preBoarding) return;
@@ -254,7 +254,7 @@ export default function NewHireDashboard() {
               </div>
 
               <div className={styles.tasksList}>
-                {preBoarding.tasks.map((task, index) => {
+                {preBoarding.tasks?.map((task, index) => {
                   const daysUntil = task.deadline ? getDaysUntil(task.deadline) : null;
                   const isOverdue = daysUntil !== null && daysUntil < 0;
                   

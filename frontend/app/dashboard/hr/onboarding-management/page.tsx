@@ -37,6 +37,7 @@ interface NewHire {
   firstName: string;
   lastName: string;
   email: string;
+  employeeNumber: string;
 }
 
 export default function OnboardingManagement() {
@@ -78,11 +79,6 @@ export default function OnboardingManagement() {
 
   const fetchNewHires = async () => {
     try {
-      // Get all checklists first
-      const checklistsRes = await axios.get('/recruitment/onboarding');
-      const existingChecklists = checklistsRes.data;
-      const employeesWithChecklists = existingChecklists.map((c: any) => c.employeeId._id);
-      
       // Fetch all employees
       const employeesRes = await axios.get('/employee-profile');
       const allEmployees = employeesRes.data;
@@ -91,16 +87,19 @@ export default function OnboardingManagement() {
       const newHiresList = [];
       
       for (const emp of allEmployees) {
-        // Skip if already has checklist
-        if (employeesWithChecklists.includes(emp._id)) continue;
-        
         try {
           // Get employee's roles
           const rolesRes = await axios.get(`/employee-profile/${emp._id}/roles`);
           const hasNewHireRole = rolesRes.data.roles?.includes(Role.NEW_HIRE);
           
           if (hasNewHireRole) {
-            newHiresList.push(emp);
+            newHiresList.push({
+              _id: emp._id,
+              firstName: emp.firstName,
+              lastName: emp.lastName,
+              email: emp.email,
+              employeeNumber: emp.employeeNumber
+            });
           }
         } catch (err) {
           // If no roles found, skip this employee
@@ -372,7 +371,7 @@ export default function OnboardingManagement() {
                         <option value="">-- Select Employee --</option>
                         {newHires.map(hire => (
                           <option key={hire._id} value={hire._id}>
-                            {hire.firstName} {hire.lastName} ({hire.email})
+                            {hire.employeeNumber} - {hire.firstName} {hire.lastName} ({hire.email})
                           </option>
                         ))}
                       </select>

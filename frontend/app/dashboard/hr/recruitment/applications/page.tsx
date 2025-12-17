@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from '@/lib/axios-config';
 import Spinner from '@/app/components/Spinner';
 import styles from './applications.module.css';
+import { SystemRole } from '@/lib/roles';
 
 interface Department {
   _id: string;
@@ -124,10 +125,29 @@ export default function ApplicationsPage() {
     try {
       setLoadingEmployees(true);
       const response = await axios.get('/employee-profile');
-      // Filter for HR employees and managers
-      const hrStaff = response.data.filter((emp: any) => 
-        emp.role === 'HR_EMPLOYEE' || emp.role === 'HR_MANAGER' || emp.role === 'RECRUITER'
-      );
+      const allEmployees = response.data;
+      
+      // Fetch roles for each employee and filter for HR staff
+      const hrStaff = [];
+      for (const emp of allEmployees) {
+        try {
+          const rolesRes = await axios.get(`/employee-profile/${emp._id}/roles`);
+          const roles = rolesRes.data.roles || [];
+          
+          // Check if employee has any HR role
+          const hasHRRole = roles.some((role: string) => 
+            role === SystemRole.HR_MANAGER || role === SystemRole.HR_ADMIN || role === SystemRole.HR_EMPLOYEE
+          );
+          
+          if (hasHRRole) {
+            hrStaff.push(emp);
+          }
+        } catch (err) {
+          // If no roles found, skip this employee
+          continue;
+        }
+      }
+      
       setHrEmployees(hrStaff);
     } catch (err: any) {
       console.error('Failed to fetch HR employees:', err);
@@ -1194,7 +1214,7 @@ export default function ApplicationsPage() {
                                 {employee.firstName} {employee.lastName}
                               </span>
                               <span className={styles.employeeRole}>
-                                {employee.role.replace(/_/g, ' ')}
+                                {employee.role?.replace(/_/g, ' ') || 'HR Staff'}
                               </span>
                             </div>
                           </label>

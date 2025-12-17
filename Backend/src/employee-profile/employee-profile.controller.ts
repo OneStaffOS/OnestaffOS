@@ -451,10 +451,10 @@ export class EmployeeProfileController {
 
   /**
    * Get employee system roles
-   * Accessible by: HR Admin, HR Manager, System Admin
+   * Accessible by: HR Admin, HR Manager, HR Employee, Recruiter, System Admin
    */
   @Get(':id/roles')
-  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.HR_EMPLOYEE, Role.RECRUITER, Role.SYSTEM_ADMIN)
   async getEmployeeRoles(@Param('id') id: string) {
     return this.employeeProfileService.getEmployeeRoles(id);
   }

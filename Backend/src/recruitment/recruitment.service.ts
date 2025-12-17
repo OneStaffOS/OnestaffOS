@@ -824,7 +824,7 @@ ${message}
   async getApplicationInterviewsWithFeedback(applicationId: string): Promise<any[]> {
     const interviews = await this.interviewModel
       .find({ applicationId: new Types.ObjectId(applicationId) })
-      .populate('panel', 'firstName lastName personalEmail')
+      .populate('panel', '_id firstName lastName personalEmail')
       .sort({ scheduledDate: 1 })
       .exec();
 

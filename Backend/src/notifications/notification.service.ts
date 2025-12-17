@@ -18,11 +18,16 @@ export class NotificationService implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   async createNotification(createdByEmployeeId: string, dto: CreateNotificationDto) {
+    // Handle system notifications - use the actual system user ID
+    const createdBy = (createdByEmployeeId?.toLowerCase() === 'system') 
+      ? new Types.ObjectId('692a056cfad7d194cd3f0992') 
+      : new Types.ObjectId(createdByEmployeeId);
+    
     const doc = new this.notificationModel({
       _id: new Types.ObjectId(),
       title: dto.title,
       message: dto.message,
-      createdByEmployeeId: new Types.ObjectId(createdByEmployeeId),
+      createdByEmployeeId: createdBy,
       targetRole: dto.targetRole || 'ALL',
       targetEmployeeIds: (dto.targetEmployeeIds || []).map(id => new Types.ObjectId(id)),
       targetDepartmentIds: (dto.targetDepartmentIds || []).map(id => new Types.ObjectId(id)),
