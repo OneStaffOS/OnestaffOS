@@ -1780,8 +1780,8 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
       if (nextSync <= now) nextSync.setDate(nextSync.getDate() + 1);
       const msUntilSync = nextSync.getTime() - now.getTime();
       setTimeout(() => {
-        this.syncWithPayroll({ dryRun: false }).catch(err => console.error('Scheduled payroll sync failed:', err));
-        setInterval(() => this.syncWithPayroll({ dryRun: false }).catch(err => console.error('Scheduled payroll sync failed:', err)), ms1day);
+        this.syncWithPayroll({ dryRun: false }).catch(() => {});
+        setInterval(() => this.syncWithPayroll({ dryRun: false }).catch(() => {}), ms1day);
       }, msUntilSync);
     } catch (err) {
       console.error('Failed to schedule payroll sync:', err?.message || err);
@@ -1796,11 +1796,11 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
       if (nextEsc <= now2) nextEsc.setDate(nextEsc.getDate() + 1);
       const msUntilEsc = nextEsc.getTime() - now2.getTime();
       setTimeout(() => {
-        this.escalatePendingRequests().catch(err => console.error('Scheduled escalation failed:', err));
-        setInterval(() => this.escalatePendingRequests().catch(err => console.error('Scheduled escalation failed:', err)), ms1day);
+        this.escalatePendingRequests().catch(() => {});
+        setInterval(() => this.escalatePendingRequests().catch(() => {}), ms1day);
       }, msUntilEsc);
     } catch (err) {
-      console.error('Failed to schedule payroll escalation:', err?.message || err);
+      // Silently handle error
     }
   }
 

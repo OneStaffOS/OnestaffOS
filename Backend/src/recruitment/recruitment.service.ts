@@ -470,7 +470,7 @@ export class RecruitmentService {
     const jobTitle = jobRequisition?.jobTitle || 'your application';
 
     // Send custom message to candidate
-    console.log(`Custom notification to candidate ${candidate.personalEmail}: ${dto.message}`);
+    // TODO: Implement email/SMS notification service
   }
 
   async getAllApplications(): Promise<any[]> {

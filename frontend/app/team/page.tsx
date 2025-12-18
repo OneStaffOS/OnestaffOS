@@ -46,11 +46,12 @@ export default function TeamViewPage() {
   };
 
   const getUniqueDepartments = () => {
+    if (!Array.isArray(teamMembers)) return [];
     const departments = teamMembers.map(member => member.department);
     return Array.from(new Set(departments)).filter(Boolean);
   };
 
-  const filteredMembers = teamMembers.filter(member => {
+  const filteredMembers = Array.isArray(teamMembers) ? teamMembers.filter(member => {
     const matchesSearch = 
       member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       member.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -61,7 +62,7 @@ export default function TeamViewPage() {
     const matchesDepartment = filterDepartment === 'ALL' || member.department === filterDepartment;
 
     return matchesSearch && matchesStatus && matchesDepartment;
-  });
+  }) : [];
 
   const getStatusClass = (status: EmployeeStatus) => {
     switch (status) {

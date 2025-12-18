@@ -63,11 +63,9 @@ export default function PayslipDetailPage({ params }: PageProps) {
   useEffect(() => {
     // Load user data from localStorage
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    console.log('User data from localStorage:', userData);
     setUser(userData);
 
     params.then(p => {
-      console.log('Payslip ID:', p.id);
       setPayslipId(p.id);
       loadPayslip(p.id);
     });
@@ -79,7 +77,6 @@ export default function PayslipDetailPage({ params }: PageProps) {
     try {
       // Get user from localStorage
       const userData = JSON.parse(localStorage.getItem('user') || '{}');
-      console.log('Loading payslip for user:', userData.sub);
       
       if (!userData.sub) {
         setError('User session not found. Please login again.');

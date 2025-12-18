@@ -124,8 +124,30 @@ export default function LoginPage() {
         setShowRoleSelection(true);
       }
     } catch (err: any) {
-      // Extract and display detailed error message
-      const errorMessage = err.response?.data?.message || err.message || 'Login failed';
+      // Extract and display specific error messages
+      const backendMessage = err.response?.data?.message || err.message || '';
+      const statusCode = err.response?.status;
+      
+      let errorMessage = 'Login failed';
+      
+      if (statusCode === 404 || backendMessage.includes('User not found') || backendMessage.includes('not found')) {
+        errorMessage = 'No account found with this email address. Please check your email or register for a new account.';
+      } else if (statusCode === 401) {
+        if (backendMessage.includes('Invalid credentials')) {
+          errorMessage = 'Incorrect password. Please try again or use "Forgot Password" to reset it.';
+        } else if (backendMessage.includes('inactive') || backendMessage.includes('not active')) {
+          errorMessage = backendMessage; // Use full account status message
+        } else if (backendMessage.includes('suspended')) {
+          errorMessage = 'Your account has been suspended. Please contact your administrator.';
+        } else if (backendMessage.includes('terminated')) {
+          errorMessage = 'Your account has been terminated. Please contact HR for assistance.';
+        } else {
+          errorMessage = backendMessage || 'Incorrect email or password. Please try again.';
+        }
+      } else if (backendMessage) {
+        errorMessage = backendMessage;
+      }
+      
       setError(errorMessage);
     } finally {
       setLoading(false);

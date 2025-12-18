@@ -8,12 +8,65 @@ import { JwtService } from '@nestjs/jwt';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bodyParser: false, // Disable default body parser for multipart/form-data
   });
+
+  // ========================================
+  // SWAGGER API DOCUMENTATION
+  // ========================================
+  // Setup Swagger BEFORE setting global prefix
+  const config = new DocumentBuilder()
+    .setTitle('OnestaffOS API')
+    .setDescription('Comprehensive HR Management System API - Handles employee profiles, recruitment, payroll, time management, performance reviews, and organizational structure')
+    .setVersion('1.0')
+    .addTag('Authentication', 'User authentication and authorization endpoints')
+    .addTag('Employee Profile', 'Employee profile management and team views')
+    .addTag('Recruitment', 'Job requisitions, applications, and hiring workflows')
+    .addTag('Payroll', 'Payroll configuration, execution, and tracking')
+    .addTag('Time Management', 'Attendance, shifts, and time tracking')
+    .addTag('Leaves', 'Leave requests and balance management')
+    .addTag('Performance', 'Performance reviews and appraisals')
+    .addTag('Organization Structure', 'Departments, positions, and organizational hierarchy')
+    .addTag('Notifications', 'System notifications and alerts')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter JWT token from login response',
+      },
+      'JWT-auth',
+    )
+    .addCookieAuth('accessToken', {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'accessToken',
+      description: 'JWT token stored in httpOnly cookie',
+    })
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document, {
+    customSiteTitle: 'OnestaffOS API Docs',
+    customCss: '.swagger-ui .topbar { display: none }',
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+    },
+  });
+
+  // Set global prefix for all routes AFTER Swagger setup
   app.setGlobalPrefix('api/v1');
+
+  // ========================================
+  // GLOBAL EXCEPTION FILTER
+  // ========================================
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // ========================================
   // SECURITY MIDDLEWARE

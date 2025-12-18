@@ -86,30 +86,24 @@ export default function ApplyPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    console.log('🚀 [FRONTEND] Form submission started');
 
     if (!cvFile) {
-      console.log('❌ [FRONTEND] No CV file selected');
       setError('Please upload your CV');
       return;
     }
 
     try {
       setSubmitting(true);
-      console.log('📡 [FRONTEND] Fetching user profile...');
 
       // Get candidateId from user profile
       const profileResponse = await axios.get('/auth/me');
       const candidateId = profileResponse.data.user?.sub;
-      console.log('✅ [FRONTEND] Got candidateId:', candidateId);
 
       if (!candidateId) {
         throw new Error('Could not get candidate ID');
       }
 
       // Create FormData for file upload
-      console.log('📦 [FRONTEND] Creating FormData...');
-      
       const formData = new FormData();
       formData.append('cv', cvFile, cvFile.name);
       formData.append('candidateId', candidateId);
@@ -120,22 +114,12 @@ export default function ApplyPage() {
         formData.append('coverLetter', coverLetter.trim());
       }
 
-      console.log('📋 [FRONTEND] FormData contents:');
-      console.log('  - cv:', cvFile.name, `(${cvFile.size} bytes)`);
-      console.log('  - candidateId:', candidateId);
-      console.log('  - requisitionId:', jobId);
-      console.log('  - coverLetter:', coverLetter ? 'Yes' : 'No');
-
       // Submit application - let axios interceptor handle Content-Type
-      console.log('📤 [FRONTEND] Sending request...');
       const response = await axios.post('/recruitment/applications', formData);
-      console.log('✅ [FRONTEND] Application submitted successfully:', response.data);
 
       setSuccess(true);
       setTimeout(() => router.push('/job-offers'), 2000);
     } catch (err: any) {
-      console.error('❌ [FRONTEND] Error submitting application:', err);
-      console.error('❌ [FRONTEND] Error response:', err.response?.data);
       setError(err.response?.data?.message || 'Failed to submit application. Please try again.');
     } finally {
       setSubmitting(false);

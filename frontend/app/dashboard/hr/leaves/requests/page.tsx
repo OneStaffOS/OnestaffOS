@@ -131,9 +131,6 @@ export default function LeaveRequestsPage() {
         return;
       }
 
-      console.log('[Leave Action] Approver ID:', approverId);
-      console.log('[Leave Action] User object:', user);
-
       if (actionType === 'approve') {
         await axios.post(`/leaves/requests/${selectedRequest._id}/approve`, {
           approverId,

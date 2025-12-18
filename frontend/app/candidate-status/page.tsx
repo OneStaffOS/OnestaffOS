@@ -195,15 +195,12 @@ export default function CandidateStatusPage() {
     try {
       // Get the candidate ID from the current user
       if (!user?.sub) {
-        console.error('No user ID found');
         setOffer(null);
         return;
       }
       
-      console.log('Fetching offers for candidate:', user.sub);
       // Fetch all offers for this candidate using the user's ID as candidateId
       const response = await axios.get(`/recruitment/candidates/${user.sub}/offers`);
-      console.log('All offers received:', response.data);
       
       // Find the offer that matches this application
       // The applicationId in the offer might be an object with _id or a string
@@ -211,13 +208,10 @@ export default function CandidateStatusPage() {
         const offerAppId = typeof offer.applicationId === 'object' 
           ? offer.applicationId._id 
           : offer.applicationId;
-        console.log('Comparing offerAppId:', offerAppId, 'with applicationId:', applicationId);
         return offerAppId === applicationId;
       });
-      console.log('Matching offer found:', matchingOffer);
       setOffer(matchingOffer || null);
     } catch (err: any) {
-      console.error('Failed to fetch offer:', err);
       setOffer(null);
     }
   };
@@ -325,7 +319,7 @@ export default function CandidateStatusPage() {
           <div className={styles.applicationsSection}>
             <h2>Your Applications</h2>
             <div className={styles.applicationsList}>
-              {applications.map((app) => (
+              {(Array.isArray(applications) ? applications : []).map((app) => (
                 <div
                   key={app._id}
                   className={`${styles.applicationCard} ${
