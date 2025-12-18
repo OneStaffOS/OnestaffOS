@@ -25,8 +25,10 @@ export const axios = axiosLib.create({
   withCredentials: true,
   // Timeout after 30 seconds
   timeout: 30000,
-  // Prevent SSRF by validating URLs
-  validateStatus: (status) => status >= 200 && status < 500,
+  // Only treat 2xx responses as successful; let axios reject 3xx/4xx/5xx so
+  // response interceptors / request code can handle errors via catch().
+  // (Previously allowed <500 which caused 4xx to resolve and bypass error handling.)
+  validateStatus: (status) => status >= 200 && status < 300,
 });
 
 // Also export as default for convenience
