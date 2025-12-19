@@ -46,9 +46,12 @@ export default function Navbar() {
               <Link href="/dashboard" className={styles.navLink}>
                 Dashboard
               </Link>
-              <Link href="/job-offers" className={styles.navLink}>
-                Career Center
-              </Link>
+              {/* Career Center - Only visible to Job Candidates */}
+              {ensureArray(user.roles).includes(SystemRole.JOB_CANDIDATE) && (
+                <Link href="/job-offers" className={styles.navLink}>
+                  Career Center
+                </Link>
+              )}
               {/* Shift Types is accessible from the Admin/Manager dashboards (quick actions), not the navbar */}
               <button onClick={handleLogout} className={styles.logoutButton}>
                 Logout

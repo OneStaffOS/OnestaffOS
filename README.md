@@ -402,5 +402,3 @@ Built with modern technologies and best practices:
 - And many other open-source libraries
 
 ---
-
-**Made with ❤️ by the OneStaffOS Team**

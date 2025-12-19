@@ -34,7 +34,6 @@ export const PasswordResetTokenSchema = SchemaFactory.createForClass(PasswordRes
 
 // Index for automatic cleanup of expired tokens
 PasswordResetTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-// Index for quick token lookup
-PasswordResetTokenSchema.index({ token: 1 });
+// Note: token field has unique: true, so no explicit index needed
 // Index for finding tokens by employee
 PasswordResetTokenSchema.index({ employeeId: 1 });
