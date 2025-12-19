@@ -612,23 +612,30 @@ export default function ApplicationsPage() {
     setSelectedApplications([]);
   };
 
+  const normalizeStatus = (status: string) => (status || '').toLowerCase();
+
+  const formatStatus = (status: string) =>
+    normalizeStatus(status).replace(/_/g, ' ').toUpperCase();
+
   const getFilteredApplications = () => {
-    return applications.filter(app => {
-      const statusMatch = statusFilter === 'all' || app.status === statusFilter;
+    return applications.filter((app) => {
+      const statusMatch =
+        statusFilter === 'all' || normalizeStatus(app.status) === statusFilter;
       const stageMatch = stageFilter === 'all' || app.currentStage === stageFilter;
       return statusMatch && stageMatch;
     });
   };
 
   const getStatusBadgeClass = (status: string) => {
+    const normalized = normalizeStatus(status);
     const statusClasses: { [key: string]: string } = {
-      SUBMITTED: styles.statusSubmitted,
-      IN_PROCESS: styles.statusInProcess,
-      OFFER: styles.statusOffer,
-      HIRED: styles.statusHired,
-      REJECTED: styles.statusRejected,
+      submitted: styles.statusSubmitted,
+      in_process: styles.statusInProcess,
+      offer: styles.statusOffer,
+      hired: styles.statusHired,
+      rejected: styles.statusRejected,
     };
-    return statusClasses[status] || styles.statusDefault;
+    return statusClasses[normalized] || styles.statusDefault;
   };
 
   const filteredApplications = getFilteredApplications();
@@ -651,11 +658,11 @@ export default function ApplicationsPage() {
             className={styles.filterSelect}
           >
             <option value="all">All Statuses</option>
-            <option value="SUBMITTED">Submitted</option>
-            <option value="IN_PROCESS">In Process</option>
-            <option value="OFFER">Offer</option>
-            <option value="HIRED">Hired</option>
-            <option value="REJECTED">Rejected</option>
+            <option value="submitted">Submitted</option>
+            <option value="in_process">In Process</option>
+            <option value="offer">Offer</option>
+            <option value="hired">Hired</option>
+            <option value="rejected">Rejected</option>
           </select>
 
           <select
@@ -749,7 +756,7 @@ export default function ApplicationsPage() {
                     <td>{getDepartmentFromRequisition(app.requisitionId)}</td>
                     <td>
                       <span className={`${styles.statusBadge} ${getStatusBadgeClass(app.status)}`}>
-                        {app.status.replace(/_/g, ' ')}
+                        {formatStatus(app.status)}
                       </span>
                     </td>
                     <td>
