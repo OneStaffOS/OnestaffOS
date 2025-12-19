@@ -177,108 +177,330 @@ export default function TeamAppraisalsPage() {
   if (loading) {
     return (
       <ProtectedRoute requiredRoles={[Role.DEPARTMENT_HEAD, Role.HR_MANAGER]}>
-        <Spinner message="Loading team appraisals..." />
+        <Spinner fullScreen message="Loading team appraisals..." />
       </ProtectedRoute>
     );
   }
 
+  // Calculate stats
+  const totalMembers = rows.length;
+  const withAssignment = rows.filter(r => r.assignment).length;
+  const completed = rows.filter(r => r.assignment?.status === 'PUBLISHED' || r.assignment?.status === 'COMPLETED').length;
+  const pending = withAssignment - completed;
+
+  const getStatusBadge = (status: string) => {
+    const s = status?.toUpperCase() || '';
+    if (s === 'PUBLISHED' || s === 'COMPLETED') {
+      return { bg: '#d1fae5', color: '#065f46', text: 'Completed' };
+    } else if (s === 'IN_PROGRESS' || s === 'DRAFT') {
+      return { bg: '#dbeafe', color: '#1e40af', text: 'In Progress' };
+    } else if (s === 'PENDING' || s === 'ASSIGNED') {
+      return { bg: '#fef3c7', color: '#92400e', text: 'Pending' };
+    }
+    return { bg: '#f3f4f6', color: '#6b7280', text: status || 'No Status' };
+  };
+
   return (
     <ProtectedRoute requiredRoles={[Role.DEPARTMENT_HEAD, Role.HR_MANAGER]}>
       <div className={styles.container}>
+        {/* Header */}
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>Team Appraisals</h1>
+            <h1 className={styles.title}>📋 Team Appraisals</h1>
             <p className={styles.subtitle}>View employees, their cycle assignments and set Department Head rating & comments.</p>
           </div>
           <div className={styles.headerActions}>
-            <button className={styles.refreshButton} onClick={fetchTeamAndAssignments}>Refresh</button>
-            <button className={styles.secondaryButton} onClick={() => router.back()}>Back</button>
+            <button className={styles.refreshButton} onClick={fetchTeamAndAssignments}>🔄 Refresh</button>
+            <button className={styles.secondaryButton} onClick={() => router.back()}>← Back</button>
           </div>
         </div>
 
         {error && <div className={styles.error}>{error}</div>}
 
-        <div style={{ marginTop: 16 }}>
-          {rows.length === 0 ? (
-            <div className={styles.emptyState}>No team members found</div>
-          ) : (
-            <div style={{ display: 'grid', gap: 12 }}>
-              {rows.map(r => {
-                const a = r.assignment;
-                const key = a?._id || `emp-${r.employee._id}`;
-                return (
-                  <div key={key} className={styles.assignmentCard}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div>
-                        <strong>{r.employee?.firstName} {r.employee?.lastName}</strong>
-                        <div style={{ color: '#6b7280' }}>{a ? `${a.cycleId?.name || ''} • ${a.templateId?.name || ''}` : 'No assignment'}</div>
+        {/* Stats Cards */}
+        <div className={styles.statsGrid}>
+          <div className={`${styles.statCard} ${styles.statBlue}`}>
+            <h3>👥 Team Members</h3>
+            <p>{totalMembers}</p>
+          </div>
+          <div className={`${styles.statCard} ${styles.statPurple}`}>
+            <h3>📋 With Assignments</h3>
+            <p>{withAssignment}</p>
+          </div>
+          <div className={`${styles.statCard} ${styles.statGreen}`}>
+            <h3>✅ Completed</h3>
+            <p>{completed}</p>
+          </div>
+          <div className={`${styles.statCard} ${styles.statOrange}`}>
+            <h3>⏳ Pending</h3>
+            <p>{pending}</p>
+          </div>
+        </div>
+
+        {/* Team Cards */}
+        {rows.length === 0 ? (
+          <div className={styles.emptyState}>
+            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📋</div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#374151', marginBottom: '0.75rem' }}>No Team Members Found</h2>
+            <p style={{ fontSize: '1.05rem', color: '#6b7280', margin: 0 }}>No team members or appraisal assignments found.</p>
+          </div>
+        ) : (
+          <div className={styles.cardsGrid}>
+            {rows.map(r => {
+              const a = r.assignment;
+              const key = a?._id || `emp-${r.employee._id}`;
+              const statusBadge = getStatusBadge(a?.status || '');
+              const initials = `${r.employee?.firstName?.[0] || ''}${r.employee?.lastName?.[0] || ''}`;
+              
+              return (
+                <div key={key} className={styles.assignmentCard}>
+                  {/* Card Header */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)',
+                    padding: '1.5rem',
+                    borderBottom: '1px solid #e5e7eb',
+                    display: 'flex',
+                    gap: '1rem',
+                    alignItems: 'center'
+                  }}>
+                    <div style={{
+                      width: '56px',
+                      height: '56px',
+                      borderRadius: '12px',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '1.25rem',
+                      fontWeight: '700',
+                      boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                      flexShrink: 0
+                    }}>
+                      {initials}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#111827', margin: 0 }}>
+                          {r.employee?.firstName} {r.employee?.lastName}
+                        </h3>
+                        <span style={{
+                          background: statusBadge.bg,
+                          color: statusBadge.color,
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '9999px',
+                          fontSize: '0.7rem',
+                          fontWeight: '600',
+                          textTransform: 'uppercase'
+                        }}>
+                          {statusBadge.text}
+                        </span>
                       </div>
-                      <div className={styles.actionGroup}>
-                        {a ? (
-                          <>
-                            <button className={styles.infoButton} onClick={() => router.push(a.latestAppraisalId ? `/dashboard/manager/performance/record/${a.latestAppraisalId}` : `/dashboard/manager/performance/appraisal/${a._id}`)}>Open Appraisal</button>
-                            <button className={styles.primaryButton} onClick={() => openEditor(a)}>Edit Dept Head Comment</button>
-                          </>
-                        ) : (
-                          <div style={{ color: '#9ca3af', fontSize: 13 }}>No assignment</div>
-                        )}
+                      <p style={{ fontSize: '0.9rem', color: '#6b7280', margin: 0 }}>
+                        {a ? `${a.cycleId?.name || 'No Cycle'} • ${a.templateId?.name || 'No Template'}` : 'No assignment'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Card Body */}
+                  <div style={{ padding: '1.5rem' }}>
+                    {a && r.employee?.appraisal?.totalScore !== undefined && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        padding: '1rem',
+                        background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                        borderRadius: '12px',
+                        marginBottom: '1rem'
+                      }}>
+                        <span style={{ fontSize: '0.9rem', color: '#92400e' }}>⭐ Current Score:</span>
+                        <span style={{ fontSize: '1.5rem', fontWeight: '700', color: '#92400e' }}>
+                          {r.employee?.appraisal?.totalScore?.toFixed(1) || '—'}
+                        </span>
                       </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className={styles.actionGroup}>
+                      {a ? (
+                        <>
+                          <button className={styles.infoButton} onClick={() => router.push(a.latestAppraisalId ? `/dashboard/manager/performance/record/${a.latestAppraisalId}` : `/dashboard/manager/performance/appraisal/${a._id}`)}>
+                            📄 Open Appraisal
+                          </button>
+                          <button className={styles.primaryButton} onClick={() => openEditor(a)}>
+                            ✏️ Edit Dept Head Comment
+                          </button>
+                        </>
+                      ) : (
+                        <span style={{ color: '#9ca3af', fontSize: '0.9rem', fontStyle: 'italic' }}>No assignment available</span>
+                      )}
                     </div>
 
+                    {/* Editor Section */}
                     {a && editing[a._id] && (
-                      <div style={{ marginTop: 12, borderTop: '1px solid #e5e7eb', paddingTop: 12 }}>
-                        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                          <label style={{ minWidth: 160 }}>Existing Score</label>
-                          <div style={{ color: '#111827', fontWeight: 600 }}>{deptValues[a._id]?.rating ?? (r.employee?.appraisal?.totalScore ?? '—')}</div>
-                        </div>
+                      <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '2px solid #e5e7eb' }}>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#374151', margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          📝 Department Head Comments
+                        </h4>
 
-                                        <div style={{ marginTop: 8 }}>
-                                          <label style={{ display: 'block', marginBottom: 6 }}>Manager Summary</label>
-                                          <textarea
-                                            rows={3}
-                                            style={{ width: '100%', padding: 8, borderRadius: 6 }}
-                                            value={deptValues[a._id]?.managerSummary ?? (r.employee?.appraisal?.managerSummary || '')}
-                                            onChange={(e) => setDeptValues(prev => ({ ...prev, [a._id]: { ...(prev[a._id] || {}), managerSummary: e.target.value } }))}
-                                          />
-                                        </div>
+                        {deptValues[a._id]?.loading ? (
+                          <div style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>Loading...</div>
+                        ) : (
+                          <>
+                            {/* Existing Score Display */}
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '1rem',
+                              padding: '0.75rem 1rem',
+                              background: '#f9fafb',
+                              borderRadius: '10px',
+                              marginBottom: '1rem'
+                            }}>
+                              <span style={{ fontSize: '0.9rem', color: '#6b7280', minWidth: '100px' }}>Existing Score:</span>
+                              <span style={{ fontWeight: '700', color: '#111827', fontSize: '1.25rem' }}>
+                                {deptValues[a._id]?.rating ?? (r.employee?.appraisal?.totalScore ?? '—')}
+                              </span>
+                            </div>
 
-                        <div style={{ marginTop: 8 }}>
-                          <label style={{ display: 'block', marginBottom: 6 }}>Key Strengths</label>
-                          <textarea
-                            rows={2}
-                            style={{ width: '100%', padding: 8, borderRadius: 6 }}
-                            value={deptValues[a._id]?.strengths ?? (r.employee?.appraisal?.strengths || '')}
-                            onChange={(e) => setDeptValues(prev => ({ ...prev, [a._id]: { ...(prev[a._id] || {}), strengths: e.target.value } }))}
-                          />
-                        </div>
+                            {/* Manager Summary */}
+                            <div style={{ marginBottom: '1rem' }}>
+                              <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>
+                                Manager Summary
+                              </label>
+                              <textarea
+                                rows={3}
+                                placeholder="Enter overall manager summary..."
+                                style={{
+                                  width: '100%',
+                                  padding: '0.875rem',
+                                  border: '2px solid #e5e7eb',
+                                  borderRadius: '10px',
+                                  fontSize: '0.95rem',
+                                  resize: 'vertical',
+                                  fontFamily: 'inherit',
+                                  transition: 'border-color 0.2s ease'
+                                }}
+                                value={deptValues[a._id]?.managerSummary ?? (r.employee?.appraisal?.managerSummary || '')}
+                                onChange={(e) => setDeptValues(prev => ({ ...prev, [a._id]: { ...(prev[a._id] || {}), managerSummary: e.target.value } }))}
+                                onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                                onBlur={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+                              />
+                            </div>
 
-                        <div style={{ marginTop: 8 }}>
-                          <label style={{ display: 'block', marginBottom: 6 }}>Areas for Improvement</label>
-                          <textarea
-                            rows={2}
-                            style={{ width: '100%', padding: 8, borderRadius: 6 }}
-                            value={deptValues[a._id]?.improvementAreas ?? (r.employee?.appraisal?.improvementAreas || '')}
-                            onChange={(e) => setDeptValues(prev => ({ ...prev, [a._id]: { ...(prev[a._id] || {}), improvementAreas: e.target.value } }))}
-                          />
-                        </div>
+                            {/* Strengths */}
+                            <div style={{ marginBottom: '1rem' }}>
+                              <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>
+                                💪 Key Strengths
+                              </label>
+                              <textarea
+                                rows={2}
+                                placeholder="Highlight key strengths..."
+                                style={{
+                                  width: '100%',
+                                  padding: '0.875rem',
+                                  border: '2px solid #e5e7eb',
+                                  borderRadius: '10px',
+                                  fontSize: '0.95rem',
+                                  resize: 'vertical',
+                                  fontFamily: 'inherit'
+                                }}
+                                value={deptValues[a._id]?.strengths ?? (r.employee?.appraisal?.strengths || '')}
+                                onChange={(e) => setDeptValues(prev => ({ ...prev, [a._id]: { ...(prev[a._id] || {}), strengths: e.target.value } }))}
+                                onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                                onBlur={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+                              />
+                            </div>
 
-                        <div style={{ marginTop: 8, display: 'flex', gap: 12, alignItems: 'center' }}>
-                          <label style={{ minWidth: 160 }}>Status</label>
-                          <div style={{ fontWeight: 600 }}>{deptValues[a._id]?.status || r.employee?.appraisal?.status || a.status || '—'}</div>
-                        </div>
+                            {/* Areas for Improvement */}
+                            <div style={{ marginBottom: '1rem' }}>
+                              <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>
+                                📈 Areas for Improvement
+                              </label>
+                              <textarea
+                                rows={2}
+                                placeholder="Note areas for improvement..."
+                                style={{
+                                  width: '100%',
+                                  padding: '0.875rem',
+                                  border: '2px solid #e5e7eb',
+                                  borderRadius: '10px',
+                                  fontSize: '0.95rem',
+                                  resize: 'vertical',
+                                  fontFamily: 'inherit'
+                                }}
+                                value={deptValues[a._id]?.improvementAreas ?? (r.employee?.appraisal?.improvementAreas || '')}
+                                onChange={(e) => setDeptValues(prev => ({ ...prev, [a._id]: { ...(prev[a._id] || {}), improvementAreas: e.target.value } }))}
+                                onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                                onBlur={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+                              />
+                            </div>
 
-                        <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-                          <button className={styles.primaryButton} onClick={() => handleSave(a)} disabled={deptValues[a._id]?.loading}>Save</button>
-                          <button className={styles.secondaryButton} onClick={() => closeEditor(a._id)}>Cancel</button>
-                        </div>
+                            {/* Status Display */}
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '1rem',
+                              padding: '0.75rem 1rem',
+                              background: '#f9fafb',
+                              borderRadius: '10px',
+                              marginBottom: '1rem'
+                            }}>
+                              <span style={{ fontSize: '0.9rem', color: '#6b7280', minWidth: '100px' }}>Status:</span>
+                              <span style={{ fontWeight: '600', color: '#111827' }}>
+                                {deptValues[a._id]?.status || r.employee?.appraisal?.status || a.status || '—'}
+                              </span>
+                            </div>
+
+                            {/* Editor Actions */}
+                            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                              <button
+                                onClick={() => handleSave(a)}
+                                disabled={deptValues[a._id]?.loading}
+                                style={{
+                                  padding: '0.75rem 1.5rem',
+                                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                  color: 'white',
+                                  border: 'none',
+                                  borderRadius: '10px',
+                                  cursor: deptValues[a._id]?.loading ? 'not-allowed' : 'pointer',
+                                  fontSize: '0.95rem',
+                                  fontWeight: '600',
+                                  boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                                  opacity: deptValues[a._id]?.loading ? 0.6 : 1,
+                                  transition: 'all 0.3s ease'
+                                }}
+                              >
+                                💾 Save
+                              </button>
+                              <button
+                                onClick={() => closeEditor(a._id)}
+                                style={{
+                                  padding: '0.75rem 1.5rem',
+                                  background: 'white',
+                                  color: '#6b7280',
+                                  border: '2px solid #e5e7eb',
+                                  borderRadius: '10px',
+                                  cursor: 'pointer',
+                                  fontSize: '0.95rem',
+                                  fontWeight: '600',
+                                  transition: 'all 0.3s ease'
+                                }}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </ProtectedRoute>
   );

@@ -452,7 +452,7 @@ export default function UnifiedHRDashboard() {
                 📊 View All Employees
               </button>
 
-              {isHRAdmin && (
+              {(isHRAdmin || isHRManager) && (
                 <>
                   <button
                     onClick={() => router.push('/dashboard/hr/holidays')}
@@ -501,7 +501,11 @@ export default function UnifiedHRDashboard() {
                   >
                     🔄 Manage Employee Status
                   </button>
+                </>
+              )}
 
+              {isHRAdmin && (
+                <>
                   <button 
                     onClick={() => router.push('/dashboard/hr/roles')}
                     style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)' }}
@@ -953,7 +957,7 @@ export default function UnifiedHRDashboard() {
               <h2 style={{ color: '#dc2626', marginBottom: '1rem', fontSize: '1.5rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 ⚠️ Attention Required
               </h2>
-              {stats.pendingChangeRequests > 0 && isHRAdmin && (
+              {stats.pendingChangeRequests > 0 && (isHRAdmin || isHRManager) && (
                 <p style={{ marginBottom: '0.5rem', color: '#991b1b', fontSize: '1rem' }}>
                   • {stats.pendingChangeRequests} employee change request{stats.pendingChangeRequests > 1 ? 's' : ''} awaiting review
                 </p>
@@ -969,7 +973,7 @@ export default function UnifiedHRDashboard() {
                 </p>
               )}
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-                {stats.pendingChangeRequests > 0 && isHRAdmin && (
+                {stats.pendingChangeRequests > 0 && (isHRAdmin || isHRManager) && (
                   <button 
                     onClick={() => router.push('/dashboard/hr/change-requests')}
                     style={{ 

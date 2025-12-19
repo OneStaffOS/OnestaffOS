@@ -17,6 +17,22 @@ import axios from '@/lib/axios-config';
 import { EmployeeProfile, EmployeeStatus } from '@/lib/types/employee-profile.types';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
+
+// Graduation types for qualifications
+enum GraduationType {
+  UNDERGRADE = 'UNDERGRADE',
+  BACHELOR = 'BACHELOR',
+  MASTER = 'MASTER',
+  PHD = 'PHD',
+  OTHER = 'OTHER',
+}
+
+interface Qualification {
+  _id: string;
+  establishmentName: string;
+  graduationType: GraduationType;
+}
+
 interface PositionAssignment {
   _id: string;
   employeeProfileId: string;
@@ -39,11 +55,22 @@ export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState<EmployeeProfile | null>(null);
   const [currentAssignment, setCurrentAssignment] = useState<PositionAssignment | null>(null);
+  const [qualifications, setQualifications] = useState<Qualification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // Qualification modal state
+  const [showQualificationModal, setShowQualificationModal] = useState(false);
+  const [qualificationForm, setQualificationForm] = useState({
+    establishmentName: '',
+    graduationType: GraduationType.BACHELOR,
+  });
+  const [qualificationLoading, setQualificationLoading] = useState(false);
+  const [qualificationError, setQualificationError] = useState('');
 
   useEffect(() => {
     fetchProfile();
+    fetchQualifications();
   }, []);
 
   useEffect(() => {
@@ -74,6 +101,60 @@ export default function ProfilePage() {
       console.error('Failed to fetch current assignment:', err);
       // Don't set error, just log it
     }
+  };
+
+  const fetchQualifications = async () => {
+    try {
+      const response = await axios.get('/employee-profile/my-profile/qualifications');
+      setQualifications(response.data || []);
+    } catch (err: any) {
+      console.error('Failed to fetch qualifications:', err);
+    }
+  };
+
+  const handleAddQualification = async () => {
+    if (!qualificationForm.establishmentName.trim()) {
+      setQualificationError('Establishment name is required');
+      return;
+    }
+    
+    try {
+      setQualificationLoading(true);
+      setQualificationError('');
+      await axios.post('/employee-profile/my-profile/qualifications', qualificationForm);
+      await fetchQualifications();
+      setShowQualificationModal(false);
+      setQualificationForm({
+        establishmentName: '',
+        graduationType: GraduationType.BACHELOR,
+      });
+    } catch (err: any) {
+      setQualificationError(err.response?.data?.message || 'Failed to add qualification');
+    } finally {
+      setQualificationLoading(false);
+    }
+  };
+
+  const handleDeleteQualification = async (qualificationId: string) => {
+    if (!confirm('Are you sure you want to delete this qualification?')) return;
+    
+    try {
+      await axios.delete(`/employee-profile/my-profile/qualifications/${qualificationId}`);
+      await fetchQualifications();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to delete qualification');
+    }
+  };
+
+  const getGraduationTypeLabel = (type: GraduationType) => {
+    const labels: Record<GraduationType, string> = {
+      [GraduationType.UNDERGRADE]: 'Undergraduate',
+      [GraduationType.BACHELOR]: "Bachelor's Degree",
+      [GraduationType.MASTER]: "Master's Degree",
+      [GraduationType.PHD]: 'PhD / Doctorate',
+      [GraduationType.OTHER]: 'Other',
+    };
+    return labels[type] || type;
   };
 
   const handleUploadPhoto = () => {
@@ -643,6 +724,108 @@ export default function ProfilePage() {
               </div>
             )}
 
+            {/* Qualifications */}
+            <div style={cardStyle}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                marginBottom: '1.5rem',
+                paddingBottom: '1rem',
+                borderBottom: '2px solid #e5e7eb',
+              }}>
+                <h3 style={{ 
+                  fontSize: '1.5rem', 
+                  fontWeight: '700', 
+                  color: '#111827',
+                  margin: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                }}>
+                  <span>📜</span> Qualifications
+                </h3>
+                <button 
+                  style={editButtonStyle}
+                  onClick={() => setShowQualificationModal(true)}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                >
+                  + Add Qualification
+                </button>
+              </div>
+              {qualifications.length === 0 ? (
+                <div style={{ 
+                  textAlign: 'center' as const, 
+                  padding: '2rem', 
+                  color: '#6b7280',
+                  background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)',
+                  borderRadius: '12px',
+                }}>
+                  <p style={{ margin: 0, fontSize: '1rem' }}>
+                    No qualifications added yet. Click &quot;+ Add Qualification&quot; to add your certifications and degrees.
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.25rem' }}>
+                  {qualifications.map((qual) => (
+                    <div 
+                      key={qual._id} 
+                      style={{
+                        padding: '1.25rem',
+                        background: 'linear-gradient(135deg, #fefce8 0%, #fef9c3 100%)',
+                        borderRadius: '12px',
+                        borderLeft: '4px solid #eab308',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div>
+                        <div style={{ 
+                          fontSize: '1.1rem', 
+                          fontWeight: '700', 
+                          color: '#111827',
+                          marginBottom: '0.5rem' 
+                        }}>
+                          {qual.establishmentName}
+                        </div>
+                        <div style={{ 
+                          fontSize: '0.9rem', 
+                          color: '#ca8a04',
+                          fontWeight: '600',
+                        }}>
+                          {getGraduationTypeLabel(qual.graduationType)}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteQualification(qual._id)}
+                        style={{
+                          background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
+                          color: '#dc2626',
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #fecaca 0%, #fca5a5 100%)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
+                        }}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Performance History */}
             {profile.appraisals && profile.appraisals.length > 0 && (
               <div style={cardStyle}>
@@ -714,6 +897,169 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Add Qualification Modal */}
+      {showQualificationModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+        }}>
+          <div style={{
+            background: 'white',
+            borderRadius: '16px',
+            padding: '2rem',
+            width: '90%',
+            maxWidth: '500px',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
+          }}>
+            <h3 style={{ 
+              fontSize: '1.5rem', 
+              fontWeight: '700', 
+              color: '#111827',
+              margin: '0 0 1.5rem',
+            }}>
+              📜 Add Qualification
+            </h3>
+            
+            {qualificationError && (
+              <div style={{
+                background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
+                border: '2px solid #ef4444',
+                color: '#dc2626',
+                padding: '1rem',
+                borderRadius: '8px',
+                marginBottom: '1rem',
+              }}>
+                {qualificationError}
+              </div>
+            )}
+
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                color: '#374151',
+                marginBottom: '0.5rem',
+              }}>
+                Establishment Name *
+              </label>
+              <input
+                type="text"
+                value={qualificationForm.establishmentName}
+                onChange={(e) => setQualificationForm({ ...qualificationForm, establishmentName: e.target.value })}
+                placeholder="e.g., Harvard University, AWS, Google"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  transition: 'border-color 0.3s ease',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                color: '#374151',
+                marginBottom: '0.5rem',
+              }}>
+                Graduation Type *
+              </label>
+              <select
+                value={qualificationForm.graduationType}
+                onChange={(e) => setQualificationForm({ ...qualificationForm, graduationType: e.target.value as GraduationType })}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  transition: 'border-color 0.3s ease',
+                  outline: 'none',
+                  background: 'white',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              >
+                <option value={GraduationType.UNDERGRADE}>Undergraduate</option>
+                <option value={GraduationType.BACHELOR}>Bachelor&apos;s Degree</option>
+                <option value={GraduationType.MASTER}>Master&apos;s Degree</option>
+                <option value={GraduationType.PHD}>PhD / Doctorate</option>
+                <option value={GraduationType.OTHER}>Other</option>
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => {
+                  setShowQualificationModal(false);
+                  setQualificationForm({ establishmentName: '', graduationType: GraduationType.BACHELOR });
+                  setQualificationError('');
+                }}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
+                  border: '2px solid #e5e7eb',
+                  background: 'white',
+                  color: '#374151',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#f3f4f6'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddQualification}
+                disabled={qualificationLoading}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: qualificationLoading 
+                    ? '#9ca3af' 
+                    : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                  color: 'white',
+                  fontWeight: '600',
+                  cursor: qualificationLoading ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  if (!qualificationLoading) {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                {qualificationLoading ? 'Adding...' : 'Add Qualification'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </ProtectedRoute>
   );
 }

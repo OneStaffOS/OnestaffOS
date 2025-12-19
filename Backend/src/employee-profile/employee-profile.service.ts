@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException, Inject, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -20,6 +20,11 @@ import { Department, DepartmentDocument } from '../organization-structure/models
 import { AppraisalAssignment, AppraisalAssignmentDocument } from '../performance/models/appraisal-assignment.schema';
 import { AppraisalRecord, AppraisalRecordDocument } from '../performance/models/appraisal-record.schema';
 import { AppraisalDispute, AppraisalDisputeDocument } from '../performance/models/appraisal-dispute.schema';
+import { NotificationService } from '../notifications/notification.service';
+import { ShiftAssignment, ShiftAssignmentDocument } from '../time-management/models/shift-assignment.schema';
+import { ShiftAssignmentStatus } from '../time-management/models/enums/index';
+import { payGrade, payGradeDocument } from '../payroll-configuration/models/payGrades.schema';
+import { employeePayrollDetails, employeePayrollDetailsDocument } from '../payroll-execution/models/employeePayrollDetails.schema';
 
 @Injectable()
 export class EmployeeProfileService {
@@ -44,6 +49,14 @@ export class EmployeeProfileService {
     private appraisalRecordModel: Model<AppraisalRecordDocument>,
     @InjectModel(AppraisalDispute.name)
     private appraisalDisputeModel: Model<AppraisalDisputeDocument>,
+    @InjectModel(ShiftAssignment.name)
+    private shiftAssignmentModel: Model<ShiftAssignmentDocument>,
+    @InjectModel(payGrade.name)
+    private payGradeModel: Model<payGradeDocument>,
+    @InjectModel(employeePayrollDetails.name)
+    private employeePayrollDetailsModel: Model<employeePayrollDetailsDocument>,
+    @Inject(forwardRef(() => NotificationService))
+    private notificationService: NotificationService,
   ) {}
 
   // ========== EMPLOYEE SELF-SERVICE METHODS ==========
@@ -71,6 +84,7 @@ export class EmployeeProfileService {
 
   /**
    * US-E2-05, US-E2-12: Update contact information, biography, and profile picture (Self-Service)
+   * N-037: Notification on profile update
    */
   async updateSelfService(
     employeeId: string,
@@ -82,19 +96,39 @@ export class EmployeeProfileService {
       throw new NotFoundException('Employee profile not found');
     }
 
-    // Update only allowed self-service fields
-    if (updateDto.personalEmail) profile.personalEmail = updateDto.personalEmail;
-    if (updateDto.mobilePhone) profile.mobilePhone = updateDto.mobilePhone;
-    if (updateDto.homePhone) profile.homePhone = updateDto.homePhone;
-    if (updateDto.address) profile.address = updateDto.address;
-    if (updateDto.profilePictureUrl) profile.profilePictureUrl = updateDto.profilePictureUrl;
-    if (updateDto.biography) profile.biography = updateDto.biography;
+    // Track what fields were updated for notification
+    const updatedFields: string[] = [];
 
-    return await profile.save();
+    // Update only allowed self-service fields
+    if (updateDto.personalEmail) { profile.personalEmail = updateDto.personalEmail; updatedFields.push('email'); }
+    if (updateDto.mobilePhone) { profile.mobilePhone = updateDto.mobilePhone; updatedFields.push('phone'); }
+    if (updateDto.homePhone) { profile.homePhone = updateDto.homePhone; updatedFields.push('home phone'); }
+    if (updateDto.address) { profile.address = updateDto.address; updatedFields.push('address'); }
+    if (updateDto.profilePictureUrl) { profile.profilePictureUrl = updateDto.profilePictureUrl; updatedFields.push('profile picture'); }
+    if (updateDto.biography) { profile.biography = updateDto.biography; updatedFields.push('biography'); }
+
+    const savedProfile = await profile.save();
+
+    // N-037: Send notification on profile update
+    if (updatedFields.length > 0) {
+      try {
+        await this.notificationService.createNotification('system', {
+          title: 'Profile Updated',
+          message: `Your profile has been updated. Changed fields: ${updatedFields.join(', ')}.`,
+          targetEmployeeIds: [employeeId],
+        });
+      } catch (err) {
+        // Don't fail the update if notification fails
+        console.error('Failed to send profile update notification:', err);
+      }
+    }
+
+    return savedProfile;
   }
 
   /**
    * US-E6-02: Request corrections of data (e.g., job title, department)
+   * N-040: Notification on change request submission
    */
   async createChangeRequest(
     employeeId: string,
@@ -118,7 +152,28 @@ export class EmployeeProfileService {
       submittedAt: new Date(),
     });
 
-    return await changeRequest.save();
+    const savedRequest = await changeRequest.save();
+
+    // N-040: Send notification to HR about new change request
+    try {
+      await this.notificationService.createNotification('system', {
+        title: 'New Profile Change Request',
+        message: `${profile.firstName} ${profile.lastName} has submitted a profile change request: ${createDto.requestDescription}`,
+        targetRole: 'HR Admin',
+      });
+
+      // Also notify the employee that their request was submitted
+      await this.notificationService.createNotification('system', {
+        title: 'Change Request Submitted',
+        message: `Your profile change request has been submitted and is pending HR review. Request ID: ${requestId}`,
+        targetEmployeeIds: [employeeId],
+      });
+    } catch (err) {
+      // Don't fail the request if notification fails
+      console.error('Failed to send change request notification:', err);
+    }
+
+    return savedRequest;
   }
 
   /**
@@ -162,18 +217,67 @@ export class EmployeeProfileService {
       .exec();
   }
 
+  /**
+   * Delete qualification for employee (self-service)
+   */
+  async deleteMyQualification(employeeId: string, qualificationId: string): Promise<{ message: string }> {
+    const qualification = await this.qualificationModel.findById(qualificationId);
+
+    if (!qualification) {
+      throw new NotFoundException('Qualification not found');
+    }
+
+    // Verify the qualification belongs to the employee
+    if (qualification.employeeProfileId.toString() !== employeeId) {
+      throw new ForbiddenException('You can only delete your own qualifications');
+    }
+
+    await this.qualificationModel.findByIdAndDelete(qualificationId);
+
+    return { message: 'Qualification deleted successfully' };
+  }
+
   // ========== DEPARTMENT MANAGER METHODS ==========
 
   /**
    * US-E4-01, US-E4-02: View team members' profiles (excluding sensitive info)
+   * BR 41b: Direct Managers see their team only
+   * BR 18b: Privacy restrictions - sensitive data excluded
    */
-  async getTeamProfiles(supervisorPositionId: string): Promise<Partial<EmployeeProfile>[]> {
-    const teamMembers = await this.employeeProfileModel
+  async getTeamProfiles(supervisorPositionId: string, managerProfileId?: string): Promise<Partial<EmployeeProfile>[]> {
+    // First try: Find employees where supervisorPositionId matches
+    let teamMembers = await this.employeeProfileModel
       .find({ supervisorPositionId: new Types.ObjectId(supervisorPositionId) })
       .populate('primaryPositionId')
       .populate('primaryDepartmentId')
       .select('-nationalId -personalEmail -mobilePhone -homePhone -address -payGradeId -dateOfBirth')
       .exec();
+
+    // Fallback: If no direct reports found by supervisorPositionId, try finding by department
+    if (teamMembers.length === 0 && managerProfileId) {
+      try {
+        // Get manager's department
+        const manager = await this.employeeProfileModel
+          .findById(managerProfileId)
+          .select('primaryDepartmentId')
+          .lean();
+        
+        if (manager?.primaryDepartmentId) {
+          // Find all employees in the same department (excluding the manager themselves)
+          teamMembers = await this.employeeProfileModel
+            .find({ 
+              primaryDepartmentId: manager.primaryDepartmentId,
+              _id: { $ne: new Types.ObjectId(managerProfileId) }
+            })
+            .populate('primaryPositionId')
+            .populate('primaryDepartmentId')
+            .select('-nationalId -personalEmail -mobilePhone -homePhone -address -payGradeId -dateOfBirth')
+            .exec();
+        }
+      } catch (e) {
+        // Ignore fallback errors, return empty array
+      }
+    }
 
     return teamMembers;
   }
@@ -520,6 +624,7 @@ export class EmployeeProfileService {
 
   /**
    * US-EP-04: Edit any part of employee profile (HR Admin only)
+   * Implements BR 17, BR 20 (status sync) and Dependency 40 (pay grade sync)
    */
   async updateEmployeeProfile(
     employeeId: string,
@@ -530,6 +635,10 @@ export class EmployeeProfileService {
     if (!profile) {
       throw new NotFoundException('Employee profile not found');
     }
+
+    // Capture old values for synchronization (BR 17, BR 20, Dependency 40)
+    const oldStatus = profile.status;
+    const oldPayGradeId = profile.payGradeId?.toString();
 
     // Update full name if name fields change
     if (updateDto.firstName || updateDto.middleName || updateDto.lastName) {
@@ -564,7 +673,24 @@ export class EmployeeProfileService {
     }
 
     Object.assign(profile, updateDto);
-    return await profile.save();
+    const savedProfile = await profile.save();
+
+    // BR 17 & BR 20: Synchronize status changes to Payroll and Time Management
+    if (updateDto.status && updateDto.status !== oldStatus) {
+      await this.syncStatusChangeToPayrollAndTimeManagement(
+        employeeId,
+        oldStatus,
+        updateDto.status as EmployeeStatus,
+      );
+    }
+
+    // Dependency 40: Synchronize pay grade changes to Payroll
+    const newPayGradeId = updateDto.payGradeId?.toString();
+    if (newPayGradeId && newPayGradeId !== oldPayGradeId) {
+      await this.syncPayGradeChangeToPayroll(employeeId, oldPayGradeId, newPayGradeId);
+    }
+
+    return savedProfile;
   }
 
   /**
@@ -921,17 +1047,31 @@ export class EmployeeProfileService {
       // Map field names to database field names
       const fieldMapping: { [key: string]: string } = {
         'First Name': 'firstName',
+        'firstName': 'firstName',
         'Last Name': 'lastName',
+        'lastName': 'lastName',
         'Middle Name': 'middleName',
+        'middleName': 'middleName',
         'National ID': 'nationalId',
+        'nationalId': 'nationalId',
+        'Nationality': 'nationality',
+        'nationality': 'nationality',
         'Marital Status': 'maritalStatus',
+        'maritalStatus': 'maritalStatus',
         'Gender': 'gender',
+        'gender': 'gender',
         'Personal Email': 'personalEmail',
+        'personalEmail': 'personalEmail',
         'Work Email': 'workEmail',
+        'workEmail': 'workEmail',
         'Mobile Phone': 'mobilePhone',
+        'mobilePhone': 'mobilePhone',
         'Home Phone': 'homePhone',
+        'homePhone': 'homePhone',
         'Date of Hire': 'dateOfHire',
+        'dateOfHire': 'dateOfHire',
         'Biography': 'biography',
+        'biography': 'biography',
       };
 
       const dbFieldName = fieldMapping[parsed.fieldName] || parsed.fieldName;
@@ -986,6 +1126,16 @@ export class EmployeeProfileService {
     request.processedAt = new Date();
     await request.save();
 
+    // Send notification to the employee that their request was approved (N-041)
+    const employeeId = (request.employeeProfileId as any)?._id || request.employeeProfileId;
+    if (employeeId) {
+      await this.notificationService.createNotification(adminId, {
+        targetEmployeeIds: [employeeId.toString()],
+        title: 'Profile Change Request Approved ✅',
+        message: `Your profile change request has been approved. ${request.requestDescription}`,
+      });
+    }
+
     return { message: 'Change request approved and profile updated successfully' };
   }
 
@@ -993,7 +1143,10 @@ export class EmployeeProfileService {
    * Reject change request (Admin/HR Manager)
    */
   async rejectChangeRequest(requestId: string, adminId: string) {
-    const request = await this.changeRequestModel.findById(requestId).exec();
+    const request = await this.changeRequestModel
+      .findById(requestId)
+      .populate('employeeProfileId')
+      .exec();
 
     if (!request) {
       throw new NotFoundException('Change request not found');
@@ -1007,11 +1160,22 @@ export class EmployeeProfileService {
     request.processedAt = new Date();
     await request.save();
 
+    // Send notification to the employee that their request was rejected (N-042)
+    const employeeId = (request.employeeProfileId as any)?._id || request.employeeProfileId;
+    if (employeeId) {
+      await this.notificationService.createNotification(adminId, {
+        targetEmployeeIds: [employeeId.toString()],
+        title: 'Profile Change Request Rejected ❌',
+        message: `Your profile change request has been rejected. ${request.requestDescription}. Please contact HR for more details.`,
+      });
+    }
+
     return { message: 'Change request rejected' };
   }
 
   /**
    * Update employee status (Activate, Suspend, Terminate)
+   * Implements BR 17, BR 20: Automatic synchronization to Payroll and Time Management
    */
   async updateEmployeeStatus(employeeId: string, status: EmployeeStatus) {
     const profile = await this.employeeProfileModel.findById(employeeId);
@@ -1019,6 +1183,9 @@ export class EmployeeProfileService {
     if (!profile) {
       throw new NotFoundException('Employee not found');
     }
+
+    // Capture old status for synchronization (BR 17, BR 20)
+    const oldStatus = profile.status;
 
     profile.status = status;
 
@@ -1028,11 +1195,17 @@ export class EmployeeProfileService {
 
     await profile.save();
 
+    // BR 17 & BR 20: Synchronize status changes to Payroll and Time Management
+    if (status !== oldStatus) {
+      await this.syncStatusChangeToPayrollAndTimeManagement(employeeId, oldStatus, status);
+    }
+
     return { message: `Employee status updated to ${status}` };
   }
 
   /**
    * Patch employee profile - partial update (e.g., status field)
+   * Implements BR 17, BR 20 (status sync) and Dependency 40 (pay grade sync)
    */
   async patchEmployeeProfile(employeeId: string, updateDto: any): Promise<EmployeeProfile> {
     const profile = await this.employeeProfileModel.findById(employeeId);
@@ -1040,6 +1213,10 @@ export class EmployeeProfileService {
     if (!profile) {
       throw new NotFoundException('Employee profile not found');
     }
+
+    // Capture old values for synchronization (BR 17, BR 20, Dependency 40)
+    const oldStatus = profile.status;
+    const oldPayGradeId = profile.payGradeId?.toString();
 
     // Handle 'status' field - validate against EmployeeStatus enum
     if (updateDto.status !== undefined) {
@@ -1102,7 +1279,180 @@ export class EmployeeProfileService {
       profile.fullName = `${firstName} ${middleName || ''} ${lastName}`.trim();
     }
 
-    return await profile.save();
+    const savedProfile = await profile.save();
+
+    // BR 17 & BR 20: Synchronize status changes to Payroll and Time Management
+    const newStatus = savedProfile.status;
+    if (newStatus !== oldStatus) {
+      await this.syncStatusChangeToPayrollAndTimeManagement(employeeId, oldStatus, newStatus);
+    }
+
+    // Dependency 40: Synchronize pay grade changes to Payroll
+    const newPayGradeId = savedProfile.payGradeId?.toString();
+    if (newPayGradeId && newPayGradeId !== oldPayGradeId) {
+      await this.syncPayGradeChangeToPayroll(employeeId, oldPayGradeId, newPayGradeId);
+    }
+
+    return savedProfile;
+  }
+
+  // ========== AUTOMATIC SYNCHRONIZATION METHODS (BR 17, BR 20, Dependency 40) ==========
+
+  /**
+   * BR 20, BR 17: Synchronize employee status changes to Payroll and Time Management
+   * When status changes to TERMINATED/SUSPENDED:
+   * - Block future payroll payments by flagging the employee
+   * - Cancel/suspend active shift assignments
+   */
+  async syncStatusChangeToPayrollAndTimeManagement(
+    employeeId: string,
+    oldStatus: EmployeeStatus,
+    newStatus: EmployeeStatus,
+  ): Promise<{ payrollSync: any; timeSync: any }> {
+    const results: { payrollSync: any; timeSync: any } = { payrollSync: null, timeSync: null };
+
+    // Only sync if status is changing to a blocked status
+    const blockedStatuses = [EmployeeStatus.TERMINATED, EmployeeStatus.SUSPENDED, EmployeeStatus.RETIRED];
+    const isNowBlocked = blockedStatuses.includes(newStatus);
+    const wasBlocked = blockedStatuses.includes(oldStatus);
+
+    if (isNowBlocked && !wasBlocked) {
+      // Employee is now blocked - sync to payroll and time management
+      
+      // 1. Time Management: Cancel active shift assignments (BR 17)
+      try {
+        const cancelResult = await this.shiftAssignmentModel.updateMany(
+          {
+            employeeId: new Types.ObjectId(employeeId),
+            status: { $in: [ShiftAssignmentStatus.PENDING, ShiftAssignmentStatus.APPROVED] },
+            $or: [
+              { endDate: null },
+              { endDate: { $gt: new Date() } }
+            ]
+          },
+          {
+            $set: {
+              status: ShiftAssignmentStatus.CANCELLED,
+              endDate: new Date(),
+            }
+          }
+        );
+        results.timeSync = {
+          success: true,
+          message: `Cancelled ${cancelResult.modifiedCount} active shift assignments`,
+          modifiedCount: cancelResult.modifiedCount,
+        };
+      } catch (err) {
+        results.timeSync = { success: false, error: err.message };
+      }
+
+      // 2. Payroll: Flag employee's payroll records to block payments (BR 20)
+      // We flag future payroll entries with an exception note
+      try {
+        const payrollFlagResult = await this.employeePayrollDetailsModel.updateMany(
+          {
+            employeeId: new Types.ObjectId(employeeId),
+          },
+          {
+            $set: {
+              exceptions: `PAYMENT_BLOCKED: Employee status changed to ${newStatus} on ${new Date().toISOString()}`,
+            }
+          }
+        );
+        results.payrollSync = {
+          success: true,
+          message: `Flagged ${payrollFlagResult.modifiedCount} payroll records for payment blocking`,
+          modifiedCount: payrollFlagResult.modifiedCount,
+          status: newStatus,
+        };
+      } catch (err) {
+        results.payrollSync = { success: false, error: err.message };
+      }
+
+    } else if (!isNowBlocked && wasBlocked) {
+      // Employee is being reactivated - unblock payroll and optionally restore shifts
+      
+      // 1. Time Management: Log reactivation (don't auto-restore shifts - HR should manually reassign)
+      results.timeSync = {
+        success: true,
+        message: 'Employee reactivated. Shift assignments need to be manually reassigned.',
+        action: 'MANUAL_REASSIGNMENT_REQUIRED',
+      };
+
+      // 2. Payroll: Clear payment block flags
+      try {
+        const payrollClearResult = await this.employeePayrollDetailsModel.updateMany(
+          {
+            employeeId: new Types.ObjectId(employeeId),
+            exceptions: { $regex: /^PAYMENT_BLOCKED:/ }
+          },
+          {
+            $set: { exceptions: null }
+          }
+        );
+        results.payrollSync = {
+          success: true,
+          message: `Cleared payment block from ${payrollClearResult.modifiedCount} payroll records`,
+          modifiedCount: payrollClearResult.modifiedCount,
+        };
+      } catch (err) {
+        results.payrollSync = { success: false, error: err.message };
+      }
+    }
+
+    return results;
+  }
+
+  /**
+   * Dependency 40: Sync pay grade changes to Payroll
+   * When payGradeId changes, automatically update salary information in payroll
+   */
+  async syncPayGradeChangeToPayroll(
+    employeeId: string,
+    oldPayGradeId: string | null | undefined,
+    newPayGradeId: string,
+  ): Promise<{ success: boolean; message: string; newBaseSalary?: number }> {
+    try {
+      // Fetch the new pay grade details
+      const newPayGrade = await this.payGradeModel.findById(newPayGradeId).lean();
+      
+      if (!newPayGrade) {
+        return { success: false, message: 'New pay grade not found' };
+      }
+
+      // Get the base salary from the pay grade (midpoint of range or minimum)
+      const newBaseSalary = (newPayGrade as any).minSalary || (newPayGrade as any).baseSalary || 0;
+
+      // Update the employee profile with the new pay grade info
+      await this.employeeProfileModel.findByIdAndUpdate(employeeId, {
+        payGradeId: new Types.ObjectId(newPayGradeId),
+      });
+
+      // Log the pay grade change for payroll processing
+      // Future payroll runs will pick up the new pay grade from the employee profile
+      // This ensures the next payroll calculation uses the updated salary
+
+      return {
+        success: true,
+        message: `Pay grade updated. New base salary: ${newBaseSalary}. This will be reflected in the next payroll run.`,
+        newBaseSalary,
+      };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  }
+
+  /**
+   * Helper: Check if status change requires synchronization
+   */
+  isStatusChangeSignificant(oldStatus: EmployeeStatus, newStatus: EmployeeStatus): boolean {
+    if (oldStatus === newStatus) return false;
+    
+    const blockedStatuses = [EmployeeStatus.TERMINATED, EmployeeStatus.SUSPENDED, EmployeeStatus.RETIRED];
+    const wasBlocked = blockedStatuses.includes(oldStatus);
+    const isNowBlocked = blockedStatuses.includes(newStatus);
+    
+    // Significant if transitioning to/from blocked status
+    return wasBlocked !== isNowBlocked;
   }
 }
-

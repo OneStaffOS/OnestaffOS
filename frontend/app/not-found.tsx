@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * NotFound Component (404 Page)
  * Global 404 error page for Next.js App Router
@@ -5,50 +7,169 @@
  */
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function NotFound() {
+  const router = useRouter();
+
   return (
     <div style={{
       display: 'flex',
-      justifyContent: 'center',
       alignItems: 'center',
+      justifyContent: 'center',
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-      padding: '1rem',
+      padding: '2rem',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     }}>
       <div style={{
         background: 'white',
-        padding: '3rem 2rem',
-        borderRadius: '12px',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+        borderRadius: '16px',
+        padding: '3rem',
+        maxWidth: '600px',
+        width: '100%',
         textAlign: 'center',
-        maxWidth: '500px',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
       }}>
-        <h1 style={{
+        <div style={{
           fontSize: '6rem',
-          margin: '0 0 1rem',
-          background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          fontWeight: '700',
-        }}>404</h1>
-        <h2 style={{ margin: '0 0 1rem', color: '#333' }}>Page Not Found</h2>
-        <p style={{ color: '#666', marginBottom: '2rem' }}>
+          fontWeight: 700,
+          color: '#667eea',
+          marginBottom: '1rem',
+          lineHeight: 1,
+        }}>
+          404
+        </div>
+        <h1 style={{
+          fontSize: '2rem',
+          fontWeight: 700,
+          color: '#1a202c',
+          marginBottom: '1rem',
+        }}>
+          Page Not Found
+        </h1>
+        <p style={{
+          fontSize: '1.125rem',
+          color: '#4a5568',
+          marginBottom: '2rem',
+          lineHeight: 1.6,
+        }}>
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
-        <Link href="/" style={{
-          display: 'inline-block',
-          padding: '0.75rem 2rem',
-          background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-          color: 'white',
-          textDecoration: 'none',
-          borderRadius: '8px',
-          fontWeight: '600',
-          transition: 'transform 0.2s',
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
         }}>
-          Go Home
-        </Link>
+          <button
+            onClick={() => router.back()}
+            style={{
+              padding: '0.875rem 1.75rem',
+              border: '2px solid #e2e8f0',
+              borderRadius: '10px',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              background: '#f7fafc',
+              color: '#4a5568',
+              transition: 'all 0.3s ease',
+            }}
+            type="button"
+          >
+            ← Go Back
+          </button>
+          <Link
+            href="/"
+            style={{
+              padding: '0.875rem 1.75rem',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              transition: 'all 0.3s ease',
+              textDecoration: 'none',
+              display: 'inline-block',
+            }}
+          >
+            Go Home
+          </Link>
+          <Link
+            href="/dashboard"
+            style={{
+              padding: '0.875rem 1.75rem',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+              color: 'white',
+              transition: 'all 0.3s ease',
+              textDecoration: 'none',
+              display: 'inline-block',
+            }}
+          >
+            Dashboard
+          </Link>
+        </div>
+
+        <div style={{
+          marginTop: '3rem',
+          paddingTop: '2rem',
+          borderTop: '1px solid #e2e8f0',
+        }}>
+          <p style={{
+            fontSize: '0.875rem',
+            color: '#718096',
+          }}>
+            Lost? Here are some helpful links:
+          </p>
+          <div style={{
+            display: 'flex',
+            gap: '1.5rem',
+            justifyContent: 'center',
+            marginTop: '1rem',
+            flexWrap: 'wrap',
+          }}>
+            <Link
+              href="/profile"
+              style={{
+                color: '#667eea',
+                textDecoration: 'none',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+              }}
+            >
+              Profile
+            </Link>
+            <Link
+              href="/job-offers"
+              style={{
+                color: '#667eea',
+                textDecoration: 'none',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+              }}
+            >
+              Career Center
+            </Link>
+            <Link
+              href="/login"
+              style={{
+                color: '#667eea',
+                textDecoration: 'none',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+              }}
+            >
+              Login
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

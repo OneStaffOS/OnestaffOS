@@ -148,6 +148,7 @@ export default function RequestChangePage() {
           { value: 'lastName', label: 'Last Name' },
           { value: 'middleName', label: 'Middle Name' },
           { value: 'nationalId', label: 'National ID' },
+          { value: 'nationality', label: 'Nationality' },
           { value: 'maritalStatus', label: 'Marital Status' },
           { value: 'gender', label: 'Gender' },
         ];
@@ -223,7 +224,11 @@ export default function RequestChangePage() {
     setSuccess('');
 
     try {
-      const requestDescription = `Change request for ${fieldName}: from "${getCurrentValue(fieldName)}" to "${requestedValue}". Reason: ${reason}`;
+      // Get the label for the selected field
+      const fieldOption = getFieldOptions().find(opt => opt.value === fieldName);
+      const fieldLabel = fieldOption?.label || fieldName;
+      
+      const requestDescription = `Change request for ${fieldLabel}: from "${getCurrentValue(fieldName)}" to "${requestedValue}". Reason: ${reason}`;
       
       // Send as JSON if no attachments, otherwise use FormData
       if (attachments.length === 0) {

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { EmployeeProfileController } from './employee-profile.controller';
@@ -35,6 +35,10 @@ import {
 import { AppraisalAssignment, AppraisalAssignmentSchema } from '../performance/models/appraisal-assignment.schema';
 import { AppraisalRecord, AppraisalRecordSchema } from '../performance/models/appraisal-record.schema';
 import { AppraisalDispute, AppraisalDisputeSchema } from '../performance/models/appraisal-dispute.schema';
+import { NotificationModule } from '../notifications/notification.module';
+import { ShiftAssignment, ShiftAssignmentSchema } from '../time-management/models/shift-assignment.schema';
+import { payGrade, payGradeSchema } from '../payroll-configuration/models/payGrades.schema';
+import { employeePayrollDetails, employeePayrollDetailsSchema } from '../payroll-execution/models/employeePayrollDetails.schema';
 
 @Module({
   imports: [
@@ -53,11 +57,15 @@ import { AppraisalDispute, AppraisalDisputeSchema } from '../performance/models/
       { name: AppraisalAssignment.name, schema: AppraisalAssignmentSchema },
       { name: AppraisalRecord.name, schema: AppraisalRecordSchema },
       { name: AppraisalDispute.name, schema: AppraisalDisputeSchema },
+      { name: ShiftAssignment.name, schema: ShiftAssignmentSchema },
+      { name: payGrade.name, schema: payGradeSchema },
+      { name: employeePayrollDetails.name, schema: employeePayrollDetailsSchema },
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
+    forwardRef(() => NotificationModule),
   ],
   controllers: [EmployeeProfileController],
   providers: [EmployeeProfileService],

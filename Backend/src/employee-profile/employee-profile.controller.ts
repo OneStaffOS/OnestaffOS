@@ -217,16 +217,41 @@ export class EmployeeProfileController {
     return this.employeeProfileService.getMyQualifications(req.user.sub);
   }
 
+  /**
+   * Delete my qualification
+   * Accessible by: All authenticated employees (Self-service)
+   */
+  @Delete('my-profile/qualifications/:qualificationId')
+  @Roles(
+    Role.DEPARTMENT_EMPLOYEE,
+    Role.DEPARTMENT_HEAD,
+    Role.HR_ADMIN,
+    Role.HR_MANAGER,
+    Role.HR_EMPLOYEE,
+    Role.SYSTEM_ADMIN,
+    Role.JOB_CANDIDATE,
+    Role.PAYROLL_SPECIALIST,
+    Role.PAYROLL_MANAGER,
+    Role.NEW_HIRE,
+    Role.LEGAL_POLICY_ADMIN,
+    Role.RECRUITER
+  )
+  async deleteMyQualification(@Request() req, @Param('qualificationId') qualificationId: string) {
+    return this.employeeProfileService.deleteMyQualification(req.user.sub, qualificationId);
+  }
+
   // ========== DEPARTMENT MANAGER ROUTES ==========
 
   /**
    * US-E4-01, US-E4-02: View team members' profiles (excluding sensitive info)
+   * BR 41b: Direct Managers see their team only
+   * BR 18b: Privacy restrictions applied (sensitive data excluded)
    * Accessible by: Department Managers, Head of Department
    */
   @Get('team/profiles')
   @Roles(Role.DEPARTMENT_HEAD, Role.DEPARTMENT_HEAD, Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async getTeamProfiles(@Request() req) {
-    return this.employeeProfileService.getTeamProfiles(req.user.positionId);
+    return this.employeeProfileService.getTeamProfiles(req.user.positionId, req.user.sub);
   }
 
   /**
@@ -344,20 +369,20 @@ export class EmployeeProfileController {
 
   /**
    * Get admin dashboard statistics
-   * Accessible by: HR Admin, System Admin
+   * Accessible by: HR Admin, HR Manager, System Admin
    */
   @Get('admin/stats')
-  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async getAdminStats() {
     return this.employeeProfileService.getAdminStats();
   }
 
   /**
    * Get recent activity for admin dashboard
-   * Accessible by: HR Admin, System Admin
+   * Accessible by: HR Admin, HR Manager, System Admin
    */
   @Get('admin/recent-activity')
-  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async getRecentActivity(@Query('limit') limit?: string) {
     const activityLimit = limit ? parseInt(limit) : 10;
     return this.employeeProfileService.getRecentActivity(activityLimit);
@@ -471,20 +496,20 @@ export class EmployeeProfileController {
 
   /**
    * Delete qualification
-   * Accessible by: HR Admin, System Admin
+   * Accessible by: HR Admin, HR Manager, System Admin
    */
   @Delete('qualifications/:qualificationId')
-  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async deleteQualification(@Param('qualificationId') qualificationId: string) {
     return this.employeeProfileService.deleteQualification(qualificationId);
   }
 
   /**
    * Update employee status (Activate, Suspend, Terminate)
-   * Accessible by: HR Admin, System Admin
+   * Accessible by: HR Admin, HR Manager, System Admin
    */
   @Put(':id/status')
-  @Roles(Role.HR_ADMIN, Role.SYSTEM_ADMIN)
+  @Roles(Role.HR_ADMIN, Role.HR_MANAGER, Role.SYSTEM_ADMIN)
   async updateEmployeeStatus(
     @Param('id') employeeId: string,
     @Body('status') status: string,

@@ -13,18 +13,31 @@ import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
 import Spinner from '@/app/components/Spinner';
 import axios from '@/lib/axios-config';
-import { ProfileChangeRequest, ChangeRequestStatus } from '@/lib/types/employee-profile.types';
 import { SystemRole as Role } from '@/lib/roles';
 import styles from './change-requests.module.css';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
+
+// Interface matching what the API actually returns
+interface ChangeRequest {
+  id: string;
+  employeeName: string;
+  employeeId: string;
+  requestType: string;
+  field: string;
+  currentValue: string;
+  requestedValue: string;
+  submittedDate: string;
+  status: string;
+}
+
 export default function HRChangeRequestsPage() {
   const router = useRouter();
-  const [requests, setRequests] = useState<ProfileChangeRequest[]>([]);
+  const [requests, setRequests] = useState<ChangeRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('PENDING');
-  const [selectedRequest, setSelectedRequest] = useState<ProfileChangeRequest | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<ChangeRequest | null>(null);
   const [reviewComment, setReviewComment] = useState('');
   const [processing, setProcessing] = useState(false);
 
@@ -101,14 +114,16 @@ export default function HRChangeRequestsPage() {
     }
   };
 
-  const getStatusClass = (status: ChangeRequestStatus) => {
+  const getStatusClass = (status: string) => {
     switch (status) {
-      case ChangeRequestStatus.PENDING:
+      case 'PENDING':
         return styles.statusPending;
-      case ChangeRequestStatus.APPROVED:
+      case 'APPROVED':
         return styles.statusApproved;
-      case ChangeRequestStatus.REJECTED:
+      case 'REJECTED':
         return styles.statusRejected;
+      default:
+        return '';
     }
   };
 
@@ -157,19 +172,19 @@ export default function HRChangeRequestsPage() {
             className={`${styles.tab} ${filterStatus === 'PENDING' ? styles.activeTab : ''}`}
             onClick={() => setFilterStatus('PENDING')}
           >
-            Pending ({requests.filter(r => r.status === ChangeRequestStatus.PENDING).length})
+            Pending ({requests.filter(r => r.status === 'PENDING').length})
           </button>
           <button
             className={`${styles.tab} ${filterStatus === 'APPROVED' ? styles.activeTab : ''}`}
             onClick={() => setFilterStatus('APPROVED')}
           >
-            Approved ({requests.filter(r => r.status === ChangeRequestStatus.APPROVED).length})
+            Approved ({requests.filter(r => r.status === 'APPROVED').length})
           </button>
           <button
             className={`${styles.tab} ${filterStatus === 'REJECTED' ? styles.activeTab : ''}`}
             onClick={() => setFilterStatus('REJECTED')}
           >
-            Rejected ({requests.filter(r => r.status === ChangeRequestStatus.REJECTED).length})
+            Rejected ({requests.filter(r => r.status === 'REJECTED').length})
           </button>
           <button
             className={`${styles.tab} ${filterStatus === 'ALL' ? styles.activeTab : ''}`}
@@ -187,11 +202,11 @@ export default function HRChangeRequestsPage() {
         ) : (
           <div className={styles.requestsGrid}>
             {filteredRequests.map((request, index) => (
-              <div key={(request as any).id || `request-${index}`} className={styles.requestCard}>
+              <div key={request.id || `request-${index}`} className={styles.requestCard}>
                 <div className={styles.requestHeader}>
                   <div>
                     <h3 className={styles.requestTitle}>
-                      {request.requestType.replace('_', ' ')}
+                      {request.employeeName}
                     </h3>
                     <p className={styles.requestEmployee}>
                       Employee ID: {request.employeeId}
@@ -204,40 +219,18 @@ export default function HRChangeRequestsPage() {
 
                 <div className={styles.requestDetails}>
                   <div className={styles.detailRow}>
-                    <strong>Field:</strong> {request.fieldName}
+                    <strong>Field:</strong> {request.field}
                   </div>
                   <div className={styles.detailRow}>
-                    <strong>Current Value:</strong>
-                    <pre className={styles.valueBox}>{formatValue(request.currentValue)}</pre>
-                  </div>
-                  <div className={styles.detailRow}>
-                    <strong>Requested Value:</strong>
+                    <strong>Request Details:</strong>
                     <pre className={styles.valueBox}>{formatValue(request.requestedValue)}</pre>
                   </div>
                   <div className={styles.detailRow}>
-                    <strong>Reason:</strong>
-                    <p className={styles.reason}>{request.reason}</p>
+                    <strong>Submitted:</strong> {formatDate(request.submittedDate)}
                   </div>
-                  <div className={styles.detailRow}>
-                    <strong>Requested:</strong> {formatDate(request.createdAt)}
-                  </div>
-
-                  {request.reviewedAt && (
-                    <>
-                      <div className={styles.detailRow}>
-                        <strong>Reviewed:</strong> {formatDate(request.reviewedAt)}
-                      </div>
-                      {request.reviewComments && (
-                        <div className={styles.detailRow}>
-                          <strong>Review Comments:</strong>
-                          <p className={styles.reviewComments}>{request.reviewComments}</p>
-                        </div>
-                      )}
-                    </>
-                  )}
                 </div>
 
-                {request.status === ChangeRequestStatus.PENDING && (
+                {request.status === 'PENDING' && (
                   <div className={styles.requestActions}>
                     <button
                       className={styles.reviewButton}
@@ -274,10 +267,11 @@ export default function HRChangeRequestsPage() {
 
               <div className={styles.modalBody}>
                 <div className={styles.reviewInfo}>
-                  <p><strong>Field:</strong> {selectedRequest.fieldName}</p>
-                  <p><strong>Current Value:</strong> {formatValue(selectedRequest.currentValue)}</p>
-                  <p><strong>Requested Value:</strong> {formatValue(selectedRequest.requestedValue)}</p>
-                  <p><strong>Reason:</strong> {selectedRequest.reason}</p>
+                  <p><strong>Employee:</strong> {selectedRequest.employeeName}</p>
+                  <p><strong>Field:</strong> {selectedRequest.field}</p>
+                  <p><strong>Request Details:</strong></p>
+                  <pre className={styles.valueBox}>{formatValue(selectedRequest.requestedValue)}</pre>
+                  <p><strong>Submitted:</strong> {formatDate(selectedRequest.submittedDate)}</p>
                 </div>
 
                 <div className={styles.formGroup}>
@@ -295,14 +289,14 @@ export default function HRChangeRequestsPage() {
               <div className={styles.modalActions}>
                 <button
                   className={`${styles.button} ${styles.rejectButton}`}
-                  onClick={() => handleReject((selectedRequest as any).id)}
+                  onClick={() => handleReject(selectedRequest.id)}
                   disabled={processing}
                 >
                   {processing ? 'Processing...' : 'Reject'}
                 </button>
                 <button
                   className={`${styles.button} ${styles.approveButton}`}
-                  onClick={() => handleApprove((selectedRequest as any).id)}
+                  onClick={() => handleApprove(selectedRequest.id)}
                   disabled={processing}
                 >
                   {processing ? 'Processing...' : 'Approve'}

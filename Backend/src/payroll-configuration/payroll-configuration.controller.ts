@@ -371,14 +371,14 @@ export class PayrollConfigurationController {
 
     @Get('tax-rules')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.LEGAL_POLICY_ADMIN, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.LEGAL_POLICY_ADMIN, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async getAllTaxRules(@Query('status') status?: ConfigStatus) {
         return await this.payrollConfigurationService.getAllTaxRules(status);
     }
 
     @Get('tax-rules/:id')
     @UseGuards(AuthGuard, authorizationGaurd)
-    @Roles(Role.LEGAL_POLICY_ADMIN, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
+    @Roles(Role.PAYROLL_SPECIALIST, Role.LEGAL_POLICY_ADMIN, Role.PAYROLL_MANAGER, Role.SYSTEM_ADMIN)
     async getTaxRuleById(@Param('id') id: string) {
         return await this.payrollConfigurationService.getTaxRuleById(id);
     }
