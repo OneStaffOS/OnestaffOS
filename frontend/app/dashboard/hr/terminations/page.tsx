@@ -107,7 +107,7 @@ export default function TerminationsPage() {
   };
 
   return (
-    <ProtectedRoute requiredRoles={[SystemRole.HR_MANAGER, SystemRole.HR_ADMIN]}>
+    <ProtectedRoute requiredRoles={[SystemRole.HR_EMPLOYEE, SystemRole.HR_MANAGER, SystemRole.HR_ADMIN]}>
       <DashboardLayout title="Termination Management" role="HR Manager">
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
           {/* Header */}
