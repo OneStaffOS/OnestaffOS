@@ -65,6 +65,7 @@ import { LeavesService } from '../leaves/leaves.service';
 import { EmployeeTerminationResignation, EmployeeTerminationResignationDocument } from '../payroll-execution/models/EmployeeTerminationResignation.schema';
 import { terminationAndResignationBenefits, terminationAndResignationBenefitsDocument } from '../payroll-configuration/models/terminationAndResignationBenefits';
 import { allowance, allowanceDocument } from '../payroll-configuration/models/allowance.schema';
+import { EmployeeStatus } from '../employee-profile/enums/employee-profile.enums';
 
 @Injectable()
 export class RecruitmentService {
@@ -2772,7 +2773,18 @@ HR Department
     termination.status = TerminationStatus.APPROVED;
     await termination.save();
 
-    // Step 8: Create notification for employee
+    // Step 8: Update employee status to TERMINATED
+    await this.employeeProfileModel.findByIdAndUpdate(
+      employeeId,
+      {
+        status: EmployeeStatus.TERMINATED,
+        statusEffectiveFrom: new Date(),
+        contractEndDate: new Date(),
+      },
+      { new: true }
+    );
+
+    // Step 9: Create notification for employee
     try {
       await this.notificationService.createNotification(userId, {
         title: 'Termination Benefits Assigned',

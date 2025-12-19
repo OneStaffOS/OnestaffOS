@@ -981,10 +981,10 @@ export class TimeManagementService implements OnModuleInit, OnModuleDestroy {
     const latenessMap = new Map<string, number>();
     for (const record of records) {
       const empId = record.employeeId.toString();
-      const latenessCount = (record.exceptionIds as any[]).filter(
+      const exceptions = Array.isArray(record.exceptionIds) ? record.exceptionIds : [];
+      const latenessCount = exceptions.filter(
         (ex: any) => ex.type === TimeExceptionType.LATE,
       ).length;
-
       latenessMap.set(empId, (latenessMap.get(empId) || 0) + latenessCount);
     }
 
