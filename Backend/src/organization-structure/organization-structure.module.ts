@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule, InjectModel } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { OrganizationStructureController } from './organization-structure.controller';
@@ -22,6 +22,7 @@ import {
   StructureChangeRequestSchema,
 } from './models/structure-change-request.schema';
 import { EmployeeProfile, EmployeeProfileSchema } from '../employee-profile/models/employee-profile.schema';
+import { NotificationModule } from '../notifications/notification.module';
 import { models, Model } from 'mongoose';
 
 @Module({
@@ -42,6 +43,7 @@ import { models, Model } from 'mongoose';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
+    forwardRef(() => NotificationModule),
   ],
   controllers: [OrganizationStructureController],
   providers: [OrganizationStructureService],

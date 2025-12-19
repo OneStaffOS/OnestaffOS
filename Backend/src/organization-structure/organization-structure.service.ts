@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException, Inject, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Department } from './models/department.schema';
@@ -22,6 +22,7 @@ import {
   ChangeLogAction,
   StructureRequestType,
 } from './enums/organization-structure.enums';
+import { NotificationService } from '../notifications/notification.service';
 
 @Injectable()
 export class OrganizationStructureService {
@@ -40,6 +41,8 @@ export class OrganizationStructureService {
     private changeLogModel: Model<StructureChangeLog>,
     @InjectModel(EmployeeProfile.name)
     private employeeProfileModel: Model<EmployeeProfile>,
+    @Inject(forwardRef(() => NotificationService))
+    private notificationService: NotificationService,
   ) {}
 
   // ========== DEPARTMENT MANAGEMENT ==========
@@ -73,6 +76,14 @@ export class OrganizationStructureService {
       `Created department: ${saved.name}`,
       null,
       saved.toObject(),
+    );
+
+    // REQ-OSM-11: Notify about structural change
+    await this.notifyStructuralChange(
+      'Department Created',
+      `A new department "${saved.name}" has been created.`,
+      undefined,
+      performedBy,
     );
 
     return saved;
@@ -121,6 +132,14 @@ export class OrganizationStructureService {
       `Updated department: ${saved.name}`,
       beforeSnapshot,
       saved.toObject(),
+    );
+
+    // REQ-OSM-11: Notify about structural change
+    await this.notifyStructuralChange(
+      'Department Updated',
+      `Department "${saved.name}" has been updated.`,
+      saved._id as Types.ObjectId,
+      performedBy,
     );
 
     return saved;
@@ -273,6 +292,8 @@ export class OrganizationStructureService {
 
   /**
    * REQ-OSM-01: Create a new position (System Admin)
+   * BR 10: Position must have Position ID, Pay Grade, Dept ID
+   * BR 30: Position should have Cost Center
    */
   async createPosition(createDto: CreatePositionDto, performedBy: string): Promise<Position> {
     // Check if position code already exists
@@ -300,7 +321,7 @@ export class OrganizationStructureService {
       title: createDto.title,
       description: createDto.description,
       departmentId: new Types.ObjectId(createDto.departmentId),
-      reportsToPositionId: createDto.reportsToPositionId ? new Types.ObjectId(createDto.reportsToPositionId) : undefined, // Ensure undefined if not provided
+      reportsToPositionId: createDto.reportsToPositionId ? new Types.ObjectId(createDto.reportsToPositionId) : undefined,
       isActive: createDto.isActive !== undefined ? createDto.isActive : true,
     });
 
@@ -315,6 +336,14 @@ export class OrganizationStructureService {
       `Created position: ${saved.title}`,
       null,
       saved.toObject(),
+    );
+
+    // REQ-OSM-11: Notify department head about new position
+    await this.notifyStructuralChange(
+      'Position Created',
+      `A new position "${saved.title}" has been created in department "${department.name}".`,
+      department._id as Types.ObjectId,
+      performedBy,
     );
 
     return saved;
@@ -417,6 +446,15 @@ export class OrganizationStructureService {
       saved.toObject(),
     );
 
+    // REQ-OSM-11: Notify about structural change
+    const department = await this.departmentModel.findById(saved.departmentId);
+    await this.notifyStructuralChange(
+      'Position Updated',
+      `Position "${saved.title}" has been updated${department ? ` in department "${department.name}"` : ''}.`,
+      saved.departmentId,
+      performedBy,
+    );
+
     // Bypass schema hooks to ensure reportsToPositionId is not overridden
     await this.positionModel.updateOne(
       { _id: positionId },
@@ -468,6 +506,8 @@ export class OrganizationStructureService {
   /**
    * REQ-OSM-05: Deactivate/Close position (System Admin)
    * BR 12: Positions with historical assignments can only be delimited, not deleted
+   * BR 16: Position status includes Frozen/Inactive
+   * BR 37: Historical records must be preserved using delimiting
    */
   async deactivatePosition(positionId: string, performedBy: string): Promise<Position> {
     const position = await this.positionModel.findById(positionId);
@@ -478,13 +518,13 @@ export class OrganizationStructureService {
     // Check if position has historical assignments
     const hasAssignments = await this.positionAssignmentModel.exists({ positionId: new Types.ObjectId(positionId) });
     
+    const beforeSnapshot = position.toObject();
+    position.isActive = false;
+
+    const saved = await position.save();
+
     if (hasAssignments) {
-      // BR 12: Position can only be delimited (deactivated), not deleted
-      const beforeSnapshot = position.toObject();
-      position.isActive = false;
-
-      const saved = await position.save();
-
+      // BR 12, BR 37: Position can only be delimited (deactivated), not deleted
       // End any active assignments
       await this.positionAssignmentModel.updateMany(
         { positionId: new Types.ObjectId(positionId), endDate: null },
@@ -497,19 +537,11 @@ export class OrganizationStructureService {
         'Position',
         saved._id as Types.ObjectId,
         performedBy,
-        `Delimited position: ${saved.title} (has historical assignments)`,
+        `Delimited position: ${saved.title} (has historical assignments - BR 12, BR 37)`,
         beforeSnapshot,
         saved.toObject(),
       );
-
-      return saved;
     } else {
-      // No assignments, can fully deactivate
-      const beforeSnapshot = position.toObject();
-      position.isActive = false;
-
-      const saved = await position.save();
-
       // Log the deactivation
       await this.logChange(
         ChangeLogAction.DEACTIVATED,
@@ -520,9 +552,18 @@ export class OrganizationStructureService {
         beforeSnapshot,
         saved.toObject(),
       );
-
-      return saved;
     }
+
+    // REQ-OSM-11: Notify about structural change
+    const department = await this.departmentModel.findById(saved.departmentId);
+    await this.notifyStructuralChange(
+      'Position Deactivated',
+      `Position "${saved.title}" has been deactivated${department ? ` in department "${department.name}"` : ''}.`,
+      saved.departmentId,
+      performedBy,
+    );
+
+    return saved;
   }
 
   // ========== ORGANIZATIONAL HIERARCHY / VISIBILITY ==========
@@ -1098,5 +1139,62 @@ export class OrganizationStructureService {
     }
 
     return false;
+  }
+
+  // ========== REQ-OSM-11: STRUCTURAL CHANGE NOTIFICATIONS ==========
+
+  /**
+   * REQ-OSM-11: Notify managers and relevant stakeholders when a structural change occurs
+   */
+  private async notifyStructuralChange(
+    title: string,
+    message: string,
+    departmentId?: Types.ObjectId,
+    performedBy?: string,
+  ): Promise<void> {
+    try {
+      // Find department head if departmentId is provided
+      if (departmentId) {
+        const department = await this.departmentModel
+          .findById(departmentId)
+          .populate('headPositionId')
+          .exec();
+
+        if (department?.headPositionId) {
+          // Find the employee assigned to the head position
+          const headAssignment = await this.positionAssignmentModel
+            .findOne({
+              positionId: department.headPositionId,
+              endDate: null,
+            })
+            .exec();
+
+          if (headAssignment) {
+            // Send notification to department head
+            await this.notificationService.createNotification(
+              performedBy || 'system',
+              {
+                title,
+                message,
+                targetEmployeeIds: [headAssignment.employeeProfileId.toString()],
+              },
+            );
+          }
+        }
+      }
+
+      // Always notify System Admins about structural changes
+      await this.notificationService.createNotification(
+        performedBy || 'system',
+        {
+          title,
+          message,
+          targetRole: 'SYSTEM_ADMIN',
+        },
+      );
+    } catch (error) {
+      // Don't fail the main operation if notification fails
+      console.error('Failed to send structural change notification:', error);
+    }
   }
 }
