@@ -1,0 +1,83 @@
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: onestaff-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../deploy/Dockerfile.frontend
+    container_name: onestaff-frontend
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+    env_file:
+      - ./frontend/.env.production
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: ../deploy/Dockerfile.backend
+    container_name: onestaff-backend
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      CHATBOT_API_URL: http://chatbot:5050
+      BIOMETRICS_SERVICE_URL: http://biometrics-service:6000
+    env_file:
+      - ./Backend/.env.production
+    depends_on:
+      - chatbot
+      - biometrics-service
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  chatbot:
+    build:
+      context: ./Backend/src/chatbot
+      dockerfile: Dockerfile
+    container_name: onestaff-chatbot
+    environment:
+      CHATBOT_PORT: 5050
+      GUNICORN_WORKERS: 4
+      LOG_LEVEL: info
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  biometrics-service:
+    build:
+      context: ./Backend/src/biometrics-service
+      dockerfile: Dockerfile
+    container_name: onestaff-biometrics
+    environment:
+      BIOMETRICS_PORT: 6000
+      GUNICORN_WORKERS: 2
+      LOG_LEVEL: info
+      INSIGHTFACE_HOME: /app/.insightface
+    volumes:
+      - insightface_cache:/app/.insightface
+    networks:
+      - app_net
+    restart: unless-stopped
+
+networks:
+  app_net:
+    driver: bridge
+
+volumes:
+  insightface_cache:

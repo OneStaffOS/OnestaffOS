@@ -46,6 +46,7 @@
   align-items: center;
 }
 
+.supportBtn,
 .switchBtn,
 .logoutBtn {
   padding: 0.75rem 1.5rem;
@@ -57,6 +58,17 @@
   font-size: 0.875rem;
   position: relative;
   overflow: hidden;
+}
+
+.supportBtn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.supportBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 .switchBtn {
@@ -125,6 +137,7 @@
     flex-direction: column;
   }
 
+  .supportBtn,
   .switchBtn,
   .logoutBtn {
     width: 100%;

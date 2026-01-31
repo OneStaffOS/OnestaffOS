@@ -89,6 +89,46 @@ textarea::placeholder {
   outline-offset: 2px;
 }
 
+/* Unified button styling */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"],
+a.button,
+.button,
+.btn {
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+[role="button"]:hover,
+a.button:hover,
+.button:hover,
+.btn:hover {
+  background: #111;
+  border-color: #111;
+}
+
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled,
+[role="button"][aria-disabled="true"],
+a.button[aria-disabled="true"],
+.button[aria-disabled="true"],
+.btn[aria-disabled="true"] {
+  background: #000;
+  color: #fff;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

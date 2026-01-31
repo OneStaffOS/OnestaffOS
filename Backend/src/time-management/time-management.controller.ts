@@ -37,6 +37,7 @@ import { AuthGuard } from '../auth/middleware/authentication.middleware';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
 import { Public } from '../auth/decorators/public.decorator';
+import { BiometricVerificationGuard } from '../biometrics/guards/biometric-verification.guard';
 import {
   ShiftAssignmentStatus,
   CorrectionRequestStatus,
@@ -303,6 +304,7 @@ export class TimeManagementController {
    * Accessible by: All authenticated employees
    */
   @Post('attendance/clock')
+  @UseGuards(BiometricVerificationGuard)
   @Roles(
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,

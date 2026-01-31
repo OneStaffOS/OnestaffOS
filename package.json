@@ -1,0 +1,151 @@
+{
+  "name": "onestaffos-desktop",
+  "version": "1.0.0",
+  "description": "OneStaff OS - Desktop HR Management System",
+  "main": "dist/electron/main.js",
+  "author": "OneStaff OS Team",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm run install:all",
+    "install:all": "cd Backend && npm install && cd ../frontend && npm install && cd ../Backend/src/chatbot && pip install -r requirements.txt && cd ../../..",
+    "build:backend": "cd Backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build:electron": "tsc -p electron/tsconfig.json && mkdir -p dist/electron && cp electron/loading.html dist/electron/loading.html",
+    "build:all": "npm run build:backend && npm run build:frontend && npm run build:electron",
+    "dev:electron": "npm run build:electron && electron .",
+    "dev": "npm run build:electron && electron . --dev",
+    "start": "electron .",
+    "package": "npm run build:all && electron-builder",
+    "package:mac": "npm run build:all && electron-builder --mac",
+    "package:win": "npm run build:all && electron-builder --win",
+    "package:linux": "npm run build:all && electron-builder --linux",
+    "clean": "rm -rf dist && rm -rf Backend/dist && rm -rf frontend/.next && rm -rf release"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "electron": "^28.1.3",
+    "electron-builder": "^24.9.1",
+    "typescript": "^5.3.3"
+  },
+  "build": {
+    "appId": "com.onestaffos.desktop",
+    "productName": "OneStaff OS",
+    "copyright": "Copyright © 2026 OneStaff OS",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "Backend/dist/**/*",
+      "Backend/node_modules/**/*",
+      "Backend/package.json",
+      "Backend/**/*.sh",
+      "Backend/.env",
+      "frontend/.next/**/*",
+      "frontend/node_modules/**/*",
+      "frontend/package.json",
+      "frontend/**/*.sh",
+      "frontend/public/**/*",
+      "!**/*.ts",
+      "!**/*.tsx",
+      "!**/*.map",
+      "!**/.git",
+      "!**/.DS_Store"
+    ],
+    "asarUnpack": [
+      "Backend/**/*.sh",
+      "frontend/**/*.sh",
+      "Backend/dist/**/*",
+      "Backend/node_modules/**/*",
+      "frontend/.next/**/*",
+      "frontend/node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "Backend/dist",
+        "to": "Backend/dist"
+      },
+      {
+        "from": "Backend/node_modules",
+        "to": "Backend/node_modules",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "Backend/start-electron.sh",
+        "to": "Backend/start-electron.sh"
+      },
+      {
+        "from": "Backend/src/chatbot",
+        "to": "Backend/src/chatbot",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "frontend/.next",
+        "to": "frontend/.next"
+      },
+      {
+        "from": "frontend/node_modules",
+        "to": "frontend/node_modules",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "frontend/package.json",
+        "to": "frontend/package.json"
+      },
+      {
+        "from": "frontend/start-electron.sh",
+        "to": "frontend/start-electron.sh"
+      },
+      {
+        "from": "frontend/public",
+        "to": "frontend/public",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "Backend/.env",
+        "to": "Backend/.env"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.business",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "build/icon.png",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "identity": null
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Office",
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

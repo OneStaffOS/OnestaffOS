@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
 import { SystemRole } from '@/lib/roles';
+import NotificationBell from './NotificationBell';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function Navbar() {
@@ -52,6 +53,8 @@ export default function Navbar() {
                   Career Center
                 </Link>
               )}
+              {/* Notification Bell - Shows ticket notifications */}
+              <NotificationBell />
               {/* Shift Types is accessible from the Admin/Manager dashboards (quick actions), not the navbar */}
               <button onClick={handleLogout} className={styles.logoutButton}>
                 Logout

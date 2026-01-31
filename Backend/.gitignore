@@ -3,6 +3,10 @@
 /node_modules
 /build
 
+data/
+/Users/ali/Desktop/OnestaffOS/Backend/src/chatbot/Intent.json
+/Users/ali/Desktop/OnestaffOS/Backend/src/chatbot/knowledge-data.json
+
 # Logs
 logs
 *.log
@@ -11,6 +15,15 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
+# JWT rotation history
+rotation-history/
+
+rotation-history-admin/
+
+secrets/
+
+backups/
 
 # OS
 .DS_Store
@@ -54,3 +67,15 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+# Encryption keys - NEVER commit these
+.encryption-keys/
+*.key
+*.pem
+
+# Large local artifacts (datasets, models, venvs, uploads)
+/src/chatbot/venv/
+/src/chatbot/models/
+/src/chatbot/data/train.json
+/src/tickets/train.csv
+/src/tickets/classifier/ticket_classifier_model.joblib
+/uploads/

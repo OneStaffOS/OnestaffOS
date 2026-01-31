@@ -1,0 +1,383 @@
+.container {
+  --ink: #0f172a;
+  --slate: #1f2937;
+  --muted: #6b7280;
+  --sunrise: #f59e0b;
+  --teal: #0ea5a4;
+  --ocean: #0f766e;
+  --paper: #f8fafc;
+  --card: #ffffff;
+  --line: #e2e8f0;
+  --shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 8px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+}
+
+.container > * {
+  position: relative;
+  z-index: 1;
+}
+
+.container::before,
+.container::after {
+  content: '';
+  position: absolute;
+  inset: auto;
+  border-radius: 999px;
+  opacity: 0.18;
+  filter: blur(0);
+  z-index: 0;
+}
+
+.container::before {
+  width: 220px;
+  height: 220px;
+  right: -40px;
+  top: -30px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.45), rgba(245, 158, 11, 0));
+}
+
+.container::after {
+  width: 260px;
+  height: 260px;
+  left: -70px;
+  top: 140px;
+  background: radial-gradient(circle, rgba(14, 165, 164, 0.35), rgba(14, 165, 164, 0));
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%);
+  color: #fff;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  animation: fadeUp 0.55s ease;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bankButton {
+  background: linear-gradient(135deg, rgba(14, 165, 164, 0.95), rgba(15, 118, 110, 0.9));
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(15, 118, 110, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bankButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(15, 118, 110, 0.35);
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+
+.hero p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 520px;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  bottom: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.5), transparent 70%);
+  z-index: -1;
+}
+
+.refreshButton {
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.refreshButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2);
+}
+
+.card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  animation: fadeUp 0.6s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.field input,
+.field select,
+.field textarea {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: var(--paper);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.fieldFull textarea:focus {
+  outline: none;
+  border-color: rgba(14, 165, 164, 0.6);
+  box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.15);
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.fieldFull textarea {
+  min-height: 120px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: var(--paper);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fieldFull textarea::placeholder {
+  color: rgba(71, 85, 105, 0.7);
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #0ea5a4 0%, #0f766e 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 12px 20px rgba(15, 118, 110, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.primaryButton:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 24px rgba(15, 118, 110, 0.3);
+}
+
+.error {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.notice {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #047857;
+  font-weight: 600;
+}
+
+.balanceStrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px 20px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: var(--shadow);
+}
+
+.balanceStrip div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--slate);
+  font-size: 13px;
+}
+
+.balanceStrip strong {
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.loading,
+.empty {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.contractList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contractItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 16px;
+  padding: 18px;
+  background: #f8fafc;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contractItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.contractActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.contractItem h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.contractMeta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.contractDesc {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.status {
+  align-self: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.approveButton {
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 0 8px 16px rgba(249, 115, 22, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.approveButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(249, 115, 22, 0.35);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .refreshButton,
+  .bankButton {
+    align-self: flex-start;
+  }
+
+  .heroActions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .contractItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contractActions {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

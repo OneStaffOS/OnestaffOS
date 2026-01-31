@@ -53,6 +53,10 @@ export class CreateEmployeeProfileDto {
 
   @IsOptional()
   @IsEmail()
+  googleAccountEmail?: string;
+
+  @IsOptional()
+  @IsEmail()
   personalEmail?: string;
 
   @IsOptional()

@@ -2,6 +2,26 @@
 
 A full-stack Human Resources Management System built with modern web technologies, featuring employee management, recruitment, payroll, time tracking, performance reviews, and organizational structure management.
 
+## 🖥️ Desktop Application
+
+**NEW!** OneStaff OS is now available as a desktop application powered by Electron!
+
+- ✅ **Native desktop experience** for macOS, Windows, and Linux
+- ✅ **Automatic service management** - Backend, Frontend, and Chatbot start automatically
+- ✅ **Production-ready** with built-in health checks and crash recovery
+- ✅ **Secure architecture** following Electron best practices
+
+**Quick Start:**
+```bash
+npm install
+npm run build:all
+npm run dev
+```
+
+📖 **Full Documentation:** See [README-ELECTRON.md](README-ELECTRON.md) | [QUICKSTART.md](QUICKSTART.md) | [ARCHITECTURE.md](ARCHITECTURE.md)
+
+---
+
 ## 🌟 Features
 
 ### Core Modules

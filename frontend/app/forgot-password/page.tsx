@@ -1,13 +1,14 @@
 /**
  * ForgotPasswordPage (Route: /forgot-password)
- * Password reset request form
+ * Password reset request form with OTP
  * Fields: email
- * Sends password reset link to user's email
+ * Sends OTP to user's email and redirects to OTP verification page
  */
 
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { axios } from '@/lib/axios-config';
 import { sanitizeInput } from '@/lib/security';
@@ -15,16 +16,14 @@ import styles from './forgot-password.module.css';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [resetToken, setResetToken] = useState<string | null>(null); // For dev/testing only
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess(false);
     setLoading(true);
 
     try {
@@ -35,60 +34,16 @@ export default function ForgotPasswordPage() {
       });
 
       if (response.data.success) {
-        setSuccess(true);
-        // In development, the token is returned for testing
-        if (response.data.token) {
-          setResetToken(response.data.token);
-        }
+        sessionStorage.setItem('otp_email', sanitizedEmail);
+        router.push('/verify-otp');
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to send reset link';
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to send OTP';
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
-  if (success) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.card}>
-          <div className={styles.successIcon}>
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
-                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <h1 className={styles.title}>Check Your Email</h1>
-          <p className={styles.successMessage}>
-            If an account exists with <strong>{email}</strong>, you will receive a password reset link shortly.
-          </p>
-          <p className={styles.helpText}>
-            Please check your inbox and spam folder. The link will expire in 1 hour.
-          </p>
-
-          {/* Development only - show reset link */}
-          {resetToken && (
-            <div className={styles.devNote}>
-              <p><strong>Development Mode:</strong></p>
-              <Link 
-                href={`/reset-password?token=${resetToken}`}
-                className={styles.devLink}
-              >
-                Click here to reset password
-              </Link>
-            </div>
-          )}
-
-          <div className={styles.actionLinks}>
-            <Link href="/login" className={styles.backLink}>
-              ← Back to Login
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.container}>
@@ -124,10 +79,10 @@ export default function ForgotPasswordPage() {
             {loading ? (
               <>
                 <span className={styles.spinner}></span>
-                Sending...
+                Sending OTP...
               </>
             ) : (
-              'Send Reset Link'
+              'Send Verification Code'
             )}
           </button>
         </form>

@@ -38,6 +38,20 @@ export class UserProfileBase {
   @Prop({ type: String })
   password?: string;
 
+  // Password Reset OTP fields
+  @Prop({ type: String })
+  resetOtpHash?: string;
+
+  @Prop({ type: Date })
+  resetOtpExpiresAt?: Date;
+
+  // Password Reset Token fields
+  @Prop({ type: String })
+  passwordResetTokenHash?: string;
+
+  @Prop({ type: Date })
+  passwordResetExpiresAt?: Date;
+
   // Demographics
   @Prop({ type: String, enum: Object.values(Gender) })
   gender?: Gender;

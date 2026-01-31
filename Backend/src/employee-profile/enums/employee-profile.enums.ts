@@ -41,6 +41,7 @@ export enum SystemRole {
   LEGAL_POLICY_ADMIN = 'Legal & Policy Admin',
   RECRUITER = 'Recruiter',
   FINANCE_STAFF = 'Finance Staff',
+  CLIENT = 'Client',
   JOB_CANDIDATE = 'Job Candidate',
   HR_ADMIN = 'HR Admin',
   NEW_HIRE = 'New Hire',

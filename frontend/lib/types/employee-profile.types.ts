@@ -1,8 +1,3 @@
-/**
- * Employee Profile Types and Interfaces
- * Defines all data structures for the Employee Profile subsystem
- */
-
 export enum EmployeeStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
@@ -95,6 +90,7 @@ export interface EmployeeProfile {
   // Contact Information
   personalEmail?: string;
   workEmail?: string;
+  googleAccountEmail?: string;
   mobilePhone?: string;
   homePhone?: string;
   address?: Address;

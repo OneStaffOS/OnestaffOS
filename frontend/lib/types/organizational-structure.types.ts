@@ -1,8 +1,3 @@
-/**
- * Organizational Structure Types and Interfaces
- * Defines all data structures for departments, positions, and hierarchy
- */
-
 export enum PositionStatus {
   ACTIVE = 'ACTIVE',
   VACANT = 'VACANT',

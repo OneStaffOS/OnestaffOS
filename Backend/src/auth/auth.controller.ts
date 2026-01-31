@@ -10,19 +10,24 @@ import {
   Req,
   UseGuards,
   Logger,
+  Query,
 } from '@nestjs/common';
 import type { Response, Request } from 'express';
+import axios from 'axios';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/SignInDto';
 import { Public } from './decorators/public.decorator';
 import { Role, Roles } from './decorators/roles.decorator';
+import { AdminPinBypass } from './decorators/admin-pin-bypass.decorator';
 import { authorizationGaurd } from 'src/auth/middleware/authorization.middleware';
+import { AuthGuard } from './middleware/authentication.middleware';
 import { SkipCsrf } from '../common/guards/csrf.guard';
 import { generateSecureToken } from '../common/utils/security.utils';
 
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
+  private readonly csrfMaxAgeMs = 24 * 60 * 60 * 1000;
 
   constructor(private readonly authService: AuthService) {}
 
@@ -69,7 +74,7 @@ export class AuthController {
           httpOnly: false,
           secure: process.env.NODE_ENV === 'production',
           sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-          maxAge: 5 * 60 * 1000, // 5 minutes for MFA completion
+          maxAge: this.csrfMaxAgeMs,
           path: '/',
         });
 
@@ -101,20 +106,21 @@ export class AuthController {
         httpOnly: false, // Client needs to read this
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: expiresSec * 1000,
+        maxAge: this.csrfMaxAgeMs,
         path: '/',
       });
 
       this.logger.log(`[${correlationId}] Login successful for ${signInDto.email}`);
       
-      // Return success response with accessToken
+      // Return success response
+      // accessToken is in HTTP-only cookie (not in response body for security)
       return {
         statusCode: HttpStatus.OK,
         message: 'Login successful',
         mfaRequired: false,
-        accessToken: result.accessToken,
         user: result.payload,
         csrfToken, // Send token in response body as well
+        ...(result.adminPinRequired ? { adminPinRequired: true } : {}),
       };
     } catch (error) {
       this.logger.error(`[${correlationId}] Login failed: ${(error as Error).message}`);
@@ -190,7 +196,7 @@ export class AuthController {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      maxAge: expiresSec * 1000,
+      maxAge: this.csrfMaxAgeMs,
       path: '/',
     });
 
@@ -209,9 +215,24 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async logout(@Res({ passthrough: true }) res: Response) {
     const secure = process.env.NODE_ENV === 'production';
-    const domain = process.env.COOKIE_DOMAIN || undefined;
+    const domain = process.env.COOKIE_DOMAIN;
 
     res.clearCookie('access_token', {
+      httpOnly: true,
+      secure,
+      sameSite: secure ? 'strict' : 'lax',
+      path: '/',
+      domain,
+    });
+
+    res.clearCookie('admin_token', {
+      httpOnly: true,
+      secure,
+      sameSite: secure ? 'strict' : 'lax',
+      path: '/',
+      domain,
+    });
+    res.clearCookie('admin_token_prev', {
       httpOnly: true,
       secure,
       sameSite: secure ? 'strict' : 'lax',
@@ -241,24 +262,202 @@ export class AuthController {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      maxAge: 3600 * 1000, // 1 hour
+      maxAge: this.csrfMaxAgeMs,
       path: '/',
     });
 
     return { csrfToken };
   }
 
-  @Roles(Role.DEPARTMENT_EMPLOYEE, Role.DEPARTMENT_HEAD, Role.DEPARTMENT_HEAD, Role.HR_EMPLOYEE, Role.HR_MANAGER, Role.HR_ADMIN, Role.SYSTEM_ADMIN, Role.SYSTEM_ADMIN,Role.PAYROLL_MANAGER,Role.PAYROLL_SPECIALIST,Role.FINANCE_STAFF,Role.LEGAL_POLICY_ADMIN,Role.RECRUITER,Role.JOB_CANDIDATE)
-  @UseGuards(authorizationGaurd)
+  // ================= GOOGLE OAUTH =================
+  @Public()
+  @SkipCsrf()
+  @Get('google')
+  async redirectToGoogle(
+    @Res() res: Response,
+    @Query('redirect') redirect?: string,
+  ) {
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI;
+
+    if (!clientId || !redirectUri) {
+      throw new HttpException('Google OAuth is not configured', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    const state = redirect ? Buffer.from(redirect).toString('base64url') : '';
+
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope: 'openid email profile',
+      access_type: 'offline',
+      prompt: 'consent',
+      state,
+    });
+
+    if (!res) {
+      throw new HttpException('Response object not available', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
+  }
+
+  @Public()
+  @SkipCsrf()
+  @Get('google/callback')
+  async googleCallback(
+    @Query('code') code: string,
+    @Query('state') state: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    if (!code) {
+      throw new HttpException('Missing authorization code', HttpStatus.BAD_REQUEST);
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI;
+
+    if (!clientId || !clientSecret || !redirectUri) {
+      throw new HttpException('Google OAuth is not configured', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    const tokenResponse = await axios.post(
+      'https://oauth2.googleapis.com/token',
+      new URLSearchParams({
+        code,
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code',
+      }),
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+    );
+
+    const googleAccessToken = tokenResponse.data.access_token;
+    if (!googleAccessToken) {
+      throw new HttpException('Failed to exchange token with Google', HttpStatus.UNAUTHORIZED);
+    }
+
+    const profileResponse = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${googleAccessToken}` },
+    });
+
+    const email = profileResponse.data?.email;
+    if (!email) {
+      throw new HttpException('Google account email not available', HttpStatus.UNAUTHORIZED);
+    }
+
+    const signInResult = await this.authService.signInWithGoogle(email);
+
+    const parseExpirySeconds = (v?: string): number => {
+      if (!v) return 3600;
+      const n = Number(v);
+      if (Number.isFinite(n)) return Math.max(1, Math.floor(n));
+      const m = v.match(/^(\d+)([smhd])$/i);
+      if (m) {
+        const val = Number(m[1]);
+        const unit = m[2].toLowerCase();
+        switch (unit) {
+          case 's': return val;
+          case 'm': return val * 60;
+          case 'h': return val * 3600;
+          case 'd': return val * 86400;
+        }
+      }
+      return 3600;
+    };
+    const expiresSec = parseExpirySeconds(process.env.JWT_EXPIRES_IN);
+
+    res.cookie('access_token', signInResult.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: expiresSec * 1000,
+      path: '/',
+    });
+
+    const csrfToken = generateSecureToken();
+    res.cookie('XSRF-TOKEN', csrfToken, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: this.csrfMaxAgeMs,
+      path: '/',
+    });
+
+    const redirectTargetRaw =
+      state ? Buffer.from(state, 'base64url').toString('utf8') : process.env.OAUTH_SUCCESS_REDIRECT || '/';
+    const redirectTarget = signInResult.adminPinRequired
+      ? `/verify-admin-pin?redirect=${encodeURIComponent(redirectTargetRaw)}`
+      : redirectTargetRaw;
+
+    res.redirect(redirectTarget);
+  }
+
+  @Public()
+  @SkipCsrf()
+  @Get('login/google/callback')
+  async googleLoginCallback(
+    @Query('code') code: string,
+    @Query('state') state: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.googleCallback(code, state, res);
+  }
+
+  @Post('admin-pin/verify')
+  @UseGuards(AuthGuard, authorizationGaurd)
+  @Roles(Role.SYSTEM_ADMIN)
+  @AdminPinBypass()
+  async verifyAdminPin(
+    @Req() req: Request,
+    @Body() body: { adminPin: string },
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const adminPin = body?.adminPin;
+    if (!adminPin) {
+      throw new HttpException('Admin PIN is required', HttpStatus.BAD_REQUEST);
+    }
+
+    const previousToken = (req as any)?.cookies?.admin_token;
+    const adminToken = await this.authService.verifyAdminPin((req as any).user.sub, adminPin);
+    if (previousToken) {
+      res.cookie('admin_token_prev', previousToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: 24 * 60 * 60 * 1000,
+        path: '/',
+      });
+    } else {
+      res.clearCookie('admin_token_prev', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        path: '/',
+      });
+    }
+    res.cookie('admin_token', adminToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    return { ok: true };
+  }
+
+  @Public()
+  @SkipCsrf()
   @Get('me')
   @HttpCode(HttpStatus.OK)
   async me(@Req() req: Request) {
     const user = (req as any).user;
     if (!user) {
-      throw new HttpException(
-        { statusCode: HttpStatus.UNAUTHORIZED, message: 'Not authenticated' },
-        HttpStatus.UNAUTHORIZED,
-      );
+      return { ok: false, user: null };
     }
     return { ok: true, user };
   }

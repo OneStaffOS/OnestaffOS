@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import styles from './page.module.css';
 
 export default function Error({
   error,
@@ -16,63 +15,9 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className={styles.errorContainer}>
-      <div className={styles.errorContent}>
-        <div className={styles.errorIcon}>⚠️</div>
-        <h1 className={styles.errorTitle}>Something went wrong!</h1>
-        <p className={styles.errorMessage}>
-          We encountered an unexpected error. Please try again.
-        </p>
-        {error.digest && (
-          <p className={styles.errorDigest}>
-            Error ID: <code>{error.digest}</code>
-          </p>
-        )}
-        <div className={styles.errorActions}>
-          <button
-            onClick={reset}
-            className={styles.retryButton}
-            type="button"
-          >
-            Try again
-          </button>
-          <button
-            onClick={() => (window.location.href = '/dashboard')}
-            className={styles.homeButton}
-            type="button"
-          >
-            Go to Dashboard
-          </button>
-        </div>
-      </div>
-
-      <style jsx>{`
-        .errorContainer {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 100vh;
-          padding: 2rem;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .errorContent {
-          background: white;
-          border-radius: 16px;
-          padding: 3rem;
-          max-width: 500px;
-          width: 100%;
-          text-align: center;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .errorIcon {
-          font-size: 4rem;
-          margin-bottom: 1rem;
-          animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
+    <>
+      <style>{`
+        @keyframes errorPulse {
           0%, 100% {
             transform: scale(1);
           }
@@ -81,93 +26,165 @@ export default function Error({
           }
         }
 
-        .errorTitle {
-          font-size: 2rem;
-          font-weight: 700;
-          color: #1a202c;
-          margin-bottom: 1rem;
-        }
-
-        .errorMessage {
-          font-size: 1.125rem;
-          color: #4a5568;
-          margin-bottom: 1.5rem;
-          line-height: 1.6;
-        }
-
-        .errorDigest {
-          font-size: 0.875rem;
-          color: #718096;
-          margin-bottom: 2rem;
-          padding: 0.75rem;
-          background: #f7fafc;
-          border-radius: 8px;
-        }
-
-        .errorDigest code {
-          font-family: 'Courier New', monospace;
-          color: #e53e3e;
-          font-weight: 600;
-        }
-
-        .errorActions {
-          display: flex;
-          gap: 1rem;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-
-        .retryButton,
-        .homeButton {
-          padding: 0.875rem 1.75rem;
-          border: none;
-          border-radius: 10px;
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .retryButton {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-        }
-
-        .retryButton:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .homeButton {
-          background: #f7fafc;
-          color: #4a5568;
-          border: 2px solid #e2e8f0;
-        }
-
-        .homeButton:hover {
-          background: #edf2f7;
-          border-color: #cbd5e0;
-        }
-
-        @media (max-width: 640px) {
-          .errorContent {
-            padding: 2rem;
+        @keyframes errorFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
           }
-
-          .errorTitle {
-            font-size: 1.5rem;
-          }
-
-          .errorActions {
-            flex-direction: column;
-          }
-
-          .retryButton,
-          .homeButton {
-            width: 100%;
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
       `}</style>
-    </div>
+      
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: '2rem',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '24px',
+          padding: '3rem',
+          maxWidth: '560px',
+          width: '100%',
+          textAlign: 'center',
+          boxShadow: '0 25px 70px rgba(0, 0, 0, 0.35)',
+          animation: 'errorFadeIn 0.5s ease-out'
+        }}>
+          <div style={{
+            fontSize: '5rem',
+            marginBottom: '1.5rem',
+            animation: 'errorPulse 2s ease-in-out infinite',
+            filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))'
+          }}>
+            ⚠️
+          </div>
+          
+          <h1 style={{
+            fontSize: '2.25rem',
+            fontWeight: '800',
+            color: '#1a202c',
+            marginBottom: '1rem',
+            letterSpacing: '-0.025em'
+          }}>
+            Oops! Something went wrong
+          </h1>
+          
+          <p style={{
+            fontSize: '1.125rem',
+            color: '#4a5568',
+            marginBottom: '1.5rem',
+            lineHeight: '1.75'
+          }}>
+            We encountered an unexpected error. Don&apos;t worry, we&apos;re on it!
+          </p>
+          
+          {error.digest && (
+            <div style={{
+              fontSize: '0.875rem',
+              color: '#718096',
+              marginBottom: '2rem',
+              padding: '1rem',
+              background: 'linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%)',
+              borderRadius: '12px',
+              border: '1px solid #e2e8f0'
+            }}>
+              <div style={{ marginBottom: '0.5rem', fontWeight: '600' }}>Error Details:</div>
+              <code style={{
+                fontFamily: '"SF Mono", "Monaco", "Consolas", monospace',
+                color: '#e53e3e',
+                fontWeight: '600',
+                fontSize: '0.8125rem',
+                backgroundColor: '#fff5f5',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '6px'
+              }}>
+                {error.digest}
+              </code>
+            </div>
+          )}
+          
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            marginTop: '2rem'
+          }}>
+            <button
+              onClick={reset}
+              type="button"
+              style={{
+                padding: '1rem 2rem',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                minWidth: '140px'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-3px)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.5)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
+              }}
+            >
+              🔄 Try Again
+            </button>
+            
+            <button
+              onClick={() => (window.location.href = '/dashboard')}
+              type="button"
+              style={{
+                padding: '1rem 2rem',
+                border: '2px solid #cbd5e0',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                background: 'white',
+                color: '#4a5568',
+                minWidth: '140px'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = '#f7fafc';
+                e.currentTarget.style.borderColor = '#a0aec0';
+                e.currentTarget.style.transform = 'translateY(-3px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderColor = '#cbd5e0';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              🏠 Go to Dashboard
+            </button>
+          </div>
+          
+          <p style={{
+            marginTop: '2rem',
+            fontSize: '0.875rem',
+            color: '#a0aec0',
+            fontStyle: 'italic'
+          }}>
+            If this problem persists, please contact support
+          </p>
+        </div>
+      </div>
+    </>
   );
 }

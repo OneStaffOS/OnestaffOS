@@ -31,6 +31,7 @@ export default function ProfileEditPage() {
   // Form states
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [googleEmail, setGoogleEmail] = useState('');
   const [address, setAddress] = useState<Address>({
     street: '',
     city: '',
@@ -60,8 +61,9 @@ export default function ProfileEditPage() {
       setProfile(data);
       
       // Populate form fields
-      setPhone(data.phone || '');
-      setEmail(data.email || '');
+      setPhone(data.mobilePhone || '');
+      setEmail(data.personalEmail || '');
+      setGoogleEmail(data.googleAccountEmail || '');
       setAddress(data.address || {
         street: '',
         city: '',
@@ -147,14 +149,47 @@ export default function ProfileEditPage() {
       let updateData: any = {};
 
       if (section === 'contact') {
+        const hasContactUpdate =
+          email.trim() ||
+          googleEmail.trim() ||
+          phone.trim() ||
+          address.street.trim() ||
+          address.city.trim() ||
+          address.state.trim() ||
+          address.postalCode.trim() ||
+          address.country.trim();
+
+        if (!hasContactUpdate) {
+          setError('Please fill at least one field before saving.');
+          setSaving(false);
+          return;
+        }
+
         updateData = { 
           personalEmail: email, 
+          googleAccountEmail: googleEmail,
           mobilePhone: phone, 
           address 
         };
       } else if (section === 'biography') {
+        if (!biography.trim()) {
+          setError('Please enter a biography before saving.');
+          setSaving(false);
+          return;
+        }
         updateData = { biography };
       } else if (section === 'emergency') {
+        const hasEmergencyUpdate =
+          emergencyContact.name.trim() ||
+          emergencyContact.relationship.trim() ||
+          emergencyContact.phone.trim() ||
+          (emergencyContact.email || '').trim();
+
+        if (!hasEmergencyUpdate) {
+          setError('Please fill at least one field before saving.');
+          setSaving(false);
+          return;
+        }
         updateData = { emergencyContact };
       } else if (section === 'photo' && profilePicture && previewUrl) {
         // Upload the compressed image
@@ -249,79 +284,83 @@ export default function ProfileEditPage() {
             {section === 'contact' && (
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Email *</label>
+                  <label className={styles.label}>Email</label>
                   <input
                     type="email"
                     className={styles.input}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Phone *</label>
+                  <label className={styles.label}>Google Account Email</label>
+                  <input
+                    type="email"
+                    className={styles.input}
+                    value={googleEmail}
+                    onChange={(e) => setGoogleEmail(e.target.value)}
+                    placeholder="name@company.com"
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Phone</label>
                   <input
                     type="tel"
                     className={styles.input}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
-                  <label className={styles.label}>Street Address *</label>
+                  <label className={styles.label}>Street Address</label>
                   <input
                     type="text"
                     className={styles.input}
                     value={address.street}
                     onChange={(e) => setAddress({ ...address, street: e.target.value })}
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>City *</label>
+                  <label className={styles.label}>City</label>
                   <input
                     type="text"
                     className={styles.input}
                     value={address.city}
                     onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>State/Province *</label>
+                  <label className={styles.label}>State/Province</label>
                   <input
                     type="text"
                     className={styles.input}
                     value={address.state}
                     onChange={(e) => setAddress({ ...address, state: e.target.value })}
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Postal Code *</label>
+                  <label className={styles.label}>Postal Code</label>
                   <input
                     type="text"
                     className={styles.input}
                     value={address.postalCode}
                     onChange={(e) => setAddress({ ...address, postalCode: e.target.value })}
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Country *</label>
+                  <label className={styles.label}>Country</label>
                   <input
                     type="text"
                     className={styles.input}
                     value={address.country}
                     onChange={(e) => setAddress({ ...address, country: e.target.value })}
-                    required
                   />
                 </div>
               </div>
@@ -348,36 +387,33 @@ export default function ProfileEditPage() {
             {section === 'emergency' && (
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Contact Name *</label>
+                  <label className={styles.label}>Contact Name</label>
                   <input
                     type="text"
                     className={styles.input}
                     value={emergencyContact.name}
                     onChange={(e) => setEmergencyContact({ ...emergencyContact, name: e.target.value })}
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Relationship *</label>
+                  <label className={styles.label}>Relationship</label>
                   <input
                     type="text"
                     className={styles.input}
                     value={emergencyContact.relationship}
                     onChange={(e) => setEmergencyContact({ ...emergencyContact, relationship: e.target.value })}
                     placeholder="e.g., Spouse, Parent, Sibling"
-                    required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Phone Number *</label>
+                  <label className={styles.label}>Phone Number</label>
                   <input
                     type="tel"
                     className={styles.input}
                     value={emergencyContact.phone}
                     onChange={(e) => setEmergencyContact({ ...emergencyContact, phone: e.target.value })}
-                    required
                   />
                 </div>
 

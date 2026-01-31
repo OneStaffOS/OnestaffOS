@@ -181,6 +181,11 @@ export class SecurityInterceptor implements NestInterceptor {
       'privateKey',
       'accessToken',
       'refreshToken',
+      'otp',
+      'resetOtpHash',
+      'passwordResetTokenHash',
+      'resetOtpExpiresAt',
+      'passwordResetExpiresAt',
     ];
 
     return sensitiveFields.some((field) =>

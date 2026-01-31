@@ -101,6 +101,7 @@ export class EmployeeProfileService {
 
     // Update only allowed self-service fields
     if (updateDto.personalEmail) { profile.personalEmail = updateDto.personalEmail; updatedFields.push('email'); }
+    if (updateDto.googleAccountEmail) { profile.googleAccountEmail = updateDto.googleAccountEmail; updatedFields.push('google account'); }
     if (updateDto.mobilePhone) { profile.mobilePhone = updateDto.mobilePhone; updatedFields.push('phone'); }
     if (updateDto.homePhone) { profile.homePhone = updateDto.homePhone; updatedFields.push('home phone'); }
     if (updateDto.address) { profile.address = updateDto.address; updatedFields.push('address'); }
@@ -125,6 +126,18 @@ export class EmployeeProfileService {
 
     return savedProfile;
   }
+
+  async updateAdminPin(employeeId: string, pin: string): Promise<void> {
+    const profile = await this.employeeProfileModel.findById(employeeId);
+    if (!profile) {
+      throw new NotFoundException('Employee profile not found');
+    }
+
+    const hash = await bcrypt.hash(pin, 10);
+    profile.adminPinHash = hash;
+    await profile.save();
+  }
+
 
   /**
    * US-E6-02: Request corrections of data (e.g., job title, department)
@@ -911,6 +924,7 @@ export class EmployeeProfileService {
       .findOne({
         $or: [
           { workEmail: email },
+          { googleAccountEmail: email },
           { personalEmail: email }
         ]
       })
@@ -1243,7 +1257,7 @@ export class EmployeeProfileService {
     }
 
     // Handle other fields
-    const allowedFields = ['firstName', 'lastName', 'middleName', 'workEmail', 'personalEmail', 
+    const allowedFields = ['firstName', 'lastName', 'middleName', 'workEmail', 'googleAccountEmail', 'personalEmail', 
                            'mobilePhone', 'homePhone', 'address', 'biography', 'profilePictureUrl',
                            'nationalId', 'gender', 'maritalStatus', 'dateOfBirth', 'payGradeId',
                            'primaryPositionId', 'primaryDepartmentId', 'supervisorPositionId', 'dateOfHire'];

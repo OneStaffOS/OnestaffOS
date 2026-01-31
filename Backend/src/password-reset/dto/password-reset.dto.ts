@@ -1,17 +1,31 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength, Matches, IsOptional, IsBoolean, IsNumber, IsDate } from 'class-validator';
 
+// STEP 1: Request password reset (send OTP)
 export class RequestPasswordResetDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
 }
 
+// STEP 2: Verify OTP and get reset token
+export class VerifyOtpDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  otp: string;
+}
+
+// STEP 3: Verify token (used by frontend to check token validity)
 export class VerifyResetTokenDto {
   @IsString()
   @IsNotEmpty()
   token: string;
 }
 
+// STEP 4: Reset password with token
 export class ResetPasswordDto {
   @IsString()
   @IsNotEmpty()

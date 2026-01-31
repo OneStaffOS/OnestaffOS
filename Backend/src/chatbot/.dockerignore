@@ -1,0 +1,52 @@
+##################################
+# Python virtual environment & cache
+##################################
+
+venv
+.venv
+__pycache__
+*.pyc
+*.pyo
+
+##################################
+# ML models & datasets (HUGE)
+##################################
+
+models
+!models/tokenizer.json
+!models/best_model.pt
+data
+!data/intent_map.json
+*.pt
+*.pth
+*.onnx
+*.h5
+*.pkl
+*.joblib
+*.zip
+*.tar
+*.gz
+
+##################################
+# Training / evaluation scripts
+##################################
+
+train.py
+evaluate.py
+expand_dataset.py
+preprocess.py
+
+##################################
+# Logs
+##################################
+
+logs
+*.log
+
+##################################
+# OS / IDE junk
+##################################
+
+.DS_Store
+.idea
+.vscode

@@ -9,8 +9,10 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
+import type { StringValue } from 'ms';
 import { EmployeeProfileService } from '../employee-profile/employee-profile.service';
 import { PasskeysService } from '../passkeys/passkeys.service';
+import { Roles, Role } from '../auth/decorators/roles.decorator';
 
 type SignInPayload = {
   sub: string;
@@ -23,6 +25,8 @@ type SignInResult = {
   accessToken: string;
   payload: SignInPayload;
   mfaRequired?: boolean;
+  adminToken?: string;
+  adminPinRequired?: boolean;
 };
 
 @Injectable()
@@ -94,6 +98,14 @@ export class AuthService {
 
     const employeeId = String((user as any)._id as Types.ObjectId);
 
+    const isSystemAdmin = roles.includes(Role.SYSTEM_ADMIN);
+    const pinHash = (user as any).adminPinHash;
+    const adminPinRequired = isSystemAdmin;
+
+    if (isSystemAdmin && !pinHash) {
+      throw new UnauthorizedException('Admin PIN is not set. Please create one in the admin dashboard.');
+    }
+
     // Check if user has MFA enabled (has registered passkeys)
     let mfaRequired = false;
     try {
@@ -112,12 +124,111 @@ export class AuthService {
 
     const accessToken = await this.jwtService.signAsync(payload);
 
+    let adminToken: string | undefined;
+
     this.logger.log(`[${correlationId}] Sign-in successful for ${email}, MFA required: ${mfaRequired}`);
 
     return {
       accessToken,
       payload,
       mfaRequired,
+      ...(adminPinRequired ? { adminPinRequired: true } : {}),
     };
+  }
+
+  async signInWithGoogle(email: string): Promise<SignInResult> {
+    const correlationId = `auth_google_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    this.logger.log(`[${correlationId}] Google sign-in attempt for email: ${email}`);
+
+    const user = await this.employeeService.findByEmailForAuth(email);
+    if (!user) {
+      this.logger.warn(`[${correlationId}] User not found: ${email}`);
+      throw new NotFoundException('User not found');
+    }
+
+    const status = (user as any).status;
+    if (status && status !== 'ACTIVE') {
+      const statusMessage = {
+        INACTIVE: 'Your account is currently inactive',
+        ON_LEAVE: 'Your account is on leave',
+        SUSPENDED: 'Your account has been suspended',
+        TERMINATED: 'Your account has been terminated',
+        RETIRED: 'Your account is marked as retired',
+        PROBATION: 'Your account is in probation status'
+      }[status] || 'Your account is not active';
+      
+      this.logger.warn(`[${correlationId}] Account status blocked: ${status}`);
+      throw new UnauthorizedException(
+        `${statusMessage}. You are not allowed to access the system. If you believe this is a mistake, please contact your line manager or IT department. (Status: ${status})`
+      );
+    }
+
+    const employeeId = String((user as any)._id as Types.ObjectId);
+
+    if (!(user as any).googleAccountEmail || !(user as any).workEmail) {
+      const updatePayload: Record<string, string> = {};
+      if (!(user as any).googleAccountEmail) {
+        updatePayload.googleAccountEmail = email;
+      }
+      if (!(user as any).workEmail) {
+        updatePayload.workEmail = email;
+      }
+      if (Object.keys(updatePayload).length > 0) {
+        await this.employeeService.patchEmployeeProfile(employeeId, updatePayload);
+      }
+    }
+
+    let roles: string[] = [];
+    const accessProfile = (user as any).accessProfileId;
+    
+    if (accessProfile && typeof accessProfile === 'object' && Array.isArray(accessProfile.roles)) {
+      roles = accessProfile.roles.filter((role: any) => role);
+    }
+
+    const payload: SignInPayload = {
+      sub: employeeId,
+      employeeId: employeeId,
+      email: (user as any).personalEmail || (user as any).workEmail || email,
+      roles,
+    };
+
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    const isSystemAdmin = roles.includes(Role.SYSTEM_ADMIN);
+    const adminPinRequired = isSystemAdmin;
+
+    this.logger.log(`[${correlationId}] Google sign-in successful for ${email}`);
+
+    return {
+      accessToken,
+      payload,
+      mfaRequired: false,
+      ...(adminPinRequired ? { adminPinRequired: true } : {}),
+    };
+  }
+
+  async verifyAdminPin(employeeId: string, adminPin: string): Promise<string> {
+    const profile = await this.employeeService.getEmployeeProfileById(employeeId);
+    const pinHash = (profile as any).adminPinHash;
+    if (!pinHash) {
+      throw new UnauthorizedException('Admin PIN is not set. Please create one in the admin dashboard.');
+    }
+
+    const pinValid = await bcrypt.compare(adminPin, String(pinHash));
+    if (!pinValid) {
+      throw new UnauthorizedException('Invalid Admin PIN');
+    }
+
+    const expiresIn = ('24h') as StringValue;
+    const secret = process.env.ADMIN_JWT_SECRET;
+    if (!secret) {
+      throw new UnauthorizedException('Admin token secret not configured');
+    }
+
+    const adminToken = await this.jwtService.signAsync(
+      { sub: employeeId, type: 'admin' },
+      { secret, expiresIn },
+    );
+    return adminToken;
   }
 }

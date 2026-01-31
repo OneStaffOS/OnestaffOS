@@ -473,6 +473,7 @@ export default function ProfilePage() {
                 gap: '1.5rem' 
               }}>
                 <InfoItem label="Work Email" value={profile.workEmail || 'N/A'} />
+                <InfoItem label="Google Account" value={profile.googleAccountEmail || 'N/A'} />
                 <InfoItem label="Personal Email" value={profile.personalEmail || 'N/A'} />
                 <InfoItem label="Mobile Phone" value={profile.mobilePhone || 'N/A'} />
                 {profile.address && (

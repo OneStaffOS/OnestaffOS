@@ -26,6 +26,7 @@ import { LeaveEntitlement, LeaveEntitlementSchema } from '../leaves/models/leave
 import { signingBonus, signingBonusSchema } from '../payroll-configuration/models/signingBonus.schema';
 import { Contract, ContractSchema } from '../recruitment/models/contract.schema';
 import { Offer, OfferSchema } from '../recruitment/models/offer.schema';
+import { BankingContractsModule } from '../banking-contracts/banking-contracts.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Offer, OfferSchema } from '../recruitment/models/offer.schema';
     TimeManagementModule, 
     EmployeeProfileModule, 
     LeavesModule,
+    BankingContractsModule,
     MongooseModule.forFeature([
       { name: payrollRuns.name, schema: payrollRunsSchema },
       { name: paySlip.name, schema: paySlipSchema },

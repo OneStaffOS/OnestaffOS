@@ -8,6 +8,10 @@ export class UpdateSelfServiceDto {
   personalEmail?: string;
 
   @IsOptional()
+  @IsEmail()
+  googleAccountEmail?: string;
+
+  @IsOptional()
   @IsString()
   mobilePhone?: string;
 

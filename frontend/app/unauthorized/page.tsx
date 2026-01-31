@@ -6,11 +6,16 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 export default function UnauthorizedPage() {
   const { user, logout } = useAuth();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   return (
     <div style={{
@@ -41,7 +46,7 @@ export default function UnauthorizedPage() {
         <p style={{ color: '#666', marginBottom: '1rem' }}>
           You don&apos;t have permission to access this page.
         </p>
-        {user && (
+        {isHydrated && user && (
           <p style={{ color: '#888', fontSize: '0.875rem', marginBottom: '2rem' }}>
             Logged in as: {user.email}
           </p>
@@ -69,7 +74,7 @@ export default function UnauthorizedPage() {
           }}>
             Go Home
           </Link>
-          {user && (
+          {isHydrated && user && (
             <button 
               onClick={logout}
               style={{

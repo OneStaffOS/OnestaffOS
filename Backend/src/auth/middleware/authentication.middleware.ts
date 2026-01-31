@@ -21,6 +21,19 @@ export class AuthGuard implements CanActivate {
             context.getClass(),
           ]);
           if (isPublic) {
+            const request = context.switchToHttp().getRequest();
+            const token = this.extractTokenFromHeader(request);
+            if (token) {
+                try {
+                    const payload = await this.jwtService.verifyAsync(token, { secret: process.env.JWT_SECRET });
+                    if (!payload.employeeId && payload.sub) {
+                        payload.employeeId = payload.sub;
+                    }
+                    request['user'] = payload;
+                } catch (err: any) {
+                    console.debug('[AuthGuard] token verification failed on public route, path=', request.path, 'reason=', err?.message);
+                }
+            }
             return true;
           }
         const request = context.switchToHttp().getRequest();

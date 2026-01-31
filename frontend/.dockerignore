@@ -1,0 +1,137 @@
+############################
+# Git / VCS
+############################
+.git
+.gitignore
+.github/
+
+############################
+# Node / JS
+############################
+node_modules
+**/node_modules
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+############################
+# Build outputs
+############################
+dist
+build
+out
+.next
+**/.next
+
+############################
+# Logs & debug
+############################
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+############################
+# Test / coverage
+############################
+coverage
+.nyc_output
+
+############################
+# Environment & secrets
+############################
+.env
+.env.*
+secrets/
+backups/
+rotation-history/
+rotation-history-admin/
+.encryption-keys/
+.banking-keys/
+
+############################
+# Runtime / temp
+############################
+.tmp
+.temp
+*.tmp
+*.temp
+pids
+*.pid
+*.pid.lock
+*.seed
+
+############################
+# OS / Editor junk
+############################
+.DS_Store
+.idea
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.vcxproj
+*.userosscache
+.project
+.classpath
+.c9/
+.settings/
+*.launch
+*.sublime-workspace
+
+############################
+# TypeScript / Next.js
+############################
+*.tsbuildinfo
+next-env.d.ts
+
+############################
+# Python / venv
+############################
+__pycache__/
+*.pyc
+env/
+venv/
+.venv/
+
+############################
+# Docker / infra noise
+############################
+docker-compose.yml
+
+############################
+# Security-sensitive files
+############################
+*.key
+*.pem
+
+############################
+# Platform-specific
+############################
+.vercel
+
+############################
+# Electron (if present)
+############################
+release/
+*.tmp
+*.temp
+
+############################
+# Misc project-specific
+############################
+/facial-recognition

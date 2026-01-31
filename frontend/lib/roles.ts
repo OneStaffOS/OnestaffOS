@@ -14,6 +14,7 @@ export enum SystemRole {
   LEGAL_POLICY_ADMIN = 'Legal & Policy Admin',
   RECRUITER = 'Recruiter',
   FINANCE_STAFF = 'Finance Staff',
+  CLIENT = 'Client',
   JOB_CANDIDATE = 'Job Candidate',
   HR_ADMIN = 'HR Admin',
   NEW_HIRE = 'New Hire',
@@ -34,6 +35,7 @@ export const ROLE_DASHBOARD_MAP: Record<string, string> = {
   [SystemRole.DEPARTMENT_HEAD]: '/dashboard/manager',
   [SystemRole.RECRUITER]: '/dashboard/recruitment',
   [SystemRole.FINANCE_STAFF]: '/dashboard/finance',
+  [SystemRole.CLIENT]: '/dashboard/client',
   [SystemRole.LEGAL_POLICY_ADMIN]: '/dashboard/payroll',
   [SystemRole.NEW_HIRE]: '/dashboard/new-hire',
 };
@@ -54,6 +56,7 @@ export const ROLE_LABELS: Record<string, string> = {
   [SystemRole.DEPARTMENT_HEAD]: 'Department Head',
   [SystemRole.RECRUITER]: 'Recruiter',
   [SystemRole.FINANCE_STAFF]: 'Finance Staff',
+  [SystemRole.CLIENT]: 'Client',
   [SystemRole.LEGAL_POLICY_ADMIN]: 'Legal & Policy Admin',
 };
 

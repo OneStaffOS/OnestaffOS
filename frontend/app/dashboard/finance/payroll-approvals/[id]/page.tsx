@@ -9,6 +9,7 @@ import DashboardLayout from '@/app/components/DashboardLayout';
 import Spinner from '@/app/components/Spinner';
 import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
+import { buildSignedAction } from '@/lib/banking-signature';
 import styles from '../../finance.module.css';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
@@ -94,13 +95,30 @@ export default function PayrollApprovalPage({ params }: { params: Promise<{ id: 
     setActionLoading(true);
     setError(null);
     try {
-      await axios.post(`/payroll-execution/runs/${runId}/finance-approve`);
+      const actorId = user?.sub;
+      const roles = user?.roles || [];
+      const actorRole = roles.includes(SystemRole.FINANCE_STAFF)
+        ? SystemRole.FINANCE_STAFF
+        : roles.includes(SystemRole.SYSTEM_ADMIN)
+          ? SystemRole.SYSTEM_ADMIN
+          : roles[0];
+      if (!actorId || !actorRole) {
+        throw new Error('User session not available for signing');
+      }
+
+      const signedAction = await buildSignedAction({
+        actorId,
+        actorRole,
+        action: 'PAYROLL_FINANCE_APPROVE',
+        amount: run?.totalnetpay || 0,
+      });
+      await axios.post(`/payroll-execution/runs/${runId}/finance-approve`, signedAction);
       setSuccess('✅ Payroll disbursement approved successfully!');
       setTimeout(() => {
         router.push('/dashboard/finance');
       }, 2000);
     } catch (e: any) {
-      setError(e?.response?.data?.message || 'Failed to approve payroll disbursement');
+      setError(e?.response?.data?.message || e?.message || 'Failed to approve payroll disbursement');
     } finally {
       setActionLoading(false);
     }

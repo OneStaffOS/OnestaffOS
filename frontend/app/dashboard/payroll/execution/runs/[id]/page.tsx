@@ -9,6 +9,7 @@ import DashboardLayout from '@/app/components/DashboardLayout';
 import Spinner from '@/app/components/Spinner';
 import { SystemRole } from '@/lib/roles';
 import axios from '@/lib/axios-config';
+import { buildSignedAction } from '@/lib/banking-signature';
 import styles from '../../execution.module.css';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
@@ -155,7 +156,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
       await loadPayrollRun();
       setTimeout(() => setSuccess(null), 3000);
     } catch (e: any) {
-      setError(e?.response?.data?.message || 'Failed to approve payroll run');
+      setError(e?.response?.data?.message || e?.message || 'Failed to approve payroll run');
     } finally {
       setActionLoading(false);
     }
@@ -166,7 +167,24 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
     setActionLoading(true);
     setError(null);
     try {
-      await axios.post(`/payroll-execution/runs/${runId}/finance-approve`);
+      const actorId = user?.sub;
+      const roles = user?.roles || [];
+      const actorRole = roles.includes(SystemRole.FINANCE_STAFF)
+        ? SystemRole.FINANCE_STAFF
+        : roles.includes(SystemRole.SYSTEM_ADMIN)
+          ? SystemRole.SYSTEM_ADMIN
+          : roles[0];
+      if (!actorId || !actorRole) {
+        throw new Error('User session not available for signing');
+      }
+
+      const signedAction = await buildSignedAction({
+        actorId,
+        actorRole,
+        action: 'PAYROLL_FINANCE_APPROVE',
+        amount: run?.totalnetpay || 0,
+      });
+      await axios.post(`/payroll-execution/runs/${runId}/finance-approve`, signedAction);
       setSuccess('Payroll run approved by finance successfully');
       await loadPayrollRun();
       setTimeout(() => setSuccess(null), 3000);

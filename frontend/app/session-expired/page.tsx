@@ -24,21 +24,14 @@ export default function SessionExpiredPage() {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      // Call backend to clear httpOnly cookies
-      await axios.post('/auth/logout');
-    } catch (error) {
-      // Ignore errors, just proceed with logout
-      console.error('Logout error:', error);
-    } finally {
-      // Ensure all auth data is cleared
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('user');
-        sessionStorage.clear();
-        // Force a full page refresh to login
-        window.location.href = '/login';
-      }
+    // Don't call backend - session already expired, just clear local data
+    // Calling /auth/logout would trigger 401 interceptor and cause infinite loop
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+      // Force a full page refresh to login
+      window.location.href = '/login';
     }
   };
 
@@ -113,33 +106,6 @@ export default function SessionExpiredPage() {
           }}>
             🔐 Log In Again
           </Link>
-          <button 
-            onClick={handleLogout}
-            style={{
-              padding: '0.875rem 2.5rem',
-              background: '#64748b',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontWeight: '600',
-              fontSize: '1rem',
-              cursor: 'pointer',
-              transition: 'all 0.3s',
-              boxShadow: '0 4px 12px rgba(100, 116, 139, 0.3)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.background = '#475569';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(100, 116, 139, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.background = '#64748b';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(100, 116, 139, 0.3)';
-            }}
-          >
-            🚪 Logout
-          </button>
         </div>
         <div style={{
           marginTop: '1.5rem',

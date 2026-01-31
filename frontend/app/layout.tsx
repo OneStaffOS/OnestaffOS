@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { ClientProviders } from "./components/ClientProviders";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import Navbar from "./components/Navbar";
 import Spinner from "./components/Spinner";
 
@@ -30,12 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ClientProviders>
-          <Navbar />
-          <Suspense fallback={<Spinner fullScreen size="lg" />}>
-            {children}
-          </Suspense>
-        </ClientProviders>
+        <ErrorBoundary>
+          <ClientProviders>
+            <Navbar />
+            <Suspense fallback={<Spinner fullScreen size="lg" />}>
+              {children}
+            </Suspense>
+          </ClientProviders>
+        </ErrorBoundary>
       </body>
     </html>
   );

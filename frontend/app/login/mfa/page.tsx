@@ -87,7 +87,7 @@ function MFAVerificationContent() {
       }
 
       // Use AuthContext login method
-      login(accessToken, userData);
+      login(userData);
 
       // Handle navigation based on roles
       const userRoles = userData?.roles || [];

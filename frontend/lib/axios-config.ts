@@ -1,20 +1,9 @@
-/**
- * Axios Configuration
- * Centralized axios instance with interceptors for authentication and security
- * 
- * Usage:
- * import { axios } from '@/lib/axios-config'
- * 
- * const data = await axios.get('/recruitment/job-requisitions')
- * const result = await axios.post('/auth/login', { email, password })
- */
-
 import axiosLib from 'axios';
 import { getCsrfToken, logSecurityEvent } from './security';
 
 // Default to the backend Nest server port (3000) when running locally.
 // Override with NEXT_PUBLIC_API_URL in your environment when needed (e.g. staging, production).
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
 
 // Create axios instance
 export const axios = axiosLib.create({
@@ -34,16 +23,13 @@ export const axios = axiosLib.create({
 // Also export as default for convenience
 export default axios;
 
-// Request interceptor - Add token and CSRF protection to all requests
+// Request interceptor - Add CSRF protection to all requests
 axios.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      // Add JWT token if available
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-
+      // HTTP-only cookie is automatically sent by browser
+      // We don't set Authorization header since backend reads from cookie
+      
       // Add CSRF token for state-changing requests
       const csrfToken = getCsrfToken();
       if (csrfToken && ['post', 'put', 'patch', 'delete'].includes(config.method?.toLowerCase() || '')) {
@@ -81,6 +67,12 @@ axios.interceptors.response.use(
       const url = error.config?.url || '';
       const errorMessage = error.response?.data?.message?.toLowerCase() || '';
       
+      console.warn('[Auth] Access denied', {
+        method: error.config?.method?.toUpperCase(),
+        url,
+        message: error.response?.data?.message,
+      });
+
       logSecurityEvent('Permission denied', {
         url: error.config?.url,
         status: error.response.status,
@@ -108,10 +100,10 @@ axios.interceptors.response.use(
       const isTokenError = errorMessage.includes('token') || errorMessage.includes('unauthorized') || errorMessage.includes('authentication');
       
       // Only redirect to session-expired page if it's an actual auth failure
+      // AND we're not already on session-expired page (prevent infinite loop)
       if (isTokenError) {
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('user');
+        if (typeof window !== 'undefined' && !window.location.pathname.includes('/session-expired')) {
+          // Cookies are cleared by backend or browser
           window.location.href = '/session-expired';
         }
       }

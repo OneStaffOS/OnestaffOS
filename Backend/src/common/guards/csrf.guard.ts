@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
+import { IS_PUBLIC_KEY } from '../../auth/decorators/public.decorator';
 
 /**
  * CSRF Protection Guard
@@ -17,11 +18,19 @@ export class CsrfGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     // Check if CSRF protection is disabled for this route
-    const isPublic = this.reflector.get<boolean>(
-      'isPublic',
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
-    );
+      context.getClass(),
+    ]);
     if (isPublic) {
+      return true;
+    }
+
+    const skipCsrf = this.reflector.getAllAndOverride<boolean>('skipCsrf', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (skipCsrf) {
       return true;
     }
 

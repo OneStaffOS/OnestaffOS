@@ -190,6 +190,37 @@ export default function FinanceDashboardPage() {
                   </button>
                   <button
                     className={styles.actionCard}
+                    onClick={() => router.push('/dashboard/finance/banking')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '16px 20px',
+                      background: 'white',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      fontSize: '15px',
+                      fontWeight: '500',
+                      color: '#1e293b'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = '#3b82f6';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = '#e5e7eb';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
+                    <span style={{ fontSize: '24px' }}>🏦</span>
+                    <span>Company Banking</span>
+                  </button>
+                  <button
+                    className={styles.actionCard}
                     onClick={() => router.push('/dashboard/finance/approved-disputes')}
                     style={{
                       display: 'flex',

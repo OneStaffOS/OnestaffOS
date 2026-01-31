@@ -50,6 +50,7 @@ interface PendingRequest {
 export default function AdminDashboard() {
   const { user } = useAuth();
   const router = useRouter();
+  const isSystemAdmin = (user?.roles || []).includes(Role.SYSTEM_ADMIN);
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     activeEmployees: 0,
@@ -63,6 +64,10 @@ export default function AdminDashboard() {
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [pendingRequests, setPendingRequests] = useState<PendingRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [adminPin, setAdminPin] = useState('');
+  const [adminPinConfirm, setAdminPinConfirm] = useState('');
+  const [adminPinMessage, setAdminPinMessage] = useState('');
+  const [adminPinLoading, setAdminPinLoading] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -128,6 +133,31 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSetAdminPin = async () => {
+    setAdminPinMessage('');
+    if (!adminPin || adminPin.length < 6) {
+      setAdminPinMessage('Admin PIN must be at least 6 characters.');
+      return;
+    }
+    if (adminPin !== adminPinConfirm) {
+      setAdminPinMessage('Admin PIN confirmation does not match.');
+      return;
+    }
+
+    try {
+      setAdminPinLoading(true);
+      await axios.patch('/employee-profile/my-profile/admin-pin', { pin: adminPin });
+      setAdminPinMessage('Admin PIN updated successfully.');
+      setAdminPin('');
+      setAdminPinConfirm('');
+    } catch (error) {
+      setAdminPinMessage('Failed to update Admin PIN.');
+      console.error('Failed to update admin PIN:', error);
+    } finally {
+      setAdminPinLoading(false);
+    }
+  };
+
   return (
     <ProtectedRoute requiredRoles={[Role.SYSTEM_ADMIN, Role.HR_ADMIN]}>
       <DashboardLayout title="Admin Dashboard" role="System Administrator">
@@ -185,6 +215,52 @@ export default function AdminDashboard() {
               </div>
             </div>
           </section>
+
+          {isSystemAdmin && (
+            <section className={styles.requestsSection}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>Admin Security</h2>
+              </div>
+              <div className={styles.requestsCard}>
+                <div className={styles.requestItem}>
+                  <div className={styles.requestInfo}>
+                    <div className={styles.requestHeader}>
+                      <span className={styles.employeeName}>Set Admin PIN</span>
+                    </div>
+                    <p className={styles.requestDetails}>
+                      Required for System Admin login. Keep it private.
+                    </p>
+                    {adminPinMessage && (
+                      <span className={styles.requestDate}>{adminPinMessage}</span>
+                    )}
+                  </div>
+                  <div className={styles.requestActions} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <input
+                      type="password"
+                      placeholder="New PIN"
+                      value={adminPin}
+                      onChange={(e) => setAdminPin(e.target.value)}
+                      className={styles.input}
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirm PIN"
+                      value={adminPinConfirm}
+                      onChange={(e) => setAdminPinConfirm(e.target.value)}
+                      className={styles.input}
+                    />
+                    <button
+                      className={styles.actionButton}
+                      onClick={handleSetAdminPin}
+                      disabled={adminPinLoading}
+                    >
+                      {adminPinLoading ? 'Saving...' : 'Save PIN'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* Pending Change Requests */}
           <section className={styles.requestsSection}>
@@ -261,6 +337,11 @@ export default function AdminDashboard() {
               <Link href="/dashboard/hr/roles" className={styles.actionCard}>
                 <h3>Role Management</h3>
                 <p>Assign roles and access permissions</p>
+              </Link>
+
+              <Link href="/dashboard/admin/tickets" className={styles.actionCard}>
+                <h3>Support Tickets</h3>
+                <p>Manage and resolve employee support tickets</p>
               </Link>
 
               <Link href="/org-structure/departments" className={styles.actionCard}>

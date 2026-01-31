@@ -536,6 +536,27 @@ export default function ManagerDashboard() {
               >
                 Trigger Missed-Punch Scan (Test)
               </button>
+
+              <button
+                onClick={() => router.push('/dashboard/manager/contracts')}
+                style={{
+                  background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
+                  transition: 'all 0.3s ease',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                Review Department Contracts
+              </button>
               
               {/* REQ-PP-13, REQ-AE-03: Manager evaluation */}
               <button 

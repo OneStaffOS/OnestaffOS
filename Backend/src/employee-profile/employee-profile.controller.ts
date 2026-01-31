@@ -20,6 +20,7 @@ import { CreateChangeRequestDto } from './dto/create-change-request.dto';
 import { ProcessChangeRequestDto } from './dto/process-change-request.dto';
 import { AssignRolesDto } from './dto/assign-roles.dto';
 import { CreateQualificationDto } from './dto/create-qualification.dto';
+import { UpdateAdminPinDto } from './dto/update-admin-pin.dto';
 import { AuthGuard } from '../auth/middleware/authentication.middleware';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
@@ -98,6 +99,16 @@ export class EmployeeProfileController {
   )
   async updateMyProfile(@Request() req, @Body() updateDto: any) {
     return this.employeeProfileService.updateSelfService(req.user.sub, updateDto);
+  }
+
+  /**
+   * Update admin PIN (System Admin only, self-service)
+   */
+  @Patch('my-profile/admin-pin')
+  @Roles(Role.SYSTEM_ADMIN)
+  async updateAdminPin(@Request() req, @Body() updateDto: UpdateAdminPinDto) {
+    await this.employeeProfileService.updateAdminPin(req.user.sub, updateDto.pin);
+    return { ok: true };
   }
 
   /**
@@ -517,4 +528,3 @@ export class EmployeeProfileController {
     return this.employeeProfileService.updateEmployeeStatus(employeeId, status as any);
   }
 }
-

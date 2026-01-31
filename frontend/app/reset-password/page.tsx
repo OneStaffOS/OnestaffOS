@@ -95,14 +95,39 @@ function ResetPasswordForm() {
     e.preventDefault();
     setError('');
 
-    // Validate passwords
+    // Comprehensive validation with user-friendly messages
+    if (!formData.newPassword || !formData.confirmPassword) {
+      setError('Please fill in all password fields');
+      return;
+    }
+
     if (formData.newPassword !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError('Passwords do not match. Please make sure both passwords are identical.');
       return;
     }
 
     if (formData.newPassword.length < 8) {
       setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (!/[A-Z]/.test(formData.newPassword)) {
+      setError('Password must contain at least one uppercase letter (A-Z)');
+      return;
+    }
+
+    if (!/[a-z]/.test(formData.newPassword)) {
+      setError('Password must contain at least one lowercase letter (a-z)');
+      return;
+    }
+
+    if (!/[0-9]/.test(formData.newPassword)) {
+      setError('Password must contain at least one number (0-9)');
+      return;
+    }
+
+    if (!/[@$!%*?&]/.test(formData.newPassword)) {
+      setError('Password must contain at least one special character (@$!%*?&)');
       return;
     }
 
@@ -119,7 +144,24 @@ function ResetPasswordForm() {
         setSuccess(true);
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to reset password';
+      // Extract and display the exact error message from backend
+      let errorMessage = 'Failed to reset password. Please try again.';
+      
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      // Make common errors more user-friendly
+      if (errorMessage.toLowerCase().includes('bad request')) {
+        errorMessage = 'Invalid password format. Please check all requirements are met.';
+      } else if (errorMessage.toLowerCase().includes('token')) {
+        errorMessage = 'Your reset link has expired. Please request a new one.';
+      }
+
       setError(errorMessage);
     } finally {
       setLoading(false);

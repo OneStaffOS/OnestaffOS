@@ -191,12 +191,20 @@ export default function HREmployeesPage() {
               {filteredList.length} of {employees.length} employees
             </p>
           </div>
-          <button 
-            className={styles.addButton}
-            onClick={() => router.push('/dashboard/hr/employees/new')}
-          >
-            + Add Employee
-          </button>
+          <div className={styles.headerActions}>
+            <button 
+              className={styles.addButton}
+              onClick={() => router.push('/dashboard/hr/clients/new')}
+            >
+              + Add Client
+            </button>
+            <button 
+              className={styles.addButton}
+              onClick={() => router.push('/dashboard/hr/employees/new')}
+            >
+              + Add Employee
+            </button>
+          </div>
         </div>
 
         {error && <div className={styles.error}>{error}</div>}

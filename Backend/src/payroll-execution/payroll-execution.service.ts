@@ -22,6 +22,8 @@ import { LeaveEntitlement, LeaveEntitlementDocument } from '../leaves/models/lea
 import { signingBonus, signingBonusDocument } from '../payroll-configuration/models/signingBonus.schema';
 import { Contract, ContractDocument } from '../recruitment/models/contract.schema';
 import { Offer, OfferDocument } from '../recruitment/models/offer.schema';
+import { BankingContractsService } from '../banking-contracts/banking-contracts.service';
+import { SignedActionDto } from '../banking-contracts/dto/signed-action.dto';
 
 @Injectable()
 export class PayrollExecutionService {
@@ -44,6 +46,7 @@ export class PayrollExecutionService {
         @InjectModel(signingBonus.name) private signingBonusConfigModel: Model<signingBonusDocument>,
         @InjectModel(Contract.name) private contractModel: Model<ContractDocument>,
         @InjectModel(Offer.name) private offerModel: Model<OfferDocument>,
+        private readonly bankingContractsService: BankingContractsService,
     ) {}
 
     // =====================================================
@@ -649,7 +652,12 @@ export class PayrollExecutionService {
         return await run.save();
     }
 
-    async financeApprovePayroll(runId: string, financeStaffId: string): Promise<payrollRuns> {
+    async financeApprovePayroll(
+        runId: string,
+        financeStaffId: string,
+        roles: string[],
+        signedAction: SignedActionDto,
+    ): Promise<payrollRuns> {
         const run = await this.payrollRunsModel.findById(runId);
         if (!run) {
             throw new NotFoundException('Payroll run not found');
@@ -658,6 +666,13 @@ export class PayrollExecutionService {
         if (run.status !== PayRollStatus.PENDING_FINANCE_APPROVAL) {
             throw new BadRequestException('Payroll must be pending finance approval');
         }
+
+        await this.bankingContractsService.recordPayrollPayment(
+            run._id.toString(),
+            financeStaffId,
+            roles,
+            signedAction,
+        );
 
         run.status = PayRollStatus.APPROVED;
         run.paymentStatus = PayRollPaymentStatus.PAID;

@@ -42,6 +42,7 @@ export default function RolesPage() {
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
   const availableRoles = [
+    Role.CLIENT,
     Role.DEPARTMENT_EMPLOYEE,
     Role.DEPARTMENT_HEAD,
     Role.HR_ADMIN,

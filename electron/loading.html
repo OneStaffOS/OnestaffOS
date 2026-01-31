@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading OneStaff OS...</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .loading-container {
+      text-align: center;
+      color: white;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 2rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.025em;
+    }
+
+    .loading-message {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .spinner-container {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 2rem 0;
+    }
+
+    .spinner {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border: 8px solid #fff;
+      border-radius: 50%;
+      animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: #fff transparent transparent transparent;
+    }
+
+    .spinner:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    .spinner:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    .spinner:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+
+    @keyframes spinner {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .service-status {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      min-width: 400px;
+    }
+
+    .service-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .service-name {
+      font-weight: 600;
+    }
+
+    .service-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fbbf24;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .service-indicator.ready {
+      background: #10b981;
+      animation: none;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: white;
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-container">
+    <div class="logo">🏢</div>
+    <h1>OneStaff OS</h1>
+    <p class="loading-message" id="message">Initializing services...</p>
+    
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <div class="spinner"></div>
+      <div class="spinner"></div>
+    </div>
+
+    <div class="service-status">
+      <div class="service-item">
+        <span class="service-name">Core Services</span>
+        <span class="service-indicator" id="backend-status"></span>
+      </div>
+      <div class="service-item">
+        <span class="service-name">AI Assistant</span>
+        <span class="service-indicator" id="gunicorn-status"></span>
+      </div>
+      <div class="service-item">
+        <span class="service-name">Application Interface</span>
+        <span class="service-indicator" id="frontend-status"></span>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Listen for startup progress from main process
+    if (window.electronAPI) {
+      window.electronAPI.onStartupProgress((data) => {
+        const message = document.getElementById('message');
+        const progress = document.getElementById('progress');
+        
+        if (message) {
+          message.textContent = data.message;
+        }
+
+        // Update service indicators
+        if (data.service === 'Backend') {
+          document.getElementById('backend-status').classList.add('ready');
+          if (progress) progress.style.width = '33%';
+        } else if (data.service === 'Gunicorn') {
+          document.getElementById('gunicorn-status').classList.add('ready');
+          if (progress) progress.style.width = '66%';
+        } else if (data.service === 'Frontend') {
+          document.getElementById('frontend-status').classList.add('ready');
+          if (progress) progress.style.width = '100%';
+          
+          // Redirect to frontend after a short delay
+          setTimeout(() => {
+            window.location.href = 'http://localhost:3001';
+          }, 1000);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -29,6 +29,12 @@ export class EmployeeProfile extends UserProfileBase {
   workEmail?: string;
 
   @Prop({ type: String })
+  googleAccountEmail?: string;
+
+  @Prop({ type: String })
+  adminPinHash?: string;
+
+  @Prop({ type: String })
   biography?: string;
 
   @Prop({ type: Date })

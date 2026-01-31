@@ -21,6 +21,7 @@ import { ShiftAssignmentSchema, ShiftAssignment } from './models/shift-assignmen
 import { LatenessRule, latenessRuleSchema } from './models/lateness-rule.schema';
 import { HolidaySchema, Holiday } from './models/holiday.schema';
 import { Position, PositionSchema } from '../organization-structure/models/position.schema';
+import { BiometricsModule } from '../biometrics/biometrics.module';
 
 
 @Module({
@@ -44,6 +45,7 @@ import { Position, PositionSchema } from '../organization-structure/models/posit
     ]),
     ScheduleModule.forRoot(),
     NotificationModule,
+    BiometricsModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },

@@ -2,7 +2,7 @@
  * LoginPage (Route: /login)
  * User authentication form
  * Fields: email, password
- * Stores JWT token and user data in localStorage
+ * Stores JWT token in HTTP-only cookie (no localStorage)
  * Redirects based on user roles:
  * - No roles -> /job-offers
  * - Single role -> specific dashboard
@@ -58,15 +58,15 @@ export default function LoginPage() {
 
       const response = await axios.post('/auth/login', sanitizedData);
       
-      // Backend returns { statusCode, message, mfaRequired, accessToken, user, csrfToken }
+      // Backend returns { statusCode, message, mfaRequired, user, csrfToken }
+      // Token is in HTTP-only cookie (not in response body)
       const userData = response.data.user || response.data.payload;
-      const token = response.data.accessToken;
       const csrfToken = response.data.csrfToken;
       const mfaRequired = response.data.mfaRequired;
 
       // Validate required data before proceeding
-      if (!token || !userData) {
-        throw new Error('Invalid response from server: missing token or user data');
+      if (!userData) {
+        throw new Error('Invalid response from server: missing user data');
       }
 
       // Store CSRF token
@@ -76,6 +76,12 @@ export default function LoginPage() {
 
       // Check if MFA is required
       if (mfaRequired) {
+        // For MFA, backend still returns token in response (needed for passkey verification)
+        const token = response.data.accessToken;
+        if (!token) {
+          throw new Error('MFA required but no token provided');
+        }
+        
         // Redirect to MFA verification page with necessary data
         const userDataBase64 = btoa(JSON.stringify(userData));
         const redirect = searchParams.get('redirect') || '';
@@ -84,22 +90,18 @@ export default function LoginPage() {
         return;
       }
 
-      // No MFA required - proceed with normal login flow
-      // Use AuthContext login method
-      login(token, userData);
-
-      // Check if password is expired (90-day policy)
-      try {
-        const expiryResponse = await axios.get(`/password-reset/check-expiry?employeeId=${userData.sub}`);
-        if (expiryResponse.data.isExpired) {
-          // Password expired - redirect to change password page
-          router.push('/change-password?expired=true');
-          return;
-        }
-      } catch (expiryError) {
-        // If expiry check fails, continue with normal login flow
-        console.warn('Password expiry check failed:', expiryError);
+      if (response.data.adminPinRequired) {
+        // Set user state from password login before PIN verification page
+        login(userData);
+        const redirect = searchParams.get('redirect') || '/dashboard/admin';
+        router.push(`/verify-admin-pin?redirect=${encodeURIComponent(redirect)}`);
+        return;
       }
+
+      // No MFA required - proceed with normal login flow
+      // Backend already set HTTP-only cookie with token
+      // Just update React state with user data
+      login(userData);
 
       const userRoles = userData?.roles || [];
 
@@ -160,8 +162,33 @@ export default function LoginPage() {
   };
 
   const handleOAuthClick = (provider: string) => {
-    setComingSoonMessage(`Sign in with ${provider} is coming soon!`);
-    setTimeout(() => setComingSoonMessage(''), 3000);
+    if (provider !== 'Google') {
+      setComingSoonMessage(`Sign in with ${provider} is coming soon!`);
+      setTimeout(() => setComingSoonMessage(''), 3000);
+      return;
+    }
+
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    const redirectUri =
+      process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI ||
+      `${window.location.origin}/api/v1/auth/google/callback`;
+
+    if (!clientId) {
+      setError('Google OAuth is not configured. Missing client ID.');
+      return;
+    }
+
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope: 'openid email profile',
+      access_type: 'offline',
+      prompt: 'consent',
+      state: searchParams.get('redirect') || '',
+    });
+
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
   };
 
   return (

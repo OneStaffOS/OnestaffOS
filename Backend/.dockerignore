@@ -1,0 +1,73 @@
+##################################
+# 1. Node / NestJS (SAFE)
+##################################
+
+node_modules
+**/node_modules
+
+dist
+build
+
+logs
+*.log
+
+##################################
+# 2. Explicitly ignore Python services
+# (NOT part of NestJS runtime)
+##################################
+
+src/biometrics-service
+
+##################################
+# 3. Python junk (defensive, SAFE)
+##################################
+
+src/**/venv
+src/**/.venv
+src/**/__pycache__
+src/**/*.pyc
+src/**/*.pyo
+
+##################################
+# 4. ML / AI heavy artifacts
+##################################
+
+src/**/*.pt
+src/**/*.pth
+src/**/*.onnx
+src/**/*.h5
+src/**/*.pkl
+src/**/biometrics-service/**/*.joblib
+src/**/*.zip
+src/**/*.tar
+src/**/*.gz
+
+##################################
+# 5. Secrets & sensitive material
+##################################
+
+secrets
+.encryption-keys
+.banking-keys
+.env
+.env.*
+*.key
+*.pem
+
+##################################
+# 6. Tests & dev-only
+##################################
+
+test
+scripts
+
+##################################
+# 7. Git / OS / IDE noise
+##################################
+
+.git
+.gitignore
+.DS_Store
+.idea
+.vscode
+.vscode/*

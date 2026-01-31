@@ -10,8 +10,10 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import styles from './DashboardLayout.module.css';
 import Spinner from './Spinner';
+import { SystemRole } from '@/lib/roles';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
+import AIChatWidget from './AIChatWidget';
 interface DashboardLayoutProps {
   children: React.ReactNode;
   title: string;
@@ -26,6 +28,9 @@ export default function DashboardLayout({ children, title, role }: DashboardLayo
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Check if user is admin (should not see support button)
+  const isAdmin = user?.roles?.includes(SystemRole.SYSTEM_ADMIN);
 
   // Prevent hydration mismatch by not rendering until mounted and auth is ready
   if (!mounted || isLoading) {
@@ -43,6 +48,15 @@ export default function DashboardLayout({ children, title, role }: DashboardLayo
             </p>
           </div>
           <div className={styles.actions}>
+            {!isAdmin && (
+              <button
+                onClick={() => router.push('/support')}
+                className={styles.supportBtn}
+                title="Get Technical Support"
+              >
+                🎧 Support
+              </button>
+            )}
             {user?.roles && user.roles.length > 1 && (
               <button
                 onClick={() => router.push('/dashboard/select-role')}
@@ -61,6 +75,9 @@ export default function DashboardLayout({ children, title, role }: DashboardLayo
       <main className={styles.main}>
         {children}
       </main>
+
+      {/* AI Help Desk Chat Widget */}
+      <AIChatWidget position="bottom-right" />
     </div>
   );
 }

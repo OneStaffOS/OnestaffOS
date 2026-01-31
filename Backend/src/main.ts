@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 import cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from './auth/middleware/authentication.middleware';
@@ -22,7 +23,7 @@ async function bootstrap() {
   // Setup Swagger BEFORE setting global prefix
   const config = new DocumentBuilder()
     .setTitle('OnestaffOS API')
-    .setDescription('Comprehensive HR Management System API - Handles employee profiles, recruitment, payroll, time management, performance reviews, and organizational structure')
+    .setDescription('Comprehensive HR Management System - Handles employee profiles, recruitment, payroll, time management, performance reviews, and organizational structure')
     .setVersion('1.0')
     .addTag('Authentication', 'User authentication and authorization endpoints')
     .addTag('Employee Profile', 'Employee profile management and team views')
@@ -79,9 +80,9 @@ async function bootstrap() {
         directives: {
           defaultSrc: ["'self'"],
           styleSrc: ["'self'", "'unsafe-inline'"],
-          scriptSrc: ["'self'"],
+          scriptSrc: ["'self'", "https://static.cloudflareinsights.com"],
           imgSrc: ["'self'", 'data:', 'https:'],
-          connectSrc: ["'self'"],
+          connectSrc: ["'self'", "https://static.cloudflareinsights.com"],
           fontSrc: ["'self'"],
           objectSrc: ["'none'"],
           mediaSrc: ["'self'"],
@@ -108,6 +109,7 @@ async function bootstrap() {
     'https://onestaffos.digital/api/v1',
     'https://www.onestaffos.digital',
     'https://www.onestaffos.digital/api/v1',
+    'https://static.cloudflareinsights.com',
   ];
 
   app.enableCors({
@@ -133,6 +135,10 @@ async function bootstrap() {
       'Accept-Language',
       'X-Requested-With',
       'X-CSRF-TOKEN',
+      'X-Biometric-Verification',
+      'x-biometric-verification',
+      'X-Face-Verification',
+      'x-face-verification',
     ],
     exposedHeaders: ['Set-Cookie', 'X-CSRF-TOKEN'],
     preflightContinue: false,
@@ -154,7 +160,7 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
   // 7. Cookie Parser with secret for signed cookies
-  const cookieSecret = process.env.COOKIE_SECRET || 'your-secret-key-change-in-production';
+  const cookieSecret = process.env.COOKIE_SECRET;
   app.use(cookieParser(cookieSecret));
 
   // 8. Static Files - Serve with security headers
@@ -189,7 +195,11 @@ async function bootstrap() {
   const jwtService = app.get(JwtService);
   app.useGlobalGuards(new AuthGuard(jwtService, reflector));
 
+  // Enable WebSocket adapter for Socket.io
+  app.useWebSocketAdapter(new IoAdapter(app));
+
   await app.listen(process.env.PORT || 3000);
-  console.log(`✅ Server running on port ${process.env.PORT || 3000}`);
+  console.log(`✅ Server running on port ${process.env.PORT}`);
+  console.log(`🔌 WebSocket server running on /tickets namespace`);
 }
 bootstrap();

@@ -1,0 +1,292 @@
+{
+  "categories": [
+    {
+      "id": "software",
+      "name": "Software Issues",
+      "icon": "💻",
+      "description": "Common software problems and solutions",
+      "articles": [
+        {
+          "id": "sw-001",
+          "title": "Application Not Responding",
+          "tags": ["freeze", "crash", "not responding", "hung"],
+          "question": "What should I do when an application freezes or stops responding?",
+          "answer": "When an application freezes, try these steps:\n\n1. **Wait a moment** - Sometimes applications need time to process large tasks\n2. **Force close the application**:\n   - Windows: Press Ctrl+Alt+Delete → Task Manager → Select app → End Task\n   - Mac: Press Cmd+Option+Escape → Select app → Force Quit\n3. **Restart the application** after closing it\n4. **Check for updates** - Outdated software can cause freezing\n5. **Restart your computer** if the problem persists\n\nIf the issue continues, submit a support ticket with the application name and what you were doing when it froze.",
+          "relatedArticles": ["sw-002", "sw-003"]
+        },
+        {
+          "id": "sw-002",
+          "title": "Software Installation Failed",
+          "tags": ["install", "installation", "failed", "error", "setup"],
+          "question": "Why did my software installation fail and how can I fix it?",
+          "answer": "Installation failures can occur due to several reasons:\n\n**Common Solutions:**\n1. **Run as Administrator**:\n   - Right-click the installer → Run as administrator\n2. **Check disk space** - Ensure you have enough free space\n3. **Disable antivirus temporarily** - Some antivirus software blocks installations\n4. **Check system requirements** - Verify your computer meets minimum requirements\n5. **Clear temporary files**:\n   - Windows: Run `%temp%` and delete contents\n   - Mac: Use Finder → Go → Go to Folder → ~/Library/Caches\n\n**Still having issues?**\nContact IT Support with the error message and software name.",
+          "relatedArticles": ["sw-001", "sw-004"]
+        },
+        {
+          "id": "sw-003",
+          "title": "Slow Application Performance",
+          "tags": ["slow", "performance", "lag", "sluggish"],
+          "question": "How can I speed up slow-running applications?",
+          "answer": "To improve application performance:\n\n1. **Close unnecessary programs** - Free up system resources\n2. **Clear application cache**:\n   - Look in Settings/Preferences → Clear Cache\n3. **Check for updates** - Performance fixes are often included\n4. **Restart the application** regularly\n5. **Increase RAM allocation** (if applicable)\n6. **Check background processes** - Some apps run services that consume resources\n\n**System-wide improvements:**\n- Restart your computer weekly\n- Keep your OS updated\n- Consider upgrading RAM if consistently slow",
+          "relatedArticles": ["sw-001", "hw-002"]
+        },
+        {
+          "id": "sw-004",
+          "title": "License Activation Issues",
+          "tags": ["license", "activation", "key", "subscription", "expired"],
+          "question": "How do I resolve software license or activation problems?",
+          "answer": "For license activation issues:\n\n1. **Verify your license key** - Check for typos or extra spaces\n2. **Check internet connection** - Most activations require online verification\n3. **Deactivate on old devices** - Some licenses have device limits\n4. **Contact your IT administrator** - They may need to assign licenses\n5. **Check subscription status** - Ensure your subscription is active\n\n**Common error messages:**\n- \"License expired\" → Contact IT for renewal\n- \"Maximum activations reached\" → Deactivate on unused devices\n- \"Invalid license key\" → Verify key accuracy with IT",
+          "relatedArticles": ["sw-002"]
+        },
+        {
+          "id": "sw-005",
+          "title": "Browser Issues and Troubleshooting",
+          "tags": ["browser", "chrome", "firefox", "edge", "safari", "slow", "crash"],
+          "question": "How do I fix common browser problems?",
+          "answer": "Browser troubleshooting steps:\n\n**For slow browsing:**\n1. Clear browsing history and cache\n2. Disable unused extensions\n3. Update your browser to the latest version\n\n**For crashes:**\n1. Reset browser to default settings\n2. Create a new browser profile\n3. Check for conflicting extensions\n\n**For display issues:**\n1. Try Ctrl+F5 (hard refresh)\n2. Clear site-specific data\n3. Try incognito/private mode\n\n**Recommended browsers:**\n- Google Chrome (most compatible)\n- Microsoft Edge (Windows)\n- Safari (Mac)",
+          "relatedArticles": ["sw-003", "nw-001"]
+        }
+      ]
+    },
+    {
+      "id": "hardware",
+      "name": "Hardware Issues",
+      "icon": "🖥️",
+      "description": "Physical equipment problems and solutions",
+      "articles": [
+        {
+          "id": "hw-001",
+          "title": "Computer Won't Turn On",
+          "tags": ["power", "won't start", "dead", "no power", "black screen"],
+          "question": "What should I do if my computer won't turn on?",
+          "answer": "If your computer won't power on:\n\n**Basic checks:**\n1. **Check power connections** - Ensure all cables are securely connected\n2. **Try a different outlet** - The outlet might be faulty\n3. **Check the power strip** - Make sure it's turned on\n4. **Look for indicator lights** - Any blinking lights indicate partial power\n\n**For laptops:**\n1. Remove the battery (if removable) and hold power for 30 seconds\n2. Try with only AC adapter connected\n3. Check if charging light is on\n\n**For desktops:**\n1. Check the power supply switch on the back\n2. Listen for any sounds when pressing power\n3. Look for motherboard lights\n\n⚠️ **Submit a ticket** if these steps don't work - hardware replacement may be needed.",
+          "relatedArticles": ["hw-002", "hw-003"]
+        },
+        {
+          "id": "hw-002",
+          "title": "Slow Computer Performance",
+          "tags": ["slow", "performance", "speed", "lag", "freezing"],
+          "question": "Why is my computer running slowly?",
+          "answer": "Common causes and solutions for slow computers:\n\n**Quick fixes:**\n1. **Restart your computer** - Clears memory and temporary files\n2. **Close unused programs** - Check Task Manager (Ctrl+Shift+Esc)\n3. **Check available storage** - Keep at least 10-15% free\n\n**Maintenance tasks:**\n1. Run disk cleanup\n2. Disable startup programs you don't need\n3. Check for malware/viruses\n4. Update your operating system\n\n**Hardware considerations:**\n- RAM upgrade may help if using >80% regularly\n- SSD upgrade can significantly improve speed\n- Computers older than 5 years may need replacement\n\nContact IT if slowness persists after these steps.",
+          "relatedArticles": ["hw-001", "sw-003"]
+        },
+        {
+          "id": "hw-003",
+          "title": "Monitor Display Problems",
+          "tags": ["monitor", "display", "screen", "blank", "flickering", "resolution"],
+          "question": "How do I fix monitor or display issues?",
+          "answer": "For display problems:\n\n**No display:**\n1. Check cable connections (both ends)\n2. Try a different cable if available\n3. Ensure monitor is on correct input source\n4. Test with another monitor if possible\n\n**Flickering screen:**\n1. Check refresh rate (60Hz recommended)\n2. Update graphics drivers\n3. Check for electromagnetic interference\n4. Try a different cable\n\n**Resolution issues:**\n1. Right-click desktop → Display Settings\n2. Select recommended resolution\n3. Check that correct monitor is detected\n\n**Color problems:**\n1. Check monitor color settings\n2. Calibrate display in system settings\n3. Update graphics drivers",
+          "relatedArticles": ["hw-001", "hw-004"]
+        },
+        {
+          "id": "hw-004",
+          "title": "Keyboard and Mouse Issues",
+          "tags": ["keyboard", "mouse", "typing", "clicking", "wireless", "bluetooth"],
+          "question": "How do I troubleshoot keyboard or mouse problems?",
+          "answer": "For keyboard/mouse issues:\n\n**Wired devices:**\n1. Try a different USB port\n2. Check cable for damage\n3. Test on another computer\n4. Restart your computer\n\n**Wireless devices:**\n1. Check/replace batteries\n2. Re-pair the device:\n   - Turn off device\n   - Remove from Bluetooth settings\n   - Put in pairing mode and reconnect\n3. Check USB receiver connection\n4. Keep receiver away from USB 3.0 ports (interference)\n\n**Specific issues:**\n- Keys not registering → Clean keyboard, check for stuck keys\n- Mouse jumping → Clean sensor, try different surface\n- Double-clicking → Adjust click speed in settings\n\nRequest replacement if device is physically damaged.",
+          "relatedArticles": ["hw-003"]
+        },
+        {
+          "id": "hw-005",
+          "title": "Printer Not Working",
+          "tags": ["printer", "printing", "paper jam", "offline", "not printing"],
+          "question": "What should I do if my printer isn't working?",
+          "answer": "Printer troubleshooting:\n\n**Printer offline:**\n1. Check printer is turned on\n2. Verify network/USB connection\n3. Set as default printer\n4. Restart print spooler service\n\n**Paper jams:**\n1. Turn off printer\n2. Open all access doors\n3. Gently remove paper (pull in direction of paper path)\n4. Check for torn pieces\n5. Close doors and restart\n\n**Poor print quality:**\n1. Run printer head cleaning\n2. Replace low ink/toner\n3. Use correct paper type\n4. Align print heads\n\n**Network printer issues:**\n1. Verify IP address hasn't changed\n2. Check firewall settings\n3. Reinstall printer driver\n\nContact IT for persistent issues or hardware failures.",
+          "relatedArticles": ["hw-004", "nw-002"]
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "name": "Network & Connectivity",
+      "icon": "🌐",
+      "description": "Internet, VPN, and network connection issues",
+      "articles": [
+        {
+          "id": "nw-001",
+          "title": "No Internet Connection",
+          "tags": ["internet", "wifi", "connection", "offline", "no network"],
+          "question": "How do I fix internet connectivity issues?",
+          "answer": "To restore internet connectivity:\n\n**Quick fixes:**\n1. **Check if others are affected** - May be an outage\n2. **Restart your device** - Clears network cache\n3. **Check WiFi is enabled** - Look for WiFi icon\n4. **Forget and reconnect** to WiFi network\n\n**Advanced steps:**\n1. **Restart router/modem** (if at home):\n   - Unplug for 30 seconds\n   - Plug back in and wait 2 minutes\n2. **Flush DNS:**\n   - Windows: `ipconfig /flushdns`\n   - Mac: `sudo dscacheutil -flushcache`\n3. **Reset network settings** (last resort)\n\n**In the office:**\n- Try connecting to a different network\n- Check if VPN is causing issues\n- Contact IT if company-wide",
+          "relatedArticles": ["nw-002", "nw-003"]
+        },
+        {
+          "id": "nw-002",
+          "title": "WiFi Connection Drops",
+          "tags": ["wifi", "disconnect", "dropping", "unstable", "intermittent"],
+          "question": "Why does my WiFi keep disconnecting?",
+          "answer": "For unstable WiFi connections:\n\n**On your device:**\n1. Forget the network and reconnect\n2. Update WiFi drivers\n3. Disable power saving for WiFi adapter\n4. Move closer to the router\n\n**Environmental factors:**\n1. Reduce interference (microwaves, cordless phones)\n2. Switch to 5GHz band if available (less congestion)\n3. Position yourself with line-of-sight to router\n\n**Router issues (home):**\n1. Update router firmware\n2. Change WiFi channel\n3. Restart router weekly\n\n**In office:**\n- Report dead zones to IT\n- Request WiFi extender if needed\n- Use wired connection for critical work",
+          "relatedArticles": ["nw-001", "nw-003"]
+        },
+        {
+          "id": "nw-003",
+          "title": "VPN Connection Problems",
+          "tags": ["vpn", "remote", "connect", "access", "tunnel"],
+          "question": "How do I fix VPN connection issues?",
+          "answer": "VPN troubleshooting steps:\n\n**Cannot connect:**\n1. Check your internet connection first\n2. Verify VPN credentials are correct\n3. Try connecting to a different VPN server\n4. Temporarily disable firewall/antivirus\n5. Restart VPN client\n\n**Connection drops:**\n1. Check for ISP throttling\n2. Try different VPN protocol (IKEv2, OpenVPN)\n3. Reduce WiFi interference\n4. Use wired connection if possible\n\n**Slow VPN speeds:**\n1. Connect to nearest server\n2. Try different protocol\n3. Close bandwidth-heavy applications\n\n**Still having issues?**\nContact IT with:\n- Error messages\n- When the issue started\n- Your location (home/office)",
+          "relatedArticles": ["nw-001", "nw-002"]
+        },
+        {
+          "id": "nw-004",
+          "title": "Email Not Syncing",
+          "tags": ["email", "sync", "outlook", "mail", "not receiving"],
+          "question": "Why aren't my emails syncing?",
+          "answer": "Email sync troubleshooting:\n\n**First steps:**\n1. Check internet connection\n2. Verify you can access webmail\n3. Check server status with IT\n\n**Outlook issues:**\n1. Work Offline mode → Disable it\n2. Send/Receive all folders manually\n3. Repair Office installation\n4. Create new Outlook profile\n\n**Mobile email:**\n1. Check account settings\n2. Re-enter password\n3. Remove and re-add account\n4. Check sync frequency settings\n\n**Common causes:**\n- Password changed (re-enter new password)\n- Mailbox full (delete old emails)\n- Server maintenance (check IT announcements)\n- Firewall blocking (contact IT)",
+          "relatedArticles": ["sw-005", "nw-001"]
+        },
+        {
+          "id": "nw-005",
+          "title": "File Share Access Issues",
+          "tags": ["file share", "network drive", "access denied", "shared folder", "mapped drive"],
+          "question": "How do I fix file share or network drive access problems?",
+          "answer": "For file share issues:\n\n**Cannot access share:**\n1. Check network connection\n2. Verify you have permissions\n3. Try accessing via IP address instead of name\n4. Clear cached credentials:\n   - Windows: `net use * /delete`\n5. Restart and try again\n\n**Mapped drive missing:**\n1. Reconnect the drive manually\n2. Check if VPN is connected (for remote access)\n3. Verify server is online\n\n**Access denied:**\n1. Contact folder owner for permissions\n2. Submit IT ticket for access request\n3. Check if your account is locked\n\n**Slow file access:**\n1. Check network speed\n2. Copy files locally for editing\n3. Avoid opening large files directly from share",
+          "relatedArticles": ["nw-001", "nw-003"]
+        }
+      ]
+    },
+    {
+      "id": "account",
+      "name": "Account & Access",
+      "icon": "🔐",
+      "description": "Login, password, and account access issues",
+      "articles": [
+        {
+          "id": "ac-001",
+          "title": "Forgot Password",
+          "tags": ["password", "forgot", "reset", "can't login", "locked out"],
+          "question": "How do I reset my password?",
+          "answer": "To reset your password:\n\n**Self-service reset:**\n1. Go to the login page\n2. Click \"Forgot Password\"\n3. Enter your email address\n4. Check your email for reset link\n5. Create a new password following requirements\n\n**Password requirements:**\n- Minimum 8 characters\n- At least one uppercase letter\n- At least one number\n- At least one special character\n- Cannot reuse last 5 passwords\n\n**If self-service doesn't work:**\n- Check spam/junk folder\n- Verify email address is correct\n- Contact IT for manual reset\n\n⚠️ Never share your password with anyone, including IT staff.",
+          "relatedArticles": ["ac-002", "ac-003"]
+        },
+        {
+          "id": "ac-002",
+          "title": "Account Locked",
+          "tags": ["locked", "account locked", "too many attempts", "disabled"],
+          "question": "What do I do if my account is locked?",
+          "answer": "Account lockouts typically occur after multiple failed login attempts.\n\n**Automatic unlock:**\n- Most accounts unlock automatically after 15-30 minutes\n- Wait and try again with correct password\n\n**Manual unlock:**\n1. Use self-service password reset\n2. Contact IT Help Desk\n3. Visit IT in person with ID\n\n**Prevent future lockouts:**\n- Use a password manager\n- Check Caps Lock before typing\n- Clear saved passwords if outdated\n- Update password on all devices after changing\n\n**Suspicious lockout?**\nIf you didn't cause the lockout, report it immediately - someone may be trying to access your account.",
+          "relatedArticles": ["ac-001", "ac-003"]
+        },
+        {
+          "id": "ac-003",
+          "title": "Multi-Factor Authentication (MFA) Issues",
+          "tags": ["mfa", "2fa", "authenticator", "verification", "code"],
+          "question": "How do I troubleshoot MFA/2FA problems?",
+          "answer": "MFA troubleshooting:\n\n**Not receiving codes:**\n1. Check phone signal/internet\n2. Verify phone number is correct\n3. Check SMS isn't blocked\n4. Request code to be resent\n\n**Authenticator app issues:**\n1. Verify time is correct on phone (use automatic time)\n2. Try closing and reopening app\n3. Use backup codes if available\n4. Re-sync authenticator\n\n**Lost phone:**\n1. Use backup codes (if saved)\n2. Contact IT to reset MFA\n3. You'll need to verify your identity\n\n**Setting up new phone:**\n1. Transfer authenticator app properly\n2. Or contact IT to reset MFA\n3. Set up MFA again on new device\n\n💡 Always save backup codes in a secure location!",
+          "relatedArticles": ["ac-001", "ac-002"]
+        },
+        {
+          "id": "ac-004",
+          "title": "Access Permission Request",
+          "tags": ["access", "permission", "request", "folder", "application"],
+          "question": "How do I request access to systems or folders?",
+          "answer": "To request access:\n\n**Application/System access:**\n1. Submit a support ticket\n2. Include:\n   - Application name\n   - Reason for access\n   - Manager approval (if required)\n3. IT will verify and provision access\n\n**File/Folder access:**\n1. Contact the folder owner directly\n2. Or submit IT ticket with:\n   - Folder path\n   - Type of access needed (read/write)\n   - Business justification\n\n**Typical turnaround:**\n- Standard requests: 1-2 business days\n- Manager approval required: 2-3 business days\n- Security review required: 3-5 business days\n\n**Temporary access:**\n- Specify end date in request\n- Access automatically removed after",
+          "relatedArticles": ["ac-001", "nw-005"]
+        }
+      ]
+    },
+    {
+      "id": "hr-systems",
+      "name": "HR Systems",
+      "icon": "👥",
+      "description": "OneStaffOS and HR application support",
+      "articles": [
+        {
+          "id": "hr-001",
+          "title": "Time Clock Issues",
+          "tags": ["clock", "time", "punch", "attendance", "clock in", "clock out"],
+          "question": "How do I fix time clock or attendance issues?",
+          "answer": "For time clock problems:\n\n**Cannot clock in/out:**\n1. Check your internet connection\n2. Verify you're at an approved location (if geo-restricted)\n3. Ensure you're within your scheduled shift time\n4. Try refreshing the page\n5. Clear browser cache\n\n**Missed punch:**\n1. Submit a time correction request\n2. Include date, time, and reason\n3. Manager approval required\n\n**Incorrect hours showing:**\n1. Review your time entries\n2. Submit correction request for errors\n3. Contact HR for pay period adjustments\n\n**Biometric issues:**\n- Re-register fingerprint if not recognizing\n- Ensure finger is clean and dry\n- Report hardware issues to IT",
+          "relatedArticles": ["hr-002", "hr-003"]
+        },
+        {
+          "id": "hr-002",
+          "title": "Leave Request Problems",
+          "tags": ["leave", "vacation", "pto", "time off", "request"],
+          "question": "How do I submit or fix leave requests?",
+          "answer": "Leave request help:\n\n**Submitting a request:**\n1. Navigate to Leaves → Request Leave\n2. Select leave type\n3. Choose dates\n4. Add notes if required\n5. Submit for approval\n\n**Request stuck/pending:**\n1. Check who needs to approve\n2. Send a reminder via system\n3. Contact manager directly\n4. Escalate to HR if urgent\n\n**Request rejected:**\n1. Check rejection reason\n2. Modify dates if conflict\n3. Choose different leave type if balance issue\n4. Discuss with manager\n\n**Balance incorrect:**\n1. Review leave history\n2. Check if pending requests are counted\n3. Contact HR for balance verification\n4. Request accrual audit if needed",
+          "relatedArticles": ["hr-001", "hr-003"]
+        },
+        {
+          "id": "hr-003",
+          "title": "Profile Update Issues",
+          "tags": ["profile", "update", "personal", "information", "change"],
+          "question": "How do I update my personal information?",
+          "answer": "To update your profile:\n\n**Self-service updates:**\n1. Go to Profile → My Profile\n2. Click Edit on the section\n3. Make changes\n4. Submit for approval (if required)\n\n**What you can update:**\n- Contact information (phone, email)\n- Emergency contacts\n- Address\n- Profile photo\n\n**What requires HR approval:**\n- Name changes (requires documentation)\n- Banking information\n- Tax withholding\n\n**Changes not saving:**\n1. Check for validation errors\n2. Ensure all required fields completed\n3. Try a different browser\n4. Clear cache and retry\n\n**Processing time:**\n- Self-service: Immediate\n- HR approval: 1-3 business days",
+          "relatedArticles": ["hr-001", "hr-002"]
+        },
+        {
+          "id": "hr-004",
+          "title": "Payslip Access",
+          "tags": ["payslip", "paycheck", "salary", "pay stub", "earnings"],
+          "question": "How do I access my payslips?",
+          "answer": "To view payslips:\n\n**Accessing payslips:**\n1. Navigate to Payroll section\n2. Select \"My Payslips\"\n3. Choose pay period\n4. View or download PDF\n\n**Cannot see payslips:**\n1. Verify you're a confirmed employee\n2. Check payroll has been processed\n3. Try different browser\n4. Contact HR if issue persists\n\n**Understanding your payslip:**\n- Gross Pay: Total before deductions\n- Net Pay: Take-home amount\n- Deductions: Taxes, benefits, etc.\n- YTD: Year-to-date totals\n\n**Payslip errors:**\n1. Document the discrepancy\n2. Submit payroll dispute\n3. Contact HR/Finance\n4. Keep records of all communications",
+          "relatedArticles": ["hr-003"]
+        }
+      ]
+    },
+    {
+      "id": "general",
+      "name": "General IT",
+      "icon": "ℹ️",
+      "description": "General IT questions and guidelines",
+      "articles": [
+        {
+          "id": "gn-001",
+          "title": "How to Submit a Support Ticket",
+          "tags": ["ticket", "support", "help", "request", "issue"],
+          "question": "How do I submit a support ticket?",
+          "answer": "To submit a support ticket:\n\n**Steps:**\n1. Navigate to Support section\n2. Click \"Create New Ticket\"\n3. Fill in the form:\n   - **Title**: Brief description\n   - **Type**: Software/Hardware/Network\n   - **Priority**: Low/Medium/High\n   - **Description**: Detailed explanation\n4. Attach screenshots if helpful\n5. Submit\n\n**Tips for faster resolution:**\n- Include error messages exactly\n- Describe steps to reproduce\n- Note when issue started\n- Mention what you've already tried\n\n**Priority guidelines:**\n- **High**: Cannot work, affects many users\n- **Medium**: Significant impact, workaround exists\n- **Low**: Minor inconvenience\n\nYou'll receive updates via email and can track status in the Support portal.",
+          "relatedArticles": ["gn-002"]
+        },
+        {
+          "id": "gn-002",
+          "title": "IT Support Hours and Response Times",
+          "tags": ["hours", "support", "response", "sla", "contact"],
+          "question": "What are IT support hours and expected response times?",
+          "answer": "**IT Support Hours:**\n- Monday-Friday: 8:00 AM - 6:00 PM\n- Saturday: 9:00 AM - 1:00 PM (Limited)\n- Sunday: Closed (Emergency only)\n\n**Response Times by Priority:**\n| Priority | Initial Response | Target Resolution |\n|----------|-----------------|-------------------|\n| High     | 1 hour          | 4 hours           |\n| Medium   | 4 hours         | 1 business day    |\n| Low      | 1 business day  | 3 business days   |\n\n**Emergency Contact:**\n- After-hours emergencies: Use emergency hotline\n- Critical system outages only\n\n**Ways to get help:**\n1. Submit a ticket (recommended)\n2. Live chat during business hours\n3. Email: support@company.com\n4. Phone: For urgent issues only",
+          "relatedArticles": ["gn-001"]
+        },
+        {
+          "id": "gn-003",
+          "title": "Security Best Practices",
+          "tags": ["security", "safe", "protect", "phishing", "virus"],
+          "question": "What are the IT security best practices I should follow?",
+          "answer": "**Essential security practices:**\n\n**Passwords:**\n- Use unique passwords for each account\n- Enable MFA wherever possible\n- Use a password manager\n- Never share passwords\n\n**Email safety:**\n- Don't click suspicious links\n- Verify sender before opening attachments\n- Report phishing to IT\n- When in doubt, ask IT\n\n**Device security:**\n- Lock screen when away (Win+L / Cmd+Ctrl+Q)\n- Keep software updated\n- Don't disable antivirus\n- Don't install unauthorized software\n\n**Data protection:**\n- Don't store sensitive data locally\n- Use approved file sharing methods\n- Encrypt sensitive emails\n- Shred sensitive documents\n\n⚠️ Report security incidents immediately!",
+          "relatedArticles": ["ac-001", "gn-002"]
+        }
+      ]
+    }
+  ],
+  "quickAnswers": [
+    {
+      "trigger": ["reset password", "forgot password", "change password"],
+      "response": "To reset your password, go to the login page and click 'Forgot Password'. Enter your email address and you'll receive a reset link. If you don't receive it within 5 minutes, check your spam folder or contact IT."
+    },
+    {
+      "trigger": ["vpn not working", "can't connect vpn", "vpn issues"],
+      "response": "For VPN issues: 1) Check your internet connection first, 2) Restart the VPN client, 3) Try a different server, 4) Disable firewall temporarily. If still not working, submit a support ticket."
+    },
+    {
+      "trigger": ["computer slow", "laptop slow", "running slow"],
+      "response": "To speed up your computer: 1) Restart it, 2) Close unused programs, 3) Check available disk space (keep 10%+ free), 4) Run disk cleanup. If still slow after these steps, submit a ticket."
+    },
+    {
+      "trigger": ["printer not working", "can't print", "printer offline"],
+      "response": "Printer troubleshooting: 1) Make sure it's turned on and connected, 2) Set it as default printer, 3) Restart the print spooler service, 4) Try printing a test page. Submit a ticket if issues persist."
+    },
+    {
+      "trigger": ["account locked", "locked out", "too many attempts"],
+      "response": "Account lockouts usually resolve automatically in 15-30 minutes. If urgent, use the self-service password reset or contact IT directly for a manual unlock."
+    },
+    {
+      "trigger": ["submit ticket", "create ticket", "need help"],
+      "response": "To submit a ticket: Go to Support → Create New Ticket → Fill in the details (title, type, priority, description) → Submit. Include screenshots and error messages for faster resolution."
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2026-01-04",
+    "totalArticles": 24,
+    "categories": 6
+  }
+}

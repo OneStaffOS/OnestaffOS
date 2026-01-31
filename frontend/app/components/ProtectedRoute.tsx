@@ -38,9 +38,16 @@ export default function ProtectedRoute({
     }
 
     if (!isLoading && isAuthenticated && requiredRoles) {
-      const hasRequiredRole = requiredRoles.some(role => 
-        user?.roles.includes(role)
-      );
+      const normalizeRole = (value?: string) =>
+        String(value || '')
+          .replace(/[_\\-]+/g, ' ')
+          .replace(/[^a-zA-Z0-9 ]+/g, '')
+          .trim()
+          .toLowerCase();
+
+      const userRoles = (user?.roles || []).map(normalizeRole);
+      const required = requiredRoles.map(normalizeRole);
+      const hasRequiredRole = required.some((role) => userRoles.includes(role));
 
       if (!hasRequiredRole) {
         router.push('/unauthorized');
@@ -64,9 +71,16 @@ export default function ProtectedRoute({
   }
 
   if (requiredRoles) {
-    const hasRequiredRole = requiredRoles.some(role => 
-      user?.roles.includes(role)
-    );
+    const normalizeRole = (value?: string) =>
+      String(value || '')
+        .replace(/[_\\-]+/g, ' ')
+        .replace(/[^a-zA-Z0-9 ]+/g, '')
+        .trim()
+        .toLowerCase();
+
+    const userRoles = (user?.roles || []).map(normalizeRole);
+    const required = requiredRoles.map(normalizeRole);
+    const hasRequiredRole = required.some((role) => userRoles.includes(role));
 
     if (!hasRequiredRole) {
       return null;

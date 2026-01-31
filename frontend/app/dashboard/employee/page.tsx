@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProtectedRoute from '../../components/ProtectedRoute';
 import DashboardLayout from '../../components/DashboardLayout';
+import BiometricsModal from '../../components/biometrics/BiometricsModal';
 import { SystemRole } from '@/lib/roles';
 import styles from '../dashboard.module.css';
 import axios from '@/lib/axios-config';
@@ -37,6 +38,9 @@ export default function EmployeeDashboard() {
   const [hasClockedOutToday, setHasClockedOutToday] = useState(false);
   const [attendanceMessage, setAttendanceMessage] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [biometricsOpen, setBiometricsOpen] = useState(false);
+  const [biometricsMode, setBiometricsMode] = useState<'ENROLL' | 'VERIFY'>('VERIFY');
+  const [pendingClockType, setPendingClockType] = useState<'IN' | 'OUT' | null>(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -155,13 +159,19 @@ export default function EmployeeDashboard() {
     }
   };
 
-  const handleClock = async (type: 'IN' | 'OUT') => {
+  const handleClock = async (type: 'IN' | 'OUT', verificationToken?: string, skipConfirm?: boolean) => {
     const label = type === 'IN' ? 'Clock In' : 'Clock Out';
-    if (!confirm(`Are you sure you want to ${label} now?`)) return;
+    if (!skipConfirm && !confirm(`Are you sure you want to ${label} now?`)) return;
     try {
       setAttendanceLoading(true);
       setAttendanceMessage(null);
-      const res = await axios.post('/time-management/attendance/clock', { type });
+      const res = await axios.post(
+        '/time-management/attendance/clock',
+        { type },
+        verificationToken
+          ? { headers: { 'x-biometric-verification': verificationToken } }
+          : undefined,
+      );
       const data = res.data || {};
       setAttendanceMessage(data.message || `${label} successful`);
       
@@ -188,6 +198,39 @@ export default function EmployeeDashboard() {
     } finally {
       setAttendanceLoading(false);
     }
+  };
+
+  const startClockIn = () => {
+    if (attendanceLoading || hasClockedInToday) return;
+    if (!confirm('Are you sure you want to Clock In now?')) return;
+    setPendingClockType('IN');
+    setBiometricsMode('VERIFY');
+    setBiometricsOpen(true);
+  };
+
+  const startEnrollment = () => {
+    setBiometricsMode('ENROLL');
+    setPendingClockType(null);
+    setBiometricsOpen(true);
+  };
+
+  const handleBiometricsClose = () => {
+    setBiometricsOpen(false);
+    setPendingClockType(null);
+  };
+
+  const handleBiometricsSuccess = (result: { verificationToken?: string }) => {
+    setBiometricsOpen(false);
+    if (biometricsMode === 'VERIFY' && pendingClockType === 'IN') {
+      if (result.verificationToken) {
+        handleClock('IN', result.verificationToken, true);
+      } else {
+        setAttendanceMessage('Verification token missing. Please try again.');
+      }
+    } else if (biometricsMode === 'ENROLL') {
+      setAttendanceMessage('Face print saved successfully');
+    }
+    setPendingClockType(null);
   };
 
   const fetchUnreadCount = async (empId?: string) => {
@@ -351,6 +394,22 @@ export default function EmployeeDashboard() {
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
                     📊 Track Resignation
+                  </button>
+                  <button
+                    onClick={() => router.push('/dashboard/employee/balance')}
+                    style={{ ...buttonStyle.base, ...buttonStyle.primary }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                  >
+                    💰 My Balance
+                  </button>
+                  <button
+                    onClick={() => router.push('/dashboard/employee/contracts')}
+                    style={{ ...buttonStyle.base, ...buttonStyle.indigo }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                  >
+                    📄 Active Contracts
                   </button>
                 </div>
               </div>
@@ -601,7 +660,7 @@ export default function EmployeeDashboard() {
                   <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#111827', marginBottom: '1rem' }}>⏱️ Clock In/Out</h3>
                   <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                     <button
-                      onClick={() => handleClock('IN')}
+                      onClick={startClockIn}
                       disabled={attendanceLoading || hasClockedInToday}
                       style={{
                         ...buttonStyle.base,
@@ -635,6 +694,19 @@ export default function EmployeeDashboard() {
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
                       ⏹️ Clock Out
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={startEnrollment}
+                      style={{
+                        ...buttonStyle.base,
+                        ...buttonStyle.primary,
+                        flex: '1',
+                        minWidth: '180px',
+                      }}
+                    >
+                      📷 Save / Update Face Print
                     </button>
                   </div>
                   <div style={{ fontSize: '0.9rem', color: '#6b7280', textAlign: 'center', fontWeight: '500' }}>
@@ -742,6 +814,12 @@ export default function EmployeeDashboard() {
             </>
           )}
         </div>
+        <BiometricsModal
+          open={biometricsOpen}
+          mode={biometricsMode}
+          onClose={handleBiometricsClose}
+          onSuccess={handleBiometricsSuccess}
+        />
       </DashboardLayout>
     </ProtectedRoute>
   );

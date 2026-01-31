@@ -1,7 +1,7 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AppController } from './app.controller';
+import { AppController, HealthController } from './app.controller';
 import { AppService } from './app.service';
 import { TimeManagementModule } from './time-management/time-management.module';
 import { RecruitmentModule } from './recruitment/recruitment.module';
@@ -17,14 +17,23 @@ import { PayrollConfigurationModule } from './payroll-configuration/payroll-conf
 import { PayrollExecutionModule } from './payroll-execution/payroll-execution.module';
 import { PasswordResetModule } from './password-reset/password-reset.module';
 import { PasskeysModule } from './passkeys/passkeys.module';
+import { TicketsModule } from './tickets/tickets.module';
+import { AIChatbotModule } from './chatbot/ai-chatbot.module';
+import { EncryptionModule } from './common/encryption';
+import { BiometricsModule } from './biometrics/biometrics.module';
+import { BankingContractsModule } from './banking-contracts/banking-contracts.module';
 import { CsrfGuard } from './common/guards/csrf.guard';
 import { SecurityInterceptor } from './common/interceptors/security.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { NoSQLSanitizeMiddleware } from './common/middleware/nosql-sanitize.middleware';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
+import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { LoggerService } from './common/logger/logger.service';
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/onestaff'),
+    EncryptionModule, // Global encryption module
     AuthModule,
     TimeManagementModule, 
     RecruitmentModule, 
@@ -39,13 +48,22 @@ import { CorrelationIdMiddleware } from './common/middleware/correlation-id.midd
     NotificationModule,
     PasswordResetModule,
     PasskeysModule,
+    TicketsModule,
+    AIChatbotModule,
+    BiometricsModule,
+    BankingContractsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [
     AppService,
+    LoggerService, // Add centralized logger
     {
       provide: APP_GUARD,
       useClass: CsrfGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor, // Add HTTP request/error logging
     },
     // SecurityInterceptor disabled - was causing issues with Mongoose object serialization
     // and React key warnings due to improper object-to-plain conversion
@@ -57,9 +75,9 @@ import { CorrelationIdMiddleware } from './common/middleware/correlation-id.midd
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // Apply correlation ID middleware first for request tracing
+    // Apply request ID middleware first for tracing (replaces correlation ID)
     consumer
-      .apply(CorrelationIdMiddleware)
+      .apply(RequestIdMiddleware)
       .forRoutes('*');
     
     // Apply NoSQL injection sanitization

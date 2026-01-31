@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
 import { PayrollExecutionService } from './payroll-execution.service';
+import { SignedActionDto } from '../banking-contracts/dto/signed-action.dto';
 import { AuthGuard } from '../auth/gaurds/authentication.guard';
 import { authorizationGaurd } from '../auth/middleware/authorization.middleware';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
@@ -135,8 +136,13 @@ export class PayrollExecutionController {
     @Post('runs/:id/finance-approve')
     @UseGuards(AuthGuard, authorizationGaurd)
     @Roles(Role.SYSTEM_ADMIN, Role.FINANCE_STAFF)
-    async financeApprovePayroll(@Param('id') id: string, @Req() req: any) {
-        return await this.payrollExecutionService.financeApprovePayroll(id, req.user.userId);
+    async financeApprovePayroll(
+        @Param('id') id: string,
+        @Body() dto: SignedActionDto,
+        @Req() req: any,
+    ) {
+        const roles = req.user.roles || [];
+        return await this.payrollExecutionService.financeApprovePayroll(id, req.user.userId, roles, dto);
     }
 
     @Post('runs/:id/reject')

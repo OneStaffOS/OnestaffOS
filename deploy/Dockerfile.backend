@@ -1,0 +1,36 @@
+FROM node:22-alpine AS build
+
+WORKDIR /app
+
+# 1️⃣ Copy manifests
+COPY package.json package-lock.json ./
+
+# 2️⃣ Install ALL deps (including dev, so Nest CLI exists)
+RUN npm ci
+
+# 3️⃣ Copy source
+COPY . ./
+
+# 4️⃣ Build NestJS
+RUN npm run build
+
+# 4.1️⃣ Copy classifier model into dist for runtime
+RUN mkdir -p dist/tickets/classifier && \
+    if [ -f "src/tickets/classifier/ticket_classifier_model.joblib" ]; then \
+      cp src/tickets/classifier/ticket_classifier_model.joblib dist/tickets/classifier/; \
+    fi
+
+# =========================
+
+FROM node:22-alpine AS runner
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+# 5️⃣ Copy only what runtime needs
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./
+
+EXPOSE 3000
+CMD ["node", "dist/main"]
