@@ -132,7 +132,7 @@ export default function PayrollPoliciesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📋 Payroll Policies</h1>
+              <h1 className={styles.pageTitle}> Payroll Policies</h1>
               <p className={styles.pageSubtitle}>
                 Manage deduction, allowance, benefit, and misconduct policies
               </p>
@@ -143,15 +143,15 @@ export default function PayrollPoliciesPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/policies/create')}
                 >
-                  ➕ Create Policy
+                   Create Policy
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -176,7 +176,7 @@ export default function PayrollPoliciesPage() {
           {/* Pending Approvals Section (HR Manager View) */}
           {canApprove && pendingPolicies.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingPolicies.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingPolicies.length})</h3>
               <div className={styles.approvalList}>
                 {pendingPolicies.map(policy => (
                   <div key={policy._id} className={styles.approvalItem}>
@@ -192,13 +192,13 @@ export default function PayrollPoliciesPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(policy._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(policy._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -228,7 +228,7 @@ export default function PayrollPoliciesPage() {
             <Spinner message="Loading policies..." />
           ) : policies.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📋</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Policies Found</h3>
               <p>Create your first payroll policy to get started.</p>
               {canCreate && (
@@ -237,7 +237,7 @@ export default function PayrollPoliciesPage() {
                   onClick={() => router.push('/dashboard/payroll/policies/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Policy
+                   Create Policy
                 </button>
               )}
             </div>

@@ -53,12 +53,12 @@ export default function CreateSigningBonusPage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>✍️ Create Signing Bonus</h1>
+            <h1 className={styles.formTitle}> Create Signing Bonus</h1>
             <p className={styles.formSubtitle}>
               Define a signing bonus for a position. It will require HR Manager approval.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -66,13 +66,10 @@ export default function CreateSigningBonusPage() {
                   Position Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="positionName"
-                  className={styles.formInput}
+                  type="text" name="positionName" className={styles.formInput}
                   value={formData.positionName}
                   onChange={handleChange}
-                  placeholder="e.g., Junior Developer, Senior Manager, Team Lead"
-                  required
+                  placeholder="e.g., Junior Developer, Senior Manager, Team Lead" required
                 />
                 <span className={styles.formHint}>The position that qualifies for this signing bonus</span>
               </div>
@@ -82,34 +79,27 @@ export default function CreateSigningBonusPage() {
                   Bonus Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="amount"
-                  className={styles.formInput}
+                  type="number" name="amount" className={styles.formInput}
                   value={formData.amount}
                   onChange={handleChange}
-                  placeholder="Enter signing bonus amount in EGP"
-                  min="0"
-                  step="1000"
-                  required
+                  placeholder="Enter signing bonus amount in EGP" min="0" step="1000" required
                 />
                 <span className={styles.formHint}>One-time signing bonus for new hires in this position</span>
               </div>
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/signing-bonuses')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
-                  {loading ? 'Creating...' : '✍️ Create Signing Bonus'}
+                  {loading ? 'Creating...' : 'Create Signing Bonus'}
                 </button>
               </div>
             </form>

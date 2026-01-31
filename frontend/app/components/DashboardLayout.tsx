@@ -3,7 +3,7 @@
  * Used by all role-specific dashboards
  */
 
-'use client';
+"use client";
 
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -38,7 +38,7 @@ export default function DashboardLayout({ children, title, role }: DashboardLayo
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-dashboard-role={role}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div>
@@ -52,20 +52,21 @@ export default function DashboardLayout({ children, title, role }: DashboardLayo
               <button
                 onClick={() => router.push('/support')}
                 className={styles.supportBtn}
-                title="Get Technical Support"
+                title="Get Technical Support" data-dashboard-layout-button
               >
-                🎧 Support
+                 Support
               </button>
             )}
             {user?.roles && user.roles.length > 1 && (
               <button
                 onClick={() => router.push('/dashboard/select-role')}
                 className={styles.switchBtn}
+                data-dashboard-layout-button
               >
                 Switch Dashboard
               </button>
             )}
-            <button onClick={logout} className={styles.logoutBtn}>
+            <button onClick={logout} className={styles.logoutBtn} data-dashboard-layout-button>
               Logout
             </button>
           </div>

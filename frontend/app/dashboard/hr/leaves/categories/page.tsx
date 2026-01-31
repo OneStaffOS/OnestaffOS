@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -150,7 +150,7 @@ export default function LeaveCategoriesPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📁 Leave Categories</h1>
+              <h1 className={styles.title}> Leave Categories</h1>
               <p className={styles.subtitle}>
                 Manage leave categories to organize leave types
               </p>
@@ -181,7 +181,7 @@ export default function LeaveCategoriesPage() {
               <Spinner message="Loading categories..." />
             ) : categories.length === 0 ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>📁</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>No Categories Found</h3>
                 <p>Create your first leave category to get started.</p>
                 <button 
@@ -220,7 +220,7 @@ export default function LeaveCategoriesPage() {
                             onClick={() => handleOpenModal(category)}
                             title="Edit Category"
                           >
-                            ✏️
+                            
                           </button>
                           {deleteConfirm === category._id ? (
                             <div className={styles.deleteConfirm}>
@@ -229,13 +229,13 @@ export default function LeaveCategoriesPage() {
                                 onClick={() => handleDelete(category._id)}
                                 disabled={submitting}
                               >
-                                ✓
+                                
                               </button>
                               <button
                                 className={styles.cancelDeleteButton}
                                 onClick={() => setDeleteConfirm(null)}
                               >
-                                ✕
+                                
                               </button>
                             </div>
                           ) : (
@@ -244,7 +244,7 @@ export default function LeaveCategoriesPage() {
                               onClick={() => setDeleteConfirm(category._id)}
                               title="Delete Category"
                             >
-                              🗑️
+                              
                             </button>
                           )}
                         </div>
@@ -263,44 +263,37 @@ export default function LeaveCategoriesPage() {
                 <div className={styles.modalHeader}>
                   <h2>{editingCategory ? 'Edit Category' : 'Add New Category'}</h2>
                   <button className={styles.closeButton} onClick={handleCloseModal}>
-                    ✕
+                    
                   </button>
                 </div>
                 <form onSubmit={handleSubmit}>
                   <div className={styles.formGroup}>
                     <label htmlFor="name">Category Name *</label>
                     <input
-                      type="text"
-                      id="name"
-                      value={formData.name}
+                      type="text" id="name" value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g., Statutory Leave, Personal Leave"
-                      required
+                      placeholder="e.g., Statutory Leave, Personal Leave" required
                     />
                   </div>
                   <div className={styles.formGroup}>
                     <label htmlFor="description">Description</label>
                     <textarea
-                      id="description"
-                      value={formData.description}
+                      id="description" value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Optional description for this category"
-                      rows={3}
+                      placeholder="Optional description for this category" rows={3}
                     />
                   </div>
                   {error && <div className={styles.formError}>{error}</div>}
                   <div className={styles.modalActions}>
                     <button
-                      type="button"
-                      className={styles.cancelButton}
+                      type="button" className={styles.cancelButton}
                       onClick={handleCloseModal}
                       disabled={submitting}
                     >
                       Cancel
                     </button>
                     <button
-                      type="submit"
-                      className={styles.submitButton}
+                      type="submit" className={styles.submitButton}
                       disabled={submitting}
                     >
                       {submitting ? 'Saving...' : editingCategory ? 'Update Category' : 'Create Category'}

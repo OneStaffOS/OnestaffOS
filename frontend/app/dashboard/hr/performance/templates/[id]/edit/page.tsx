@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -195,9 +195,7 @@ export default function EditTemplatePage() {
                 <div className={styles.formGroup}>
                   <label htmlFor="name">Template Name *</label>
                   <input
-                    type="text"
-                    id="name"
-                    value={name}
+                    type="text" id="name" value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
                     placeholder="e.g., Annual Performance Review 2024"
@@ -207,8 +205,7 @@ export default function EditTemplatePage() {
                 <div className={styles.formGroup}>
                   <label htmlFor="templateType">Template Type *</label>
                   <select
-                    id="templateType"
-                    value={templateType}
+                    id="templateType" value={templateType}
                     onChange={(e) => setTemplateType(e.target.value as any)}
                     required
                   >
@@ -223,8 +220,7 @@ export default function EditTemplatePage() {
                 <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
                   <label htmlFor="description">Description</label>
                   <textarea
-                    id="description"
-                    value={description}
+                    id="description" value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
                     placeholder="Brief description of this template's purpose"
@@ -234,8 +230,7 @@ export default function EditTemplatePage() {
                 <div className={styles.formGroup}>
                   <label>
                     <input
-                      type="checkbox"
-                      checked={isActive}
+                      type="checkbox" checked={isActive}
                       onChange={(e) => setIsActive(e.target.checked)}
                     />
                     {' '}Active Template
@@ -251,8 +246,7 @@ export default function EditTemplatePage() {
                 <div className={styles.formGroup}>
                   <label htmlFor="ratingScaleType">Scale Type *</label>
                   <select
-                    id="ratingScaleType"
-                    value={ratingScale.type}
+                    id="ratingScaleType" value={ratingScale.type}
                     onChange={(e) => handleRatingScaleTypeChange(e.target.value as any)}
                     required
                   >
@@ -283,8 +277,7 @@ export default function EditTemplatePage() {
                     {ratingScale.labels.map((label, index) => (
                       <input
                         key={index}
-                        type="text"
-                        value={label}
+                        type="text" value={label}
                         onChange={(e) => {
                           const newLabels = [...ratingScale.labels];
                           newLabels[index] = e.target.value;
@@ -311,8 +304,7 @@ export default function EditTemplatePage() {
                   <div className={styles.criterionBoxHeader}>
                     <h3>Criterion {index + 1}</h3>
                     <button
-                      type="button"
-                      onClick={() => handleRemoveCriterion(index)}
+                      type="button" onClick={() => handleRemoveCriterion(index)}
                       className={styles.removeButton}
                     >
                       Remove
@@ -323,8 +315,7 @@ export default function EditTemplatePage() {
                     <div className={styles.formGroup}>
                       <label>Key (Unique ID) *</label>
                       <input
-                        type="text"
-                        value={criterion.key}
+                        type="text" value={criterion.key}
                         onChange={(e) => handleCriterionChange(index, 'key', e.target.value)}
                         required
                         placeholder="e.g., job_knowledge"
@@ -335,8 +326,7 @@ export default function EditTemplatePage() {
                     <div className={styles.formGroup}>
                       <label>Title *</label>
                       <input
-                        type="text"
-                        value={criterion.title}
+                        type="text" value={criterion.title}
                         onChange={(e) => handleCriterionChange(index, 'title', e.target.value)}
                         required
                         placeholder="e.g., Job Knowledge"
@@ -346,20 +336,16 @@ export default function EditTemplatePage() {
                     <div className={styles.formGroup}>
                       <label>Weight (%)</label>
                       <input
-                        type="number"
-                        value={criterion.weight || 0}
+                        type="number" value={criterion.weight || 0}
                         onChange={(e) => handleCriterionChange(index, 'weight', parseFloat(e.target.value))}
-                        min="0"
-                        max="100"
-                        placeholder="0-100"
+                        min="0" max="100" placeholder="0-100"
                       />
                     </div>
 
                     <div className={styles.formGroup}>
                       <label>Max Score</label>
                       <input
-                        type="number"
-                        value={criterion.maxScore || ''}
+                        type="number" value={criterion.maxScore || ''}
                         onChange={(e) => handleCriterionChange(index, 'maxScore', e.target.value ? parseFloat(e.target.value) : undefined)}
                         placeholder="Optional"
                       />
@@ -378,8 +364,7 @@ export default function EditTemplatePage() {
                     <div className={styles.formGroup}>
                       <label>
                         <input
-                          type="checkbox"
-                          checked={criterion.required || false}
+                          type="checkbox" checked={criterion.required || false}
                           onChange={(e) => handleCriterionChange(index, 'required', e.target.checked)}
                         />
                         {' '}Required Criterion
@@ -408,8 +393,7 @@ export default function EditTemplatePage() {
 
             <div className={styles.formActions}>
               <button
-                type="button"
-                onClick={() => router.push(`/dashboard/hr/performance/templates/${templateId}`)}
+                type="button" onClick={() => router.push(`/dashboard/hr/performance/templates/${templateId}`)}
                 className={styles.secondaryButton}
                 disabled={submitting}
               >

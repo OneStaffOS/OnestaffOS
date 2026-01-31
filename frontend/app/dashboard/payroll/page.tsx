@@ -128,14 +128,14 @@ export default function PayrollDashboardPage() {
       id: 'employee-assignments',
       title: 'Employee Payroll Assignments',
       description: 'Assign pay grades and payroll information to employees in the organization.',
-      icon: '👥',
+      icon: '',
       path: '/dashboard/payroll/employee-assignments',
     },
     {
       id: 'policies',
       title: 'Payroll Policies',
       description: 'Define deduction, allowance, benefit, and misconduct policies that apply to employees.',
-      icon: '📋',
+      icon: '',
       path: '/dashboard/payroll/policies',
       stats: stats?.policies,
     },
@@ -143,7 +143,7 @@ export default function PayrollDashboardPage() {
       id: 'pay-grades',
       title: 'Pay Grades',
       description: 'Configure salary grades with base and gross salary for different positions.',
-      icon: '💰',
+      icon: '',
       path: '/dashboard/payroll/pay-grades',
       stats: stats?.payGrades,
     },
@@ -151,7 +151,7 @@ export default function PayrollDashboardPage() {
       id: 'pay-types',
       title: 'Pay Types',
       description: 'Define payment types such as Monthly, Hourly, or Daily compensation.',
-      icon: '⏱️',
+      icon: '',
       path: '/dashboard/payroll/pay-types',
       stats: stats?.payTypes,
     },
@@ -159,7 +159,7 @@ export default function PayrollDashboardPage() {
       id: 'allowances',
       title: 'Allowances',
       description: 'Manage employee allowances like Housing, Transport, and other benefits.',
-      icon: '🎁',
+      icon: '',
       path: '/dashboard/payroll/allowances',
       stats: stats?.allowances,
     },
@@ -167,7 +167,7 @@ export default function PayrollDashboardPage() {
       id: 'termination-benefits',
       title: 'Termination Benefits',
       description: 'Define end-of-service gratuity and resignation benefits.',
-      icon: '📤',
+      icon: '',
       path: '/dashboard/payroll/termination-benefits',
       stats: stats?.terminationBenefits,
     },
@@ -175,7 +175,7 @@ export default function PayrollDashboardPage() {
       id: 'insurance-brackets',
       title: 'Insurance Brackets',
       description: 'Define social and health insurance rates based on salary brackets.',
-      icon: '🛡️',
+      icon: '',
       path: '/dashboard/payroll/insurance-brackets',
       stats: stats?.insuranceBrackets,
     },
@@ -186,7 +186,7 @@ export default function PayrollDashboardPage() {
     id: 'tax-rules',
     title: 'Tax Rules',
     description: 'Configure tax rates and rules for payroll deductions.',
-    icon: '🏛️',
+    icon: '',
     path: '/dashboard/payroll/tax-rules',
     stats: stats?.taxRules,
   };
@@ -235,7 +235,7 @@ export default function PayrollDashboardPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>{isLegalPolicyAdmin ? '🏛️ Tax Rules Configuration' : '💼 Payroll Configuration'}</h1>
+              <h1 className={styles.pageTitle}>{isLegalPolicyAdmin ? 'Tax Rules Configuration' : 'Payroll Configuration'}</h1>
               <p className={styles.pageSubtitle}>
                 {isLegalPolicyAdmin 
                   ? 'Configure and manage tax rates and rules for payroll deductions'
@@ -248,14 +248,14 @@ export default function PayrollDashboardPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/approvals')}
                 >
-                  ✅ Approval Center ({totalPending} pending)
+                   Approval Center ({totalPending} pending)
                 </button>
               </div>
             )}
           </div>
 
           {/* Error Message */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {loading ? (
             <Spinner message="Loading payroll configuration..." />
@@ -285,7 +285,7 @@ export default function PayrollDashboardPage() {
               {totalPending > 0 && !isLegalPolicyAdmin && (
                 <div className={styles.approvalSection}>
                   <h3 className={styles.approvalTitle}>
-                    ⚠️ Pending Approvals ({totalPending})
+                     Pending Approvals ({totalPending})
                   </h3>
                   <p style={{ color: '#92400e', fontSize: '14px', margin: 0 }}>
                     There are {totalPending} configurations waiting for Payroll Manager approval.
@@ -304,7 +304,7 @@ export default function PayrollDashboardPage() {
 
               {/* Configuration Modules */}
               <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>{isLegalPolicyAdmin ? '🏛️ Tax Configuration' : '⚙️ Configuration Modules'}</h2>
+                <h2 className={styles.sectionTitle}>{isLegalPolicyAdmin ? 'Tax Configuration' : 'Configuration Modules'}</h2>
                 <div className={styles.dashboardGrid}>
                   {configModules.map((module) => (
                     <div 
@@ -343,14 +343,14 @@ export default function PayrollDashboardPage() {
               {/* Payroll Execution & Processing - For Payroll Specialist, Payroll Manager, and System Admin */}
               {(isPayrollSpecialist || isPayrollManager) && !isLegalPolicyAdmin && executionStats && (
                 <div className={styles.section} style={{ marginTop: '40px' }}>
-                  <h2 className={styles.sectionTitle}>💰 Payroll Execution & Processing</h2>
+                  <h2 className={styles.sectionTitle}> Payroll Execution & Processing</h2>
                   <div className={styles.dashboardGrid}>
                     {/* Payroll Runs */}
                     <div 
                       className={styles.dashboardCard}
                       onClick={() => router.push('/dashboard/payroll/execution/runs')}
                     >
-                      <span className={styles.dashboardCardIcon}>💰</span>
+                      <span className={styles.dashboardCardIcon}></span>
                       <h3 className={styles.dashboardCardTitle}>Payroll Runs</h3>
                       <p className={styles.dashboardCardDescription}>
                         Create, manage, and process monthly payroll runs with automated calculations.
@@ -380,7 +380,7 @@ export default function PayrollDashboardPage() {
                       className={styles.dashboardCard}
                       onClick={() => router.push('/dashboard/payroll/execution/signing-bonuses')}
                     >
-                      <span className={styles.dashboardCardIcon}>✍️</span>
+                      <span className={styles.dashboardCardIcon}></span>
                       <h3 className={styles.dashboardCardTitle}>Signing Bonuses</h3>
                       <p className={styles.dashboardCardDescription}>
                         Review and approve signing bonuses for new hires before payroll processing.
@@ -400,7 +400,7 @@ export default function PayrollDashboardPage() {
                       className={styles.dashboardCard}
                       onClick={() => router.push('/dashboard/payroll/execution/payslips')}
                     >
-                      <span className={styles.dashboardCardIcon}>📄</span>
+                      <span className={styles.dashboardCardIcon}></span>
                       <h3 className={styles.dashboardCardTitle}>Payslips</h3>
                       <p className={styles.dashboardCardDescription}>
                         View, generate, and distribute employee payslips for completed payroll runs.
@@ -413,7 +413,7 @@ export default function PayrollDashboardPage() {
                         className={styles.dashboardCard}
                         onClick={() => router.push('/dashboard/payroll/reports/overtime-exceptions')}
                       >
-                        <span className={styles.dashboardCardIcon}>📊</span>
+                        <span className={styles.dashboardCardIcon}></span>
                         <h3 className={styles.dashboardCardTitle}>Overtime & Exceptions</h3>
                         <p className={styles.dashboardCardDescription}>
                           View and export overtime hours and attendance exception reports for payroll accuracy.
@@ -427,7 +427,7 @@ export default function PayrollDashboardPage() {
               {/* Payroll Manager Controls - Only for Payroll Manager and System Admin */}
               {isPayrollManager && !isLegalPolicyAdmin && (
                 <div className={styles.section} style={{ marginTop: '40px' }}>
-                  <h2 className={styles.sectionTitle}>🔐 Payroll Manager Controls</h2>
+                  <h2 className={styles.sectionTitle}> Payroll Manager Controls</h2>
                   <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '24px' }}>
                     Lock/unlock payroll runs and manage exceptions as Payroll Manager
                   </p>
@@ -442,7 +442,7 @@ export default function PayrollDashboardPage() {
                         border: 'none'
                       }}
                     >
-                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}>🔒</span>
+                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}></span>
                       <h3 className={styles.dashboardCardTitle} style={{ color: 'white' }}>
                         Lock/Unlock Payroll Runs
                       </h3>
@@ -461,7 +461,7 @@ export default function PayrollDashboardPage() {
                         border: 'none'
                       }}
                     >
-                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}>⚠️</span>
+                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}></span>
                       <h3 className={styles.dashboardCardTitle} style={{ color: 'white' }}>
                         Resolve Escalated Exceptions
                       </h3>
@@ -480,7 +480,7 @@ export default function PayrollDashboardPage() {
                         border: 'none'
                       }}
                     >
-                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}>📊</span>
+                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}></span>
                       <h3 className={styles.dashboardCardTitle} style={{ color: 'white' }}>
                         Audit & Reports
                       </h3>
@@ -495,14 +495,14 @@ export default function PayrollDashboardPage() {
               {/* Payroll Reports & Disputes - For Payroll Specialist and Manager */}
               {(isPayrollSpecialist || isPayrollManager) && !isLegalPolicyAdmin && (
                 <div className={styles.section} style={{ marginTop: '40px' }}>
-                  <h2 className={styles.sectionTitle}>📊 Reports & Dispute Management</h2>
+                  <h2 className={styles.sectionTitle}> Reports & Dispute Management</h2>
                   <div className={styles.dashboardGrid}>
                     {/* Department Reports */}
                     <div 
                       className={styles.dashboardCard}
                       onClick={() => router.push('/dashboard/payroll/department-reports')}
                     >
-                      <span className={styles.dashboardCardIcon}>📈</span>
+                      <span className={styles.dashboardCardIcon}></span>
                       <h3 className={styles.dashboardCardTitle}>Department Payroll Reports</h3>
                       <p className={styles.dashboardCardDescription}>
                         Generate detailed payroll reports by department to analyze salary distribution and ensure budget alignment.
@@ -521,7 +521,7 @@ export default function PayrollDashboardPage() {
                         border: isPayrollManager ? 'none' : undefined
                       }}
                     >
-                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}>⚖️</span>
+                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}></span>
                       <h3 className={styles.dashboardCardTitle} style={{ color: isPayrollManager ? 'white' : undefined }}>
                         Payroll Disputes
                       </h3>
@@ -544,7 +544,7 @@ export default function PayrollDashboardPage() {
                         border: isPayrollManager ? 'none' : undefined
                       }}
                     >
-                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}>💰</span>
+                      <span className={styles.dashboardCardIcon} style={{ fontSize: '48px' }}></span>
                       <h3 className={styles.dashboardCardTitle} style={{ color: isPayrollManager ? 'white' : undefined }}>
                         Expense Claims
                       </h3>

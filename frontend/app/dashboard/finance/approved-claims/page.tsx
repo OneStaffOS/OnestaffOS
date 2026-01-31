@@ -161,7 +161,7 @@ export default function ApprovedClaimsPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>💰 Approved Expense Claims</h1>
+              <h1 className={styles.title}> Approved Expense Claims</h1>
               <p className={styles.subtitle}>
                 Review approved claims and generate refunds for next payroll cycle
               </p>
@@ -173,7 +173,7 @@ export default function ApprovedClaimsPage() {
 
           {/* Info Banner */}
           <div className={styles.infoBanner}>
-            <div className={styles.infoBannerIcon}>ℹ️</div>
+            <div className={styles.infoBannerIcon}></div>
             <div>
               <h3 className={styles.infoBannerTitle}>Finance Staff Action Required</h3>
               <p className={styles.infoBannerText}>
@@ -182,7 +182,7 @@ export default function ApprovedClaimsPage() {
             </div>
           </div>
 
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {loading ? (
             <div className={styles.loadingContainer}>
@@ -191,7 +191,7 @@ export default function ApprovedClaimsPage() {
             </div>
           ) : claims.length === 0 ? (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>✅</div>
+              <div className={styles.emptyIcon}></div>
               <h3>No Approved Claims</h3>
               <p>All approved claims have been processed. New claims will appear here when approved by Payroll Manager.</p>
             </div>
@@ -251,11 +251,11 @@ export default function ApprovedClaimsPage() {
                         <td>
                           {refundGenerated ? (
                             <span className={styles.statusRefundGenerated}>
-                              ✓ Refund Generated
+                               Refund Generated
                             </span>
                           ) : (
                             <span className={styles.statusPending}>
-                              ⏳ Pending Refund
+                               Pending Refund
                             </span>
                           )}
                         </td>
@@ -265,14 +265,14 @@ export default function ApprovedClaimsPage() {
                               onClick={() => openClaimModal(claim)}
                               className={styles.generateButton}
                             >
-                              💵 Generate Refund
+                               Generate Refund
                             </button>
                           ) : (
                             <button
                               onClick={() => openClaimModal(claim)}
                               className={styles.viewButton}
                             >
-                              👁 View Details
+                               View Details
                             </button>
                           )}
                         </td>
@@ -289,8 +289,8 @@ export default function ApprovedClaimsPage() {
             <div className={styles.modalOverlay} onClick={closeModal}>
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                  <h2>💰 Expense Claim Details</h2>
-                  <button onClick={closeModal} className={styles.closeButton}>✕</button>
+                  <h2> Expense Claim Details</h2>
+                  <button onClick={closeModal} className={styles.closeButton}></button>
                 </div>
 
                 <div className={styles.modalBody}>
@@ -345,21 +345,21 @@ export default function ApprovedClaimsPage() {
                   </div>
 
                   {successMessage && (
-                    <div className={styles.successMessage}>✓ {successMessage}</div>
+                    <div className={styles.successMessage}> {successMessage}</div>
                   )}
 
                   {error && <div className={styles.error}>{error}</div>}
 
                   {!hasRefund(selectedClaim._id) && !successMessage && (
                     <div className={styles.actionInfo}>
-                      <strong>⚡ Action Required:</strong> Generate a refund to include this payment in the next payroll cycle.
+                      <strong> Action Required:</strong> Generate a refund to include this payment in the next payroll cycle.
                       The refund amount will be <strong>{formatCurrency(selectedClaim.approvedAmount || selectedClaim.amount)}</strong>.
                     </div>
                   )}
 
                   {hasRefund(selectedClaim._id) && (
                     <div className={styles.completedInfo}>
-                      <strong>✓ Refund Already Generated:</strong> This claim has been processed and will be included in the next payroll cycle.
+                      <strong> Refund Already Generated:</strong> This claim has been processed and will be included in the next payroll cycle.
                     </div>
                   )}
                 </div>
@@ -378,7 +378,7 @@ export default function ApprovedClaimsPage() {
                       className={styles.generateRefundButton}
                       disabled={generating}
                     >
-                      {generating ? 'Generating...' : '💵 Generate Refund'}
+                      {generating ? 'Generating...' : 'Generate Refund'}
                     </button>
                   )}
                 </div>

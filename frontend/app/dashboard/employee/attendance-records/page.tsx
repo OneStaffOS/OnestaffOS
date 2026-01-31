@@ -109,7 +109,7 @@ export default function AttendanceRecordsPage() {
           {/* Page Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📊 My Attendance Records</h1>
+              <h1 className={styles.pageTitle}> My Attendance Records</h1>
               <p className={styles.pageSubtitle}>
                 View your attendance records, request corrections, and track time exceptions
               </p>
@@ -172,7 +172,7 @@ export default function AttendanceRecordsPage() {
                 <>
                   {records.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <span className={styles.emptyIcon}>📭</span>
+                      <span className={styles.emptyIcon}></span>
                       <h3>No Attendance Records</h3>
                       <p>You don't have any attendance records yet.</p>
                     </div>
@@ -183,7 +183,7 @@ export default function AttendanceRecordsPage() {
                           <div className={styles.cardHeader}>
                             <div>
                               <h3 className={styles.cardTitle}>
-                                📅 {formatDateDDMMYYYY(r.createdAt ?? (r.punches?.[0]?.time ?? null))}
+                                 {formatDateDDMMYYYY(r.createdAt ?? (r.punches?.[0]?.time ?? null))}
                               </h3>
                               <p className={styles.cardSubtitle}>
                                 Total work: {r.totalWorkMinutes} minutes
@@ -245,8 +245,7 @@ export default function AttendanceRecordsPage() {
                                 value={reasonMap[r._id] || ''} 
                                 onChange={(e) => setReasonMap((m) => ({ ...m, [r._id]: e.target.value }))} 
                                 rows={3}
-                                placeholder="Explain why this correction is needed..."
-                                style={{
+                                placeholder="Explain why this correction is needed..." style={{
                                   width: '100%',
                                   padding: '0.75rem',
                                   borderRadius: '6px',
@@ -261,7 +260,7 @@ export default function AttendanceRecordsPage() {
                                   onClick={() => submitCorrection(r._id)} 
                                   className={styles.btnSuccess}
                                 >
-                                  {submittingId === r._id ? 'Submitting…' : '✓ Submit Request'}
+                                  {submittingId === r._id ? 'Submitting…' : 'Submit Request'}
                                 </button>
                                 <button 
                                   onClick={() => setOpenFormFor(null)} 
@@ -284,7 +283,7 @@ export default function AttendanceRecordsPage() {
                 <>
                   {requests.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <span className={styles.emptyIcon}>📭</span>
+                      <span className={styles.emptyIcon}></span>
                       <h3>No Correction Requests</h3>
                       <p>You haven't submitted any correction requests yet.</p>
                     </div>
@@ -326,7 +325,7 @@ export default function AttendanceRecordsPage() {
                 <>
                   {timeExceptions.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <span className={styles.emptyIcon}>📭</span>
+                      <span className={styles.emptyIcon}></span>
                       <h3>No Time Exceptions</h3>
                       <p>You don't have any time exception requests.</p>
                     </div>

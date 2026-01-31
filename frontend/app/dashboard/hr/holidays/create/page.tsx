@@ -71,7 +71,7 @@ export default function CreateHolidayPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>🎄 Create Holiday</h1>
+              <h1 className={styles.pageTitle}> Create Holiday</h1>
               <p className={styles.pageSubtitle}>
                 Add a new holiday to the system calendar
               </p>
@@ -91,8 +91,7 @@ export default function CreateHolidayPage() {
                     className={styles.formInput}
                     value={name} 
                     onChange={(e) => setName(e.target.value)} 
-                    placeholder="e.g. Christmas, Independence Day"
-                    required 
+                    placeholder="e.g. Christmas, Independence Day" required 
                   />
                 </div>
 
@@ -112,8 +111,7 @@ export default function CreateHolidayPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Start Date *</label>
                   <input 
-                    type="date" 
-                    className={styles.formInput}
+                    type="date" className={styles.formInput}
                     value={startDate} 
                     onChange={(e) => setStartDate(e.target.value)} 
                     required 
@@ -123,8 +121,7 @@ export default function CreateHolidayPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>End Date (optional)</label>
                   <input 
-                    type="date" 
-                    className={styles.formInput}
+                    type="date" className={styles.formInput}
                     value={endDate} 
                     onChange={(e) => setEndDate(e.target.value)} 
                   />
@@ -137,14 +134,12 @@ export default function CreateHolidayPage() {
               <div className={styles.formActions}>
                 <button 
                   className={styles.btnPrimary} 
-                  type="submit" 
-                  disabled={loading}
+                  type="submit" disabled={loading}
                 >
-                  {loading ? 'Creating...' : '✓ Create Holiday'}
+                  {loading ? 'Creating...' : 'Create Holiday'}
                 </button>
                 <button 
-                  type="button" 
-                  className={styles.btnSecondary} 
+                  type="button" className={styles.btnSecondary} 
                   onClick={() => router.push('/dashboard/hr/holidays')}
                 >
                   Cancel

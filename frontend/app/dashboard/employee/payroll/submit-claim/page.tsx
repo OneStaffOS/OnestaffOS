@@ -88,7 +88,7 @@ export default function SubmitClaimPage() {
 
           {/* Info Banner */}
           <div className={styles.infoBanner}>
-            <div className={styles.infoIcon}>💼</div>
+            <div className={styles.infoIcon}></div>
             <div className={styles.infoContent}>
               <h4>Submit an Expense Reimbursement Claim</h4>
               <p>
@@ -102,7 +102,7 @@ export default function SubmitClaimPage() {
           {/* Success Message */}
           {success && (
             <div className={styles.successMessage}>
-              ✅ Claim submitted successfully! Redirecting to My Claims...
+               Claim submitted successfully! Redirecting to My Claims...
             </div>
           )}
 
@@ -141,14 +141,10 @@ export default function SubmitClaimPage() {
                   Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  className={styles.input}
+                  type="number" className={styles.input}
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0.00"
-                  step="0.01"
-                  min="0.01"
-                  required
+                  placeholder="0.00" step="0.01" min="0.01" required
                   disabled={loading}
                 />
                 <div className={styles.inputHint}>Enter the total amount you are claiming for reimbursement</div>
@@ -163,8 +159,7 @@ export default function SubmitClaimPage() {
                   className={styles.textarea}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Provide details about the expense: date, purpose, what was purchased, who was involved (if applicable), and any other relevant information..."
-                  rows={6}
+                  placeholder="Provide details about the expense: date, purpose, what was purchased, who was involved (if applicable), and any other relevant information..." rows={6}
                   required
                   disabled={loading}
                 />
@@ -187,15 +182,14 @@ export default function SubmitClaimPage() {
               {/* Action Buttons */}
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnCancel}
+                  type="button" className={styles.btnCancel}
                   onClick={() => router.push('/dashboard/employee/payroll/my-payslips')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button type="submit" className={styles.btnSubmit} disabled={loading}>
-                  {loading ? 'Submitting...' : '💼 Submit Claim'}
+                  {loading ? 'Submitting...' : 'Submit Claim'}
                 </button>
               </div>
             </div>

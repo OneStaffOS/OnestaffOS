@@ -75,12 +75,12 @@ export default function CreatePayrollPolicyPage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>📋 Create Payroll Policy</h1>
+            <h1 className={styles.formTitle}> Create Payroll Policy</h1>
             <p className={styles.formSubtitle}>
               Define a new payroll policy. It will be saved as a draft and require HR Manager approval.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formRow}>
@@ -89,13 +89,10 @@ export default function CreatePayrollPolicyPage() {
                     Policy Name <span className={styles.required}>*</span>
                   </label>
                   <input
-                    type="text"
-                    name="policyName"
-                    className={styles.formInput}
+                    type="text" name="policyName" className={styles.formInput}
                     value={formData.policyName}
                     onChange={handleChange}
-                    placeholder="Enter policy name"
-                    required
+                    placeholder="Enter policy name" required
                   />
                 </div>
 
@@ -104,8 +101,7 @@ export default function CreatePayrollPolicyPage() {
                     Policy Type <span className={styles.required}>*</span>
                   </label>
                   <select
-                    name="policyType"
-                    className={styles.formSelect}
+                    name="policyType" className={styles.formSelect}
                     value={formData.policyType}
                     onChange={handleChange}
                     required
@@ -123,12 +119,10 @@ export default function CreatePayrollPolicyPage() {
                   Description <span className={styles.required}>*</span>
                 </label>
                 <textarea
-                  name="description"
-                  className={styles.formTextarea}
+                  name="description" className={styles.formTextarea}
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Describe the policy in detail..."
-                  required
+                  placeholder="Describe the policy in detail..." required
                 />
               </div>
 
@@ -138,9 +132,7 @@ export default function CreatePayrollPolicyPage() {
                     Effective Date <span className={styles.required}>*</span>
                   </label>
                   <input
-                    type="date"
-                    name="effectiveDate"
-                    className={styles.formInput}
+                    type="date" name="effectiveDate" className={styles.formInput}
                     value={formData.effectiveDate}
                     onChange={handleChange}
                     required
@@ -152,8 +144,7 @@ export default function CreatePayrollPolicyPage() {
                     Applicability <span className={styles.required}>*</span>
                   </label>
                   <select
-                    name="applicability"
-                    className={styles.formSelect}
+                    name="applicability" className={styles.formSelect}
                     value={formData.applicability}
                     onChange={handleChange}
                     required
@@ -168,7 +159,7 @@ export default function CreatePayrollPolicyPage() {
 
               {/* Rule Definition Section */}
               <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>📐 Rule Definition</h3>
+                <h3 className={styles.sectionTitle}> Rule Definition</h3>
                 
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
@@ -176,16 +167,10 @@ export default function CreatePayrollPolicyPage() {
                       Percentage (0-100) <span className={styles.required}>*</span>
                     </label>
                     <input
-                      type="number"
-                      name="percentage"
-                      className={styles.formInput}
+                      type="number" name="percentage" className={styles.formInput}
                       value={formData.ruleDefinition.percentage}
                       onChange={handleRuleChange}
-                      placeholder="Enter percentage (0-100)"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      required
+                      placeholder="Enter percentage (0-100)" min="0" max="100" step="0.01" required
                     />
                     <span className={styles.formHint}>Percentage to apply for the rule</span>
                   </div>
@@ -195,15 +180,10 @@ export default function CreatePayrollPolicyPage() {
                       Fixed Amount <span className={styles.required}>*</span>
                     </label>
                     <input
-                      type="number"
-                      name="fixedAmount"
-                      className={styles.formInput}
+                      type="number" name="fixedAmount" className={styles.formInput}
                       value={formData.ruleDefinition.fixedAmount}
                       onChange={handleRuleChange}
-                      placeholder="Enter fixed amount in EGP"
-                      min="0"
-                      step="0.01"
-                      required
+                      placeholder="Enter fixed amount in EGP" min="0" step="0.01" required
                     />
                     <span className={styles.formHint}>Fixed amount in EGP</span>
                   </div>
@@ -213,15 +193,10 @@ export default function CreatePayrollPolicyPage() {
                       Threshold Amount <span className={styles.required}>*</span>
                     </label>
                     <input
-                      type="number"
-                      name="thresholdAmount"
-                      className={styles.formInput}
+                      type="number" name="thresholdAmount" className={styles.formInput}
                       value={formData.ruleDefinition.thresholdAmount}
                       onChange={handleRuleChange}
-                      placeholder="Enter threshold amount"
-                      min="0"
-                      step="0.01"
-                      required
+                      placeholder="Enter threshold amount" min="0" step="0.01" required
                     />
                     <span className={styles.formHint}>Minimum threshold to trigger the rule</span>
                   </div>
@@ -230,19 +205,17 @@ export default function CreatePayrollPolicyPage() {
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/policies')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
-                  {loading ? 'Creating...' : '📋 Create Policy'}
+                  {loading ? 'Creating...' : 'Create Policy'}
                 </button>
               </div>
             </form>

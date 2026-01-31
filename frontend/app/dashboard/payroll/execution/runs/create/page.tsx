@@ -80,7 +80,7 @@ export default function CreatePayrollRunPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>➕ Create New Payroll Run</h1>
+              <h1 className={styles.pageTitle}> Create New Payroll Run</h1>
               <p className={styles.pageSubtitle}>
                 Initialize a new payroll run for the selected period
               </p>
@@ -88,12 +88,12 @@ export default function CreatePayrollRunPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Information Card */}
           <div className={styles.warningMessage}>
-            <strong>ℹ️ Before Creating a Payroll Run:</strong>
+            <strong> Before Creating a Payroll Run:</strong>
             <ul style={{ margin: '8px 0 0 20px', lineHeight: '1.6' }}>
               <li>Ensure all signing bonuses for new hires have been reviewed and approved</li>
               <li>Verify that termination benefits for exiting employees are processed</li>
@@ -109,13 +109,10 @@ export default function CreatePayrollRunPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Company Entity *</label>
                 <input
-                  type="text"
-                  name="entity"
-                  value={formData.entity}
+                  type="text" name="entity" value={formData.entity}
                   onChange={handleChange}
                   className={styles.formInput}
-                  placeholder="e.g., OneStaff Organization"
-                  required
+                  placeholder="e.g., OneStaff Organization" required
                 />
                 <span className={styles.formHint}>
                   The legal entity name for this payroll run
@@ -126,9 +123,7 @@ export default function CreatePayrollRunPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Payroll Period (End Date) *</label>
                 <input
-                  type="date"
-                  name="payrollPeriod"
-                  value={formData.payrollPeriod}
+                  type="date" name="payrollPeriod" value={formData.payrollPeriod}
                   onChange={handleChange}
                   className={styles.formInput}
                   required
@@ -142,12 +137,10 @@ export default function CreatePayrollRunPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Notes (Optional)</label>
                 <textarea
-                  name="notes"
-                  value={formData.notes}
+                  name="notes" value={formData.notes}
                   onChange={handleChange}
                   className={styles.formTextarea}
-                  placeholder="Add any notes or special instructions for this payroll run..."
-                  rows={4}
+                  placeholder="Add any notes or special instructions for this payroll run..." rows={4}
                 />
                 <span className={styles.formHint}>
                   Any additional information about this payroll run
@@ -173,19 +166,17 @@ export default function CreatePayrollRunPage() {
               {/* Action Buttons */}
               <div className={styles.actionButtons}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/execution/runs')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
-                  {loading ? '⏳ Creating Payroll Run...' : '✅ Create Payroll Run'}
+                  {loading ? 'Creating Payroll Run...' : 'Create Payroll Run'}
                 </button>
               </div>
             </form>

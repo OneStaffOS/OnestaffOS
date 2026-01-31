@@ -53,12 +53,12 @@ export default function CreateAllowancePage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>🎁 Create Allowance</h1>
+            <h1 className={styles.formTitle}> Create Allowance</h1>
             <p className={styles.formSubtitle}>
               Define a new employee allowance. It will require HR Manager approval.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -66,13 +66,10 @@ export default function CreateAllowancePage() {
                   Allowance Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="name"
-                  className={styles.formInput}
+                  type="text" name="name" className={styles.formInput}
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="e.g., Housing Allowance, Transport Allowance, Meal Allowance"
-                  required
+                  placeholder="e.g., Housing Allowance, Transport Allowance, Meal Allowance" required
                 />
                 <span className={styles.formHint}>The name of the allowance</span>
               </div>
@@ -82,34 +79,27 @@ export default function CreateAllowancePage() {
                   Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="amount"
-                  className={styles.formInput}
+                  type="number" name="amount" className={styles.formInput}
                   value={formData.amount}
                   onChange={handleChange}
-                  placeholder="Enter allowance amount in EGP"
-                  min="0"
-                  step="100"
-                  required
+                  placeholder="Enter allowance amount in EGP" min="0" step="100" required
                 />
                 <span className={styles.formHint}>The allowance amount in Egyptian Pounds</span>
               </div>
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/allowances')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
-                  {loading ? 'Creating...' : '🎁 Create Allowance'}
+                  {loading ? 'Creating...' : 'Create Allowance'}
                 </button>
               </div>
             </form>

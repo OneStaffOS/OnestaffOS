@@ -40,7 +40,7 @@ export default function CreateScheduleRulePage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📅 Create Scheduling Rule</h1>
+              <h1 className={styles.pageTitle}> Create Scheduling Rule</h1>
               <p className={styles.pageSubtitle}>
                 Define a new scheduling pattern for your team
               </p>
@@ -81,14 +81,12 @@ export default function CreateScheduleRulePage() {
               <div className={styles.formActions}>
                 <button 
                   className={styles.btnPrimary} 
-                  type="submit" 
-                  disabled={loading}
+                  type="submit" disabled={loading}
                 >
-                  {loading ? 'Creating...' : '✓ Create Rule'}
+                  {loading ? 'Creating...' : 'Create Rule'}
                 </button>
                 <button 
-                  type="button" 
-                  className={styles.btnSecondary} 
+                  type="button" className={styles.btnSecondary} 
                   onClick={() => router.push('/dashboard/manager/time-management/schedule-rules')}
                 >
                   Cancel

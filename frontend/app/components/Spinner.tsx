@@ -3,7 +3,7 @@
  * Reusable loading spinner with consistent green styling
  */
 
-'use client';
+"use client";
 
 import React from 'react';
 import styles from './Spinner.module.css';

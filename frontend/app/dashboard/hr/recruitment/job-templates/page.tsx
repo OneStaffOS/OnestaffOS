@@ -4,7 +4,7 @@
  * HR Manager can create, view, edit, and delete standardized job templates
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -119,9 +119,7 @@ export default function JobTemplatesPage() {
             flexWrap: 'wrap'
           }}>
             <input
-              type="text"
-              placeholder="Search by title or department..."
-              value={searchTerm}
+              type="text" placeholder="Search by title or department..." value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 flex: '1',

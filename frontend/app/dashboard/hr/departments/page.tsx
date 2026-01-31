@@ -4,7 +4,7 @@
  * Phase III: HR/Admin Processing & Master Data
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -128,9 +128,7 @@ export default function DepartmentsPage() {
 
         <div className={styles.controls}>
           <input
-            type="text"
-            placeholder="Search departments..."
-            value={searchTerm}
+            type="text" placeholder="Search departments..." value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
           />
@@ -208,8 +206,7 @@ export default function DepartmentsPage() {
                 <div className={styles.formGroup}>
                   <label>Department Code</label>
                   <input
-                    type="text"
-                    required
+                    type="text" required
                     value={newDepartment.code}
                     onChange={(e) => setNewDepartment({ ...newDepartment, code: e.target.value })}
                     placeholder="e.g., IT, HR, FIN"
@@ -218,8 +215,7 @@ export default function DepartmentsPage() {
                 <div className={styles.formGroup}>
                   <label>Department Name</label>
                   <input
-                    type="text"
-                    required
+                    type="text" required
                     value={newDepartment.name}
                     onChange={(e) => setNewDepartment({ ...newDepartment, name: e.target.value })}
                     placeholder="e.g., Information Technology"
@@ -231,8 +227,7 @@ export default function DepartmentsPage() {
                     required
                     value={newDepartment.description}
                     onChange={(e) => setNewDepartment({ ...newDepartment, description: e.target.value })}
-                    placeholder="e.g., HR: Manages recruitment, employee relations, payroll, benefits administration, and compliance with labor regulations"
-                    rows={4}
+                    placeholder="e.g., HR: Manages recruitment, employee relations, payroll, benefits administration, and compliance with labor regulations" rows={4}
                   />
                 </div>
                 <div className={styles.modalActions}>

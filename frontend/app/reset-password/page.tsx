@@ -5,7 +5,7 @@
  * Token is passed as URL query parameter
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';

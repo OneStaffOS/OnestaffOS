@@ -3,7 +3,7 @@
  * View and manage all termination requests
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -119,7 +119,7 @@ export default function TerminationsPage() {
             boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)'
           }}>
             <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '700', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              🏢 Termination & Offboarding Management
+               Termination & Offboarding Management
             </h1>
           </div>
 
@@ -138,7 +138,7 @@ export default function TerminationsPage() {
                 boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
                 transition: 'all 0.3s ease',
               }}>
-                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>📊 Total Terminations</h3>
+                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Total Terminations</h3>
                 <p style={{ color: 'white', fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{stats.total}</p>
               </div>
               <div style={{
@@ -148,7 +148,7 @@ export default function TerminationsPage() {
                 boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
                 transition: 'all 0.3s ease',
               }}>
-                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>⏳ Pending</h3>
+                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Pending</h3>
                 <p style={{ color: 'white', fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{stats.byStatus.pending}</p>
               </div>
               <div style={{
@@ -158,7 +158,7 @@ export default function TerminationsPage() {
                 boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                 transition: 'all 0.3s ease',
               }}>
-                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🔍 Under Review</h3>
+                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Under Review</h3>
                 <p style={{ color: 'white', fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{stats.byStatus.underReview}</p>
               </div>
               <div style={{
@@ -168,7 +168,7 @@ export default function TerminationsPage() {
                 boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
                 transition: 'all 0.3s ease',
               }}>
-                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✅ Approved</h3>
+                <h3 style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Approved</h3>
                 <p style={{ color: 'white', fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{stats.byStatus.approved}</p>
               </div>
             </div>
@@ -244,7 +244,7 @@ export default function TerminationsPage() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
             }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📋</div>
+              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}></div>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#374151', marginBottom: '0.75rem' }}>No Termination Requests</h2>
               <p style={{ fontSize: '1.05rem', color: '#6b7280', margin: 0 }}>No termination requests match the selected filter.</p>
             </div>

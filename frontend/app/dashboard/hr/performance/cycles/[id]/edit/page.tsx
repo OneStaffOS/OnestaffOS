@@ -3,7 +3,7 @@
  * Allow HR Manager and HR Employee to edit existing appraisal cycles
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -47,7 +47,7 @@ export default function EditCyclePage() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    cycleType: 'ANNUAL' as 'ANNUAL' | 'SEMI_ANNUAL' | 'PROBATIONARY' | 'PROJECT' | 'AD_HOC',
+    cycleType: 'ANNUAL'as 'ANNUAL' | 'SEMI_ANNUAL' | 'PROBATIONARY' | 'PROJECT' | 'AD_HOC',
     startDate: '',
     endDate: '',
     managerDueDate: '',
@@ -230,12 +230,9 @@ export default function EditCyclePage() {
                   Cycle Name *
                 </label>
                 <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
+                  type="text" id="name" value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g., Q1 2024 Performance Review"
-                  required
+                  placeholder="e.g., Q1 2024 Performance Review" required
                   style={{
                     width: '100%',
                     padding: '0.75rem',
@@ -251,11 +248,9 @@ export default function EditCyclePage() {
                   Description
                 </label>
                 <textarea
-                  id="description"
-                  value={formData.description}
+                  id="description" value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe the purpose and scope of this appraisal cycle"
-                  rows={4}
+                  placeholder="Describe the purpose and scope of this appraisal cycle" rows={4}
                   style={{
                     width: '100%',
                     padding: '0.75rem',
@@ -272,8 +267,7 @@ export default function EditCyclePage() {
                   Cycle Type *
                 </label>
                 <select
-                  id="cycleType"
-                  value={formData.cycleType}
+                  id="cycleType" value={formData.cycleType}
                   onChange={(e) => setFormData({ ...formData, cycleType: e.target.value as any })}
                   required
                   style={{
@@ -303,9 +297,7 @@ export default function EditCyclePage() {
                     Start Date *
                   </label>
                   <input
-                    type="date"
-                    id="startDate"
-                    value={formData.startDate}
+                    type="date" id="startDate" value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                     required
                     style={{
@@ -323,9 +315,7 @@ export default function EditCyclePage() {
                     End Date *
                   </label>
                   <input
-                    type="date"
-                    id="endDate"
-                    value={formData.endDate}
+                    type="date" id="endDate" value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                     required
                     style={{
@@ -345,9 +335,7 @@ export default function EditCyclePage() {
                     Manager Review Due Date
                   </label>
                   <input
-                    type="date"
-                    id="managerDueDate"
-                    value={formData.managerDueDate}
+                    type="date" id="managerDueDate" value={formData.managerDueDate}
                     onChange={(e) => setFormData({ ...formData, managerDueDate: e.target.value })}
                     style={{
                       width: '100%',
@@ -364,9 +352,7 @@ export default function EditCyclePage() {
                     Employee Acknowledgement Due Date
                   </label>
                   <input
-                    type="date"
-                    id="employeeAcknowledgementDueDate"
-                    value={formData.employeeAcknowledgementDueDate}
+                    type="date" id="employeeAcknowledgementDueDate" value={formData.employeeAcknowledgementDueDate}
                     onChange={(e) => setFormData({ ...formData, employeeAcknowledgementDueDate: e.target.value })}
                     style={{
                       width: '100%',
@@ -391,8 +377,7 @@ export default function EditCyclePage() {
                   Template Assignments ({formData.templateAssignments.length})
                 </h2>
                 <button
-                  type="button"
-                  onClick={addTemplateAssignment}
+                  type="button" onClick={addTemplateAssignment}
                   style={{
                     padding: '0.5rem 1rem',
                     background: '#0066cc',
@@ -433,8 +418,7 @@ export default function EditCyclePage() {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <h3 style={{ fontSize: '1rem', margin: 0 }}>Assignment #{index + 1}</h3>
                         <button
-                          type="button"
-                          onClick={() => removeTemplateAssignment(index)}
+                          type="button" onClick={() => removeTemplateAssignment(index)}
                           style={{
                             padding: '0.25rem 0.75rem',
                             background: '#dc2626',
@@ -532,8 +516,7 @@ export default function EditCyclePage() {
                                   }}
                                 >
                                   <input
-                                    type="checkbox"
-                                    checked={assignment.departmentIds.includes(dept._id)}
+                                    type="checkbox" checked={assignment.departmentIds.includes(dept._id)}
                                     onChange={() => toggleDepartment(index, dept._id)}
                                     style={{ marginRight: '0.5rem', cursor: 'pointer' }}
                                   />
@@ -553,8 +536,7 @@ export default function EditCyclePage() {
             {/* Actions */}
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', paddingTop: '1rem', borderTop: '1px solid #ddd' }}>
               <button
-                type="button"
-                onClick={() => router.push(`/dashboard/hr/performance/cycles/${cycleId}`)}
+                type="button" onClick={() => router.push(`/dashboard/hr/performance/cycles/${cycleId}`)}
                 disabled={loading}
                 style={{
                   padding: '0.75rem 1.5rem',
@@ -570,8 +552,7 @@ export default function EditCyclePage() {
                 Cancel
               </button>
               <button
-                type="submit"
-                disabled={loading || templates.length === 0}
+                type="submit" disabled={loading || templates.length === 0}
                 style={{
                   padding: '0.75rem 1.5rem',
                   background: loading || templates.length === 0 ? '#9ca3af' : '#0066cc',

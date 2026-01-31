@@ -124,7 +124,7 @@ export default function PayTypesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>⏱️ Pay Types</h1>
+              <h1 className={styles.pageTitle}> Pay Types</h1>
               <p className={styles.pageSubtitle}>
                 Define payment types such as Monthly, Hourly, or Daily compensation
               </p>
@@ -135,15 +135,15 @@ export default function PayTypesPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/pay-types/create')}
                 >
-                  ➕ Create Pay Type
+                   Create Pay Type
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -168,7 +168,7 @@ export default function PayTypesPage() {
           {/* Pending Approvals Section */}
           {canApprove && pendingTypes.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingTypes.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingTypes.length})</h3>
               <div className={styles.approvalList}>
                 {pendingTypes.map(type => (
                   <div key={type._id} className={styles.approvalItem}>
@@ -183,13 +183,13 @@ export default function PayTypesPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(type._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(type._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -219,7 +219,7 @@ export default function PayTypesPage() {
             <Spinner message="Loading pay types..." />
           ) : payTypes.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>⏱️</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Pay Types Found</h3>
               <p>Create your first pay type to get started.</p>
               {canCreate && (
@@ -228,7 +228,7 @@ export default function PayTypesPage() {
                   onClick={() => router.push('/dashboard/payroll/pay-types/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Pay Type
+                   Create Pay Type
                 </button>
               )}
             </div>

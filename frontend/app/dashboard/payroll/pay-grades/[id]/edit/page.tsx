@@ -95,12 +95,12 @@ export default function EditPayGradePage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>✏️ Edit Pay Grade</h1>
+            <h1 className={styles.formTitle}> Edit Pay Grade</h1>
             <p className={styles.formSubtitle}>
               Update the pay grade details. Only draft pay grades can be edited.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -108,13 +108,10 @@ export default function EditPayGradePage() {
                   Grade Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="grade"
-                  className={styles.formInput}
+                  type="text" name="grade" className={styles.formInput}
                   value={formData.grade}
                   onChange={handleChange}
-                  placeholder="e.g., Junior Software Engineer, Senior Manager"
-                  required
+                  placeholder="e.g., Junior Software Engineer, Senior Manager" required
                 />
                 <span className={styles.formHint}>Position grade/level name</span>
               </div>
@@ -125,14 +122,10 @@ export default function EditPayGradePage() {
                     Base Salary (EGP) <span className={styles.required}>*</span>
                   </label>
                   <input
-                    type="number"
-                    name="baseSalary"
-                    className={styles.formInput}
+                    type="number" name="baseSalary" className={styles.formInput}
                     value={formData.baseSalary}
                     onChange={handleChange}
-                    min="6000"
-                    step="100"
-                    required
+                    min="6000" step="100" required
                   />
                   <span className={styles.formHint}>Minimum: 6,000 EGP</span>
                 </div>
@@ -142,14 +135,10 @@ export default function EditPayGradePage() {
                     Gross Salary (EGP) <span className={styles.required}>*</span>
                   </label>
                   <input
-                    type="number"
-                    name="grossSalary"
-                    className={styles.formInput}
+                    type="number" name="grossSalary" className={styles.formInput}
                     value={formData.grossSalary}
                     onChange={handleChange}
-                    min="6000"
-                    step="100"
-                    required
+                    min="6000" step="100" required
                   />
                   <span className={styles.formHint}>Total salary including allowances</span>
                 </div>
@@ -157,19 +146,17 @@ export default function EditPayGradePage() {
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/pay-grades')}
                   disabled={saving}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={saving}
                 >
-                  {saving ? 'Saving...' : '💾 Save Changes'}
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>

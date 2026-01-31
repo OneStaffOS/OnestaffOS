@@ -44,7 +44,7 @@ export default function CreateShiftTypePage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📋 Create Shift Type</h1>
+              <h1 className={styles.pageTitle}> Create Shift Type</h1>
               <p className={styles.pageSubtitle}>
                 Define a new shift type category
               </p>
@@ -72,8 +72,7 @@ export default function CreateShiftTypePage() {
               <div className={styles.checkboxGroup}>
                 <label className={styles.checkboxLabel}>
                   <input
-                    type="checkbox"
-                    checked={active}
+                    type="checkbox" checked={active}
                     onChange={(e) => setActive(e.target.checked)}
                   />
                   <span>Active</span>
@@ -83,14 +82,12 @@ export default function CreateShiftTypePage() {
               <div className={styles.formActions}>
                 <button 
                   className={styles.btnPrimary} 
-                  type="submit" 
-                  disabled={loading}
+                  type="submit" disabled={loading}
                 >
-                  {loading ? 'Creating...' : '✓ Create Type'}
+                  {loading ? 'Creating...' : 'Create Type'}
                 </button>
                 <button 
-                  type="button" 
-                  className={styles.btnSecondary} 
+                  type="button" className={styles.btnSecondary} 
                   onClick={() => router.back()}
                 >
                   Cancel

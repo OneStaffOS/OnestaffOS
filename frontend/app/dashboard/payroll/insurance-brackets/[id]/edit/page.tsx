@@ -152,14 +152,14 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
 
           {/* Header */}
           <div className={styles.pageHeader}>
-            <h1 className={styles.pageTitle}>✏️ Edit Insurance Bracket</h1>
+            <h1 className={styles.pageTitle}> Edit Insurance Bracket</h1>
             <p className={styles.pageSubtitle}>
               Update insurance bracket details (draft status only)
             </p>
           </div>
 
           {/* Error */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Form */}
           <div className={styles.formCard}>
@@ -167,13 +167,10 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Insurance Name *</label>
                 <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
+                  type="text" name="name" value={formData.name}
                   onChange={handleChange}
                   className={styles.formInput}
-                  placeholder="e.g., Social Insurance Bracket A"
-                  required
+                  placeholder="e.g., Social Insurance Bracket A" required
                 />
                 <span className={styles.formHint}>
                   A descriptive name for this insurance bracket
@@ -184,15 +181,10 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Minimum Salary (EGP) *</label>
                   <input
-                    type="number"
-                    name="minSalary"
-                    value={formData.minSalary}
+                    type="number" name="minSalary" value={formData.minSalary}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 0"
-                    min="0"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 0" min="0" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Lower bound of salary range (inclusive)
@@ -202,15 +194,10 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Maximum Salary (EGP) *</label>
                   <input
-                    type="number"
-                    name="maxSalary"
-                    value={formData.maxSalary}
+                    type="number" name="maxSalary" value={formData.maxSalary}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 5000"
-                    min="0"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 5000" min="0" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Upper bound of salary range (inclusive)
@@ -222,16 +209,10 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Employee Contribution Rate (%) *</label>
                   <input
-                    type="number"
-                    name="employeeRate"
-                    value={formData.employeeRate}
+                    type="number" name="employeeRate" value={formData.employeeRate}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 11"
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 11" min="0" max="100" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Percentage deducted from employee&apos;s gross salary
@@ -241,16 +222,10 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Employer Contribution Rate (%) *</label>
                   <input
-                    type="number"
-                    name="employerRate"
-                    value={formData.employerRate}
+                    type="number" name="employerRate" value={formData.employerRate}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 18.75"
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 18.75" min="0" max="100" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Percentage paid by employer on top of salary
@@ -260,7 +235,7 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
 
               {/* Info Box */}
               <div className={styles.infoBox}>
-                <h4>ℹ️ Important Notes</h4>
+                <h4> Important Notes</h4>
                 <ul>
                   <li>Only <strong>Draft</strong> insurance brackets can be edited</li>
                   <li>Once approved, the bracket cannot be modified</li>
@@ -270,15 +245,13 @@ export default function EditInsuranceBracketPage({ params }: { params: Promise<{
 
               <div className={styles.formActions}>
                 <button 
-                  type="button" 
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.back()}
                 >
                   Cancel
                 </button>
                 <button 
-                  type="submit" 
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={saving}
                 >
                   {saving ? 'Saving...' : 'Update Insurance Bracket'}

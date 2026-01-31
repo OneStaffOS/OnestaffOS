@@ -3,7 +3,7 @@
  * View status of submitted resignation requests
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -91,7 +91,7 @@ export default function MyResignationsPage() {
 
           {resignations.length === 0 ? (
             <div className={styles.empty}>
-              <div className={styles.emptyIcon}>📄</div>
+              <div className={styles.emptyIcon}></div>
               <h2>No Resignation Requests</h2>
               <p>You haven't submitted any resignation requests yet.</p>
               <button

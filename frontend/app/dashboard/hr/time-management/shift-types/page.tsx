@@ -65,7 +65,7 @@ export default function ShiftTypesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>⏰ Shift Management</h1>
+              <h1 className={styles.pageTitle}> Shift Management</h1>
               <p className={styles.pageSubtitle}>
                 Manage shift types and individual shifts for your organization
               </p>
@@ -75,13 +75,13 @@ export default function ShiftTypesPage() {
                 className={styles.btnPrimary}
                 onClick={() => router.push('/dashboard/hr/time-management/shifts/create')}
               >
-                ➕ Create Shift
+                 Create Shift
               </button>
               <button 
                 className={styles.btnSecondary}
                 onClick={() => router.push('/dashboard/hr/time-management/shift-types/create')}
               >
-                ➕ Create Shift Type
+                 Create Shift Type
               </button>
             </div>
           </div>
@@ -116,10 +116,10 @@ export default function ShiftTypesPage() {
             <>
               {/* Shift Types Section */}
               <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>📋 Shift Types</h2>
+                <h2 className={styles.sectionTitle}> Shift Types</h2>
                 {shiftTypes.length === 0 ? (
                   <div className={styles.emptyState}>
-                    <span className={styles.emptyIcon}>📋</span>
+                    <span className={styles.emptyIcon}></span>
                     <h3>No Shift Types</h3>
                     <p>Create your first shift type to get started.</p>
                   </div>
@@ -159,10 +159,10 @@ export default function ShiftTypesPage() {
 
               {/* Shifts Section */}
               <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>🕐 Shifts</h2>
+                <h2 className={styles.sectionTitle}> Shifts</h2>
                 {shifts.length === 0 ? (
                   <div className={styles.emptyState}>
-                    <span className={styles.emptyIcon}>🕐</span>
+                    <span className={styles.emptyIcon}></span>
                     <h3>No Shifts</h3>
                     <p>Create your first shift to start scheduling.</p>
                   </div>
@@ -221,4 +221,3 @@ export default function ShiftTypesPage() {
     </ProtectedRoute>
   );
 }
-

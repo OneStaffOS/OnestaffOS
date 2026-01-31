@@ -4,7 +4,7 @@
  * Accessible by: HR Manager, HR Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -100,8 +100,7 @@ export default function PerformanceTemplatesPage() {
             <div className={styles.headerRight}>
               <label className={styles.checkbox}>
                 <input
-                  type="checkbox"
-                  checked={showInactive}
+                  type="checkbox" checked={showInactive}
                   onChange={(e) => setShowInactive(e.target.checked)}
                 />
                 <span>Show Inactive</span>

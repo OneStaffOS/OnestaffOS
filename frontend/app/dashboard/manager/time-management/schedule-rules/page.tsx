@@ -55,7 +55,7 @@ export default function ManagerScheduleRulesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📅 Scheduling Rules</h1>
+              <h1 className={styles.pageTitle}> Scheduling Rules</h1>
               <p className={styles.pageSubtitle}>
                 Manage scheduling patterns and rules for your team
               </p>
@@ -65,7 +65,7 @@ export default function ManagerScheduleRulesPage() {
                 className={styles.btnPrimary}
                 onClick={() => router.push('/dashboard/manager/time-management/schedule-rules/create')}
               >
-                ➕ Create Rule
+                 Create Rule
               </button>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function ManagerScheduleRulesPage() {
             <Spinner message="Loading rules..." />
           ) : items.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📅</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Scheduling Rules</h3>
               <p>Create your first scheduling rule to get started.</p>
             </div>

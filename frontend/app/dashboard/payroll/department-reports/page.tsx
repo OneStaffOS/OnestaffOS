@@ -166,7 +166,7 @@ export default function DepartmentReportsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📊 Department Payroll Reports</h1>
+              <h1 className={styles.pageTitle}> Department Payroll Reports</h1>
               <p className={styles.pageSubtitle}>
                 Analyze salary distribution and budget alignment by department
               </p>
@@ -179,7 +179,7 @@ export default function DepartmentReportsPage() {
             </button>
           </div>
 
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Configuration Panel */}
           <div className={styles.configPanel}>
@@ -204,8 +204,7 @@ export default function DepartmentReportsPage() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>Start Date *</label>
                 <input 
-                  type="date"
-                  className={styles.input}
+                  type="date" className={styles.input}
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
@@ -214,8 +213,7 @@ export default function DepartmentReportsPage() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>End Date *</label>
                 <input 
-                  type="date"
-                  className={styles.input}
+                  type="date" className={styles.input}
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                 />
@@ -228,7 +226,7 @@ export default function DepartmentReportsPage() {
                   onClick={generateReport}
                   disabled={loading || !selectedDepartment || !startDate || !endDate}
                 >
-                  {loading ? 'Generating...' : '📊 Generate Report'}
+                  {loading ? 'Generating...' : 'Generate Report'}
                 </button>
               </div>
             </div>
@@ -248,14 +246,14 @@ export default function DepartmentReportsPage() {
                   <p className={styles.reportPeriod}>{report.period}</p>
                 </div>
                 <button className={styles.btnExport} onClick={exportToCSV}>
-                  📥 Export to CSV
+                   Export to CSV
                 </button>
               </div>
 
               {/* Summary Cards */}
               <div className={styles.statsGrid}>
                 <div className={styles.summaryCard}>
-                  <div className={styles.cardIcon}>👥</div>
+                  <div className={styles.cardIcon}></div>
                   <div className={styles.cardContent}>
                     <div className={styles.cardLabel}>Total Employees</div>
                     <div className={styles.cardValue}>{report.totalEmployees}</div>
@@ -263,7 +261,7 @@ export default function DepartmentReportsPage() {
                 </div>
 
                 <div className={styles.summaryCard}>
-                  <div className={styles.cardIcon}>💰</div>
+                  <div className={styles.cardIcon}></div>
                   <div className={styles.cardContent}>
                     <div className={styles.cardLabel}>Total Gross Salary</div>
                     <div className={styles.cardValue}>
@@ -273,7 +271,7 @@ export default function DepartmentReportsPage() {
                 </div>
 
                 <div className={styles.summaryCard}>
-                  <div className={styles.cardIcon}>💵</div>
+                  <div className={styles.cardIcon}></div>
                   <div className={styles.cardContent}>
                     <div className={styles.cardLabel}>Total Net Pay</div>
                     <div className={styles.cardValue}>
@@ -283,7 +281,7 @@ export default function DepartmentReportsPage() {
                 </div>
 
                 <div className={styles.summaryCard}>
-                  <div className={styles.cardIcon}>📊</div>
+                  <div className={styles.cardIcon}></div>
                   <div className={styles.cardContent}>
                     <div className={styles.cardLabel}>Average Salary</div>
                     <div className={styles.cardValue}>

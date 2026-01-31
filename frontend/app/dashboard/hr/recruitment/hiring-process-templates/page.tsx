@@ -5,7 +5,7 @@
  * Stages are defined in ApplicationStage enum: Screening, Department Interview, HR Interview, Offer
  */
 
-'use client';
+"use client";
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';

@@ -55,13 +55,13 @@ export default function MyDisputesPage() {
   const getStatusBadge = (status: string) => {
     const statusLower = status?.toLowerCase() || '';
     if (statusLower.includes('pending') || statusLower.includes('open')) {
-      return <span className={styles.statusPending}>⏳ Pending</span>;
+      return <span className={styles.statusPending}> Pending</span>;
     }
     if (statusLower.includes('approved') || statusLower.includes('resolved')) {
-      return <span className={styles.statusApproved}>✅ Resolved</span>;
+      return <span className={styles.statusApproved}> Resolved</span>;
     }
     if (statusLower.includes('rejected') || statusLower.includes('denied')) {
-      return <span className={styles.statusRejected}>❌ Rejected</span>;
+      return <span className={styles.statusRejected}> Rejected</span>;
     }
     return <span className={styles.statusDefault}>{status}</span>;
   };
@@ -90,14 +90,14 @@ export default function MyDisputesPage() {
         <div className={styles.container}>
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>⚖️ My Disputes</h1>
+              <h1 className={styles.title}> My Disputes</h1>
               <p className={styles.subtitle}>Track appraisal disputes you've submitted</p>
             </div>
           </div>
 
           {error && (
             <div className={styles.errorBanner}>
-              <span>⚠️</span>
+              <span></span>
               <span>{error}</span>
             </div>
           )}
@@ -126,7 +126,7 @@ export default function MyDisputesPage() {
 
           {filteredDisputes.length === 0 ? (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>📋</div>
+              <div className={styles.emptyIcon}></div>
               <h3>No Disputes Found</h3>
               <p>
                 {filter === 'all' 
@@ -144,14 +144,14 @@ export default function MyDisputesPage() {
                       {getStatusBadge(dispute.status || 'UNKNOWN')}
                     </div>
                     <div className={styles.disputeMeta}>
-                      <span>📅 Submitted: {dispute.submittedAt ? new Date(dispute.submittedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}</span>
+                      <span> Submitted: {dispute.submittedAt ? new Date(dispute.submittedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}</span>
                     </div>
                   </div>
 
                   {dispute.resolutionSummary && (
                     <div className={styles.resolutionBox}>
                       <div className={styles.resolutionHeader}>
-                        <strong>📝 Resolution</strong>
+                        <strong> Resolution</strong>
                         {dispute.resolvedAt && (
                           <span className={styles.resolutionDate}>
                             {new Date(dispute.resolvedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}

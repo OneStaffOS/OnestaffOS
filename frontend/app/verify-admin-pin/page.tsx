@@ -3,7 +3,7 @@
  * System Admin PIN verification after password login
  */
 
-'use client';
+"use client";
 
 import { FormEvent, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';

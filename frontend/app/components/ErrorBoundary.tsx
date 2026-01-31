@@ -5,7 +5,7 @@
  * Provides graceful error UI for users.
  */
 
-'use client';
+"use client";
 
 import React, { Component, ReactNode } from 'react';
 import { logger } from '@/lib/logger';

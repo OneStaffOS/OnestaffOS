@@ -4,7 +4,7 @@
  * Phase III: HR/Admin Processing & Master Data
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/app/components/ProtectedRoute';

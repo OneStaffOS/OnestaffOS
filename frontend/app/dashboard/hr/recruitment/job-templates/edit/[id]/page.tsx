@@ -4,7 +4,7 @@
  * HR Manager can edit existing job templates
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -211,11 +211,9 @@ export default function EditJobTemplatePage() {
                     Job Title <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <input
-                    type="text"
-                    value={formData.title}
+                    type="text" value={formData.title}
                     onChange={(e) => handleChange('title', e.target.value)}
-                    placeholder="e.g., Senior Software Engineer"
-                    required
+                    placeholder="e.g., Senior Software Engineer" required
                     style={{
                       width: '100%',
                       padding: '0.75rem',
@@ -257,8 +255,7 @@ export default function EditJobTemplatePage() {
                   <textarea
                     value={formData.description}
                     onChange={(e) => handleChange('description', e.target.value)}
-                    placeholder="Brief description of the role and responsibilities..."
-                    rows={4}
+                    placeholder="Brief description of the role and responsibilities..." rows={4}
                     style={{
                       width: '100%',
                       padding: '0.75rem',
@@ -279,8 +276,7 @@ export default function EditJobTemplatePage() {
                     Required Qualifications <span style={{ color: '#ef4444' }}>*</span>
                   </h2>
                   <button
-                    type="button"
-                    onClick={() => addArrayItem('qualifications')}
+                    type="button" onClick={() => addArrayItem('qualifications')}
                     style={{
                       padding: '0.5rem 1rem',
                       background: '#10b981',
@@ -298,8 +294,7 @@ export default function EditJobTemplatePage() {
                 {formData.qualifications.map((qual, index) => (
                   <div key={index} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
                     <input
-                      type="text"
-                      value={qual}
+                      type="text" value={qual}
                       onChange={(e) => handleArrayChange('qualifications', index, e.target.value)}
                       placeholder={`Qualification ${index + 1}`}
                       style={{
@@ -311,8 +306,7 @@ export default function EditJobTemplatePage() {
                       }}
                     />
                     <button
-                      type="button"
-                      onClick={() => removeArrayItem('qualifications', index)}
+                      type="button" onClick={() => removeArrayItem('qualifications', index)}
                       style={{
                         padding: '0.75rem 1rem',
                         background: '#ef4444',
@@ -335,8 +329,7 @@ export default function EditJobTemplatePage() {
                     Required Skills <span style={{ color: '#ef4444' }}>*</span>
                   </h2>
                   <button
-                    type="button"
-                    onClick={() => addArrayItem('skills')}
+                    type="button" onClick={() => addArrayItem('skills')}
                     style={{
                       padding: '0.5rem 1rem',
                       background: '#10b981',
@@ -354,8 +347,7 @@ export default function EditJobTemplatePage() {
                 {formData.skills.map((skill, index) => (
                   <div key={index} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
                     <input
-                      type="text"
-                      value={skill}
+                      type="text" value={skill}
                       onChange={(e) => handleArrayChange('skills', index, e.target.value)}
                       placeholder={`Skill ${index + 1}`}
                       style={{
@@ -367,8 +359,7 @@ export default function EditJobTemplatePage() {
                       }}
                     />
                     <button
-                      type="button"
-                      onClick={() => removeArrayItem('skills', index)}
+                      type="button" onClick={() => removeArrayItem('skills', index)}
                       style={{
                         padding: '0.75rem 1rem',
                         background: '#ef4444',
@@ -393,8 +384,7 @@ export default function EditJobTemplatePage() {
                 borderTop: '1px solid #e5e7eb'
               }}>
                 <button
-                  type="button"
-                  onClick={() => router.back()}
+                  type="button" onClick={() => router.back()}
                   disabled={loading}
                   style={{
                     padding: '0.75rem 1.5rem',
@@ -410,8 +400,7 @@ export default function EditJobTemplatePage() {
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  disabled={loading}
+                  type="submit" disabled={loading}
                   style={{
                     padding: '0.75rem 1.5rem',
                     background: loading ? '#9ca3af' : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',

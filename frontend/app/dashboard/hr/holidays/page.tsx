@@ -93,7 +93,7 @@ export default function HolidaysPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>🎄 Holiday Configuration</h1>
+              <h1 className={styles.pageTitle}> Holiday Configuration</h1>
               <p className={styles.pageSubtitle}>
                 Define national, organizational holidays and weekly rest days. These suppress penalties in attendance and shift checks.
               </p>
@@ -126,7 +126,7 @@ export default function HolidaysPage() {
 
           {/* Create Holiday Form */}
           <div className={styles.formCard}>
-            <h3 className={styles.sectionTitle}>➕ Create Holiday</h3>
+            <h3 className={styles.sectionTitle}> Create Holiday</h3>
             <div className={styles.formGrid}>
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Type *</label>
@@ -144,10 +144,8 @@ export default function HolidaysPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Name</label>
                 <input 
-                  type="text" 
-                  className={styles.formInput}
-                  placeholder="e.g. Christmas, Eid, Independence Day"
-                  value={form.name} 
+                  type="text" className={styles.formInput}
+                  placeholder="e.g. Christmas, Eid, Independence Day" value={form.name} 
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} 
                 />
               </div>
@@ -155,8 +153,7 @@ export default function HolidaysPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Start Date *</label>
                 <input 
-                  type="date" 
-                  className={styles.formInput}
+                  type="date" className={styles.formInput}
                   value={form.startDate} 
                   onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))} 
                 />
@@ -165,8 +162,7 @@ export default function HolidaysPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>End Date (optional)</label>
                 <input 
-                  type="date" 
-                  className={styles.formInput}
+                  type="date" className={styles.formInput}
                   value={form.endDate} 
                   onChange={(e) => setForm((f) => ({ ...f, endDate: e.target.value }))} 
                 />
@@ -176,8 +172,7 @@ export default function HolidaysPage() {
             <div className={styles.checkboxGroup}>
               <label className={styles.checkboxLabel}>
                 <input 
-                  type="checkbox" 
-                  checked={form.active} 
+                  type="checkbox" checked={form.active} 
                   onChange={(e) => setForm((f) => ({ ...f, active: e.target.checked }))} 
                 />
                 <span>Active</span>
@@ -190,19 +185,19 @@ export default function HolidaysPage() {
                 onClick={createHoliday} 
                 disabled={saving}
               >
-                {saving ? 'Creating...' : '✓ Create Holiday'}
+                {saving ? 'Creating...' : 'Create Holiday'}
               </button>
             </div>
           </div>
 
           {/* Holiday List */}
           <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>📅 Existing Holidays</h3>
+            <h3 className={styles.sectionTitle}> Existing Holidays</h3>
             {loading ? (
               <Spinner message="Loading holidays..." />
             ) : holidays.length === 0 ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>🎄</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>No Holidays Defined</h3>
                 <p>Create your first holiday using the form above.</p>
               </div>

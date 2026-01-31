@@ -3,7 +3,7 @@
  * REQ-OD-06, REQ-OD-08: Performance analytics, trends, and comprehensive reporting
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -198,11 +198,11 @@ export default function PerformanceReportsPage() {
           <h2>Rating Distribution</h2>
           <div className={styles.distributionGrid}>
             {[
-              { key: 'excellent' as const, label: 'Excellent', color: '#059669' },
-              { key: 'good' as const, label: 'Good', color: '#2563eb' },
-              { key: 'satisfactory' as const, label: 'Satisfactory', color: '#f59e0b' },
-              { key: 'needsImprovement' as const, label: 'Needs Improvement', color: '#ef4444' },
-              { key: 'unsatisfactory' as const, label: 'Unsatisfactory', color: '#991b1b' },
+              { key: 'excellent'as const, label: 'Excellent', color: '#059669' },
+              { key: 'good'as const, label: 'Good', color: '#2563eb' },
+              { key: 'satisfactory'as const, label: 'Satisfactory', color: '#f59e0b' },
+              { key: 'needsImprovement'as const, label: 'Needs Improvement', color: '#ef4444' },
+              { key: 'unsatisfactory'as const, label: 'Unsatisfactory', color: '#991b1b' },
             ].map(({ key, label, color }) => {
               const value = reportData?.ratingDistribution[key] || 0;
               const total = Object.values(reportData?.ratingDistribution || {}).reduce((a, b) => a + b, 0);

@@ -4,7 +4,7 @@
  * System notifies managers when structural change is approved
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

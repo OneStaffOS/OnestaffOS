@@ -4,7 +4,7 @@
  * HR Manager can edit existing hiring process templates
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -243,11 +243,9 @@ export default function EditHiringProcessTemplatePage() {
                     Template Name <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <input
-                    type="text"
-                    value={formData.name}
+                    type="text" value={formData.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    placeholder="e.g., Standard Hiring Process"
-                    required
+                    placeholder="e.g., Standard Hiring Process" required
                     style={{
                       width: '100%',
                       padding: '0.75rem',
@@ -265,8 +263,7 @@ export default function EditHiringProcessTemplatePage() {
                   <textarea
                     value={formData.description}
                     onChange={(e) => handleChange('description', e.target.value)}
-                    placeholder="Brief description of this hiring process..."
-                    rows={3}
+                    placeholder="Brief description of this hiring process..." rows={3}
                     style={{
                       width: '100%',
                       padding: '0.75rem',
@@ -282,8 +279,7 @@ export default function EditHiringProcessTemplatePage() {
                 <div style={{ display: 'flex', gap: '2rem', marginBottom: '1rem' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                     <input
-                      type="checkbox"
-                      checked={formData.isActive}
+                      type="checkbox" checked={formData.isActive}
                       onChange={(e) => handleChange('isActive', e.target.checked)}
                       style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                     />
@@ -292,8 +288,7 @@ export default function EditHiringProcessTemplatePage() {
 
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                     <input
-                      type="checkbox"
-                      checked={formData.isDefault}
+                      type="checkbox" checked={formData.isDefault}
                       onChange={(e) => handleChange('isDefault', e.target.checked)}
                       style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                     />
@@ -317,8 +312,7 @@ export default function EditHiringProcessTemplatePage() {
                     </p>
                   </div>
                   <button
-                    type="button"
-                    onClick={addStage}
+                    type="button" onClick={addStage}
                     style={{
                       padding: '0.5rem 1rem',
                       background: '#10b981',
@@ -361,8 +355,7 @@ export default function EditHiringProcessTemplatePage() {
                           </span>
                           <div style={{ display: 'flex', gap: '0.25rem' }}>
                             <button
-                              type="button"
-                              onClick={() => moveStageUp(index)}
+                              type="button" onClick={() => moveStageUp(index)}
                               disabled={index === 0}
                               style={{
                                 padding: '0.25rem 0.5rem',
@@ -375,11 +368,10 @@ export default function EditHiringProcessTemplatePage() {
                               }}
                               title="Move up"
                             >
-                              ▲
+                              
                             </button>
                             <button
-                              type="button"
-                              onClick={() => moveStageDown(index)}
+                              type="button" onClick={() => moveStageDown(index)}
                               disabled={index === stages.length - 1}
                               style={{
                                 padding: '0.25rem 0.5rem',
@@ -392,18 +384,16 @@ export default function EditHiringProcessTemplatePage() {
                               }}
                               title="Move down"
                             >
-                              ▼
+                              
                             </button>
                           </div>
                         </div>
 
                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                           <input
-                            type="text"
-                            value={stage.name}
+                            type="text" value={stage.name}
                             onChange={(e) => handleStageChange(index, 'name', e.target.value)}
-                            placeholder="Stage name (e.g., Screening, Interview)"
-                            required
+                            placeholder="Stage name (e.g., Screening, Interview)" required
                             style={{
                               padding: '0.75rem',
                               border: '1px solid #d1d5db',
@@ -412,11 +402,9 @@ export default function EditHiringProcessTemplatePage() {
                             }}
                           />
                           <input
-                            type="text"
-                            value={stage.description}
+                            type="text" value={stage.description}
                             onChange={(e) => handleStageChange(index, 'description', e.target.value)}
-                            placeholder="Optional description"
-                            style={{
+                            placeholder="Optional description" style={{
                               padding: '0.5rem 0.75rem',
                               border: '1px solid #d1d5db',
                               borderRadius: '6px',
@@ -426,8 +414,7 @@ export default function EditHiringProcessTemplatePage() {
                         </div>
 
                         <button
-                          type="button"
-                          onClick={() => removeStage(index)}
+                          type="button" onClick={() => removeStage(index)}
                           style={{
                             padding: '0.75rem 1rem',
                             background: '#ef4444',
@@ -531,8 +518,7 @@ export default function EditHiringProcessTemplatePage() {
                 borderTop: '1px solid #e5e7eb'
               }}>
                 <button
-                  type="button"
-                  onClick={() => router.back()}
+                  type="button" onClick={() => router.back()}
                   disabled={loading}
                   style={{
                     padding: '0.75rem 1.5rem',
@@ -548,8 +534,7 @@ export default function EditHiringProcessTemplatePage() {
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  disabled={loading}
+                  type="submit" disabled={loading}
                   style={{
                     padding: '0.75rem 1.5rem',
                     background: loading ? '#9ca3af' : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',

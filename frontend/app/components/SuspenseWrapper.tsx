@@ -4,7 +4,7 @@
  * Fixes React 19 Suspense boundary issues in Next.js 16
  */
 
-'use client';
+"use client";
 
 import { Suspense, ReactNode } from 'react';
 import Spinner from './Spinner';

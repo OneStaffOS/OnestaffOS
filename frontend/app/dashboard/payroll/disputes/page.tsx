@@ -167,7 +167,7 @@ export default function DisputesManagementPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>⚖️ Payroll Disputes Management</h1>
+              <h1 className={styles.pageTitle}> Payroll Disputes Management</h1>
               <p className={styles.pageSubtitle}>
                 {isPayrollManager 
                   ? 'Review and approve/reject disputes escalated by Payroll Specialists'
@@ -182,7 +182,7 @@ export default function DisputesManagementPage() {
             </button>
           </div>
 
-          {error && !selectedDispute && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && !selectedDispute && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Summary Stats */}
           <div className={styles.statsGrid}>
@@ -232,7 +232,7 @@ export default function DisputesManagementPage() {
           {isPayrollManager && managerDisputes.length > 0 && (
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>🔔 Pending Your Approval ({managerDisputes.length})</h2>
+                <h2 className={styles.sectionTitle}> Pending Your Approval ({managerDisputes.length})</h2>
                 <span className={styles.priorityBadge}>MANAGER ACTION REQUIRED</span>
               </div>
               <div className={styles.disputesList}>
@@ -270,13 +270,13 @@ export default function DisputesManagementPage() {
                         className={styles.btnApprove}
                         onClick={() => openModal(dispute, 'manager', 'approve')}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnReject}
                         onClick={() => openModal(dispute, 'manager', 'reject')}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -325,13 +325,13 @@ export default function DisputesManagementPage() {
                           className={styles.btnApprove}
                           onClick={() => openModal(dispute, 'specialist', 'approve')}
                         >
-                          ✅ Approve (Escalate to Manager)
+                           Approve (Escalate to Manager)
                         </button>
                         <button 
                           className={styles.btnReject}
                           onClick={() => openModal(dispute, 'specialist', 'reject')}
                         >
-                          ❌ Reject
+                           Reject
                         </button>
                       </div>
                     )}
@@ -341,13 +341,13 @@ export default function DisputesManagementPage() {
                           className={styles.btnApprove}
                           onClick={() => openModal(dispute, 'manager', 'approve')}
                         >
-                          ✅ Approve
+                           Approve
                         </button>
                         <button 
                           className={styles.btnReject}
                           onClick={() => openModal(dispute, 'manager', 'reject')}
                         >
-                          ❌ Reject
+                           Reject
                         </button>
                       </div>
                     )}
@@ -359,7 +359,7 @@ export default function DisputesManagementPage() {
 
           {!loading && disputes.length === 0 && (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>📋</div>
+              <div className={styles.emptyIcon}></div>
               <p>No disputes found</p>
             </div>
           )}
@@ -370,13 +370,13 @@ export default function DisputesManagementPage() {
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
                   <h3 className={styles.modalTitle}>
-                    {actionType === 'approve' ? '✅ Approve' : '❌ Reject'} Dispute {selectedDispute.disputeId}
+                    {actionType === 'approve' ? 'Approve' : 'Reject'} Dispute {selectedDispute.disputeId}
                   </h3>
                   <button className={styles.closeBtn} onClick={closeModal}>×</button>
                 </div>
 
                 <div className={styles.modalBody}>
-                  {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+                  {error && <div className={styles.errorMessage}> {error}</div>}
 
                   <div className={styles.modalInfo}>
                     <p><strong>Employee:</strong> {selectedDispute.employeeId.firstName} {selectedDispute.employeeId.lastName}</p>

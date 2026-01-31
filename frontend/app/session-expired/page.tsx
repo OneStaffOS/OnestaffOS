@@ -3,7 +3,7 @@
  * Displayed when a user's authentication token expires
  */
 
-'use client';
+"use client";
 
 import Link from 'next/link';
 import { useEffect } from 'react';

@@ -99,7 +99,7 @@ export default function CreateShiftAssignment() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📋 Create Shift Assignment</h1>
+              <h1 className={styles.pageTitle}> Create Shift Assignment</h1>
               <p className={styles.pageSubtitle}>
                 Assign a shift to an employee, department, or position
               </p>
@@ -180,8 +180,7 @@ export default function CreateShiftAssignment() {
                     <label className={styles.formLabel}>Start Date</label>
                     <input 
                       className={styles.formInput} 
-                      type="date" 
-                      value={form.startDate} 
+                      type="date" value={form.startDate} 
                       onChange={(e)=>setForm({...form, startDate: e.target.value})} 
                     />
                   </div>
@@ -190,8 +189,7 @@ export default function CreateShiftAssignment() {
                     <label className={styles.formLabel}>End Date (optional)</label>
                     <input 
                       className={styles.formInput} 
-                      type="date" 
-                      value={form.endDate} 
+                      type="date" value={form.endDate} 
                       onChange={(e)=>setForm({...form, endDate: e.target.value})} 
                     />
                   </div>
@@ -213,14 +211,12 @@ export default function CreateShiftAssignment() {
                 <div className={styles.formActions}>
                   <button 
                     className={styles.btnPrimary} 
-                    type="submit" 
-                    disabled={loading}
+                    type="submit" disabled={loading}
                   >
-                    {loading ? 'Creating...' : '✓ Create Assignment'}
+                    {loading ? 'Creating...' : 'Create Assignment'}
                   </button>
                   <button 
-                    type="button" 
-                    className={styles.btnSecondary} 
+                    type="button" className={styles.btnSecondary} 
                     onClick={() => router.push('/dashboard/hr/time-management/shift-assignments')}
                   >
                     Cancel

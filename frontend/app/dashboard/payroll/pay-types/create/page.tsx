@@ -53,12 +53,12 @@ export default function CreatePayTypePage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>⏱️ Create Pay Type</h1>
+            <h1 className={styles.formTitle}> Create Pay Type</h1>
             <p className={styles.formSubtitle}>
               Define a new payment type. It will require HR Manager approval.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -66,13 +66,10 @@ export default function CreatePayTypePage() {
                   Pay Type Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="type"
-                  className={styles.formInput}
+                  type="text" name="type" className={styles.formInput}
                   value={formData.type}
                   onChange={handleChange}
-                  placeholder="e.g., Monthly, Hourly, Daily, Weekly"
-                  required
+                  placeholder="e.g., Monthly, Hourly, Daily, Weekly" required
                 />
                 <span className={styles.formHint}>The type of payment schedule</span>
               </div>
@@ -82,34 +79,27 @@ export default function CreatePayTypePage() {
                   Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="amount"
-                  className={styles.formInput}
+                  type="number" name="amount" className={styles.formInput}
                   value={formData.amount}
                   onChange={handleChange}
-                  placeholder="Enter amount (min 6,000 EGP)"
-                  min="6000"
-                  step="100"
-                  required
+                  placeholder="Enter amount (min 6,000 EGP)" min="6000" step="100" required
                 />
                 <span className={styles.formHint}>Base amount for this pay type</span>
               </div>
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/pay-types')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
-                  {loading ? 'Creating...' : '⏱️ Create Pay Type'}
+                  {loading ? 'Creating...' : 'Create Pay Type'}
                 </button>
               </div>
             </form>

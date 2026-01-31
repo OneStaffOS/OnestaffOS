@@ -3,7 +3,7 @@
  * View and update specific termination request
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -271,8 +271,7 @@ export default function TerminationDetailPage() {
         <div className={styles.formGroup}>
           <label htmlFor="status">Status</label>
           <select
-            id="status"
-            value={status}
+            id="status" value={status}
             onChange={(e) => setStatus(e.target.value)}
             required
           >
@@ -286,9 +285,7 @@ export default function TerminationDetailPage() {
         <div className={styles.formGroup}>
           <label htmlFor="terminationDate">Termination Date</label>
           <input
-            type="date"
-            id="terminationDate"
-            value={terminationDate}
+            type="date" id="terminationDate" value={terminationDate}
             onChange={(e) => setTerminationDate(e.target.value)}
             min={new Date().toISOString().split('T')[0]}
           />
@@ -297,8 +294,7 @@ export default function TerminationDetailPage() {
         <div className={styles.formGroup}>
           <label htmlFor="hrComments">HR Comments</label>
           <textarea
-            id="hrComments"
-            value={hrComments}
+            id="hrComments" value={hrComments}
             onChange={(e) => setHrComments(e.target.value)}
             rows={5}
             placeholder="Add comments about this termination..."
@@ -307,8 +303,7 @@ export default function TerminationDetailPage() {
 
         <div className={styles.formActions}>
           <button
-            type="submit"
-            disabled={updating}
+            type="submit" disabled={updating}
             className={styles.submitButton}
           >
             {updating ? 'Updating...' : 'Update Termination'}
@@ -316,8 +311,7 @@ export default function TerminationDetailPage() {
 
           {status === 'approved' && (
             <button
-              type="button"
-              onClick={() => router.push(`/dashboard/hr/terminations/${terminationId}/clearance`)}
+              type="button" onClick={() => router.push(`/dashboard/hr/terminations/${terminationId}/clearance`)}
               className={styles.clearanceButton}
             >
               Manage Clearance

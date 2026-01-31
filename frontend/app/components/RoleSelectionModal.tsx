@@ -3,7 +3,7 @@
  * Modal for users with multiple roles to select which dashboard to access
  */
 
-'use client';
+"use client";
 
 import { useRouter } from 'next/navigation';
 import styles from './RoleSelectionModal.module.css';

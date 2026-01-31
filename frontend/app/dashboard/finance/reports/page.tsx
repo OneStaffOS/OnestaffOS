@@ -194,7 +194,7 @@ export default function FinanceReportsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📊 Financial Reports</h1>
+              <h1 className={styles.pageTitle}> Financial Reports</h1>
               <p className={styles.pageSubtitle}>
                 Generate comprehensive payroll reports for taxes, insurance, benefits, and period summaries
               </p>
@@ -226,8 +226,7 @@ export default function FinanceReportsPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Start Date</label>
                     <input
-                      type="date"
-                      className={styles.input}
+                      type="date" className={styles.input}
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
                     />
@@ -235,8 +234,7 @@ export default function FinanceReportsPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>End Date</label>
                     <input
-                      type="date"
-                      className={styles.input}
+                      type="date" className={styles.input}
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                     />
@@ -261,8 +259,7 @@ export default function FinanceReportsPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Year</label>
                     <input
-                      type="number"
-                      className={styles.input}
+                      type="number" className={styles.input}
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
                       min={2020}
@@ -276,8 +273,7 @@ export default function FinanceReportsPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Year</label>
                   <input
-                    type="number"
-                    className={styles.input}
+                    type="number" className={styles.input}
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(parseInt(e.target.value))}
                     min={2020}
@@ -289,8 +285,7 @@ export default function FinanceReportsPage() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>Entity (Optional)</label>
                 <input
-                  type="text"
-                  className={styles.input}
+                  type="text" className={styles.input}
                   value={entity}
                   onChange={(e) => setEntity(e.target.value)}
                   placeholder="Leave empty for all entities"
@@ -300,18 +295,18 @@ export default function FinanceReportsPage() {
 
             <div className={styles.actions}>
               <button className={styles.btnPrimary} onClick={generateReport} disabled={loading}>
-                {loading ? 'Generating...' : '📈 Generate Report'}
+                {loading ? 'Generating...' : 'Generate Report'}
               </button>
               {reportData && (
                 <button className={styles.btnSecondary} onClick={exportToCSV}>
-                  📊 Export CSV
+                   Export CSV
                 </button>
               )}
             </div>
           </div>
 
           {/* Error Message */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Loading */}
           {loading && <Spinner message="Generating report..." />}
@@ -322,7 +317,7 @@ export default function FinanceReportsPage() {
               {/* Tax Report */}
               {reportData.reportType === 'taxes' && (
                 <div className={styles.card}>
-                  <h2 className={styles.reportTitle}>💰 Tax Report</h2>
+                  <h2 className={styles.reportTitle}> Tax Report</h2>
                   <div className={styles.reportMeta}>
                     <p><strong>Period:</strong> {reportData.period}</p>
                     <p><strong>Entity:</strong> {reportData.entity}</p>
@@ -361,7 +356,7 @@ export default function FinanceReportsPage() {
               {/* Insurance Report */}
               {reportData.reportType === 'insurance' && (
                 <div className={styles.card}>
-                  <h2 className={styles.reportTitle}>🏥 Insurance Contributions Report</h2>
+                  <h2 className={styles.reportTitle}> Insurance Contributions Report</h2>
                   <div className={styles.reportMeta}>
                     <p><strong>Period:</strong> {reportData.period}</p>
                     <p><strong>Entity:</strong> {reportData.entity}</p>
@@ -416,7 +411,7 @@ export default function FinanceReportsPage() {
               {/* Benefits Report */}
               {reportData.reportType === 'benefits' && (
                 <div className={styles.card}>
-                  <h2 className={styles.reportTitle}>🎁 Benefits Report</h2>
+                  <h2 className={styles.reportTitle}> Benefits Report</h2>
                   <div className={styles.reportMeta}>
                     <p><strong>Period:</strong> {reportData.period}</p>
                     <p><strong>Entity:</strong> {reportData.entity}</p>
@@ -455,7 +450,7 @@ export default function FinanceReportsPage() {
               {/* Month-End Report */}
               {reportData.reportType === 'month-end' && (
                 <div className={styles.card}>
-                  <h2 className={styles.reportTitle}>📅 Month-End Summary</h2>
+                  <h2 className={styles.reportTitle}> Month-End Summary</h2>
                   <div className={styles.reportMeta}>
                     <p><strong>Period:</strong> {reportData.period}</p>
                     <p><strong>Entity:</strong> {reportData.entity}</p>
@@ -548,7 +543,7 @@ export default function FinanceReportsPage() {
               {/* Year-End Report */}
               {reportData.reportType === 'year-end' && (
                 <div className={styles.card}>
-                  <h2 className={styles.reportTitle}>📆 Year-End Summary {reportData.year}</h2>
+                  <h2 className={styles.reportTitle}> Year-End Summary {reportData.year}</h2>
                   <div className={styles.reportMeta}>
                     <p><strong>Entity:</strong> {reportData.entity}</p>
                     <p><strong>Total Employees:</strong> {reportData.totalEmployees}</p>

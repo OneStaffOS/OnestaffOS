@@ -90,41 +90,41 @@ textarea::placeholder {
 }
 
 /* Unified button styling */
-button,
-input[type="button"],
-input[type="submit"],
-input[type="reset"],
-[role="button"],
-a.button,
-.button,
-.btn {
-  background: #000;
-  color: #fff;
-  border: 1px solid #000;
+button:not([data-dashboard-layout-button]):not([data-navbar-button]),
+input[type="button"]:not([data-dashboard-layout-button]):not([data-navbar-button]),
+input[type="submit"]:not([data-dashboard-layout-button]):not([data-navbar-button]),
+input[type="reset"]:not([data-dashboard-layout-button]):not([data-navbar-button]),
+[role="button"]:not([data-dashboard-layout-button]):not([data-navbar-button]),
+a.button:not([data-dashboard-layout-button]):not([data-navbar-button]),
+.button:not([data-dashboard-layout-button]):not([data-navbar-button]),
+.btn:not([data-dashboard-layout-button]):not([data-navbar-button]) {
+  background: var(--dashboard-btn-bg);
+  color: var(--dashboard-btn-fg);
+  border: 1px solid var(--dashboard-btn-bg);
 }
 
-button:hover,
-input[type="button"]:hover,
-input[type="submit"]:hover,
-input[type="reset"]:hover,
-[role="button"]:hover,
-a.button:hover,
-.button:hover,
-.btn:hover {
-  background: #111;
-  border-color: #111;
+button:not([data-dashboard-layout-button]):not([data-navbar-button]):hover,
+input[type="button"]:not([data-dashboard-layout-button]):not([data-navbar-button]):hover,
+input[type="submit"]:not([data-dashboard-layout-button]):not([data-navbar-button]):hover,
+input[type="reset"]:not([data-dashboard-layout-button]):not([data-navbar-button]):hover,
+[role="button"]:not([data-dashboard-layout-button]):not([data-navbar-button]):hover,
+a.button:not([data-dashboard-layout-button]):not([data-navbar-button]):hover,
+.button:not([data-dashboard-layout-button]):not([data-navbar-button]):hover,
+.btn:not([data-dashboard-layout-button]):not([data-navbar-button]):hover {
+  background: var(--dashboard-btn-bg);
+  border-color: var(--dashboard-btn-bg);
 }
 
-button:disabled,
-input[type="button"]:disabled,
-input[type="submit"]:disabled,
-input[type="reset"]:disabled,
-[role="button"][aria-disabled="true"],
-a.button[aria-disabled="true"],
-.button[aria-disabled="true"],
-.btn[aria-disabled="true"] {
-  background: #000;
-  color: #fff;
+button:not([data-dashboard-layout-button]):not([data-navbar-button]):disabled,
+input[type="button"]:not([data-dashboard-layout-button]):not([data-navbar-button]):disabled,
+input[type="submit"]:not([data-dashboard-layout-button]):not([data-navbar-button]):disabled,
+input[type="reset"]:not([data-dashboard-layout-button]):not([data-navbar-button]):disabled,
+[role="button"][aria-disabled="true"]:not([data-dashboard-layout-button]):not([data-navbar-button]),
+a.button[aria-disabled="true"]:not([data-dashboard-layout-button]):not([data-navbar-button]),
+.button[aria-disabled="true"]:not([data-dashboard-layout-button]):not([data-navbar-button]),
+.btn[aria-disabled="true"]:not([data-dashboard-layout-button]):not([data-navbar-button]) {
+  background: var(--dashboard-btn-bg);
+  color: var(--dashboard-btn-fg);
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -133,4 +133,50 @@ a.button[aria-disabled="true"],
   html {
     color-scheme: dark;
   }
+}
+:root {
+  --dashboard-btn-bg: #0F3A44;
+  --dashboard-btn-fg: #fff;
+}
+
+/* Unified dashboard button styling (exclude client dashboard) */
+[data-dashboard-role]:not([data-dashboard-role='Client']) button:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='button']:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='submit']:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='reset']:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) [role='button']:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) .button:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) .btn:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) a.button:not([data-dashboard-layout-button]) {
+  background: var(--dashboard-btn-bg) !important;
+  background-color: var(--dashboard-btn-bg) !important;
+  background-image: none !important;
+  color: var(--dashboard-btn-fg) !important;
+  border: 1px solid var(--dashboard-btn-bg) !important;
+  box-shadow: none !important;
+}
+
+[data-dashboard-role]:not([data-dashboard-role='Client']) button:not([data-dashboard-layout-button]):hover,
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='button']:not([data-dashboard-layout-button]):hover,
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='submit']:not([data-dashboard-layout-button]):hover,
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='reset']:not([data-dashboard-layout-button]):hover,
+[data-dashboard-role]:not([data-dashboard-role='Client']) [role='button']:not([data-dashboard-layout-button]):hover,
+[data-dashboard-role]:not([data-dashboard-role='Client']) .button:not([data-dashboard-layout-button]):hover,
+[data-dashboard-role]:not([data-dashboard-role='Client']) .btn:not([data-dashboard-layout-button]):hover,
+[data-dashboard-role]:not([data-dashboard-role='Client']) a.button:not([data-dashboard-layout-button]):hover {
+  background: #111 !important;
+  background-color: #111 !important;
+  color: var(--dashboard-btn-fg) !important;
+}
+
+[data-dashboard-role]:not([data-dashboard-role='Client']) button:not([data-dashboard-layout-button]):disabled,
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='button']:not([data-dashboard-layout-button]):disabled,
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='submit']:not([data-dashboard-layout-button]):disabled,
+[data-dashboard-role]:not([data-dashboard-role='Client']) input[type='reset']:not([data-dashboard-layout-button]):disabled,
+[data-dashboard-role]:not([data-dashboard-role='Client']) [role='button'][aria-disabled='true']:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) .button[aria-disabled='true']:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) .btn[aria-disabled='true']:not([data-dashboard-layout-button]),
+[data-dashboard-role]:not([data-dashboard-role='Client']) a.button[aria-disabled='true']:not([data-dashboard-layout-button]) {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
 }

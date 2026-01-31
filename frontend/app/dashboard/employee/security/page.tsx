@@ -9,7 +9,7 @@
  * - Delete passkeys
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -247,7 +247,7 @@ export default function SecurityPage() {
           
           {!webAuthnSupported && (
             <div className={styles.warning}>
-              ⚠️ Your browser does not support passkeys. Please use a modern browser like Chrome, Safari, Firefox, or Edge.
+               Your browser does not support passkeys. Please use a modern browser like Chrome, Safari, Firefox, or Edge.
             </div>
           )}
         </div>
@@ -268,7 +268,7 @@ export default function SecurityPage() {
         <div className={styles.cardBody}>
           {passkeys.length === 0 ? (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>🔐</div>
+              <div className={styles.emptyIcon}></div>
               <p>No passkeys registered yet</p>
               <p className={styles.emptyHint}>
                 Add a passkey to secure your account with biometric authentication
@@ -279,17 +279,15 @@ export default function SecurityPage() {
               {passkeys.map((passkey) => (
                 <div key={passkey.id} className={styles.passkeyItem}>
                   <div className={styles.passkeyIcon}>
-                    {passkey.deviceType === 'platform' ? '📱' : '🔑'}
+                    {passkey.deviceType === 'platform' ? '' : ''}
                   </div>
                   <div className={styles.passkeyInfo}>
                     {editingPasskey === passkey.id ? (
                       <div className={styles.editNameForm}>
                         <input
-                          type="text"
-                          value={editName}
+                          type="text" value={editName}
                           onChange={(e) => setEditName(e.target.value)}
-                          placeholder="Enter new name"
-                          className={styles.editInput}
+                          placeholder="Enter new name" className={styles.editInput}
                           autoFocus
                         />
                         <button
@@ -333,14 +331,14 @@ export default function SecurityPage() {
                         className={styles.actionBtn}
                         title="Rename"
                       >
-                        ✏️
+                        
                       </button>
                       <button
                         onClick={() => handleDeletePasskey(passkey.id)}
                         className={`${styles.actionBtn} ${styles.deleteBtn}`}
                         title="Delete"
                       >
-                        🗑️
+                        
                       </button>
                     </div>
                   )}
@@ -362,7 +360,7 @@ export default function SecurityPage() {
             </p>
             
             <div className={styles.warningBox}>
-              <strong>⚠️ Important:</strong> When the browser popup appears, select{' '}
+              <strong> Important:</strong> When the browser popup appears, select{' '}
               <strong>&quot;This Device&quot;</strong> or your device name (e.g., &quot;MacBook Pro&quot;).{' '}
               <strong>Do NOT scan the QR code</strong> with your phone — that will not work for login on this device.
             </div>
@@ -370,9 +368,7 @@ export default function SecurityPage() {
             <div className={styles.formGroup}>
               <label htmlFor="deviceName">Device Name (optional)</label>
               <input
-                type="text"
-                id="deviceName"
-                value={deviceName}
+                type="text" id="deviceName" value={deviceName}
                 onChange={(e) => setDeviceName(e.target.value)}
                 placeholder={getDeviceDescription()}
                 className={styles.input}

@@ -121,7 +121,7 @@ export default function InsuranceBracketsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>🛡️ Insurance Brackets</h1>
+              <h1 className={styles.pageTitle}> Insurance Brackets</h1>
               <p className={styles.pageSubtitle}>
                 Define social and health insurance rates based on salary brackets
               </p>
@@ -132,15 +132,15 @@ export default function InsuranceBracketsPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/insurance-brackets/create')}
                 >
-                  ➕ Create Insurance Bracket
+                   Create Insurance Bracket
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -165,7 +165,7 @@ export default function InsuranceBracketsPage() {
           {/* Pending Approvals Section */}
           {canApprove && pendingBrackets.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingBrackets.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingBrackets.length})</h3>
               <div className={styles.approvalList}>
                 {pendingBrackets.map(bracket => (
                   <div key={bracket._id} className={styles.approvalItem}>
@@ -182,13 +182,13 @@ export default function InsuranceBracketsPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(bracket._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(bracket._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -218,7 +218,7 @@ export default function InsuranceBracketsPage() {
             <Spinner message="Loading insurance brackets..." />
           ) : brackets.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>🛡️</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Insurance Brackets Found</h3>
               <p>Create your first insurance bracket to get started.</p>
               {canCreate && (
@@ -227,7 +227,7 @@ export default function InsuranceBracketsPage() {
                   onClick={() => router.push('/dashboard/payroll/insurance-brackets/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Insurance Bracket
+                   Create Insurance Bracket
                 </button>
               )}
             </div>

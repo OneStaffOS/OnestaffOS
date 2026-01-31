@@ -54,12 +54,12 @@ export default function CreateTerminationBenefitPage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>📤 Create Termination Benefit</h1>
+            <h1 className={styles.formTitle}> Create Termination Benefit</h1>
             <p className={styles.formSubtitle}>
               Define an end-of-service benefit. It will require HR Manager approval.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -67,13 +67,10 @@ export default function CreateTerminationBenefitPage() {
                   Benefit Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="name"
-                  className={styles.formInput}
+                  type="text" name="name" className={styles.formInput}
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="e.g., End of Service Gratuity, Severance Pay"
-                  required
+                  placeholder="e.g., End of Service Gratuity, Severance Pay" required
                 />
                 <span className={styles.formHint}>The name of the termination/resignation benefit</span>
               </div>
@@ -83,15 +80,10 @@ export default function CreateTerminationBenefitPage() {
                   Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="amount"
-                  className={styles.formInput}
+                  type="number" name="amount" className={styles.formInput}
                   value={formData.amount}
                   onChange={handleChange}
-                  placeholder="Enter benefit amount in EGP"
-                  min="0"
-                  step="1000"
-                  required
+                  placeholder="Enter benefit amount in EGP" min="0" step="1000" required
                 />
                 <span className={styles.formHint}>The benefit amount in Egyptian Pounds</span>
               </div>
@@ -101,8 +93,7 @@ export default function CreateTerminationBenefitPage() {
                   Terms & Conditions
                 </label>
                 <textarea
-                  name="terms"
-                  className={styles.formTextarea}
+                  name="terms" className={styles.formTextarea}
                   value={formData.terms}
                   onChange={handleChange}
                   placeholder="Specify the terms and conditions for this benefit (e.g., eligibility criteria, calculation method)"
@@ -112,19 +103,17 @@ export default function CreateTerminationBenefitPage() {
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/termination-benefits')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
-                  {loading ? 'Creating...' : '📤 Create Benefit'}
+                  {loading ? 'Creating...' : 'Create Benefit'}
                 </button>
               </div>
             </form>

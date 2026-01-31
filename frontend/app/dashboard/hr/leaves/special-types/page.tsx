@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -495,23 +495,19 @@ export default function SpecialTypesPage() {
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Name *</label>
                       <input
-                        type="text"
-                        className={styles.input}
+                        type="text" className={styles.input}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="e.g., Bereavement Leave"
-                        required
+                        placeholder="e.g., Bereavement Leave" required
                       />
                     </div>
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Code *</label>
                       <input
-                        type="text"
-                        className={styles.input}
+                        type="text" className={styles.input}
                         value={formData.code}
                         onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                        placeholder="e.g., BEREAVEMENT"
-                        required
+                        placeholder="e.g., BEREAVEMENT" required
                       />
                     </div>
                   </div>
@@ -548,19 +544,16 @@ export default function SpecialTypesPage() {
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Max Duration (days)</label>
                       <input
-                        type="number"
-                        className={styles.input}
+                        type="number" className={styles.input}
                         value={formData.maxDurationDays}
                         onChange={(e) => setFormData({ ...formData, maxDurationDays: parseInt(e.target.value) || 0 })}
-                        min="0"
-                        placeholder="0 = unlimited"
+                        min="0" placeholder="0 = unlimited"
                       />
                     </div>
                     <div className={styles.formGroup}>
                       <label className={styles.checkboxLabel}>
                         <input
-                          type="checkbox"
-                          checked={formData.paid}
+                          type="checkbox" checked={formData.paid}
                           onChange={(e) => setFormData({ ...formData, paid: e.target.checked })}
                         />
                         Paid Leave
@@ -571,8 +564,7 @@ export default function SpecialTypesPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.checkboxLabel}>
                       <input
-                        type="checkbox"
-                        checked={formData.requiresAttachment}
+                        type="checkbox" checked={formData.requiresAttachment}
                         onChange={(e) => setFormData({ ...formData, requiresAttachment: e.target.checked })}
                       />
                       Requires Supporting Document
@@ -624,8 +616,7 @@ export default function SpecialTypesPage() {
                   Cancel
                 </button>
                 <button 
-                  type="button" 
-                  className={styles.deleteConfirmButton} 
+                  type="button" className={styles.deleteConfirmButton} 
                   onClick={handleDelete}
                   disabled={submitting}
                 >

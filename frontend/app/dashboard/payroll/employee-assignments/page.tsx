@@ -147,7 +147,7 @@ export default function EmployeePayrollAssignmentsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>👥 Employee Payroll Assignments</h1>
+              <h1 className={styles.pageTitle}> Employee Payroll Assignments</h1>
               <p className={styles.pageSubtitle}>
                 Assign pay grades and payroll information to employees
               </p>
@@ -155,8 +155,8 @@ export default function EmployeePayrollAssignmentsPage() {
           </div>
 
           {/* Success/Error Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {loading ? (
             <Spinner message="Loading employee data..." />
@@ -196,9 +196,7 @@ export default function EmployeePayrollAssignmentsPage() {
                   {/* Filters */}
                   <div style={{ marginBottom: '20px', display: 'flex', gap: '12px' }}>
                     <input
-                      type="text"
-                      placeholder="Search by name or employee number..."
-                      value={searchTerm}
+                      type="text" placeholder="Search by name or employee number..." value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className={styles.formInput}
                       style={{ flex: 1 }}
@@ -319,7 +317,7 @@ export default function EmployeePayrollAssignmentsPage() {
                       {/* Pay Grade Assignment */}
                       <div className={styles.formGroup} style={{ marginBottom: '16px' }}>
                         <label className={styles.formLabel} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                          <span>💰 Pay Grade</span>
+                          <span> Pay Grade</span>
                         </label>
                         <select
                           value={selectedPayGrade}
@@ -350,7 +348,7 @@ export default function EmployeePayrollAssignmentsPage() {
                           marginTop: '16px'
                         }}>
                           <h4 style={{ margin: '0 0 16px 0', color: '#059669', fontSize: '16px', fontWeight: '600' }}>
-                            📊 Selected Pay Grade Details
+                             Selected Pay Grade Details
                           </h4>
                           {payGrades.find(pg => pg._id === selectedPayGrade) && (
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -401,7 +399,7 @@ export default function EmployeePayrollAssignmentsPage() {
                           disabled={saving || !selectedPayGrade}
                           style={{ flex: 1, padding: '12px', fontSize: '15px', fontWeight: '600' }}
                         >
-                          {saving ? '⏳ Saving...' : '✅ Save Assignment'}
+                          {saving ? 'Saving...' : 'Save Assignment'}
                         </button>
                         <button
                           className={styles.btnSecondary}
@@ -420,7 +418,7 @@ export default function EmployeePayrollAssignmentsPage() {
                     </>
                   ) : (
                     <div className={styles.emptyState}>
-                      <p>👈 Select an employee from the list to assign pay grade</p>
+                      <p> Select an employee from the list to assign pay grade</p>
                     </div>
                   )}
                 </div>
@@ -429,7 +427,7 @@ export default function EmployeePayrollAssignmentsPage() {
               {/* Information Section */}
               <div className={styles.card}>
                 <div className={styles.cardHeader}>
-                  <h2 className={styles.cardTitle}>ℹ️ Important Information</h2>
+                  <h2 className={styles.cardTitle}> Important Information</h2>
                 </div>
                 <div style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.8' }}>
                   <ul style={{ marginLeft: '20px' }}>

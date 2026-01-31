@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -252,7 +252,7 @@ export default function LeaveCalendarPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📅 Leave Calendar</h1>
+              <h1 className={styles.title}> Leave Calendar</h1>
               <p className={styles.subtitle}>
                 Configure public holidays and blocked leave periods
               </p>
@@ -268,7 +268,7 @@ export default function LeaveCalendarPage() {
                 className={styles.addButton}
                 onClick={handleOpenModal}
               >
-                {calendar ? '✏️ Edit Calendar' : '+ Create Calendar'}
+                {calendar ? 'Edit Calendar' : '+ Create Calendar'}
               </button>
             </div>
           </div>
@@ -297,7 +297,7 @@ export default function LeaveCalendarPage() {
               <Spinner message="Loading calendar..." />
             ) : !calendar ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>📅</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>No Calendar for {selectedYear}</h3>
                 <p>Create a calendar to configure holidays and blocked periods.</p>
                 <button 
@@ -312,7 +312,7 @@ export default function LeaveCalendarPage() {
                 {/* Holidays Section */}
                 <div className={styles.section}>
                   <div className={styles.sectionHeader}>
-                    <h2>🎉 Public Holidays</h2>
+                    <h2> Public Holidays</h2>
                     <span className={styles.badge}>{calendar.holidays.length} days</span>
                   </div>
                   {calendar.holidays.length === 0 ? (
@@ -328,7 +328,7 @@ export default function LeaveCalendarPage() {
                           : '';
                         return (
                           <li key={index} className={styles.holidayItem}>
-                            <span className={styles.holidayIcon}>🗓️</span>
+                            <span className={styles.holidayIcon}></span>
                             <span>{holidayName}{holidayDate ? ` - ${holidayDate}` : ''}</span>
                           </li>
                         );
@@ -340,7 +340,7 @@ export default function LeaveCalendarPage() {
                 {/* Blocked Periods Section */}
                 <div className={styles.section}>
                   <div className={styles.sectionHeader}>
-                    <h2>🚫 Blocked Periods</h2>
+                    <h2> Blocked Periods</h2>
                     <span className={styles.badge}>{calendar.blockedPeriods.length} periods</span>
                   </div>
                   {calendar.blockedPeriods.length === 0 ? (
@@ -350,7 +350,7 @@ export default function LeaveCalendarPage() {
                       {calendar.blockedPeriods.map((period, index) => (
                         <div key={index} className={styles.blockedItem}>
                           <div className={styles.blockedDates}>
-                            <span className={styles.blockedIcon}>🚫</span>
+                            <span className={styles.blockedIcon}></span>
                             <span>{formatDate(period.from)}</span>
                             <span className={styles.arrow}>→</span>
                             <span>{formatDate(period.to)}</span>
@@ -372,15 +372,14 @@ export default function LeaveCalendarPage() {
                 <div className={styles.modalHeader}>
                   <h2>{calendar ? 'Edit Calendar' : 'Create Calendar'}</h2>
                   <button className={styles.closeButton} onClick={handleCloseModal}>
-                    ✕
+                    
                   </button>
                 </div>
                 <form onSubmit={handleSubmit} className={styles.form}>
                   <div className={styles.formGroup}>
                     <label htmlFor="year">Year *</label>
                     <select
-                      id="year"
-                      value={formData.year}
+                      id="year" value={formData.year}
                       onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                       required
                     >
@@ -394,8 +393,7 @@ export default function LeaveCalendarPage() {
                     <div className={styles.sectionTitle}>
                       <h3>Public Holidays</h3>
                       <button
-                        type="button"
-                        className={styles.addPeriodButton}
+                        type="button" className={styles.addPeriodButton}
                         onClick={() => setShowHolidayModal(true)}
                       >
                         + Add Holiday
@@ -408,15 +406,14 @@ export default function LeaveCalendarPage() {
                         {formData.holidays.map((holiday, index) => (
                           <div key={index} className={styles.periodPreviewItem}>
                             <div className={styles.periodInfo}>
-                              <span className={styles.periodDates}>🎉 {holiday.name}</span>
+                              <span className={styles.periodDates}> {holiday.name}</span>
                               <span className={styles.periodReason}>{holiday.date}</span>
                             </div>
                             <button
-                              type="button"
-                              className={styles.removePeriodButton}
+                              type="button" className={styles.removePeriodButton}
                               onClick={() => handleRemoveHoliday(index)}
                             >
-                              ✕
+                              
                             </button>
                           </div>
                         ))}
@@ -428,8 +425,7 @@ export default function LeaveCalendarPage() {
                     <div className={styles.sectionTitle}>
                       <h3>Blocked Periods</h3>
                       <button
-                        type="button"
-                        className={styles.addPeriodButton}
+                        type="button" className={styles.addPeriodButton}
                         onClick={() => setShowBlockedModal(true)}
                       >
                         + Add Period
@@ -448,11 +444,10 @@ export default function LeaveCalendarPage() {
                               <span className={styles.periodReason}>{period.reason}</span>
                             </div>
                             <button
-                              type="button"
-                              className={styles.removePeriodButton}
+                              type="button" className={styles.removePeriodButton}
                               onClick={() => handleRemoveBlockedPeriod(index)}
                             >
-                              ✕
+                              
                             </button>
                           </div>
                         ))}
@@ -464,16 +459,14 @@ export default function LeaveCalendarPage() {
                   
                   <div className={styles.modalActions}>
                     <button
-                      type="button"
-                      className={styles.cancelButton}
+                      type="button" className={styles.cancelButton}
                       onClick={handleCloseModal}
                       disabled={submitting}
                     >
                       Cancel
                     </button>
                     <button
-                      type="submit"
-                      className={styles.submitButton}
+                      type="submit" className={styles.submitButton}
                       disabled={submitting}
                     >
                       {submitting ? 'Saving...' : 'Save Calendar'}
@@ -491,7 +484,7 @@ export default function LeaveCalendarPage() {
                 <div className={styles.modalHeader}>
                   <h2>Add Blocked Period</h2>
                   <button className={styles.closeButton} onClick={() => setShowBlockedModal(false)}>
-                    ✕
+                    
                   </button>
                 </div>
                 <div className={styles.form}>
@@ -499,9 +492,7 @@ export default function LeaveCalendarPage() {
                     <div className={styles.formGroup}>
                       <label htmlFor="periodFrom">From Date *</label>
                       <input
-                        type="date"
-                        id="periodFrom"
-                        value={newBlockedPeriod.from}
+                        type="date" id="periodFrom" value={newBlockedPeriod.from}
                         onChange={(e) => setNewBlockedPeriod({ ...newBlockedPeriod, from: e.target.value })}
                         required
                       />
@@ -509,9 +500,7 @@ export default function LeaveCalendarPage() {
                     <div className={styles.formGroup}>
                       <label htmlFor="periodTo">To Date *</label>
                       <input
-                        type="date"
-                        id="periodTo"
-                        value={newBlockedPeriod.to}
+                        type="date" id="periodTo" value={newBlockedPeriod.to}
                         onChange={(e) => setNewBlockedPeriod({ ...newBlockedPeriod, to: e.target.value })}
                         required
                       />
@@ -520,25 +509,20 @@ export default function LeaveCalendarPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="periodReason">Reason *</label>
                     <input
-                      type="text"
-                      id="periodReason"
-                      value={newBlockedPeriod.reason}
+                      type="text" id="periodReason" value={newBlockedPeriod.reason}
                       onChange={(e) => setNewBlockedPeriod({ ...newBlockedPeriod, reason: e.target.value })}
-                      placeholder="e.g., Year-end inventory, Company event"
-                      required
+                      placeholder="e.g., Year-end inventory, Company event" required
                     />
                   </div>
                   <div className={styles.modalActions}>
                     <button
-                      type="button"
-                      className={styles.cancelButton}
+                      type="button" className={styles.cancelButton}
                       onClick={() => setShowBlockedModal(false)}
                     >
                       Cancel
                     </button>
                     <button
-                      type="button"
-                      className={styles.submitButton}
+                      type="button" className={styles.submitButton}
                       onClick={handleAddBlockedPeriod}
                     >
                       Add Period
@@ -556,42 +540,35 @@ export default function LeaveCalendarPage() {
                 <div className={styles.modalHeader}>
                   <h2>Add Holiday</h2>
                   <button className={styles.closeButton} onClick={() => setShowHolidayModal(false)}>
-                    ✕
+                    
                   </button>
                 </div>
                 <div className={styles.form}>
                   <div className={styles.formGroup}>
                     <label htmlFor="holidayName">Holiday Name *</label>
                     <input
-                      type="text"
-                      id="holidayName"
-                      value={newHoliday.name}
+                      type="text" id="holidayName" value={newHoliday.name}
                       onChange={(e) => setNewHoliday({ ...newHoliday, name: e.target.value })}
-                      placeholder="e.g., New Year's Day, Christmas"
-                      required
+                      placeholder="e.g., New Year's Day, Christmas" required
                     />
                   </div>
                   <div className={styles.formGroup}>
                     <label htmlFor="holidayDate">Date *</label>
                     <input
-                      type="date"
-                      id="holidayDate"
-                      value={newHoliday.date}
+                      type="date" id="holidayDate" value={newHoliday.date}
                       onChange={(e) => setNewHoliday({ ...newHoliday, date: e.target.value })}
                       required
                     />
                   </div>
                   <div className={styles.modalActions}>
                     <button
-                      type="button"
-                      className={styles.cancelButton}
+                      type="button" className={styles.cancelButton}
                       onClick={() => setShowHolidayModal(false)}
                     >
                       Cancel
                     </button>
                     <button
-                      type="button"
-                      className={styles.submitButton}
+                      type="button" className={styles.submitButton}
                       onClick={handleAddHoliday}
                     >
                       Add Holiday

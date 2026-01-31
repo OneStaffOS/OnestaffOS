@@ -88,7 +88,7 @@ export default function AllPayrollsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📊 All Payroll Runs</h1>
+              <h1 className={styles.pageTitle}> All Payroll Runs</h1>
               <p className={styles.pageSubtitle}>
                 Complete history of all payroll runs and disbursements
               </p>
@@ -96,7 +96,7 @@ export default function AllPayrollsPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -155,7 +155,7 @@ export default function AllPayrollsPage() {
             <div className={styles.card}>
               {runs.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <div className={styles.emptyStateIcon}>📊</div>
+                  <div className={styles.emptyStateIcon}></div>
                   <h3 className={styles.emptyStateTitle}>No Payroll Runs Found</h3>
                   <p className={styles.emptyStateDescription}>
                     {statusFilter !== 'all' 

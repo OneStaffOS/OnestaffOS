@@ -131,7 +131,7 @@ export default function AllowancesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>🎁 Allowances</h1>
+              <h1 className={styles.pageTitle}> Allowances</h1>
               <p className={styles.pageSubtitle}>
                 Manage employee allowances like Housing, Transport, and other benefits
               </p>
@@ -149,8 +149,8 @@ export default function AllowancesPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -175,7 +175,7 @@ export default function AllowancesPage() {
           {/* Pending Approvals Section */}
           {canApprove && pendingAllowances.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingAllowances.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingAllowances.length})</h3>
               <div className={styles.approvalList}>
                 {pendingAllowances.map(allowance => (
                   <div key={allowance._id} className={styles.approvalItem}>
@@ -191,13 +191,13 @@ export default function AllowancesPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(allowance._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(allowance._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -227,7 +227,7 @@ export default function AllowancesPage() {
             <Spinner message="Loading allowances..." />
           ) : allowances.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>🎁</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Allowances Found</h3>
               <p>Create your first allowance to get started.</p>
               {canCreate && (
@@ -236,7 +236,7 @@ export default function AllowancesPage() {
                   onClick={() => router.push('/dashboard/payroll/allowances/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Allowance
+                   Create Allowance
                 </button>
               )}
             </div>

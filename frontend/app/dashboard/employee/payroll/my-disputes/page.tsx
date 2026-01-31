@@ -133,35 +133,35 @@ export default function MyDisputesPage() {
               className={styles.btnNewDispute}
               onClick={() => router.push('/dashboard/employee/payroll/dispute')}
             >
-              ⚠️ Submit New Dispute
+               Submit New Dispute
             </button>
           </div>
 
           {/* Stats Grid */}
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📋</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Total Disputes</div>
                 <div className={styles.statValue}>{stats.total}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>⏳</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Pending Review</div>
                 <div className={styles.statValue}>{stats.pending}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>✅</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Approved</div>
                 <div className={styles.statValue}>{stats.approved}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>❌</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Rejected</div>
                 <div className={styles.statValue}>{stats.rejected}</div>
@@ -212,7 +212,7 @@ export default function MyDisputesPage() {
           {/* Empty State */}
           {!error && filteredDisputes.length === 0 && (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>📭</div>
+              <div className={styles.emptyIcon}></div>
               <h3>No Disputes Found</h3>
               <p>
                 {filterStatus === 'all'

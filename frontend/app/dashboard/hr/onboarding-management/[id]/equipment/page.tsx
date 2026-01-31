@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -123,7 +123,7 @@ export default function EquipmentManagementPage() {
       {/* Equipment Section */}
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h2>💻 Equipment Tracking</h2>
+          <h2> Equipment Tracking</h2>
           <button className={styles.addButton} onClick={addEquipmentItem}>
             + Add Equipment
           </button>
@@ -139,25 +139,20 @@ export default function EquipmentManagementPage() {
               <div key={index} className={styles.equipmentItem}>
                 <div className={styles.equipmentFields}>
                   <input
-                    type="text"
-                    placeholder="Equipment name (e.g., Laptop, Monitor)"
-                    value={item.name}
+                    type="text" placeholder="Equipment name (e.g., Laptop, Monitor)" value={item.name}
                     onChange={(e) => updateEquipment(index, 'name', e.target.value)}
                     className={styles.input}
                   />
                   
                   <input
-                    type="text"
-                    placeholder="Serial Number or Asset Tag"
-                    value={item.serialNumber || ''}
+                    type="text" placeholder="Serial Number or Asset Tag" value={item.serialNumber || ''}
                     onChange={(e) => updateEquipment(index, 'serialNumber', e.target.value)}
                     className={styles.input}
                   />
 
                   <label className={styles.checkbox}>
                     <input
-                      type="checkbox"
-                      checked={item.issued}
+                      type="checkbox" checked={item.issued}
                       onChange={(e) => updateEquipment(index, 'issued', e.target.checked)}
                     />
                     <span>Issued</span>
@@ -165,8 +160,7 @@ export default function EquipmentManagementPage() {
 
                   {item.issued && (
                     <input
-                      type="date"
-                      value={item.issuedDate ? new Date(item.issuedDate).toISOString().split('T')[0] : ''}
+                      type="date" value={item.issuedDate ? new Date(item.issuedDate).toISOString().split('T')[0] : ''}
                       onChange={(e) => updateEquipment(index, 'issuedDate', e.target.value)}
                       className={styles.input}
                     />
@@ -187,15 +181,13 @@ export default function EquipmentManagementPage() {
 
       {/* Desk Allocation Section */}
       <div className={styles.section}>
-        <h2>🏢 Desk Allocation</h2>
+        <h2> Desk Allocation</h2>
         
         <div className={styles.formGrid}>
           <div className={styles.formGroup}>
             <label>Building</label>
             <input
-              type="text"
-              placeholder="e.g., Main Building"
-              value={deskInfo.building || ''}
+              type="text" placeholder="e.g., Main Building" value={deskInfo.building || ''}
               onChange={(e) => setDeskInfo({ ...deskInfo, building: e.target.value })}
               className={styles.input}
             />
@@ -204,9 +196,7 @@ export default function EquipmentManagementPage() {
           <div className={styles.formGroup}>
             <label>Floor</label>
             <input
-              type="text"
-              placeholder="e.g., 3rd Floor"
-              value={deskInfo.floor || ''}
+              type="text" placeholder="e.g., 3rd Floor" value={deskInfo.floor || ''}
               onChange={(e) => setDeskInfo({ ...deskInfo, floor: e.target.value })}
               className={styles.input}
             />
@@ -215,9 +205,7 @@ export default function EquipmentManagementPage() {
           <div className={styles.formGroup}>
             <label>Desk Number</label>
             <input
-              type="text"
-              placeholder="e.g., 3-A-12"
-              value={deskInfo.deskNumber || ''}
+              type="text" placeholder="e.g., 3-A-12" value={deskInfo.deskNumber || ''}
               onChange={(e) => setDeskInfo({ ...deskInfo, deskNumber: e.target.value })}
               className={styles.input}
             />
@@ -226,8 +214,7 @@ export default function EquipmentManagementPage() {
           <div className={styles.formGroup}>
             <label>Allocated Date</label>
             <input
-              type="date"
-              value={deskInfo.allocatedDate ? new Date(deskInfo.allocatedDate).toISOString().split('T')[0] : ''}
+              type="date" value={deskInfo.allocatedDate ? new Date(deskInfo.allocatedDate).toISOString().split('T')[0] : ''}
               onChange={(e) => setDeskInfo({ ...deskInfo, allocatedDate: e.target.value as any })}
               className={styles.input}
             />
@@ -237,15 +224,13 @@ export default function EquipmentManagementPage() {
 
       {/* Access Card Section */}
       <div className={styles.section}>
-        <h2>🆔 Access Card</h2>
+        <h2> Access Card</h2>
         
         <div className={styles.formGrid}>
           <div className={styles.formGroup}>
             <label>Card Number</label>
             <input
-              type="text"
-              placeholder="e.g., AC-2024-001"
-              value={cardInfo.cardNumber || ''}
+              type="text" placeholder="e.g., AC-2024-001" value={cardInfo.cardNumber || ''}
               onChange={(e) => setCardInfo({ ...cardInfo, cardNumber: e.target.value })}
               className={styles.input}
             />
@@ -254,8 +239,7 @@ export default function EquipmentManagementPage() {
           <div className={styles.formGroup}>
             <label>Issued Date</label>
             <input
-              type="date"
-              value={cardInfo.issuedDate ? new Date(cardInfo.issuedDate).toISOString().split('T')[0] : ''}
+              type="date" value={cardInfo.issuedDate ? new Date(cardInfo.issuedDate).toISOString().split('T')[0] : ''}
               onChange={(e) => setCardInfo({ ...cardInfo, issuedDate: e.target.value as any })}
               className={styles.input}
             />
@@ -264,8 +248,7 @@ export default function EquipmentManagementPage() {
           <div className={styles.formGroup}>
             <label>Expiry Date</label>
             <input
-              type="date"
-              value={cardInfo.expiryDate ? new Date(cardInfo.expiryDate).toISOString().split('T')[0] : ''}
+              type="date" value={cardInfo.expiryDate ? new Date(cardInfo.expiryDate).toISOString().split('T')[0] : ''}
               onChange={(e) => setCardInfo({ ...cardInfo, expiryDate: e.target.value as any })}
               className={styles.input}
             />

@@ -4,7 +4,7 @@
  * Redirects to login if user is not authenticated
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';

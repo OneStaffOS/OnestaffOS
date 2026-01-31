@@ -7,7 +7,7 @@
  * 2. User has registered passkeys (MFA enabled)
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';

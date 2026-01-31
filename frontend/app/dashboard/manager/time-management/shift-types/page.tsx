@@ -43,7 +43,7 @@ export default function ManagerShiftTypesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📋 Shift Types</h1>
+              <h1 className={styles.pageTitle}> Shift Types</h1>
               <p className={styles.pageSubtitle}>
                 View available shift type categories
               </p>
@@ -73,7 +73,7 @@ export default function ManagerShiftTypesPage() {
             <Spinner message="Loading shift types..." />
           ) : items.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📋</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Shift Types</h3>
               <p>No shift types have been created yet.</p>
             </div>
@@ -98,4 +98,3 @@ export default function ManagerShiftTypesPage() {
     </ProtectedRoute>
   );
 }
-

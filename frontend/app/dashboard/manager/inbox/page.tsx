@@ -63,11 +63,11 @@ export default function ManagerInboxPage() {
 
   const getNotificationIcon = (type: string) => {
     switch (type?.toLowerCase()) {
-      case 'alert': return '⚠️';
-      case 'info': return 'ℹ️';
-      case 'success': return '✅';
-      case 'warning': return '⚡';
-      default: return '📬';
+      case 'alert': return '';
+      case 'info': return '';
+      case 'success': return '';
+      case 'warning': return '';
+      default: return '';
     }
   };
 
@@ -78,7 +78,7 @@ export default function ManagerInboxPage() {
           {/* Page Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📬 Manager Inbox</h1>
+              <h1 className={styles.pageTitle}> Manager Inbox</h1>
               <p className={styles.pageSubtitle}>
                 View notifications and important messages
               </p>
@@ -132,7 +132,7 @@ export default function ManagerInboxPage() {
             <Spinner message="Loading messages..." />
           ) : filteredNotes.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📭</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Messages</h3>
               <p>
                 {filter === 'UNREAD' 
@@ -194,7 +194,7 @@ export default function ManagerInboxPage() {
                             markRead(n._id);
                           }}
                         >
-                          ✓ Mark as Read
+                           Mark as Read
                         </button>
                       </div>
                     )}

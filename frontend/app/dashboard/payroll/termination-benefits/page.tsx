@@ -129,7 +129,7 @@ export default function TerminationBenefitsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📤 Termination Benefits</h1>
+              <h1 className={styles.pageTitle}> Termination Benefits</h1>
               <p className={styles.pageSubtitle}>
                 Define end-of-service gratuity and resignation benefits
               </p>
@@ -140,15 +140,15 @@ export default function TerminationBenefitsPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/termination-benefits/create')}
                 >
-                  ➕ Create Termination Benefit
+                   Create Termination Benefit
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -173,7 +173,7 @@ export default function TerminationBenefitsPage() {
           {/* Pending Approvals Section */}
           {canApprove && pendingBenefits.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingBenefits.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingBenefits.length})</h3>
               <div className={styles.approvalList}>
                 {pendingBenefits.map(benefit => (
                   <div key={benefit._id} className={styles.approvalItem}>
@@ -189,13 +189,13 @@ export default function TerminationBenefitsPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(benefit._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(benefit._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ export default function TerminationBenefitsPage() {
             <Spinner message="Loading termination benefits..." />
           ) : benefits.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📤</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Termination Benefits Found</h3>
               <p>Create your first termination benefit to get started.</p>
               {canCreate && (
@@ -234,7 +234,7 @@ export default function TerminationBenefitsPage() {
                   onClick={() => router.push('/dashboard/payroll/termination-benefits/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Termination Benefit
+                   Create Termination Benefit
                 </button>
               )}
             </div>

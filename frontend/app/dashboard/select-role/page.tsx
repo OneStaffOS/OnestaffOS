@@ -3,7 +3,7 @@
  * Allows users with multiple roles to switch between dashboards
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';

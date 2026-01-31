@@ -4,7 +4,7 @@
  * REQ-OSM-03: Track status of submitted change requests
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

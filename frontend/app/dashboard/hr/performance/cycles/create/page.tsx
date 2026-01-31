@@ -3,7 +3,7 @@
  * REQ-PP-02: HR Manager and HR Employee can create new performance appraisal cycles
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -40,7 +40,7 @@ export default function CreateCyclePage() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    cycleType: 'ANNUAL' as 'ANNUAL' | 'SEMI_ANNUAL' | 'PROBATIONARY' | 'PROJECT' | 'AD_HOC',
+    cycleType: 'ANNUAL'as 'ANNUAL' | 'SEMI_ANNUAL' | 'PROBATIONARY' | 'PROJECT' | 'AD_HOC',
     startDate: '',
     endDate: '',
     managerDueDate: '',
@@ -124,12 +124,9 @@ export default function CreateCyclePage() {
                   Cycle Name *
                 </label>
                 <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
+                  type="text" id="name" value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g., Q1 2024 Performance Review"
-                  required
+                  placeholder="e.g., Q1 2024 Performance Review" required
                   style={{
                     width: '100%',
                     padding: '0.75rem',
@@ -145,11 +142,9 @@ export default function CreateCyclePage() {
                   Description
                 </label>
                 <textarea
-                  id="description"
-                  value={formData.description}
+                  id="description" value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe the purpose and scope of this appraisal cycle"
-                  rows={4}
+                  placeholder="Describe the purpose and scope of this appraisal cycle" rows={4}
                   style={{
                     width: '100%',
                     padding: '0.75rem',
@@ -166,8 +161,7 @@ export default function CreateCyclePage() {
                   Cycle Type *
                 </label>
                 <select
-                  id="cycleType"
-                  value={formData.cycleType}
+                  id="cycleType" value={formData.cycleType}
                   onChange={(e) => setFormData({ ...formData, cycleType: e.target.value as any })}
                   required
                   style={{
@@ -197,9 +191,7 @@ export default function CreateCyclePage() {
                     Start Date *
                   </label>
                   <input
-                    type="date"
-                    id="startDate"
-                    value={formData.startDate}
+                    type="date" id="startDate" value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                     required
                     style={{
@@ -217,9 +209,7 @@ export default function CreateCyclePage() {
                     End Date *
                   </label>
                   <input
-                    type="date"
-                    id="endDate"
-                    value={formData.endDate}
+                    type="date" id="endDate" value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                     required
                     style={{
@@ -239,9 +229,7 @@ export default function CreateCyclePage() {
                     Manager Review Due Date
                   </label>
                   <input
-                    type="date"
-                    id="managerDueDate"
-                    value={formData.managerDueDate}
+                    type="date" id="managerDueDate" value={formData.managerDueDate}
                     onChange={(e) => setFormData({ ...formData, managerDueDate: e.target.value })}
                     style={{
                       width: '100%',
@@ -258,9 +246,7 @@ export default function CreateCyclePage() {
                     Employee Acknowledgement Due Date
                   </label>
                   <input
-                    type="date"
-                    id="employeeAcknowledgementDueDate"
-                    value={formData.employeeAcknowledgementDueDate}
+                    type="date" id="employeeAcknowledgementDueDate" value={formData.employeeAcknowledgementDueDate}
                     onChange={(e) => setFormData({ ...formData, employeeAcknowledgementDueDate: e.target.value })}
                     style={{
                       width: '100%',
@@ -283,8 +269,7 @@ export default function CreateCyclePage() {
             {/* Actions */}
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', paddingTop: '1rem', borderTop: '1px solid #ddd' }}>
               <button
-                type="button"
-                onClick={() => router.push('/dashboard/hr/performance/cycles')}
+                type="button" onClick={() => router.push('/dashboard/hr/performance/cycles')}
                 disabled={loading}
                 style={{
                   padding: '0.75rem 1.5rem',
@@ -300,8 +285,7 @@ export default function CreateCyclePage() {
                 Cancel
               </button>
               <button
-                type="submit"
-                disabled={loading || templates.length === 0}
+                type="submit" disabled={loading || templates.length === 0}
                 style={{
                   padding: '0.75rem 1.5rem',
                   background: loading || templates.length === 0 ? '#9ca3af' : '#0066cc',

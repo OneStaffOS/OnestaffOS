@@ -197,7 +197,7 @@ export default function ClaimsManagementPage() {
         <div className={styles.container}>
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>💰 Expense Claims Management</h1>
+              <h1 className={styles.title}> Expense Claims Management</h1>
               <p className={styles.subtitle}>Review and approve employee expense claims</p>
             </div>
             <button
@@ -212,7 +212,7 @@ export default function ClaimsManagementPage() {
           {isPayrollManager && managerClaims.length > 0 && (
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>
-                ⚡ Pending Manager Approval ({managerClaims.length})
+                 Pending Manager Approval ({managerClaims.length})
               </h2>
               <div className={styles.tableContainer}>
                 <table className={styles.table}>
@@ -257,13 +257,13 @@ export default function ClaimsManagementPage() {
                               onClick={() => openModal(claim, 'manager', 'approve')}
                               className={`${styles.button} ${styles.approveButton}`}
                             >
-                              ✓ Approve
+                               Approve
                             </button>
                             <button
                               onClick={() => openModal(claim, 'manager', 'reject')}
                               className={`${styles.button} ${styles.rejectButton}`}
                             >
-                              ✗ Reject
+                               Reject
                             </button>
                           </div>
                         </td>
@@ -281,8 +281,7 @@ export default function ClaimsManagementPage() {
               Filter by Status:
             </label>
             <select
-              id="statusFilter"
-              value={filterStatus}
+              id="statusFilter" value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               className={styles.filterSelect}
             >
@@ -349,19 +348,19 @@ export default function ClaimsManagementPage() {
                                 onClick={() => openModal(claim, 'specialist', 'approve')}
                                 className={`${styles.button} ${styles.approveButton}`}
                               >
-                                ✓ Approve
+                                 Approve
                               </button>
                               <button
                                 onClick={() => openModal(claim, 'specialist', 'reject')}
                                 className={`${styles.button} ${styles.rejectButton}`}
                               >
-                                ✗ Reject
+                                 Reject
                               </button>
                             </div>
                           )}
                           {claim.status !== 'under review' && (
                             <span className={styles.processedText}>
-                              {claim.status === 'approved' ? '✓ Processed' : '✗ Closed'}
+                              {claim.status === 'approved' ? 'Processed' : 'Closed'}
                             </span>
                           )}
                         </td>
@@ -379,9 +378,9 @@ export default function ClaimsManagementPage() {
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
                   <h2>
-                    {actionType === 'approve' ? '✓ Approve' : '✗ Reject'} Expense Claim
+                    {actionType === 'approve' ? 'Approve' : 'Reject'} Expense Claim
                   </h2>
-                  <button onClick={closeModal} className={styles.closeButton}>✕</button>
+                  <button onClick={closeModal} className={styles.closeButton}></button>
                 </div>
 
                 <div className={styles.modalBody}>
@@ -405,12 +404,8 @@ export default function ClaimsManagementPage() {
                         Approved Amount: <span className={styles.required}>*</span>
                       </label>
                       <input
-                        id="approvedAmount"
-                        type="number"
-                        min="0"
-                        max={selectedClaim.amount}
-                        step="0.01"
-                        value={approvedAmount}
+                        id="approvedAmount" type="number" min="0" max={selectedClaim.amount}
+                        step="0.01" value={approvedAmount}
                         onChange={(e) => setApprovedAmount(parseFloat(e.target.value) || 0)}
                         className={styles.input}
                         required
@@ -427,8 +422,7 @@ export default function ClaimsManagementPage() {
                       {actionType === 'reject' && <span className={styles.required}>*</span>}
                     </label>
                     <textarea
-                      id="comment"
-                      value={comment}
+                      id="comment" value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       className={styles.textarea}
                       rows={4}
@@ -441,13 +435,13 @@ export default function ClaimsManagementPage() {
 
                   {actionType === 'approve' && modalMode === 'specialist' && (
                     <div className={styles.infoBox}>
-                      <strong>ℹ️ Note:</strong> Approving this claim will escalate it to the Payroll Manager for final approval.
+                      <strong> Note:</strong> Approving this claim will escalate it to the Payroll Manager for final approval.
                     </div>
                   )}
 
                   {actionType === 'approve' && modalMode === 'manager' && (
                     <div className={styles.infoBox}>
-                      <strong>ℹ️ Note:</strong> Approving this claim will notify Finance Staff for payment processing.
+                      <strong> Note:</strong> Approving this claim will notify Finance Staff for payment processing.
                     </div>
                   )}
                 </div>

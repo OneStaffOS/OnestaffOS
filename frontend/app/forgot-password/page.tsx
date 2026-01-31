@@ -5,7 +5,7 @@
  * Sends OTP to user's email and redirects to OTP verification page
  */
 
-'use client';
+"use client";
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';

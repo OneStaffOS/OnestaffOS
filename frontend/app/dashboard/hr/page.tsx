@@ -4,7 +4,7 @@
  * Combines employee management, organization structure, and performance management
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -235,7 +235,7 @@ export default function UnifiedHRDashboard() {
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
     flex: '1 1 auto',
     minWidth: '200px',
-    textAlign: 'center' as const,
+    textAlign: 'center'as const,
     background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
     color: '#ffffff',
   };
@@ -259,7 +259,7 @@ export default function UnifiedHRDashboard() {
             color: 'white',
             boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
           }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: '700', margin: '0 0 0.5rem' }}>👔 HR Management Dashboard</h1>
+            <h1 style={{ fontSize: '2rem', fontWeight: '700', margin: '0 0 0.5rem' }}> HR Management Dashboard</h1>
             <p style={{ margin: 0, opacity: 0.9, fontSize: '1rem' }}>
               Centralized hub for employee management, organization structure, and performance management
             </p>
@@ -271,7 +271,7 @@ export default function UnifiedHRDashboard() {
             background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
             borderLeft: '4px solid #3b82f6',
           }}>
-            <h2 style={sectionTitleStyle}>⚡ Quick Actions</h2>
+            <h2 style={sectionTitleStyle}> Quick Actions</h2>
             <div style={gridStyle}>
               {isHRAdmin && (
                 <button 
@@ -283,7 +283,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  🌴 Leave Management
+                   Leave Management
                 </button>
               )}
               {(isHRManager || isHRAdmin) && (
@@ -296,7 +296,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📋 Leaves Processing
+                   Leaves Processing
                 </button>
               )}
               <button 
@@ -308,7 +308,7 @@ export default function UnifiedHRDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                🚪 Termination Management
+                 Termination Management
               </button>
             </div>
           </div>
@@ -327,7 +327,7 @@ export default function UnifiedHRDashboard() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(59, 130, 246, 0.15)',
             }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>👥</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
               <h3 style={{ fontSize: '1.1rem', color: '#1e40af', marginBottom: '0.5rem', fontWeight: '600' }}>Total Employees</h3>
               <p style={{ fontSize: '3rem', fontWeight: '700', color: '#1e3a8a', margin: '0.5rem 0' }}>
                 {loading ? '-' : stats.totalEmployees}
@@ -342,7 +342,7 @@ export default function UnifiedHRDashboard() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(16, 185, 129, 0.15)',
             }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>✅</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
               <h3 style={{ fontSize: '1.1rem', color: '#065f46', marginBottom: '0.5rem', fontWeight: '600' }}>Active Employees</h3>
               <p style={{ fontSize: '3rem', fontWeight: '700', color: '#064e3b', margin: '0.5rem 0' }}>
                 {loading ? '-' : stats.activeEmployees}
@@ -357,7 +357,7 @@ export default function UnifiedHRDashboard() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(245, 158, 11, 0.15)',
             }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📋</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
               <h3 style={{ fontSize: '1.1rem', color: '#92400e', marginBottom: '0.5rem', fontWeight: '600' }}>Pending Requests</h3>
               <p style={{ fontSize: '3rem', fontWeight: '700', color: '#78350f', margin: '0.5rem 0' }}>
                 {loading ? '-' : stats.pendingChangeRequests}
@@ -372,7 +372,7 @@ export default function UnifiedHRDashboard() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(139, 92, 246, 0.15)',
             }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🎆</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
               <h3 style={{ fontSize: '1.1rem', color: '#581c87', marginBottom: '0.5rem', fontWeight: '600' }}>Recent Hires</h3>
               <p style={{ fontSize: '3rem', fontWeight: '700', color: '#4c1d95', margin: '0.5rem 0' }}>
                 {loading ? '-' : stats.recentHires}
@@ -387,7 +387,7 @@ export default function UnifiedHRDashboard() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(236, 72, 153, 0.15)',
             }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🏢</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
               <h3 style={{ fontSize: '1.1rem', color: '#831843', marginBottom: '0.5rem', fontWeight: '600' }}>Departments</h3>
               <p style={{ fontSize: '3rem', fontWeight: '700', color: '#701a75', margin: '0.5rem 0' }}>
                 {loading ? '-' : stats.totalDepartments}
@@ -402,7 +402,7 @@ export default function UnifiedHRDashboard() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(245, 158, 11, 0.15)',
             }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🏖️</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
               <h3 style={{ fontSize: '1.1rem', color: '#78350f', marginBottom: '0.5rem', fontWeight: '600' }}>On Leave</h3>
               <p style={{ fontSize: '3rem', fontWeight: '700', color: '#713f12', margin: '0.5rem 0' }}>
                 {loading ? '-' : stats.onLeaveEmployees}
@@ -418,7 +418,7 @@ export default function UnifiedHRDashboard() {
                 textAlign: 'center',
                 boxShadow: '0 4px 12px rgba(20, 184, 166, 0.15)',
               }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📊</div>
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                 <h3 style={{ fontSize: '1.1rem', color: '#134e4a', marginBottom: '0.5rem', fontWeight: '600' }}>Insurance Brackets</h3>
                 <p style={{ fontSize: '3rem', fontWeight: '700', color: stats.pendingInsuranceBrackets > 0 ? '#f59e0b' : '#115e59', margin: '0.5rem 0' }}>
                   {loading ? '-' : stats.pendingInsuranceBrackets}
@@ -430,7 +430,7 @@ export default function UnifiedHRDashboard() {
 
           {/* Employee Management Section (All HR Roles) */}
           <div style={sectionStyle}>
-            <h2 style={sectionTitleStyle}>👥 Employee Management</h2>
+            <h2 style={sectionTitleStyle}> Employee Management</h2>
             <div style={gridStyle}>
               {isHRAdmin && (
                 <button 
@@ -439,7 +439,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  ➕ Create Employee Profile
+                   Create Employee Profile
                 </button>
               )}
               
@@ -449,7 +449,7 @@ export default function UnifiedHRDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📊 View All Employees
+                 View All Employees
               </button>
 
               {(isHRAdmin || isHRManager) && (
@@ -460,7 +460,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🎄 Holiday Configuration
+                     Holiday Configuration
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/time-exceptions')}
@@ -468,7 +468,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    ⏱️ Review Time Exceptions
+                     Review Time Exceptions
                   </button>
                   <button 
                     onClick={() => router.push('/dashboard/hr/change-requests')}
@@ -481,7 +481,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📝 Review Change Requests {stats.pendingChangeRequests > 0 && `(${stats.pendingChangeRequests})`}
+                     Review Change Requests {stats.pendingChangeRequests > 0 && `(${stats.pendingChangeRequests})`}
                   </button>
 
                   <button
@@ -490,7 +490,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    ✅ View Correction Requests
+                     View Correction Requests
                   </button>
 
                   <button 
@@ -499,7 +499,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🔄 Manage Employee Status
+                     Manage Employee Status
                   </button>
                 </>
               )}
@@ -512,7 +512,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🔑 Assign Roles & Permissions
+                     Assign Roles & Permissions
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/hr/time-management/shift-assignments')}
@@ -520,7 +520,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📅 Shift Assignments
+                     Shift Assignments
                   </button>
                 </>
               )}
@@ -529,7 +529,7 @@ export default function UnifiedHRDashboard() {
 
           {/* Organization Management Section (All HR Roles) */}
           <div style={sectionStyle}>
-            <h2 style={sectionTitleStyle}>🏢 Organization Management</h2>
+            <h2 style={sectionTitleStyle}> Organization Management</h2>
             <div style={gridStyle}>
               <button 
                 onClick={() => router.push('/org-structure/hierarchy')}
@@ -537,7 +537,7 @@ export default function UnifiedHRDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                🌳 View Hierarchy
+                 View Hierarchy
               </button>
 
               {isHRManager && (
@@ -547,7 +547,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📋 Scheduling Rules
+                   Scheduling Rules
                 </button>
               )}
 
@@ -558,7 +558,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  ⏰ Overtime & Short-Time
+                   Overtime & Short-Time
                 </button>
               )}
 
@@ -569,7 +569,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  ⏱️ Lateness Rules
+                   Lateness Rules
                 </button>
               )}
 
@@ -580,7 +580,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  🔔 Repeated Lateness Alerts
+                   Repeated Lateness Alerts
                 </button>
               )}
 
@@ -596,7 +596,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  🛡️ Insurance Bracket Approvals {stats.pendingInsuranceBrackets > 0 && `(${stats.pendingInsuranceBrackets})`}
+                   Insurance Bracket Approvals {stats.pendingInsuranceBrackets > 0 && `(${stats.pendingInsuranceBrackets})`}
                 </button>
               )}
 
@@ -607,7 +607,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  ⚡ Trigger Expiry Check
+                   Trigger Expiry Check
                 </button>
               )}
 
@@ -619,7 +619,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📋 Structure Change Requests
+                     Structure Change Requests
                   </button>
 
                   <button 
@@ -628,7 +628,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📜 View Audit Trail
+                     View Audit Trail
                   </button>
                 </>
               )}
@@ -638,7 +638,7 @@ export default function UnifiedHRDashboard() {
           {/* Recruitment Management Section (HR Manager Only) */}
           {isHRManager && (
             <div style={sectionStyle}>
-              <h2 style={sectionTitleStyle}>📢 Recruitment Management</h2>
+              <h2 style={sectionTitleStyle}> Recruitment Management</h2>
               <div style={gridStyle}>
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/monitoring')}
@@ -646,7 +646,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📊 Recruitment Progress Dashboard
+                   Recruitment Progress Dashboard
                 </button>
 
                 <button 
@@ -655,7 +655,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📝 Job Templates
+                   Job Templates
                 </button>
 
                 <button 
@@ -664,7 +664,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  🔄 Hiring Process
+                   Hiring Process
                 </button>
 
                 <button 
@@ -673,7 +673,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📋 Job Requisitions
+                   Job Requisitions
                 </button>
 
                 <button 
@@ -682,7 +682,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  👥 Track Applications
+                   Track Applications
                 </button>
 
                 <button 
@@ -691,7 +691,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  💼 Manage Offers
+                   Manage Offers
                 </button>
 
                 <button 
@@ -700,7 +700,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  ✓ Onboarding Checklists
+                   Onboarding Checklists
                 </button>
 
                 <button 
@@ -709,7 +709,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📄 Signed Contracts
+                   Signed Contracts
                 </button>
               </div>
             </div>
@@ -718,7 +718,7 @@ export default function UnifiedHRDashboard() {
           {/* Recruitment Section (HR Employee Only) */}
           {isHREmployee && !isHRManager && (
             <div style={sectionStyle}>
-              <h2 style={sectionTitleStyle}>📢 Recruitment Management</h2>
+              <h2 style={sectionTitleStyle}> Recruitment Management</h2>
               <div style={gridStyle}>
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/applications')}
@@ -726,7 +726,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  👥 Track Applications
+                   Track Applications
                 </button>
 
                 <button 
@@ -735,7 +735,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  💼 Manage Offers
+                   Manage Offers
                 </button>
                 
                 <button 
@@ -744,7 +744,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📣 Publish Jobs
+                   Publish Jobs
                 </button>
               </div>
             </div>
@@ -766,7 +766,7 @@ export default function UnifiedHRDashboard() {
                   textAlign: 'center',
                   boxShadow: '0 4px 12px rgba(59, 130, 246, 0.15)',
                 }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔄</div>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                   <h3 style={{ fontSize: '1.1rem', color: '#1e40af', marginBottom: '0.5rem', fontWeight: '600' }}>Active Cycles</h3>
                   <p style={{ fontSize: '3rem', fontWeight: '700', color: '#1e3a8a', margin: '0.5rem 0' }}>
                     {loading ? '-' : stats.activeCycles}
@@ -781,7 +781,7 @@ export default function UnifiedHRDashboard() {
                   textAlign: 'center',
                   boxShadow: '0 4px 12px rgba(16, 185, 129, 0.15)',
                 }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📋</div>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                   <h3 style={{ fontSize: '1.1rem', color: '#065f46', marginBottom: '0.5rem', fontWeight: '600' }}>Active Templates</h3>
                   <p style={{ fontSize: '3rem', fontWeight: '700', color: '#064e3b', margin: '0.5rem 0' }}>
                     {loading ? '-' : stats.activeTemplates}
@@ -796,7 +796,7 @@ export default function UnifiedHRDashboard() {
                   textAlign: 'center',
                   boxShadow: '0 4px 12px rgba(139, 92, 246, 0.15)',
                 }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📊</div>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                   <h3 style={{ fontSize: '1.1rem', color: '#581c87', marginBottom: '0.5rem', fontWeight: '600' }}>Completion Rate</h3>
                   <p style={{ fontSize: '3rem', fontWeight: '700', color: '#4c1d95', margin: '0.5rem 0' }}>
                     {loading ? '-' : `${stats.completionRate}%`}
@@ -812,7 +812,7 @@ export default function UnifiedHRDashboard() {
                     textAlign: 'center',
                     boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)',
                   }}>
-                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>⚠️</div>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                     <h3 style={{ fontSize: '1.1rem', color: '#991b1b', marginBottom: '0.5rem', fontWeight: '600' }}>Pending Disputes</h3>
                     <p style={{ fontSize: '3rem', fontWeight: '700', color: '#7f1d1d', margin: '0.5rem 0' }}>
                       {loading ? '-' : stats.pendingDisputes}
@@ -823,7 +823,7 @@ export default function UnifiedHRDashboard() {
               </div>
 
               <div style={sectionStyle}>
-                <h2 style={sectionTitleStyle}>⭐ Performance Templates & Cycles</h2>
+                <h2 style={sectionTitleStyle}> Performance Templates & Cycles</h2>
                 <div style={gridStyle}>
                   {isHRManager && (
                     <>
@@ -833,7 +833,7 @@ export default function UnifiedHRDashboard() {
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                       >
-                        📋 Appraisal Templates ({stats.activeTemplates})
+                         Appraisal Templates ({stats.activeTemplates})
                       </button>
 
                       <button 
@@ -842,7 +842,7 @@ export default function UnifiedHRDashboard() {
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                       >
-                        ➕ Create Template
+                         Create Template
                       </button>
                     </>
                   )}
@@ -853,7 +853,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🔄 Manage Cycles ({stats.activeCycles})
+                     Manage Cycles ({stats.activeCycles})
                   </button>
 
                   <button 
@@ -862,13 +862,13 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    ➕ Create Cycle
+                     Create Cycle
                   </button>
                 </div>
               </div>
 
               <div style={sectionStyle}>
-                <h2 style={sectionTitleStyle}>🔍 Monitoring & Resolution</h2>
+                <h2 style={sectionTitleStyle}> Monitoring & Resolution</h2>
                 <div style={gridStyle}>
                   <button 
                     onClick={() => router.push('/dashboard/hr/performance-dashboard')}
@@ -876,7 +876,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📊 Progress Dashboard
+                     Progress Dashboard
                   </button>
 
                   {stats.overdueAppraisals > 0 && (
@@ -886,7 +886,7 @@ export default function UnifiedHRDashboard() {
                       onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                      🔔 Send Reminders ({stats.overdueAppraisals})
+                       Send Reminders ({stats.overdueAppraisals})
                     </button>
                   )}
 
@@ -902,7 +902,7 @@ export default function UnifiedHRDashboard() {
                       onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                      ⚖️ Resolve Disputes {stats.pendingDisputes > 0 && `(${stats.pendingDisputes})`}
+                       Resolve Disputes {stats.pendingDisputes > 0 && `(${stats.pendingDisputes})`}
                     </button>
                   )}
 
@@ -912,7 +912,7 @@ export default function UnifiedHRDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📦 Archived Records
+                     Archived Records
                   </button>
                 </div>
               </div>
@@ -921,7 +921,7 @@ export default function UnifiedHRDashboard() {
 
           {/* Reports & Analytics Section (All HR Roles) */}
           <div style={sectionStyle}>
-            <h2 style={sectionTitleStyle}>📈 Reports & Analytics</h2>
+            <h2 style={sectionTitleStyle}> Reports & Analytics</h2>
             <div style={gridStyle}>
               <button 
                 onClick={() => router.push('/dashboard/hr/reports')}
@@ -929,7 +929,7 @@ export default function UnifiedHRDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📊 Generate Reports
+                 Generate Reports
               </button>
 
               {(isHRManager || isHREmployee) && (
@@ -939,7 +939,7 @@ export default function UnifiedHRDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📉 Performance Trends
+                   Performance Trends
                 </button>
               )}
             </div>
@@ -955,7 +955,7 @@ export default function UnifiedHRDashboard() {
               boxShadow: '0 4px 12px rgba(220, 38, 38, 0.2)',
             }}>
               <h2 style={{ color: '#dc2626', marginBottom: '1rem', fontSize: '1.5rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                ⚠️ Attention Required
+                 Attention Required
               </h2>
               {stats.pendingChangeRequests > 0 && (isHRAdmin || isHRManager) && (
                 <p style={{ marginBottom: '0.5rem', color: '#991b1b', fontSize: '1rem' }}>

@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, HR Manager, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -57,9 +57,9 @@ const initialFormData: FormData = {
 };
 
 const adjustmentTypes = [
-  { value: 'add', label: 'Add Days', icon: '➕', color: '#059669' },
-  { value: 'deduct', label: 'Deduct Days', icon: '➖', color: '#dc2626' },
-  { value: 'encashment', label: 'Encashment', icon: '💵', color: '#f59e0b' },
+  { value: 'add', label: 'Add Days', icon: '', color: '#059669' },
+  { value: 'deduct', label: 'Deduct Days', icon: '', color: '#dc2626' },
+  { value: 'encashment', label: 'Encashment', icon: '', color: '#f59e0b' },
 ];
 
 export default function LeaveAdjustmentsPage() {
@@ -218,7 +218,7 @@ export default function LeaveAdjustmentsPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>⚖️ Leave Balance Adjustments</h1>
+              <h1 className={styles.title}> Leave Balance Adjustments</h1>
               <p className={styles.subtitle}>
                 Manual adjustments to employee leave balances with full audit trail
               </p>
@@ -266,13 +266,13 @@ export default function LeaveAdjustmentsPage() {
               <Spinner message="Loading..." />
             ) : !selectedEmployee ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>👤</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>Select an Employee</h3>
                 <p>Choose an employee from the dropdown to view their adjustment history.</p>
               </div>
             ) : adjustments.length === 0 ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>⚖️</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>No Adjustments Found</h3>
                 <p>No balance adjustments have been made for this employee.</p>
                 <button 
@@ -339,15 +339,14 @@ export default function LeaveAdjustmentsPage() {
                 <div className={styles.modalHeader}>
                   <h2>Create Adjustment</h2>
                   <button className={styles.closeButton} onClick={handleCloseModal}>
-                    ✕
+                    
                   </button>
                 </div>
                 <form onSubmit={handleSubmit} className={styles.form}>
                   <div className={styles.formGroup}>
                     <label htmlFor="employeeId">Employee *</label>
                     <select
-                      id="employeeId"
-                      value={formData.employeeId}
+                      id="employeeId" value={formData.employeeId}
                       onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })}
                       required
                     >
@@ -363,8 +362,7 @@ export default function LeaveAdjustmentsPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="leaveTypeId">Leave Type *</label>
                     <select
-                      id="leaveTypeId"
-                      value={formData.leaveTypeId}
+                      id="leaveTypeId" value={formData.leaveTypeId}
                       onChange={(e) => setFormData({ ...formData, leaveTypeId: e.target.value })}
                       required
                     >
@@ -383,8 +381,7 @@ export default function LeaveAdjustmentsPage() {
                       {adjustmentTypes.map(type => (
                         <button
                           key={type.value}
-                          type="button"
-                          className={`${styles.typeButton} ${formData.adjustmentType === type.value ? styles.typeButtonActive : ''}`}
+                          type="button" className={`${styles.typeButton} ${formData.adjustmentType === type.value ? styles.typeButtonActive : ''}`}
                           onClick={() => setFormData({ ...formData, adjustmentType: type.value })}
                           style={{ 
                             borderColor: formData.adjustmentType === type.value ? type.color : '#e2e8f0',
@@ -401,25 +398,18 @@ export default function LeaveAdjustmentsPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="amount">Amount (days) *</label>
                     <input
-                      type="number"
-                      id="amount"
-                      value={formData.amount}
+                      type="number" id="amount" value={formData.amount}
                       onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                      placeholder="e.g., 5"
-                      step="0.5"
-                      min="0.5"
-                      required
+                      placeholder="e.g., 5" step="0.5" min="0.5" required
                     />
                   </div>
 
                   <div className={styles.formGroup}>
                     <label htmlFor="reason">Reason *</label>
                     <textarea
-                      id="reason"
-                      value={formData.reason}
+                      id="reason" value={formData.reason}
                       onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-                      placeholder="Enter the reason for this adjustment..."
-                      rows={3}
+                      placeholder="Enter the reason for this adjustment..." rows={3}
                       required
                     />
                   </div>
@@ -428,16 +418,14 @@ export default function LeaveAdjustmentsPage() {
                   
                   <div className={styles.modalActions}>
                     <button
-                      type="button"
-                      className={styles.cancelButton}
+                      type="button" className={styles.cancelButton}
                       onClick={handleCloseModal}
                       disabled={submitting}
                     >
                       Cancel
                     </button>
                     <button
-                      type="submit"
-                      className={styles.submitButton}
+                      type="submit" className={styles.submitButton}
                       disabled={submitting}
                     >
                       {submitting ? 'Creating...' : 'Create Adjustment'}

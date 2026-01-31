@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import axios from '@/lib/axios-config';
@@ -712,8 +712,7 @@ export default function ApplicationsPage() {
                 <tr>
                   <th className={styles.checkboxColumn}>
                     <input
-                      type="checkbox"
-                      checked={
+                      type="checkbox" checked={
                         selectedApplications.length === filteredApplications.length &&
                         filteredApplications.length > 0
                       }
@@ -738,8 +737,7 @@ export default function ApplicationsPage() {
                   <tr key={app._id}>
                     <td className={styles.checkboxColumn}>
                       <input
-                        type="checkbox"
-                        checked={selectedApplications.includes(app._id)}
+                        type="checkbox" checked={selectedApplications.includes(app._id)}
                         onChange={() => toggleApplicationSelection(app._id)}
                       />
                     </td>
@@ -747,7 +745,7 @@ export default function ApplicationsPage() {
                       <div className={styles.candidateInfo}>
                         <strong>
                           {app.candidateId ? `${app.candidateId.firstName} ${app.candidateId.lastName}` : 'N/A'}
-                          {app.isReferral && <span className={styles.referralBadge}>⭐ Referral</span>}
+                          {app.isReferral && <span className={styles.referralBadge}> Referral</span>}
                         </strong>
                         <small>{app.candidateId?.personalEmail || 'No email'}</small>
                       </div>
@@ -784,21 +782,21 @@ export default function ApplicationsPage() {
                               className={styles.scheduleButton}
                               title="Schedule Interview"
                             >
-                              📅 Schedule
+                               Schedule
                             </button>
                             <button
                               onClick={() => handleViewInterviews(app)}
                               className={styles.viewSlotsButton}
                               title="View Interview Slots"
                             >
-                              👁️ View Slots
+                               View Slots
                             </button>
                             <button
                               onClick={() => handleProvideFeedbackForApplication(app)}
                               className={styles.provideFeedbackButton}
                               title="Provide Interview Feedback & Score"
                             >
-                              📝 Feedback
+                               Feedback
                             </button>
                           </>
                         )}
@@ -808,7 +806,7 @@ export default function ApplicationsPage() {
                             className={styles.createOfferButton}
                             title="Create job offer for this candidate"
                           >
-                            💼 Create Offer
+                             Create Offer
                           </button>
                         )}
                         {app.status !== 'REJECTED' && app.status !== 'HIRED' && (
@@ -825,7 +823,7 @@ export default function ApplicationsPage() {
                                 className={styles.removeReferralButton}
                                 title="Remove referral tag"
                               >
-                                ⭐ Remove Referral
+                                 Remove Referral
                               </button>
                             ) : (
                               <button
@@ -833,7 +831,7 @@ export default function ApplicationsPage() {
                                 className={styles.tagReferralButton}
                                 title="Tag as referral"
                               >
-                                ⭐ Tag Referral
+                                 Tag Referral
                               </button>
                             )}
                           </>
@@ -863,12 +861,9 @@ export default function ApplicationsPage() {
               <div className={styles.formGroup}>
                 <label htmlFor="role">Position/Role <span className={styles.required}>*</span></label>
                 <input
-                  type="text"
-                  id="role"
-                  value={offerData.role}
+                  type="text" id="role" value={offerData.role}
                   onChange={(e) => setOfferData({ ...offerData, role: e.target.value })}
-                  placeholder="e.g., Senior Software Engineer"
-                  required
+                  placeholder="e.g., Senior Software Engineer" required
                 />
               </div>
 
@@ -876,25 +871,18 @@ export default function ApplicationsPage() {
                 <div className={styles.formGroup}>
                   <label htmlFor="grossSalary">Annual Gross Salary ($) <span className={styles.required}>*</span></label>
                   <input
-                    type="number"
-                    id="grossSalary"
-                    value={offerData.grossSalary}
+                    type="number" id="grossSalary" value={offerData.grossSalary}
                     onChange={(e) => setOfferData({ ...offerData, grossSalary: parseFloat(e.target.value) })}
-                    placeholder="e.g., 120000"
-                    min="0"
-                    required
+                    placeholder="e.g., 120000" min="0" required
                   />
                 </div>
 
                 <div className={styles.formGroup}>
                   <label htmlFor="signingBonus">Signing Bonus ($)</label>
                   <input
-                    type="number"
-                    id="signingBonus"
-                    value={offerData.signingBonus}
+                    type="number" id="signingBonus" value={offerData.signingBonus}
                     onChange={(e) => setOfferData({ ...offerData, signingBonus: parseFloat(e.target.value) })}
-                    placeholder="e.g., 10000"
-                    min="0"
+                    placeholder="e.g., 10000" min="0"
                   />
                 </div>
               </div>
@@ -904,18 +892,16 @@ export default function ApplicationsPage() {
                 {offerData.benefits.map((benefit, index) => (
                   <div key={index} className={styles.benefitRow}>
                     <input
-                      type="text"
-                      value={benefit}
+                      type="text" value={benefit}
                       onChange={(e) => updateBenefit(index, e.target.value)}
                       placeholder="e.g., Health Insurance"
                     />
                     {offerData.benefits.length > 1 && (
                       <button
-                        type="button"
-                        onClick={() => removeBenefit(index)}
+                        type="button" onClick={() => removeBenefit(index)}
                         className={styles.removeBenefitButton}
                       >
-                        ✕
+                        
                       </button>
                     )}
                   </div>
@@ -928,9 +914,7 @@ export default function ApplicationsPage() {
               <div className={styles.formGroup}>
                 <label htmlFor="insurances">Insurance Coverage</label>
                 <input
-                  type="text"
-                  id="insurances"
-                  value={offerData.insurances}
+                  type="text" id="insurances" value={offerData.insurances}
                   onChange={(e) => setOfferData({ ...offerData, insurances: e.target.value })}
                   placeholder="e.g., Full medical, dental, and vision coverage"
                 />
@@ -939,8 +923,7 @@ export default function ApplicationsPage() {
               <div className={styles.formGroup}>
                 <label htmlFor="conditions">Terms & Conditions</label>
                 <textarea
-                  id="conditions"
-                  value={offerData.conditions}
+                  id="conditions" value={offerData.conditions}
                   onChange={(e) => setOfferData({ ...offerData, conditions: e.target.value })}
                   rows={3}
                   placeholder="e.g., Employment is contingent upon background check..."
@@ -950,21 +933,17 @@ export default function ApplicationsPage() {
               <div className={styles.formGroup}>
                 <label htmlFor="content">Offer Letter Content <span className={styles.required}>*</span></label>
                 <textarea
-                  id="content"
-                  value={offerData.content}
+                  id="content" value={offerData.content}
                   onChange={(e) => setOfferData({ ...offerData, content: e.target.value })}
                   rows={6}
-                  placeholder="Enter the main offer letter content..."
-                  required
+                  placeholder="Enter the main offer letter content..." required
                 />
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="deadline">Response Deadline <span className={styles.required}>*</span></label>
                 <input
-                  type="date"
-                  id="deadline"
-                  value={offerData.deadline}
+                  type="date" id="deadline" value={offerData.deadline}
                   onChange={(e) => setOfferData({ ...offerData, deadline: e.target.value })}
                   min={new Date().toISOString().split('T')[0]}
                   required
@@ -1004,9 +983,7 @@ export default function ApplicationsPage() {
               <div className={styles.formGroup}>
                 <label htmlFor="reason">Rejection Reason (Optional)</label>
                 <input
-                  type="text"
-                  id="reason"
-                  value={rejectionData.reason}
+                  type="text" id="reason" value={rejectionData.reason}
                   onChange={(e) =>
                     setRejectionData({ ...rejectionData, reason: e.target.value })
                   }
@@ -1016,8 +993,7 @@ export default function ApplicationsPage() {
               <div className={styles.formGroup}>
                 <label htmlFor="customMessage">Custom Message (Optional)</label>
                 <textarea
-                  id="customMessage"
-                  value={rejectionData.customMessage}
+                  id="customMessage" value={rejectionData.customMessage}
                   onChange={(e) =>
                     setRejectionData({ ...rejectionData, customMessage: e.target.value })
                   }
@@ -1154,13 +1130,11 @@ export default function ApplicationsPage() {
                 <div className={styles.formGroup}>
                   <label>Video Link (Optional)</label>
                   <input
-                    type="url"
-                    value={interviewData.videoLink}
+                    type="url" value={interviewData.videoLink}
                     onChange={(e) =>
                       setInterviewData({ ...interviewData, videoLink: e.target.value })
                     }
-                    placeholder="https://meet.google.com/..."
-                    className={styles.input}
+                    placeholder="https://meet.google.com/..." className={styles.input}
                   />
                 </div>
               )}
@@ -1173,25 +1147,22 @@ export default function ApplicationsPage() {
                 {interviewData.timeSlots.map((slot, index) => (
                   <div key={index} className={styles.timeSlotRow}>
                     <input
-                      type="datetime-local"
-                      value={slot}
+                      type="datetime-local" value={slot}
                       onChange={(e) => updateTimeSlot(index, e.target.value)}
                       className={styles.input}
                     />
                     {interviewData.timeSlots.length > 1 && (
                       <button
-                        type="button"
-                        onClick={() => removeTimeSlot(index)}
+                        type="button" onClick={() => removeTimeSlot(index)}
                         className={styles.removeSlotButton}
                       >
-                        ✕
+                        
                       </button>
                     )}
                   </div>
                 ))}
                 <button
-                  type="button"
-                  onClick={addTimeSlot}
+                  type="button" onClick={addTimeSlot}
                   className={styles.addSlotButton}
                 >
                   + Add Time Slot
@@ -1214,8 +1185,7 @@ export default function ApplicationsPage() {
                         <div key={employee._id} className={styles.panelMember}>
                           <label className={styles.checkboxLabel}>
                             <input
-                              type="checkbox"
-                              checked={interviewData.panel.includes(employee._id)}
+                              type="checkbox" checked={interviewData.panel.includes(employee._id)}
                               onChange={() => togglePanelMember(employee._id)}
                             />
                             <div className={styles.employeeInfo}>
@@ -1286,7 +1256,7 @@ export default function ApplicationsPage() {
                     >
                       <div className={styles.interviewDetails}>
                         <div className={styles.interviewDateTime}>
-                          📆 {new Date(interview.scheduledDate).toLocaleString('en-US', {
+                           {new Date(interview.scheduledDate).toLocaleString('en-US', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
@@ -1321,9 +1291,9 @@ export default function ApplicationsPage() {
                                       {member.firstName} {member.lastName}
                                     </span>
                                     {hasFeedback ? (
-                                      <span className={styles.feedbackSubmitted}>✓ Scored</span>
+                                      <span className={styles.feedbackSubmitted}> Scored</span>
                                     ) : (
-                                      <span className={styles.feedbackPending}>⏳ Pending</span>
+                                      <span className={styles.feedbackPending}> Pending</span>
                                     )}
                                   </div>
                                 );
@@ -1344,12 +1314,12 @@ export default function ApplicationsPage() {
                       <div className={styles.interviewActions}>
                         {interview.candidateFeedback === 'CONFIRMED' && (
                           <div className={styles.confirmedBadge}>
-                            ✓ Confirmed by Candidate
+                             Confirmed by Candidate
                           </div>
                         )}
                         {interview.status === 'cancelled' && (
                           <div className={styles.cancelledBadge}>
-                            ✕ Cancelled
+                             Cancelled
                           </div>
                         )}
                         {(interview.status === 'scheduled' || interview.status === 'completed') && interview.candidateFeedback === 'CONFIRMED' && (
@@ -1357,7 +1327,7 @@ export default function ApplicationsPage() {
                             onClick={() => handleProvideFeedback(interview)}
                             className={styles.feedbackButton}
                           >
-                            📝 Provide Feedback
+                             Provide Feedback
                           </button>
                         )}
                       </div>
@@ -1428,30 +1398,23 @@ export default function ApplicationsPage() {
                 <div className={styles.formGroup}>
                   <label htmlFor="score">Score (0-100) *</label>
                   <input
-                    type="number"
-                    id="score"
-                    min="0"
-                    max="100"
-                    value={feedbackData.score || ''}
+                    type="number" id="score" min="0" max="100" value={feedbackData.score || ''}
                     onChange={(e) =>
                       setFeedbackData({ ...feedbackData, score: Number(e.target.value) })
                     }
-                    placeholder="Enter score (0-100)"
-                    className={styles.input}
+                    placeholder="Enter score (0-100)" className={styles.input}
                   />
                 </div>
 
                 <div className={styles.formGroup}>
                   <label htmlFor="comments">Comments (Optional)</label>
                   <textarea
-                    id="comments"
-                    value={feedbackData.comments}
+                    id="comments" value={feedbackData.comments}
                     onChange={(e) =>
                       setFeedbackData({ ...feedbackData, comments: e.target.value })
                     }
                     rows={6}
-                    placeholder="Provide detailed feedback about the candidate's performance..."
-                    className={styles.input}
+                    placeholder="Provide detailed feedback about the candidate's performance..." className={styles.input}
                   />
                 </div>
               </div>
@@ -1484,7 +1447,7 @@ export default function ApplicationsPage() {
                 </strong> as a referral candidate?
               </p>
               <p className={styles.infoText}>
-                ⭐ Referral candidates will be prioritized and appear at the top of the applications list.
+                 Referral candidates will be prioritized and appear at the top of the applications list.
               </p>
             </div>
             <div className={styles.modalActions}>

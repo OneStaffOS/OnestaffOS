@@ -5,7 +5,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -278,7 +278,7 @@ export default function LeavePoliciesPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📜 Leave Policies</h1>
+              <h1 className={styles.title}> Leave Policies</h1>
               <p className={styles.subtitle}>
                 Configure accrual rates, carry-forward rules, and eligibility criteria
               </p>
@@ -316,7 +316,7 @@ export default function LeavePoliciesPage() {
               <Spinner message="Loading policies..." />
             ) : policies.length === 0 ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>📜</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>No Policies Configured</h3>
                 <p>Create leave policies to define accrual rules and eligibility.</p>
                 {leaveTypes.length === 0 ? (
@@ -345,7 +345,7 @@ export default function LeavePoliciesPage() {
                     </div>
                     
                     <div className={styles.cardSection}>
-                      <h4>📊 Accrual Settings</h4>
+                      <h4> Accrual Settings</h4>
                       <div className={styles.detailGrid}>
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Monthly Rate</span>
@@ -363,7 +363,7 @@ export default function LeavePoliciesPage() {
                     </div>
 
                     <div className={styles.cardSection}>
-                      <h4>🔄 Carry Forward</h4>
+                      <h4> Carry Forward</h4>
                       <div className={styles.detailGrid}>
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Allowed</span>
@@ -389,7 +389,7 @@ export default function LeavePoliciesPage() {
                     </div>
 
                     <div className={styles.cardSection}>
-                      <h4>⏱️ Request Rules</h4>
+                      <h4> Request Rules</h4>
                       <div className={styles.detailGrid}>
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Min Notice</span>
@@ -406,7 +406,7 @@ export default function LeavePoliciesPage() {
 
                     {policy.eligibility && Object.keys(policy.eligibility).length > 0 && (
                       <div className={styles.cardSection}>
-                        <h4>✅ Eligibility</h4>
+                        <h4> Eligibility</h4>
                         <div className={styles.eligibilityTags}>
                           {policy.eligibility.minTenureMonths !== undefined && policy.eligibility.minTenureMonths > 0 && (
                             <span className={styles.eligibilityTag}>
@@ -438,7 +438,7 @@ export default function LeavePoliciesPage() {
                         className={styles.editButton}
                         onClick={() => handleOpenModal(policy)}
                       >
-                        ✏️ Edit
+                         Edit
                       </button>
                       {deleteConfirm === policy._id ? (
                         <div className={styles.deleteConfirm}>
@@ -447,13 +447,13 @@ export default function LeavePoliciesPage() {
                             onClick={() => handleDelete(policy._id)}
                             disabled={submitting}
                           >
-                            ✓
+                            
                           </button>
                           <button
                             className={styles.cancelDeleteButton}
                             onClick={() => setDeleteConfirm(null)}
                           >
-                            ✕
+                            
                           </button>
                         </div>
                       ) : (
@@ -461,7 +461,7 @@ export default function LeavePoliciesPage() {
                           className={styles.deleteButton}
                           onClick={() => setDeleteConfirm(policy._id)}
                         >
-                          🗑️
+                          
                         </button>
                       )}
                     </div>
@@ -478,7 +478,7 @@ export default function LeavePoliciesPage() {
                 <div className={styles.modalHeader}>
                   <h2>{editingPolicy ? 'Edit Policy' : 'Add New Policy'}</h2>
                   <button className={styles.closeButton} onClick={handleCloseModal}>
-                    ✕
+                    
                   </button>
                 </div>
                 <form onSubmit={handleSubmit} className={styles.form}>
@@ -486,8 +486,7 @@ export default function LeavePoliciesPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="leaveTypeId">Leave Type *</label>
                     <select
-                      id="leaveTypeId"
-                      value={formData.leaveTypeId}
+                      id="leaveTypeId" value={formData.leaveTypeId}
                       onChange={(e) => setFormData({ ...formData, leaveTypeId: e.target.value })}
                       required
                       disabled={!!editingPolicy}
@@ -501,12 +500,11 @@ export default function LeavePoliciesPage() {
 
                   {/* Accrual Settings */}
                   <div className={styles.formSection}>
-                    <h3>📊 Accrual Settings</h3>
+                    <h3> Accrual Settings</h3>
                     <div className={styles.formGroup}>
                       <label htmlFor="accrualMethod">Accrual Method *</label>
                       <select
-                        id="accrualMethod"
-                        value={formData.accrualMethod}
+                        id="accrualMethod" value={formData.accrualMethod}
                         onChange={(e) => setFormData({ ...formData, accrualMethod: e.target.value })}
                         required
                       >
@@ -521,31 +519,24 @@ export default function LeavePoliciesPage() {
                       <div className={styles.formGroup}>
                         <label htmlFor="monthlyRate">Monthly Rate (days)</label>
                         <input
-                          type="number"
-                          id="monthlyRate"
-                          value={formData.monthlyRate}
+                          type="number" id="monthlyRate" value={formData.monthlyRate}
                           onChange={(e) => setFormData({ ...formData, monthlyRate: e.target.value })}
-                          step="0.01"
-                          min="0"
+                          step="0.01" min="0"
                         />
                       </div>
                       <div className={styles.formGroup}>
                         <label htmlFor="yearlyRate">Yearly Total (days)</label>
                         <input
-                          type="number"
-                          id="yearlyRate"
-                          value={formData.yearlyRate}
+                          type="number" id="yearlyRate" value={formData.yearlyRate}
                           onChange={(e) => setFormData({ ...formData, yearlyRate: e.target.value })}
-                          step="0.5"
-                          min="0"
+                          step="0.5" min="0"
                         />
                       </div>
                     </div>
                     <div className={styles.formGroup}>
                       <label htmlFor="roundingRule">Rounding Rule</label>
                       <select
-                        id="roundingRule"
-                        value={formData.roundingRule}
+                        id="roundingRule" value={formData.roundingRule}
                         onChange={(e) => setFormData({ ...formData, roundingRule: e.target.value })}
                       >
                         {roundingRules.map(rule => (
@@ -557,11 +548,10 @@ export default function LeavePoliciesPage() {
 
                   {/* Carry Forward */}
                   <div className={styles.formSection}>
-                    <h3>🔄 Carry Forward</h3>
+                    <h3> Carry Forward</h3>
                     <label className={styles.checkbox}>
                       <input
-                        type="checkbox"
-                        checked={formData.carryForwardAllowed}
+                        type="checkbox" checked={formData.carryForwardAllowed}
                         onChange={(e) => setFormData({ ...formData, carryForwardAllowed: e.target.checked })}
                       />
                       <span>Allow Carry Forward</span>
@@ -571,9 +561,7 @@ export default function LeavePoliciesPage() {
                         <div className={styles.formGroup}>
                           <label htmlFor="maxCarryForward">Max Days to Carry</label>
                           <input
-                            type="number"
-                            id="maxCarryForward"
-                            value={formData.maxCarryForward}
+                            type="number" id="maxCarryForward" value={formData.maxCarryForward}
                             onChange={(e) => setFormData({ ...formData, maxCarryForward: e.target.value })}
                             min="0"
                           />
@@ -581,12 +569,9 @@ export default function LeavePoliciesPage() {
                         <div className={styles.formGroup}>
                           <label htmlFor="expiryAfterMonths">Expiry (months)</label>
                           <input
-                            type="number"
-                            id="expiryAfterMonths"
-                            value={formData.expiryAfterMonths}
+                            type="number" id="expiryAfterMonths" value={formData.expiryAfterMonths}
                             onChange={(e) => setFormData({ ...formData, expiryAfterMonths: e.target.value })}
-                            placeholder="Optional"
-                            min="1"
+                            placeholder="Optional" min="1"
                           />
                         </div>
                       </div>
@@ -595,14 +580,12 @@ export default function LeavePoliciesPage() {
 
                   {/* Request Rules */}
                   <div className={styles.formSection}>
-                    <h3>⏱️ Request Rules</h3>
+                    <h3> Request Rules</h3>
                     <div className={styles.formRow}>
                       <div className={styles.formGroup}>
                         <label htmlFor="minNoticeDays">Min Notice (days)</label>
                         <input
-                          type="number"
-                          id="minNoticeDays"
-                          value={formData.minNoticeDays}
+                          type="number" id="minNoticeDays" value={formData.minNoticeDays}
                           onChange={(e) => setFormData({ ...formData, minNoticeDays: e.target.value })}
                           min="0"
                         />
@@ -610,12 +593,9 @@ export default function LeavePoliciesPage() {
                       <div className={styles.formGroup}>
                         <label htmlFor="maxConsecutiveDays">Max Consecutive Days</label>
                         <input
-                          type="number"
-                          id="maxConsecutiveDays"
-                          value={formData.maxConsecutiveDays}
+                          type="number" id="maxConsecutiveDays" value={formData.maxConsecutiveDays}
                           onChange={(e) => setFormData({ ...formData, maxConsecutiveDays: e.target.value })}
-                          placeholder="Optional"
-                          min="1"
+                          placeholder="Optional" min="1"
                         />
                       </div>
                     </div>
@@ -623,16 +603,13 @@ export default function LeavePoliciesPage() {
 
                   {/* Eligibility */}
                   <div className={styles.formSection}>
-                    <h3>✅ Eligibility (Optional)</h3>
+                    <h3> Eligibility (Optional)</h3>
                     <div className={styles.formGroup}>
                       <label htmlFor="minTenureMonths">Min Tenure (months)</label>
                       <input
-                        type="number"
-                        id="minTenureMonths"
-                        value={formData.minTenureMonths}
+                        type="number" id="minTenureMonths" value={formData.minTenureMonths}
                         onChange={(e) => setFormData({ ...formData, minTenureMonths: e.target.value })}
-                        placeholder="e.g., 6"
-                        min="0"
+                        placeholder="e.g., 6" min="0"
                       />
                     </div>
                     <div className={styles.formGroup}>
@@ -642,8 +619,7 @@ export default function LeavePoliciesPage() {
                         {(positions || []).map((pos) => (
                           <label key={pos._id} className={styles.checkboxItem}>
                             <input
-                              type="checkbox"
-                              checked={formData.positionsAllowed.includes(pos._id)}
+                              type="checkbox" checked={formData.positionsAllowed.includes(pos._id)}
                               onChange={(e) => {
                                 if (e.target.checked) {
                                   setFormData({ ...formData, positionsAllowed: [...formData.positionsAllowed, pos._id] });
@@ -664,8 +640,7 @@ export default function LeavePoliciesPage() {
                         {contractTypeOptions.map((ct) => (
                           <label key={ct.value} className={styles.checkboxItem}>
                             <input
-                              type="checkbox"
-                              checked={formData.contractTypesAllowed.includes(ct.value)}
+                              type="checkbox" checked={formData.contractTypesAllowed.includes(ct.value)}
                               onChange={(e) => {
                                 if (e.target.checked) {
                                   setFormData({ ...formData, contractTypesAllowed: [...formData.contractTypesAllowed, ct.value] });
@@ -685,16 +660,14 @@ export default function LeavePoliciesPage() {
                   
                   <div className={styles.modalActions}>
                     <button
-                      type="button"
-                      className={styles.cancelButton}
+                      type="button" className={styles.cancelButton}
                       onClick={handleCloseModal}
                       disabled={submitting}
                     >
                       Cancel
                     </button>
                     <button
-                      type="submit"
-                      className={styles.submitButton}
+                      type="submit" className={styles.submitButton}
                       disabled={submitting}
                     >
                       {submitting ? 'Saving...' : editingPolicy ? 'Update Policy' : 'Create Policy'}

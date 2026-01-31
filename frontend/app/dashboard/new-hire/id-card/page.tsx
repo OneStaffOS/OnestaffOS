@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -217,7 +217,7 @@ export default function IDCardPage() {
         </div>
       ) : (
         <div className={styles.noCardContainer}>
-          <div className={styles.noCardIcon}>🆔</div>
+          <div className={styles.noCardIcon}></div>
           <h2 className={styles.noCardTitle}>No ID Card Issued</h2>
           <p className={styles.noCardText}>
             {cardInfo?.status === 'requested' 
@@ -233,13 +233,13 @@ export default function IDCardPage() {
 
           {requestSubmitted && (
             <div className={styles.successMessage}>
-              ✓ Request submitted successfully! HR will review your request.
+               Request submitted successfully! HR will review your request.
             </div>
           )}
 
           {cardInfo?.status === 'requested' && (
             <div className={styles.statusInfo}>
-              <div className={styles.statusIcon}>⏳</div>
+              <div className={styles.statusIcon}></div>
               <p>Your request is pending approval</p>
             </div>
           )}

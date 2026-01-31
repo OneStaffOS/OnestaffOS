@@ -235,7 +235,7 @@ export default function OvertimeExceptionsReportPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📊 Overtime & Exception Reports</h1>
+              <h1 className={styles.title}> Overtime & Exception Reports</h1>
               <p className={styles.subtitle}>
                 View and export overtime hours, attendance exceptions, and attendance records for payroll accuracy
               </p>
@@ -251,19 +251,19 @@ export default function OvertimeExceptionsReportPage() {
               className={`${styles.tab} ${activeTab === 'overtime' ? styles.activeTab : ''}`}
               onClick={() => setActiveTab('overtime')}
             >
-              ⏰ Overtime Report
+               Overtime Report
             </button>
             <button
               className={`${styles.tab} ${activeTab === 'exceptions' ? styles.activeTab : ''}`}
               onClick={() => setActiveTab('exceptions')}
             >
-              ⚠️ Exceptions
+               Exceptions
             </button>
             <button
               className={`${styles.tab} ${activeTab === 'attendance' ? styles.activeTab : ''}`}
               onClick={() => setActiveTab('attendance')}
             >
-              📋 Attendance Records
+               Attendance Records
             </button>
           </div>
 
@@ -274,8 +274,7 @@ export default function OvertimeExceptionsReportPage() {
                 <div className={styles.filterGroup}>
                   <label>Start Date</label>
                   <input
-                    type="date"
-                    value={startDate}
+                    type="date" value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     className={styles.input}
                   />
@@ -283,8 +282,7 @@ export default function OvertimeExceptionsReportPage() {
                 <div className={styles.filterGroup}>
                   <label>End Date</label>
                   <input
-                    type="date"
-                    value={endDate}
+                    type="date" value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     className={styles.input}
                   />
@@ -334,12 +332,12 @@ export default function OvertimeExceptionsReportPage() {
                 else handleExportAttendance();
               }}
             >
-              📥 Export to CSV
+               Export to CSV
             </button>
           </div>
 
           {/* Error Message */}
-          {error && <div className={styles.error}>⚠️ {error}</div>}
+          {error && <div className={styles.error}> {error}</div>}
 
           {/* Content */}
           {loading ? (
@@ -351,7 +349,7 @@ export default function OvertimeExceptionsReportPage() {
                 <div className={styles.tableContainer}>
                   {overtimeRecords.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <div className={styles.emptyIcon}>⏰</div>
+                      <div className={styles.emptyIcon}></div>
                       <h3>No Overtime Records Found</h3>
                       <p>No overtime hours recorded for the selected period.</p>
                     </div>
@@ -393,7 +391,7 @@ export default function OvertimeExceptionsReportPage() {
                 <div className={styles.tableContainer}>
                   {exceptionRecords.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <div className={styles.emptyIcon}>⚠️</div>
+                      <div className={styles.emptyIcon}></div>
                       <h3>No Exceptions Found</h3>
                       <p>No attendance exceptions for the selected filters.</p>
                     </div>
@@ -446,7 +444,7 @@ export default function OvertimeExceptionsReportPage() {
                 <div className={styles.tableContainer}>
                   {attendanceRecords.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <div className={styles.emptyIcon}>📋</div>
+                      <div className={styles.emptyIcon}></div>
                       <h3>No Attendance Records Found</h3>
                       <p>No attendance records for the selected period.</p>
                     </div>

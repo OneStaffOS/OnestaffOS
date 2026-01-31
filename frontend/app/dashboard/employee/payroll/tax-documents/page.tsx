@@ -196,7 +196,7 @@ For official tax purposes, please contact the HR department.
 
           {/* Info Banner */}
           <div className={styles.infoBanner}>
-            <div className={styles.infoIcon}>📄</div>
+            <div className={styles.infoIcon}></div>
             <div className={styles.infoContent}>
               <h4>Tax Documents & Statements</h4>
               <p>
@@ -213,7 +213,7 @@ For official tax purposes, please contact the HR department.
           {/* Empty State */}
           {!error && availableYears.length === 0 && (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>📭</div>
+              <div className={styles.emptyIcon}></div>
               <h3>No Tax Documents Available</h3>
               <p>You don't have any payslips yet. Tax documents will be available once you receive your first payslip.</p>
             </div>
@@ -243,28 +243,28 @@ For official tax purposes, please contact the HR department.
                     <h3>Annual Summary for {selectedYear}</h3>
                     <div className={styles.summaryGrid}>
                       <div className={styles.summaryCard}>
-                        <div className={styles.summaryIcon}>💰</div>
+                        <div className={styles.summaryIcon}></div>
                         <div className={styles.summaryContent}>
                           <div className={styles.summaryLabel}>Total Gross Income</div>
                           <div className={styles.summaryValue}>{formatCurrency(summary.totalGross)}</div>
                         </div>
                       </div>
                       <div className={styles.summaryCard}>
-                        <div className={styles.summaryIcon}>🧾</div>
+                        <div className={styles.summaryIcon}></div>
                         <div className={styles.summaryContent}>
                           <div className={styles.summaryLabel}>Total Taxes Paid</div>
                           <div className={styles.summaryValue}>{formatCurrency(summary.totalTaxes)}</div>
                         </div>
                       </div>
                       <div className={styles.summaryCard}>
-                        <div className={styles.summaryIcon}>💵</div>
+                        <div className={styles.summaryIcon}></div>
                         <div className={styles.summaryContent}>
                           <div className={styles.summaryLabel}>Total Net Pay</div>
                           <div className={styles.summaryValue}>{formatCurrency(summary.totalNet)}</div>
                         </div>
                       </div>
                       <div className={styles.summaryCard}>
-                        <div className={styles.summaryIcon}>📊</div>
+                        <div className={styles.summaryIcon}></div>
                         <div className={styles.summaryContent}>
                           <div className={styles.summaryLabel}>Number of Payslips</div>
                           <div className={styles.summaryValue}>{summary.numberOfPayslips}</div>
@@ -299,7 +299,7 @@ For official tax purposes, please contact the HR department.
                     <h3>Download Documents</h3>
                     <div className={styles.downloadGrid}>
                       <div className={styles.downloadCard}>
-                        <div className={styles.downloadIcon}>📥</div>
+                        <div className={styles.downloadIcon}></div>
                         <div className={styles.downloadContent}>
                           <h4>Annual Tax Statement</h4>
                           <p>Complete tax summary for {selectedYear} including all earnings and deductions</p>
@@ -312,7 +312,7 @@ For official tax purposes, please contact the HR department.
                         </div>
                       </div>
                       <div className={styles.downloadCard}>
-                        <div className={styles.downloadIcon}>📊</div>
+                        <div className={styles.downloadIcon}></div>
                         <div className={styles.downloadContent}>
                           <h4>Monthly Tax Breakdown (CSV)</h4>
                           <p>Detailed month-by-month breakdown of taxes paid in {selectedYear}</p>
@@ -331,7 +331,7 @@ For official tax purposes, please contact the HR department.
 
               {/* Disclaimer */}
               <div className={styles.disclaimer}>
-                <h4>⚠️ Important Notice</h4>
+                <h4> Important Notice</h4>
                 <p>
                   These documents are for informational purposes only. For official tax filing and compliance,
                   please contact the HR department to obtain certified tax documents. The HR department can provide

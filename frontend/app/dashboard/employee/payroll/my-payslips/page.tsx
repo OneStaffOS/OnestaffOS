@@ -112,7 +112,7 @@ export default function MyPayslipsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>💰 My Payslips</h1>
+              <h1 className={styles.pageTitle}> My Payslips</h1>
               <p className={styles.pageSubtitle}>
                 View and download your monthly salary statements
               </p>
@@ -122,19 +122,19 @@ export default function MyPayslipsPage() {
                 className={styles.btnPrimary}
                 onClick={() => router.push('/dashboard/employee/payroll/salary-history')}
               >
-                📊 View Salary History
+                 View Salary History
               </button>
               <button
                 className={styles.btnSecondary}
                 onClick={() => router.push('/dashboard/employee/payroll/tax-documents')}
               >
-                📄 Tax Documents
+                 Tax Documents
               </button>
             </div>
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Stats */}
           {payslips.length > 0 && (
@@ -170,7 +170,7 @@ export default function MyPayslipsPage() {
           <div className={styles.card}>
             {payslips.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>📄</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>No Payslips Available</h3>
                 <p className={styles.emptyStateDescription}>
                   Your payslips will appear here once payroll is processed
@@ -251,7 +251,7 @@ export default function MyPayslipsPage() {
                 className={styles.actionCard}
                 onClick={() => router.push('/dashboard/employee/payroll/my-disputes')}
               >
-                <span className={styles.actionIcon}>⚠️</span>
+                <span className={styles.actionIcon}></span>
                 <span className={styles.actionTitle}>My Disputes</span>
                 <span className={styles.actionDesc}>View and track payroll disputes</span>
               </button>
@@ -259,7 +259,7 @@ export default function MyPayslipsPage() {
                 className={styles.actionCard}
                 onClick={() => router.push('/dashboard/employee/payroll/my-claims')}
               >
-                <span className={styles.actionIcon}>💼</span>
+                <span className={styles.actionIcon}></span>
                 <span className={styles.actionTitle}>My Claims</span>
                 <span className={styles.actionDesc}>Track expense reimbursements</span>
               </button>
@@ -267,7 +267,7 @@ export default function MyPayslipsPage() {
                 className={styles.actionCard}
                 onClick={() => router.push('/dashboard/employee/payroll/submit-claim')}
               >
-                <span className={styles.actionIcon}>➕</span>
+                <span className={styles.actionIcon}></span>
                 <span className={styles.actionTitle}>Submit New Claim</span>
                 <span className={styles.actionDesc}>Request expense reimbursement</span>
               </button>

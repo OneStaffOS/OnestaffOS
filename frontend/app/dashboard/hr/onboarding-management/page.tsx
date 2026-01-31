@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
@@ -84,7 +84,7 @@ export default function OnboardingManagement() {
       const employeesRes = await axios.get('/employee-profile');
       const allEmployees = employeesRes.data;
       
-      // Fetch all employees' system roles and filter for NEW_HIRE
+      // Fetch all employees'system roles and filter for NEW_HIRE
       const newHiresList = [];
       
       for (const emp of allEmployees) {
@@ -301,7 +301,7 @@ export default function OnboardingManagement() {
                       <div key={idx} className={styles.taskItem}>
                         <div className={styles.taskInfo}>
                           <div className={styles.taskName}>
-                            {task.status === 'completed' && <span className={styles.checkmark}>✓</span>}
+                            {task.status === 'completed' && <span className={styles.checkmark}></span>}
                             {task.name}
                           </div>
                           <div className={styles.taskMeta}>
@@ -337,7 +337,7 @@ export default function OnboardingManagement() {
                       className={styles.equipmentButton}
                       onClick={() => window.location.href = `/dashboard/hr/onboarding-management/${checklist._id}/equipment`}
                     >
-                      🏢 Manage Equipment & Facilities
+                       Manage Equipment & Facilities
                     </button>
                   </div>
                 </div>
@@ -383,8 +383,7 @@ export default function OnboardingManagement() {
                       <div className={styles.tasksHeader}>
                         <label>Onboarding Tasks *</label>
                         <button 
-                          type="button" 
-                          className={styles.addTaskBtn}
+                          type="button" className={styles.addTaskBtn}
                           onClick={addTask}
                         >
                           + Add Task
@@ -397,8 +396,7 @@ export default function OnboardingManagement() {
                             <h4>Task {index + 1}</h4>
                             {tasks.length > 1 && (
                               <button
-                                type="button"
-                                className={styles.removeTaskBtn}
+                                type="button" className={styles.removeTaskBtn}
                                 onClick={() => removeTask(index)}
                               >
                                 Remove
@@ -407,31 +405,24 @@ export default function OnboardingManagement() {
                           </div>
 
                           <input
-                            type="text"
-                            placeholder="Task Name *"
-                            value={task.name}
+                            type="text" placeholder="Task Name *" value={task.name}
                             onChange={(e) => updateTask(index, 'name', e.target.value)}
                             required
                           />
 
                           <input
-                            type="text"
-                            placeholder="Department/Responsible Party *"
-                            value={task.department}
+                            type="text" placeholder="Department/Responsible Party *" value={task.department}
                             onChange={(e) => updateTask(index, 'department', e.target.value)}
                             required
                           />
 
                           <input
-                            type="date"
-                            placeholder="Deadline (optional)"
-                            value={task.deadline}
+                            type="date" placeholder="Deadline (optional)" value={task.deadline}
                             onChange={(e) => updateTask(index, 'deadline', e.target.value)}
                           />
 
                           <textarea
-                            placeholder="Notes (optional)"
-                            value={task.notes}
+                            placeholder="Notes (optional)" value={task.notes}
                             onChange={(e) => updateTask(index, 'notes', e.target.value)}
                             rows={2}
                           />
@@ -442,15 +433,13 @@ export default function OnboardingManagement() {
 
                   <div className={styles.modalFooter}>
                     <button 
-                      type="button"
-                      className={styles.cancelBtn}
+                      type="button" className={styles.cancelBtn}
                       onClick={() => setShowCreateModal(false)}
                     >
                       Cancel
                     </button>
                     <button 
-                      type="submit"
-                      className={styles.submitBtn}
+                      type="submit" className={styles.submitBtn}
                       disabled={loading}
                     >
                       {loading ? 'Creating...' : 'Create Checklist'}

@@ -177,7 +177,7 @@ export default function TimeExceptionRequestPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>⚠️ Request Time Exception</h1>
+              <h1 className={styles.pageTitle}> Request Time Exception</h1>
               <p className={styles.pageSubtitle}>
                 Submit a request to correct attendance records
               </p>
@@ -197,8 +197,7 @@ export default function TimeExceptionRequestPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>Filter by Date (optional)</label>
                     <input 
-                      type="date" 
-                      className={styles.formInput}
+                      type="date" className={styles.formInput}
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                     />
@@ -240,7 +239,7 @@ export default function TimeExceptionRequestPage() {
                     <label className={styles.formLabel}>Assigned To</label>
                     <div className={styles.infoBox}>
                       {assignedToName ? (
-                        <span>📧 {assignedToName}</span>
+                        <span> {assignedToName}</span>
                       ) : (
                         <span className={styles.textMuted}>Manager not found — will be auto-resolved</span>
                       )}
@@ -261,15 +260,13 @@ export default function TimeExceptionRequestPage() {
 
                 <div className={styles.formActions}>
                   <button 
-                    type="submit" 
-                    className={styles.btnPrimary} 
+                    type="submit" className={styles.btnPrimary} 
                     disabled={submitting}
                   >
-                    {submitting ? 'Submitting...' : '✓ Submit Exception'}
+                    {submitting ? 'Submitting...' : 'Submit Exception'}
                   </button>
                   <button 
-                    type="button" 
-                    className={styles.btnSecondary} 
+                    type="button" className={styles.btnSecondary} 
                     onClick={() => router.back()}
                   >
                     Cancel

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -290,8 +290,7 @@ export default function ClientDashboardPage() {
               <label className={styles.field}>
                 Time Estimate (days)
                 <input
-                  type="number"
-                  min={1}
+                  type="number" min={1}
                   step={1}
                   value={form.timeEstimateDays}
                   onChange={(e) => handleChange('timeEstimateDays', e.target.value)}
@@ -301,8 +300,7 @@ export default function ClientDashboardPage() {
               <label className={styles.field}>
                 Payment Amount (EGP)
                 <input
-                  type="number"
-                  min={1}
+                  type="number" min={1}
                   step={1}
                   value={form.paymentAmount}
                   onChange={(e) => handleChange('paymentAmount', e.target.value)}

@@ -4,7 +4,7 @@
  * Note: Positions cannot be deleted if historical assignments exist (delimit only)
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -142,7 +142,7 @@ export default function AttendanceCorrectionsPage() {
           {/* Page Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>✏️ Attendance Corrections</h1>
+              <h1 className={styles.pageTitle}> Attendance Corrections</h1>
               <p className={styles.pageSubtitle}>
                 View and correct attendance records for team members
               </p>
@@ -177,7 +177,7 @@ export default function AttendanceCorrectionsPage() {
                 onClick={fetchRecords}
                 disabled={loading || !employeeId}
               >
-                {loading ? 'Loading...' : '🔍 Fetch Records'}
+                {loading ? 'Loading...' : 'Fetch Records'}
               </button>
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function AttendanceCorrectionsPage() {
           {/* Empty State */}
           {!loading && records.length === 0 && employeeId && (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📭</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Records Found</h3>
               <p>No attendance records found for the selected employee.</p>
             </div>
@@ -286,8 +286,7 @@ export default function AttendanceCorrectionsPage() {
                                   <option value="OUT">OUT</option>
                                 </select>
                                 <input
-                                  type="datetime-local"
-                                  value={p.time}
+                                  type="datetime-local" value={p.time}
                                   onChange={(e) => updatePunch(pi, 'time', e.target.value)}
                                   className={styles.formInput}
                                   style={{ flex: 1 }}
@@ -296,7 +295,7 @@ export default function AttendanceCorrectionsPage() {
                                   className={`${styles.btnDanger} ${styles.btnSmall}`}
                                   onClick={() => removePunch(pi)}
                                 >
-                                  ✕
+                                  
                                 </button>
                               </div>
                             ))}
@@ -325,7 +324,7 @@ export default function AttendanceCorrectionsPage() {
                           className={styles.btnSuccess}
                           onClick={() => submitCorrection(idx)}
                         >
-                          💾 Save Correction
+                           Save Correction
                         </button>
                         <button
                           className={styles.btnSecondary}
@@ -344,7 +343,7 @@ export default function AttendanceCorrectionsPage() {
                         className={styles.btnPrimary}
                         onClick={() => startEdit(idx)}
                       >
-                        ✏️ Edit Punches
+                         Edit Punches
                       </button>
                     </div>
                   )}

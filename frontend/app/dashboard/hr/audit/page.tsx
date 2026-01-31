@@ -4,7 +4,7 @@
  * Phase III: HR/Admin Processing & Master Data
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
@@ -90,9 +90,7 @@ export default function AuditTrailPage() {
 
         <div className={styles.controls}>
           <input
-            type="text"
-            placeholder="Search by employee, description, or implementer..."
-            value={searchTerm}
+            type="text" placeholder="Search by employee, description, or implementer..." value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
           />

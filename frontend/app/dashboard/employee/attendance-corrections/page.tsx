@@ -76,7 +76,7 @@ export default function AttendanceCorrectionsPage() {
             >
               <option value="">-- Choose record --</option>
               {records.map((r: any) => {
-                // Safe date rendering: prefer createdAt, fall back to first punch time, else show 'Unknown date'
+                // Safe date rendering: prefer createdAt, fall back to first punch time, else show 'Unknown date'.
                 let displayDate = 'Unknown date';
                 try {
                   if (r.createdAt) displayDate = new Date(r.createdAt).toLocaleDateString();

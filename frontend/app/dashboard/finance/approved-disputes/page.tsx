@@ -164,7 +164,7 @@ export default function ApprovedDisputesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>💰 Approved Disputes for Adjustment</h1>
+              <h1 className={styles.pageTitle}> Approved Disputes for Adjustment</h1>
               <p className={styles.pageSubtitle}>
                 Review payroll disputes approved by Payroll Manager and process necessary financial adjustments
               </p>
@@ -177,7 +177,7 @@ export default function ApprovedDisputesPage() {
             </button>
           </div>
 
-          {error && !selectedDispute && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && !selectedDispute && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Summary Stats */}
           <div className={styles.statsGrid}>
@@ -201,7 +201,7 @@ export default function ApprovedDisputesPage() {
           {!loading && pendingDisputes.length > 0 && (
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>🔔 Pending Your Action ({pendingDisputes.length})</h2>
+                <h2 className={styles.sectionTitle}> Pending Your Action ({pendingDisputes.length})</h2>
                 <span className={styles.priorityBadge}>FINANCE ACTION REQUIRED</span>
               </div>
               <div className={styles.disputesList}>
@@ -255,7 +255,7 @@ export default function ApprovedDisputesPage() {
                         className={styles.btnView}
                         onClick={() => openDisputeModal(dispute)}
                       >
-                        {hasRefund(dispute._id) ? '👁️ View Details' : '👁️ View & Generate Refund'}
+                        {hasRefund(dispute._id) ? 'View Details' : 'View & Generate Refund'}
                       </button>
                     </div>
                   </div>
@@ -267,7 +267,7 @@ export default function ApprovedDisputesPage() {
           {/* Acknowledged Disputes */}
           {!loading && acknowledgedDisputes.length > 0 && (
             <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>✅ Acknowledged by Me ({acknowledgedDisputes.length})</h2>
+              <h2 className={styles.sectionTitle}> Acknowledged by Me ({acknowledgedDisputes.length})</h2>
               <div className={styles.disputesList}>
                 {acknowledgedDisputes.map(dispute => (
                   <div key={dispute._id} className={styles.disputeCard}>
@@ -301,7 +301,7 @@ export default function ApprovedDisputesPage() {
 
           {!loading && disputes.length === 0 && (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>📋</div>
+              <div className={styles.emptyIcon}></div>
               <p>No approved disputes found</p>
               <p className={styles.emptySubtext}>Disputes approved by Payroll Manager will appear here</p>
             </div>
@@ -313,14 +313,14 @@ export default function ApprovedDisputesPage() {
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
                   <h3 className={styles.modalTitle}>
-                    💰 Dispute Details - {selectedDispute.disputeId}
+                     Dispute Details - {selectedDispute.disputeId}
                   </h3>
                   <button className={styles.closeBtn} onClick={closeModal}>×</button>
                 </div>
 
                 <div className={styles.modalBody}>
-                  {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-                  {successMessage && <div className={styles.successMessage}>✓ {successMessage}</div>}
+                  {error && <div className={styles.errorMessage}> {error}</div>}
+                  {successMessage && <div className={styles.successMessage}> {successMessage}</div>}
 
                   <div className={styles.modalSection}>
                     <h4 className={styles.modalSectionTitle}>Employee Information</h4>
@@ -360,7 +360,7 @@ export default function ApprovedDisputesPage() {
                     <h4 className={styles.modalSectionTitle}>Approval Chain</h4>
                     <div className={styles.approvalTimeline}>
                       <div className={styles.timelineItem}>
-                        <div className={styles.timelineIcon}>1️⃣</div>
+                        <div className={styles.timelineIcon}>1⃣</div>
                         <div className={styles.timelineContent}>
                           <strong>Payroll Specialist Review</strong>
                           <p>{selectedDispute.payrollSpecialistId ? 
@@ -369,7 +369,7 @@ export default function ApprovedDisputesPage() {
                         </div>
                       </div>
                       <div className={styles.timelineItem}>
-                        <div className={styles.timelineIcon}>2️⃣</div>
+                        <div className={styles.timelineIcon}>2⃣</div>
                         <div className={styles.timelineContent}>
                           <strong>Payroll Manager Approval</strong>
                           <p>{selectedDispute.payrollManagerId ? 
@@ -378,7 +378,7 @@ export default function ApprovedDisputesPage() {
                         </div>
                       </div>
                       <div className={styles.timelineItem + ' ' + styles.timelinePending}>
-                        <div className={styles.timelineIcon}>3️⃣</div>
+                        <div className={styles.timelineIcon}>3⃣</div>
                         <div className={styles.timelineContent}>
                           <strong>Finance Staff Action</strong>
                           <p>Waiting for your acknowledgment</p>
@@ -389,14 +389,14 @@ export default function ApprovedDisputesPage() {
 
                   {!hasRefund(selectedDispute._id) && !successMessage && (
                     <div className={styles.infoBox}>
-                      <strong>📌 Next Steps:</strong>
+                      <strong> Next Steps:</strong>
                       <p>Generate a refund to process this dispute in the next payroll cycle.</p>
                     </div>
                   )}
 
                   {hasRefund(selectedDispute._id) && (
                     <div className={styles.completedInfo}>
-                      <strong>✓ Refund Already Generated:</strong>
+                      <strong> Refund Already Generated:</strong>
                       <p>This dispute has been processed and will be included in the next payroll cycle.</p>
                     </div>
                   )}
@@ -416,7 +416,7 @@ export default function ApprovedDisputesPage() {
                       onClick={handleAcknowledge}
                       disabled={acknowledging || generatingRefund}
                     >
-                      {acknowledging ? 'Processing...' : '✅ Acknowledge'}
+                      {acknowledging ? 'Processing...' : 'Acknowledge'}
                     </button>
                   )}
                   {!hasRefund(selectedDispute._id) && !successMessage && (
@@ -425,7 +425,7 @@ export default function ApprovedDisputesPage() {
                       onClick={handleGenerateRefund}
                       disabled={acknowledging || generatingRefund}
                     >
-                      {generatingRefund ? 'Generating...' : '💵 Generate Refund'}
+                      {generatingRefund ? 'Generating...' : 'Generate Refund'}
                     </button>
                   )}
                 </div>

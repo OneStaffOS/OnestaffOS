@@ -5,7 +5,7 @@
  * Verifies OTP and redirects to password reset page with token
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, FormEvent, useRef } from 'react';
 import React from 'react';

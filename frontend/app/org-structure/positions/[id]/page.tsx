@@ -3,7 +3,7 @@
  * View detailed information about a specific position
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';

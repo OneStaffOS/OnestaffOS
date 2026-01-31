@@ -66,7 +66,7 @@ export default function PayrollManagerRunsPage() {
 
     try {
       await axios.post(`/payroll-execution/runs/${run._id}/lock`);
-      setSuccess(`✅ Payroll run ${run.runId} has been locked successfully`);
+      setSuccess(` Payroll run ${run.runId} has been locked successfully`);
       await loadRuns();
       setTimeout(() => setSuccess(null), 5000);
     } catch (e: any) {
@@ -105,7 +105,7 @@ export default function PayrollManagerRunsPage() {
         payrollRunId: selectedRun._id,
         unlockReason: unlockReason.trim()
       });
-      setSuccess(`✅ Payroll run ${selectedRun.runId} has been unlocked. Reason: ${unlockReason}`);
+      setSuccess(` Payroll run ${selectedRun.runId} has been unlocked. Reason: ${unlockReason}`);
       closeUnlockDialog();
       await loadRuns();
       setTimeout(() => setSuccess(null), 5000);
@@ -165,7 +165,7 @@ export default function PayrollManagerRunsPage() {
           }}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle} style={{ color: 'white', fontSize: '32px' }}>
-                🔐 Lock/Unlock Payroll Runs
+                 Lock/Unlock Payroll Runs
               </h1>
               <p className={styles.pageSubtitle} style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px' }}>
                 Manage payroll run security - lock finalized runs or unlock for corrections with documented reasons
@@ -174,7 +174,7 @@ export default function PayrollManagerRunsPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
           {success && <div className={styles.successMessage}>{success}</div>}
 
           {/* Stats */}
@@ -260,7 +260,7 @@ export default function PayrollManagerRunsPage() {
             }}>
               {runs.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <div className={styles.emptyStateIcon}>🔒</div>
+                  <div className={styles.emptyStateIcon}></div>
                   <h3 className={styles.emptyStateTitle}>No Payroll Runs Found</h3>
                   <p className={styles.emptyStateDescription}>
                     {statusFilter !== 'all' 
@@ -356,7 +356,7 @@ export default function PayrollManagerRunsPage() {
                                   boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)'
                                 }}
                               >
-                                🔒 Lock
+                                 Lock
                               </button>
                             )}
                             {canUnlock && (
@@ -375,7 +375,7 @@ export default function PayrollManagerRunsPage() {
                                   boxShadow: '0 2px 8px rgba(220, 38, 38, 0.3)'
                                 }}
                               >
-                                🔓 Unlock
+                                 Unlock
                               </button>
                             )}
                             {!canLock && !canUnlock && (
@@ -416,7 +416,7 @@ export default function PayrollManagerRunsPage() {
                 boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
               }}>
                 <h2 style={{ margin: '0 0 16px 0', fontSize: '20px', fontWeight: '700', color: '#dc2626' }}>
-                  🔓 Unlock Payroll Run: {selectedRun.runId}
+                   Unlock Payroll Run: {selectedRun.runId}
                 </h2>
                 <p style={{ margin: '0 0 24px 0', color: '#64748b', fontSize: '14px' }}>
                   This is an exceptional action. You must provide a detailed reason for unlocking this payroll run.
@@ -428,8 +428,7 @@ export default function PayrollManagerRunsPage() {
                   <textarea
                     value={unlockReason}
                     onChange={(e) => setUnlockReason(e.target.value)}
-                    placeholder="Example: Correction needed for employee bank details, retroactive salary adjustment approved by CEO, etc."
-                    rows={4}
+                    placeholder="Example: Correction needed for employee bank details, retroactive salary adjustment approved by CEO, etc." rows={4}
                     style={{
                       width: '100%',
                       padding: '12px',
@@ -471,7 +470,7 @@ export default function PayrollManagerRunsPage() {
                       cursor: actionLoading || !unlockReason.trim() ? 'not-allowed' : 'pointer'
                     }}
                   >
-                    {actionLoading ? '⏳ Unlocking...' : '🔓 Confirm Unlock'}
+                    {actionLoading ? 'Unlocking...' : 'Confirm Unlock'}
                   </button>
                 </div>
               </div>

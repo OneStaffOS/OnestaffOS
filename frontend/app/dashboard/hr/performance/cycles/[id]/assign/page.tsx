@@ -4,7 +4,7 @@
  * Accessible by: HR Manager, HR Employee
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -478,8 +478,7 @@ export default function BulkAssignmentPage() {
                   Due Date (Optional)
                 </label>
                 <input
-                  type="date"
-                  value={dueDate}
+                  type="date" value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
                   style={{
                     width: '100%',
@@ -499,8 +498,7 @@ export default function BulkAssignmentPage() {
                 </label>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                   <button
-                    type="button"
-                    onClick={() => {
+                    type="button" onClick={() => {
                       setSelectedDepartments([]);
                       setSelectedEmployees([]);
                     }}
@@ -518,8 +516,7 @@ export default function BulkAssignmentPage() {
                     Select Individual Employees
                   </button>
                   <button
-                    type="button"
-                    onClick={() => {
+                    type="button" onClick={() => {
                       setSelectedEmployees([]);
                     }}
                     style={{
@@ -571,8 +568,7 @@ export default function BulkAssignmentPage() {
                             }}
                           >
                             <input
-                              type="checkbox"
-                              checked={selectedDepartments.includes(dept._id)}
+                              type="checkbox" checked={selectedDepartments.includes(dept._id)}
                               onChange={() => toggleDepartment(dept._id)}
                               style={{ marginRight: '0.5rem', cursor: 'pointer' }}
                             />
@@ -601,7 +597,7 @@ export default function BulkAssignmentPage() {
                 width: '100%'
               }}
             >
-              {submitting ? 'Assigning...' : `Create Assignment for ${selectedEmployees.length > 0 ? selectedEmployees.length + ' Employee(s)' : selectedDepartments.length + ' Department(s)'}`}
+              {submitting ? 'Assigning...' : `Create Assignment for ${selectedEmployees.length > 0 ? selectedEmployees.length + 'Employee(s)' : selectedDepartments.length + 'Department(s)'}`}
             </button>
           </div>
 
@@ -672,11 +668,9 @@ export default function BulkAssignmentPage() {
                     Search Employees
                   </label>
                   <input
-                    type="text"
-                    value={searchQuery}
+                    type="text" value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by name, email, or job title..."
-                    style={{
+                    placeholder="Search by name, email, or job title..." style={{
                       width: '100%',
                       padding: '0.5rem',
                       border: '1px solid #ddd',
@@ -726,8 +720,7 @@ export default function BulkAssignmentPage() {
                           }}
                         >
                           <input
-                            type="checkbox"
-                            checked={selectedEmployees.includes(employee._id)}
+                            type="checkbox" checked={selectedEmployees.includes(employee._id)}
                             onChange={() => toggleEmployee(employee._id)}
                             disabled={alreadyAssigned}
                             style={{ marginRight: '1rem', cursor: alreadyAssigned ? 'not-allowed' : 'pointer' }}

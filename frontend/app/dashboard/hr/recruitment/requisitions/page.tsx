@@ -4,7 +4,7 @@
  * HR Manager can create and manage job requisitions
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -229,10 +229,7 @@ export default function JobRequisitionsPage() {
                       Number of Openings <span style={{ color: 'red' }}>*</span>
                     </label>
                     <input
-                      type="number"
-                      min="1"
-                      placeholder="e.g., 1, 2, 5"
-                      value={formData.openings}
+                      type="number" min="1" placeholder="e.g., 1, 2, 5" value={formData.openings}
                       onChange={(e) => setFormData({ ...formData, openings: e.target.value ? parseInt(e.target.value) : '' as any })}
                       required
                       style={{
@@ -250,9 +247,7 @@ export default function JobRequisitionsPage() {
                       Location <span style={{ color: 'red' }}>*</span>
                     </label>
                     <input
-                      type="text"
-                      placeholder="e.g., New York, Remote, Hybrid"
-                      value={formData.location}
+                      type="text" placeholder="e.g., New York, Remote, Hybrid" value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       required
                       style={{
@@ -271,8 +266,7 @@ export default function JobRequisitionsPage() {
                     Expiry Date (Optional)
                   </label>
                   <input
-                    type="date"
-                    value={formData.expiryDate}
+                    type="date" value={formData.expiryDate}
                     onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
                     min={new Date().toISOString().split('T')[0]}
                     style={{
@@ -286,8 +280,7 @@ export default function JobRequisitionsPage() {
                 </div>
 
                 <button
-                  type="submit"
-                  style={{
+                  type="submit" style={{
                     padding: '1rem',
                     background: '#10b981',
                     color: 'white',

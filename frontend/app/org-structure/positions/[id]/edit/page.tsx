@@ -3,7 +3,7 @@
  * System Admin can update existing positions
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';

@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -229,8 +229,7 @@ export default function RolesPermissionsPage() {
                       {permissions.map((p, index) => (
                         <td key={p.role} className={styles.checkboxCell}>
                           <input
-                            type="checkbox"
-                            checked={(p.permissions as any)[permKey]}
+                            type="checkbox" checked={(p.permissions as any)[permKey]}
                             onChange={(e) => handlePermissionChange(index, permKey, e.target.checked)}
                             className={styles.checkbox}
                           />

@@ -1,12 +1,12 @@
 /**
  * Manager Team Overview Page
- * US-E4-01: View team members' profiles (excluding sensitive info)
+ * US-E4-01: View team members'profiles (excluding sensitive info)
  * US-E4-02: See summary of team's job titles and departments
  * BR 41b: Direct Managers see their team only
  * BR 18b: Privacy restrictions applied (sensitive data excluded)
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -214,7 +214,7 @@ export default function ManagerTeamPage() {
         }}>
           <div>
             <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '700', margin: 0, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              👥 My Team
+               My Team
             </h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', margin: 0 }}>
               {teamSummary?.totalMembers || 0} direct reports
@@ -278,7 +278,7 @@ export default function ManagerTeamPage() {
             boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
             color: 'white'
           }}>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>👥 Team Members</h3>
+            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}> Team Members</h3>
             <p style={{ fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{teamSummary?.totalMembers || 0}</p>
           </div>
 
@@ -290,7 +290,7 @@ export default function ManagerTeamPage() {
             boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
             color: 'white'
           }}>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>✅ Active</h3>
+            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}> Active</h3>
             <p style={{ fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>
               {teamSummary?.byStatus?.['ACTIVE'] || 0}
             </p>
@@ -304,7 +304,7 @@ export default function ManagerTeamPage() {
             boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
             color: 'white'
           }}>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>🏢 Departments</h3>
+            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}> Departments</h3>
             <p style={{ fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{Object.keys(teamSummary?.byDepartment || {}).length}</p>
           </div>
 
@@ -316,7 +316,7 @@ export default function ManagerTeamPage() {
             boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
             color: 'white'
           }}>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>💼 Job Titles</h3>
+            <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}> Job Titles</h3>
             <p style={{ fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{Object.keys(teamSummary?.byPosition || {}).length}</p>
           </div>
         </div>
@@ -333,7 +333,7 @@ export default function ManagerTeamPage() {
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
               }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#374151', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  🏢 By Department
+                   By Department
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {Object.entries(teamSummary.byDepartment).map(([dept, count]) => (
@@ -362,7 +362,7 @@ export default function ManagerTeamPage() {
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
               }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#374151', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  💼 By Job Title
+                   By Job Title
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {Object.entries(teamSummary.byPosition).map(([pos, count]) => (
@@ -393,9 +393,7 @@ export default function ManagerTeamPage() {
           alignItems: 'center'
         }}>
           <input
-            type="text"
-            placeholder="🔍 Search by name, employee number, or email..."
-            value={searchTerm}
+            type="text" placeholder="Search by name, employee number, or email..." value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
               flex: 1,
@@ -470,7 +468,7 @@ export default function ManagerTeamPage() {
             onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
           >
-            🔄 Refresh
+             Refresh
           </button>
         </div>
 
@@ -490,7 +488,7 @@ export default function ManagerTeamPage() {
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
             }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>👥</div>
+              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}></div>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#374151', marginBottom: '0.75rem' }}>No Team Members Found</h2>
               <p style={{ fontSize: '1.05rem', color: '#6b7280', margin: 0 }}>
                 {searchTerm || filterDepartment !== 'ALL' || filterPosition !== 'ALL' 
@@ -577,7 +575,7 @@ export default function ManagerTeamPage() {
                   <div style={{ padding: '1.5rem' }}>
                     {/* Job Title */}
                     <div style={{ marginBottom: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                      <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}>💼 Position:</span>
+                      <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}> Position:</span>
                       <span style={{ color: '#374151', fontWeight: '600', flex: 1, fontSize: '0.95rem' }}>
                         {member.primaryPositionId?.title || 'Unassigned'}
                       </span>
@@ -585,7 +583,7 @@ export default function ManagerTeamPage() {
                     
                     {/* Department */}
                     <div style={{ marginBottom: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                      <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}>🏢 Department:</span>
+                      <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}> Department:</span>
                       <span style={{ color: '#374151', fontWeight: '500', flex: 1, fontSize: '0.95rem' }}>
                         {member.primaryDepartmentId?.name || 'Unassigned'}
                       </span>
@@ -594,7 +592,7 @@ export default function ManagerTeamPage() {
                     {/* Work Email - Not sensitive, can be shown */}
                     {member.workEmail && (
                       <div style={{ marginBottom: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                        <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}>✉️ Email:</span>
+                        <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}> Email:</span>
                         <span style={{ color: '#374151', fontWeight: '500', flex: 1, wordBreak: 'break-word', fontSize: '0.95rem' }}>
                           {member.workEmail}
                         </span>
@@ -604,7 +602,7 @@ export default function ManagerTeamPage() {
                     {/* Contract Type */}
                     {member.contractType && (
                       <div style={{ marginBottom: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                        <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}>📄 Contract:</span>
+                        <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}> Contract:</span>
                         <span style={{ color: '#374151', fontWeight: '500', flex: 1, fontSize: '0.95rem' }}>
                           {member.contractType.replace('_', ' ')}
                         </span>
@@ -614,7 +612,7 @@ export default function ManagerTeamPage() {
                     {/* Hire Date */}
                     {member.dateOfHire && (
                       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                        <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}>📅 Joined:</span>
+                        <span style={{ color: '#6b7280', minWidth: '90px', fontSize: '0.95rem' }}> Joined:</span>
                         <span style={{ color: '#374151', fontWeight: '500', flex: 1, fontSize: '0.95rem' }}>
                           {formatDate(member.dateOfHire)}
                         </span>

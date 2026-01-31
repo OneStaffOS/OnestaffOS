@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -56,7 +56,7 @@ export default function Navbar() {
               {/* Notification Bell - Shows ticket notifications */}
               <NotificationBell />
               {/* Shift Types is accessible from the Admin/Manager dashboards (quick actions), not the navbar */}
-              <button onClick={handleLogout} className={styles.logoutButton}>
+              <button onClick={handleLogout} className={styles.logoutButton} data-navbar-button>
                 Logout
               </button>
             </>

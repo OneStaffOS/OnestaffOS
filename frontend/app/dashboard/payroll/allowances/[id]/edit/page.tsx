@@ -93,12 +93,12 @@ export default function EditAllowancePage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>✏️ Edit Allowance</h1>
+            <h1 className={styles.formTitle}> Edit Allowance</h1>
             <p className={styles.formSubtitle}>
               Update the allowance details. Only draft allowances can be edited.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -106,13 +106,10 @@ export default function EditAllowancePage() {
                   Allowance Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="name"
-                  className={styles.formInput}
+                  type="text" name="name" className={styles.formInput}
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="e.g., Housing Allowance, Transport Allowance"
-                  required
+                  placeholder="e.g., Housing Allowance, Transport Allowance" required
                 />
                 <span className={styles.formHint}>The name of the allowance</span>
               </div>
@@ -122,33 +119,27 @@ export default function EditAllowancePage() {
                   Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="amount"
-                  className={styles.formInput}
+                  type="number" name="amount" className={styles.formInput}
                   value={formData.amount}
                   onChange={handleChange}
-                  min="0"
-                  step="100"
-                  required
+                  min="0" step="100" required
                 />
                 <span className={styles.formHint}>The allowance amount in Egyptian Pounds</span>
               </div>
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/allowances')}
                   disabled={saving}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={saving}
                 >
-                  {saving ? 'Saving...' : '💾 Save Changes'}
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>

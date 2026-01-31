@@ -3,7 +3,7 @@
  * Displayed when a user tries to access a route without proper permissions
  */
 
-'use client';
+"use client";
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

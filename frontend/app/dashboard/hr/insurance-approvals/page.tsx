@@ -107,11 +107,11 @@ export default function InsuranceApprovalsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'approved':
-        return <span style={{ background: '#dcfce7', color: '#166534', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600 }}>✅ Approved</span>;
+        return <span style={{ background: '#dcfce7', color: '#166534', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600 }}> Approved</span>;
       case 'rejected':
-        return <span style={{ background: '#fee2e2', color: '#991b1b', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600 }}>❌ Rejected</span>;
+        return <span style={{ background: '#fee2e2', color: '#991b1b', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600 }}> Rejected</span>;
       default:
-        return <span style={{ background: '#fef3c7', color: '#92400e', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600 }}>⏳ Pending</span>;
+        return <span style={{ background: '#fef3c7', color: '#92400e', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600 }}> Pending</span>;
     }
   };
 
@@ -123,8 +123,7 @@ export default function InsuranceApprovalsPage() {
         <div style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
           {/* Back Link */}
           <Link 
-            href="/dashboard/hr" 
-            style={{ 
+            href="/dashboard/hr" style={{ 
               display: 'inline-flex', 
               alignItems: 'center', 
               gap: '8px', 
@@ -140,7 +139,7 @@ export default function InsuranceApprovalsPage() {
           {/* Header */}
           <div style={{ marginBottom: '24px' }}>
             <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#1e293b', margin: '0 0 8px 0' }}>
-              🛡️ Insurance Bracket Approvals
+               Insurance Bracket Approvals
             </h1>
             <p style={{ color: '#64748b', fontSize: '15px', margin: 0 }}>
               Review and approve insurance bracket configurations submitted by Payroll Specialists
@@ -157,7 +156,7 @@ export default function InsuranceApprovalsPage() {
               borderRadius: '10px', 
               marginBottom: '20px' 
             }}>
-              ⚠️ {error}
+               {error}
             </div>
           )}
           {success && (
@@ -169,7 +168,7 @@ export default function InsuranceApprovalsPage() {
               borderRadius: '10px', 
               marginBottom: '20px' 
             }}>
-              ✅ {success}
+               {success}
             </div>
           )}
 
@@ -250,7 +249,7 @@ export default function InsuranceApprovalsPage() {
               borderRadius: '12px', 
               border: '2px dashed #e2e8f0' 
             }}>
-              <span style={{ fontSize: '48px', display: 'block', marginBottom: '16px' }}>🛡️</span>
+              <span style={{ fontSize: '48px', display: 'block', marginBottom: '16px' }}></span>
               <h3 style={{ fontSize: '18px', color: '#334155', margin: '0 0 8px 0' }}>
                 No Insurance Brackets Found
               </h3>
@@ -332,7 +331,7 @@ export default function InsuranceApprovalsPage() {
                         fontSize: '13px',
                         color: '#166534'
                       }}>
-                        ✅ Approved by {bracket.approvedBy.firstName} {bracket.approvedBy.lastName}
+                         Approved by {bracket.approvedBy.firstName} {bracket.approvedBy.lastName}
                         {bracket.approvedAt && ` on ${formatDate(bracket.approvedAt)}`}
                       </div>
                     )}
@@ -345,7 +344,7 @@ export default function InsuranceApprovalsPage() {
                         fontSize: '13px',
                         color: '#991b1b'
                       }}>
-                        ❌ Rejected by {bracket.rejectedBy.firstName} {bracket.rejectedBy.lastName}
+                         Rejected by {bracket.rejectedBy.firstName} {bracket.rejectedBy.lastName}
                         {bracket.rejectedAt && ` on ${formatDate(bracket.rejectedAt)}`}
                       </div>
                     )}
@@ -376,7 +375,7 @@ export default function InsuranceApprovalsPage() {
                           opacity: processingId === bracket._id ? 0.6 : 1,
                         }}
                       >
-                        {processingId === bracket._id ? 'Processing...' : '❌ Reject'}
+                        {processingId === bracket._id ? 'Processing...' : 'Reject'}
                       </button>
                       <button
                         onClick={() => handleApprove(bracket._id)}
@@ -393,7 +392,7 @@ export default function InsuranceApprovalsPage() {
                           opacity: processingId === bracket._id ? 0.6 : 1,
                         }}
                       >
-                        {processingId === bracket._id ? 'Processing...' : '✅ Approve'}
+                        {processingId === bracket._id ? 'Processing...' : 'Approve'}
                       </button>
                     </div>
                   )}

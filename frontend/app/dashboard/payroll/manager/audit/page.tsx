@@ -123,7 +123,7 @@ export default function PayrollManagerAuditPage() {
           }}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle} style={{ color: 'white', fontSize: '32px' }}>
-                📊 Payroll Security Audit Trail
+                 Payroll Security Audit Trail
               </h1>
               <p className={styles.pageSubtitle} style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px' }}>
                 Complete history of all payroll lock/unlock actions with timestamps and reasons
@@ -132,7 +132,7 @@ export default function PayrollManagerAuditPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -216,7 +216,7 @@ export default function PayrollManagerAuditPage() {
             }}>
               {runs.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <div className={styles.emptyStateIcon}>📋</div>
+                  <div className={styles.emptyStateIcon}></div>
                   <h3 className={styles.emptyStateTitle}>No Audit Records Found</h3>
                   <p className={styles.emptyStateDescription}>
                     {viewFilter === 'locked' && 'No locked payroll runs'}
@@ -283,7 +283,7 @@ export default function PayrollManagerAuditPage() {
                               fontSize: '12px',
                               fontWeight: '600'
                             }}>
-                              {run.status === 'locked' ? '🔒 LOCKED' : '🔓 UNLOCKED'}
+                              {run.status === 'locked' ? 'LOCKED' : 'UNLOCKED'}
                             </span>
                           </td>
                           <td>
@@ -305,7 +305,7 @@ export default function PayrollManagerAuditPage() {
                                   fontWeight: '600',
                                   marginBottom: '4px'
                                 }}>
-                                  ⚠️ UNLOCK JUSTIFICATION:
+                                   UNLOCK JUSTIFICATION:
                                 </div>
                                 <div style={{ 
                                   fontSize: '13px', 
@@ -343,7 +343,7 @@ export default function PayrollManagerAuditPage() {
             borderRadius: '8px'
           }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', color: '#0c4a6e', fontWeight: '700' }}>
-              📖 Audit Trail Information
+               Audit Trail Information
             </h3>
             <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: '#475569', lineHeight: '1.8' }}>
               <li><strong>Locked Status:</strong> Payroll run is finalized and protected from any modifications</li>
@@ -387,7 +387,7 @@ export default function PayrollManagerAuditPage() {
                 boxShadow: '0 2px 8px rgba(22, 163, 74, 0.3)'
               }}
             >
-              📥 Export to CSV
+               Export to CSV
             </button>
           </div>
         </div>

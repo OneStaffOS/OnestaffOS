@@ -8,7 +8,7 @@
  * time clock stations, or external attendance systems.
  */
 
-'use client';
+"use client";
 
 import { useState } from 'react';
 import axios from '@/lib/axios-config';

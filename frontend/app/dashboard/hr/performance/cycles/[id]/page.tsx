@@ -3,7 +3,7 @@
  * Display detailed information about a specific appraisal cycle
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';

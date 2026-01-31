@@ -95,12 +95,12 @@ export default function EditTerminationBenefitPage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>✏️ Edit Termination Benefit</h1>
+            <h1 className={styles.formTitle}> Edit Termination Benefit</h1>
             <p className={styles.formSubtitle}>
               Update the termination benefit details. Only draft entries can be edited.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -108,13 +108,10 @@ export default function EditTerminationBenefitPage() {
                   Benefit Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="name"
-                  className={styles.formInput}
+                  type="text" name="name" className={styles.formInput}
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="e.g., End of Service Gratuity"
-                  required
+                  placeholder="e.g., End of Service Gratuity" required
                 />
                 <span className={styles.formHint}>The name of the termination benefit</span>
               </div>
@@ -124,14 +121,10 @@ export default function EditTerminationBenefitPage() {
                   Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="amount"
-                  className={styles.formInput}
+                  type="number" name="amount" className={styles.formInput}
                   value={formData.amount}
                   onChange={handleChange}
-                  min="0"
-                  step="1000"
-                  required
+                  min="0" step="1000" required
                 />
                 <span className={styles.formHint}>The benefit amount in Egyptian Pounds</span>
               </div>
@@ -141,8 +134,7 @@ export default function EditTerminationBenefitPage() {
                   Terms & Conditions
                 </label>
                 <textarea
-                  name="terms"
-                  className={styles.formTextarea}
+                  name="terms" className={styles.formTextarea}
                   value={formData.terms}
                   onChange={handleChange}
                   placeholder="Specify the terms and conditions for this benefit"
@@ -152,19 +144,17 @@ export default function EditTerminationBenefitPage() {
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/termination-benefits')}
                   disabled={saving}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={saving}
                 >
-                  {saving ? 'Saving...' : '💾 Save Changes'}
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>

@@ -227,16 +227,16 @@ export default function PayrollApprovalsPage() {
 
   const getModuleIcon = (module: string) => {
     const icons: Record<string, string> = {
-      'policies': '📋',
-      'pay-grades': '💰',
-      'pay-types': '⏱️',
-      'allowances': '🎁',
-      'signing-bonuses': '✍️',
-      'termination-benefits': '📤',
-      'tax-rules': '🏛️',
-      'insurance-brackets': '🛡️',
+      'policies': '',
+      'pay-grades': '',
+      'pay-types': '',
+      'allowances': '',
+      'signing-bonuses': '',
+      'termination-benefits': '',
+      'tax-rules': '',
+      'insurance-brackets': '',
     };
-    return icons[module] || '📄';
+    return icons[module] || '';
   };
 
   return (
@@ -251,7 +251,7 @@ export default function PayrollApprovalsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>✅ Approval Center</h1>
+              <h1 className={styles.pageTitle}> Approval Center</h1>
               <p className={styles.pageSubtitle}>
                 Review and approve pending payroll configurations
               </p>
@@ -263,15 +263,15 @@ export default function PayrollApprovalsPage() {
                   onClick={handleApproveAll}
                   disabled={processingIds.length > 0}
                 >
-                  ✅ Approve All ({filteredItems.length})
+                   Approve All ({filteredItems.length})
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -310,14 +310,14 @@ export default function PayrollApprovalsPage() {
             <Spinner message="Loading pending configurations..." />
           ) : filteredItems.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>🎉</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Pending Approvals</h3>
               <p>All payroll configurations have been reviewed.</p>
             </div>
           ) : (
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>
-                📝 Pending Configurations ({filteredItems.length})
+                 Pending Configurations ({filteredItems.length})
               </h2>
               <div className={styles.tableContainer}>
                 <table className={styles.table}>
@@ -356,20 +356,20 @@ export default function PayrollApprovalsPage() {
                               onClick={() => handleApprove(item)}
                               disabled={processingIds.includes(item._id)}
                             >
-                              {processingIds.includes(item._id) ? '...' : '✅'}
+                              {processingIds.includes(item._id) ? '...' : ''}
                             </button>
                             <button
                               className={styles.btnSmDanger}
                               onClick={() => handleReject(item)}
                               disabled={processingIds.includes(item._id)}
                             >
-                              {processingIds.includes(item._id) ? '...' : '❌'}
+                              {processingIds.includes(item._id) ? '...' : ''}
                             </button>
                             <button
                               className={styles.btnSmSecondary}
                               onClick={() => router.push(`/dashboard/payroll/${item.module}`)}
                             >
-                              👁️
+                              
                             </button>
                           </div>
                         </td>

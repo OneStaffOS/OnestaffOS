@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -339,8 +339,7 @@ export default function EligibilityRulesPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Minimum Tenure (months)</label>
                     <input
-                      type="number"
-                      className={styles.input}
+                      type="number" className={styles.input}
                       value={formData.minTenureMonths}
                       onChange={(e) => setFormData({ ...formData, minTenureMonths: parseInt(e.target.value) || 0 })}
                       min="0"
@@ -355,8 +354,7 @@ export default function EligibilityRulesPage() {
                       {contractTypeOptions.map((type) => (
                         <label key={type.value} className={styles.checkboxLabel}>
                           <input
-                            type="checkbox"
-                            checked={formData.contractTypesAllowed.includes(type.value)}
+                            type="checkbox" checked={formData.contractTypesAllowed.includes(type.value)}
                             onChange={() => handleArrayToggle('contractTypesAllowed', type.value)}
                           />
                           {type.label}
@@ -372,8 +370,7 @@ export default function EligibilityRulesPage() {
                       {(positions || []).map((pos) => (
                         <label key={pos._id} className={styles.checkboxLabel}>
                           <input
-                            type="checkbox"
-                            checked={formData.positionsAllowed.includes(pos._id)}
+                            type="checkbox" checked={formData.positionsAllowed.includes(pos._id)}
                             onChange={() => handleArrayToggle('positionsAllowed', pos._id)}
                           />
                           {pos.title}

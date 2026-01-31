@@ -88,7 +88,7 @@ export default function CreateShiftPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>🕐 Create New Shift</h1>
+              <h1 className={styles.pageTitle}> Create New Shift</h1>
               <p className={styles.pageSubtitle}>
                 Define a new shift with timing and policy settings
               </p>
@@ -134,8 +134,7 @@ export default function CreateShiftPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>Start Time</label>
                     <input 
-                      type="time" 
-                      className={styles.formInput} 
+                      type="time" className={styles.formInput} 
                       value={startTime} 
                       onChange={(e) => setStartTime(e.target.value)} 
                     />
@@ -144,8 +143,7 @@ export default function CreateShiftPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>End Time</label>
                     <input 
-                      type="time" 
-                      className={styles.formInput} 
+                      type="time" className={styles.formInput} 
                       value={endTime} 
                       onChange={(e) => setEndTime(e.target.value)} 
                     />
@@ -167,8 +165,7 @@ export default function CreateShiftPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>Grace In (minutes)</label>
                     <input 
-                      type="number" 
-                      className={styles.formInput} 
+                      type="number" className={styles.formInput} 
                       value={graceInMinutes} 
                       onChange={(e) => setGraceInMinutes(Number(e.target.value))}
                       min={0}
@@ -178,8 +175,7 @@ export default function CreateShiftPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>Grace Out (minutes)</label>
                     <input 
-                      type="number" 
-                      className={styles.formInput} 
+                      type="number" className={styles.formInput} 
                       value={graceOutMinutes} 
                       onChange={(e) => setGraceOutMinutes(Number(e.target.value))}
                       min={0}
@@ -190,8 +186,7 @@ export default function CreateShiftPage() {
                 <div className={styles.checkboxGroup}>
                   <label className={styles.checkboxLabel}>
                     <input 
-                      type="checkbox" 
-                      checked={requiresApprovalForOvertime} 
+                      type="checkbox" checked={requiresApprovalForOvertime} 
                       onChange={(e) => setRequiresApprovalForOvertime(e.target.checked)} 
                     />
                     <span>Requires Approval For Overtime</span>
@@ -199,8 +194,7 @@ export default function CreateShiftPage() {
 
                   <label className={styles.checkboxLabel}>
                     <input 
-                      type="checkbox" 
-                      checked={active} 
+                      type="checkbox" checked={active} 
                       onChange={(e) => setActive(e.target.checked)} 
                     />
                     <span>Active</span>
@@ -209,15 +203,13 @@ export default function CreateShiftPage() {
 
                 <div className={styles.formActions}>
                   <button 
-                    type="submit" 
-                    className={styles.btnPrimary} 
+                    type="submit" className={styles.btnPrimary} 
                     disabled={loading}
                   >
-                    {loading ? 'Creating...' : '✓ Create Shift'}
+                    {loading ? 'Creating...' : 'Create Shift'}
                   </button>
                   <button 
-                    type="button" 
-                    className={styles.btnSecondary} 
+                    type="button" className={styles.btnSecondary} 
                     onClick={() => router.back()}
                   >
                     Cancel

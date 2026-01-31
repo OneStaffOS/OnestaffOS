@@ -67,7 +67,7 @@ export default function LeaderNotifications() {
             boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)'
           }}>
             <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '700', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              📢 Post Announcement
+               Post Announcement
             </h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', margin: '0.5rem 0 0 0' }}>
               Send notifications to your team, department, or entire organization
@@ -90,13 +90,12 @@ export default function LeaderNotifications() {
                 color: '#374151', 
                 marginBottom: '0.75rem' 
               }}>
-                📝 Title
+                 Title
               </label>
               <input 
                 value={title} 
                 onChange={e => setTitle(e.target.value)}
-                placeholder="Enter announcement title..."
-                style={{
+                placeholder="Enter announcement title..." style={{
                   width: '100%',
                   padding: '0.875rem 1.25rem',
                   fontSize: '1rem',
@@ -120,13 +119,12 @@ export default function LeaderNotifications() {
                 color: '#374151', 
                 marginBottom: '0.75rem' 
               }}>
-                ✉️ Message
+                 Message
               </label>
               <textarea 
                 value={message} 
                 onChange={e => setMessage(e.target.value)}
-                placeholder="Enter your announcement message..."
-                rows={6}
+                placeholder="Enter your announcement message..." rows={6}
                 style={{
                   width: '100%',
                   padding: '0.875rem 1.25rem',
@@ -153,7 +151,7 @@ export default function LeaderNotifications() {
                 color: '#374151', 
                 marginBottom: '0.75rem' 
               }}>
-                🎯 Target Role
+                 Target Role
               </label>
               <select 
                 value={targetRole} 
@@ -188,7 +186,7 @@ export default function LeaderNotifications() {
                 color: '#374151', 
                 marginBottom: '0.75rem' 
               }}>
-                💼 Target Positions (Optional)
+                 Target Positions (Optional)
               </label>
               <div style={{ position: 'relative' }}>
                 <Select
@@ -199,8 +197,7 @@ export default function LeaderNotifications() {
                     .filter(id => targetPositionIds.includes(id))
                     .map(id => ({ value: id, label: ((positions || []).find(p => (p._id || p.id) === id)?.title || id) }))}
                   onChange={(selected: any) => setTargetPositionIds((selected || []).map((s: any) => s.value))}
-                  placeholder="Search and select positions..."
-                  styles={{
+                  placeholder="Search and select positions..." styles={{
                     control: (base: any) => ({
                       ...base,
                       padding: '0.375rem 0.5rem',
@@ -240,7 +237,7 @@ export default function LeaderNotifications() {
                 color: '#374151', 
                 marginBottom: '0.75rem' 
               }}>
-                👥 Target Employees (Optional)
+                 Target Employees (Optional)
               </label>
               <div style={{ position: 'relative' }}>
                 <Select
@@ -251,8 +248,7 @@ export default function LeaderNotifications() {
                     .filter(id => targetEmployeeIds.includes(id))
                     .map(id => ({ value: id, label: (teamEmployees.find(emp => (emp._id || emp.id) === id)?.fullName || id) }))}
                   onChange={(selected: any) => setTargetEmployeeIds((selected || []).map((s: any) => s.value))}
-                  placeholder="Search and select employees..."
-                  styles={{
+                  placeholder="Search and select employees..." styles={{
                     control: (base: any) => ({
                       ...base,
                       padding: '0.375rem 0.5rem',
@@ -314,7 +310,7 @@ export default function LeaderNotifications() {
                   }
                 }}
               >
-                {submitting ? '⏳ Sending...' : '🚀 Send Announcement'}
+                {submitting ? 'Sending...' : 'Send Announcement'}
               </button>
             </div>
           </div>
@@ -323,4 +319,3 @@ export default function LeaderNotifications() {
     </ProtectedRoute>
   );
 }
-

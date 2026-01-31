@@ -99,7 +99,7 @@ export default function PayslipsPage({ params }: { params: Promise<{ id: string 
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📄 Employee Payslips</h1>
+              <h1 className={styles.pageTitle}> Employee Payslips</h1>
               <p className={styles.pageSubtitle}>
                 View detailed payslips for all employees in this payroll run
               </p>
@@ -107,7 +107,7 @@ export default function PayslipsPage({ params }: { params: Promise<{ id: string 
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -133,7 +133,7 @@ export default function PayslipsPage({ params }: { params: Promise<{ id: string 
           <div className={styles.card}>
             {payslips.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>📄</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>No Payslips Generated</h3>
                 <p className={styles.emptyStateDescription}>
                   Payslips have not been generated for this payroll run yet.
@@ -243,7 +243,7 @@ export default function PayslipsPage({ params }: { params: Promise<{ id: string 
                       {/* Earnings */}
                       <div>
                         <h4 style={{ margin: '0 0 12px 0', color: '#16a34a', fontSize: '14px' }}>
-                          💰 Earnings
+                           Earnings
                         </h4>
                         <div style={{ fontSize: '14px', lineHeight: '1.8' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -278,7 +278,7 @@ export default function PayslipsPage({ params }: { params: Promise<{ id: string 
                       {/* Deductions */}
                       <div>
                         <h4 style={{ margin: '0 0 12px 0', color: '#dc2626', fontSize: '14px' }}>
-                          ➖ Deductions
+                           Deductions
                         </h4>
                         <div style={{ fontSize: '14px', lineHeight: '1.8' }}>
                           {payslip.deductionsDetails.taxes?.map((t, i) => (

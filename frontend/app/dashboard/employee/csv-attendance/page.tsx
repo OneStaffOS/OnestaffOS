@@ -6,7 +6,7 @@
  * for the authenticated employee
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -83,7 +83,7 @@ export default function CSVAttendancePage() {
   };
 
   const getPunchTypeIcon = (type: string) => {
-    return type === 'IN' ? '▶' : '⏸';
+    return type === 'IN' ? '' : '';
   };
 
   return (
@@ -109,14 +109,14 @@ export default function CSVAttendancePage() {
 
           {error && (
             <div className={styles.error}>
-              <span className={styles.errorIcon}>⚠</span>
+              <span className={styles.errorIcon}></span>
               <span>{error}</span>
             </div>
           )}
 
           {!loading && !error && records.length === 0 && (
             <div className={styles.empty}>
-              <div className={styles.emptyIcon}>📄</div>
+              <div className={styles.emptyIcon}></div>
               <h3>No CSV Records Found</h3>
               <p>No attendance records have been saved to the CSV file yet.</p>
               <p className={styles.hint}>Clock in/out using the kiosk to create CSV records.</p>
@@ -193,7 +193,7 @@ export default function CSVAttendancePage() {
 
               <div className={styles.footer}>
                 <p className={styles.footerText}>
-                  💡 These records are stored in the external CSV file and synced with the database
+                   These records are stored in the external CSV file and synced with the database
                 </p>
               </div>
             </div>

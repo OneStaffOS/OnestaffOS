@@ -136,7 +136,7 @@ export default function AppraisalDetailPage() {
             <Spinner message="Loading appraisal details..." />
           ) : error ? (
             <div className={styles.errorBanner}>
-              <span>⚠️</span>
+              <span></span>
               <span>{error}</span>
             </div>
           ) : record ? (
@@ -173,7 +173,7 @@ export default function AppraisalDetailPage() {
 
                   {/* Ratings Section */}
                   <section className={styles.section}>
-                    <h2 className={styles.sectionTitle}>📊 Performance Ratings</h2>
+                    <h2 className={styles.sectionTitle}> Performance Ratings</h2>
                     <div className={styles.ratingsContainer}>
                       {(record.ratings && record.ratings.length > 0 ? record.ratings : (record.templateId?.criteria || [])).map((r: any, idx: number) => (
                         <div key={idx} className={styles.ratingCard}>
@@ -199,7 +199,7 @@ export default function AppraisalDetailPage() {
 
                   {/* Manager Summary */}
                   <section className={styles.section}>
-                    <h2 className={styles.sectionTitle}>💬 Manager's Assessment</h2>
+                    <h2 className={styles.sectionTitle}> Manager's Assessment</h2>
                     <div className={styles.summaryCard}>
                       <div className={styles.summarySection}>
                         <h4>Overall Summary</h4>
@@ -208,11 +208,11 @@ export default function AppraisalDetailPage() {
 
                       <div className={styles.strengthsImprovement}>
                         <div className={styles.strengthsBox}>
-                          <h4>✨ Strengths</h4>
+                          <h4> Strengths</h4>
                           <p>{record.strengths || 'Not specified'}</p>
                         </div>
                         <div className={styles.improvementBox}>
-                          <h4>🎯 Areas for Improvement</h4>
+                          <h4> Areas for Improvement</h4>
                           <p>{record.improvementAreas || 'Not specified'}</p>
                         </div>
                       </div>
@@ -221,23 +221,23 @@ export default function AppraisalDetailPage() {
 
                   {/* Timeline */}
                   <section className={styles.section}>
-                    <h2 className={styles.sectionTitle}>📅 Timeline</h2>
+                    <h2 className={styles.sectionTitle}> Timeline</h2>
                     <div className={styles.timeline}>
                       <div className={styles.timelineItem}>
-                        <div className={styles.timelineIcon}>👤</div>
+                        <div className={styles.timelineIcon}></div>
                         <div>
                           <strong>Evaluated by:</strong> {record.managerProfileId ? `${record.managerProfileId.firstName || ''} ${record.managerProfileId.lastName || ''}`.trim() : 'Unknown'}
                         </div>
                       </div>
                       <div className={styles.timelineItem}>
-                        <div className={styles.timelineIcon}>📝</div>
+                        <div className={styles.timelineIcon}></div>
                         <div>
                           <strong>Submitted:</strong> {formatDate(record.managerSubmittedAt)}
                         </div>
                       </div>
                       {record.hrPublishedAt && (
                         <div className={styles.timelineItem}>
-                          <div className={styles.timelineIcon}>✅</div>
+                          <div className={styles.timelineIcon}></div>
                           <div>
                             <strong>Published by HR:</strong> {formatDate(record.hrPublishedAt)}
                           </div>
@@ -245,7 +245,7 @@ export default function AppraisalDetailPage() {
                       )}
                       {record.employeeViewedAt && (
                         <div className={styles.timelineItem}>
-                          <div className={styles.timelineIcon}>👁️</div>
+                          <div className={styles.timelineIcon}></div>
                           <div>
                             <strong>Viewed by you:</strong> {formatDate(record.employeeViewedAt)}
                           </div>
@@ -253,7 +253,7 @@ export default function AppraisalDetailPage() {
                       )}
                       {record.employeeAcknowledgedAt && (
                         <div className={styles.timelineItem}>
-                          <div className={styles.timelineIcon}>✔️</div>
+                          <div className={styles.timelineIcon}></div>
                           <div>
                             <strong>Acknowledged:</strong> {formatDate(record.employeeAcknowledgedAt)}
                           </div>
@@ -274,19 +274,19 @@ export default function AppraisalDetailPage() {
                         disabled={acknowledging}
                         className={styles.acknowledgeButton}
                       >
-                        {acknowledging ? '⏳ Acknowledging...' : '✅ Acknowledge Appraisal'}
+                        {acknowledging ? 'Acknowledging...' : 'Acknowledge Appraisal'}
                       </button>
                     )}
 
                     {record.employeeAcknowledgedAt && (
                       <div className={styles.acknowledgedBanner}>
-                        <span className={styles.checkIcon}>✓</span>
+                        <span className={styles.checkIcon}></span>
                         <span>Acknowledged on {formatDate(record.employeeAcknowledgedAt)}</span>
                       </div>
                     )}
 
                     <div className={styles.disputeSection}>
-                      <h4 className={styles.disputeTitle}>⚖️ Raise a Dispute</h4>
+                      <h4 className={styles.disputeTitle}> Raise a Dispute</h4>
                       <p className={styles.disputeHint}>
                         If you disagree with this appraisal, you can raise a dispute for HR review.
                       </p>
@@ -294,23 +294,18 @@ export default function AppraisalDetailPage() {
                       <div className={styles.formGroup}>
                         <label htmlFor="reason">Reason for Dispute</label>
                         <input
-                          id="reason"
-                          type="text"
-                          value={reason}
+                          id="reason" type="text" value={reason}
                           onChange={e => setReason(e.target.value)}
-                          placeholder="Brief reason (required)"
-                          className={styles.input}
+                          placeholder="Brief reason (required)" className={styles.input}
                         />
                       </div>
 
                       <div className={styles.formGroup}>
                         <label htmlFor="details">Additional Details (Optional)</label>
                         <textarea
-                          id="details"
-                          value={details}
+                          id="details" value={details}
                           onChange={e => setDetails(e.target.value)}
-                          placeholder="Provide detailed explanation..."
-                          className={styles.textarea}
+                          placeholder="Provide detailed explanation..." className={styles.textarea}
                           rows={4}
                         />
                       </div>
@@ -320,7 +315,7 @@ export default function AppraisalDetailPage() {
                         disabled={submitting || !reason.trim()}
                         className={styles.disputeButton}
                       >
-                        {submitting ? '⏳ Submitting...' : '📤 Submit Dispute'}
+                        {submitting ? 'Submitting...' : 'Submit Dispute'}
                       </button>
                     </div>
                   </div>

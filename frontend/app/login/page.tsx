@@ -9,7 +9,7 @@
  * - Multiple roles -> role selection modal
  */
 
-'use client';
+"use client";
 
 import { useState, FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';

@@ -129,7 +129,7 @@ export default function PayGradesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>💰 Pay Grades</h1>
+              <h1 className={styles.pageTitle}> Pay Grades</h1>
               <p className={styles.pageSubtitle}>
                 Configure salary grades with base and gross salary for different positions
               </p>
@@ -140,15 +140,15 @@ export default function PayGradesPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/pay-grades/create')}
                 >
-                  ➕ Create Pay Grade
+                   Create Pay Grade
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -173,7 +173,7 @@ export default function PayGradesPage() {
           {/* Pending Approvals Section */}
           {canApprove && pendingGrades.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingGrades.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingGrades.length})</h3>
               <div className={styles.approvalList}>
                 {pendingGrades.map(grade => (
                   <div key={grade._id} className={styles.approvalItem}>
@@ -189,13 +189,13 @@ export default function PayGradesPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(grade._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(grade._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ export default function PayGradesPage() {
             <Spinner message="Loading pay grades..." />
           ) : payGrades.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>💰</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Pay Grades Found</h3>
               <p>Create your first pay grade to get started.</p>
               {canCreate && (
@@ -234,7 +234,7 @@ export default function PayGradesPage() {
                   onClick={() => router.push('/dashboard/payroll/pay-grades/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Pay Grade
+                   Create Pay Grade
                 </button>
               )}
             </div>

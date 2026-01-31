@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useSocket } from '../context/SocketContext';
@@ -87,6 +87,7 @@ export default function NotificationBell() {
         className={styles.bellButton}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
+        data-navbar-button
       >
         <span className={styles.bellIcon}>🔔</span>
         {unreadCount > 0 && (
@@ -104,6 +105,7 @@ export default function NotificationBell() {
               <button
                 className={styles.markAllRead}
                 onClick={handleMarkAllRead}
+                data-navbar-button
               >
                 Mark all as read
               </button>
@@ -152,7 +154,7 @@ export default function NotificationBell() {
 
           {notifications.length > 20 && (
             <div className={styles.dropdownFooter}>
-              <button onClick={() => router.push('/support')}>
+              <button onClick={() => router.push('/support')} data-navbar-button>
                 View all notifications
               </button>
             </div>

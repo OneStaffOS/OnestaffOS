@@ -4,7 +4,7 @@
  * If user has multiple roles, shows role selection
  */
 
-'use client';
+"use client";
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';

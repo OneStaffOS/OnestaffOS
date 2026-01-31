@@ -10,7 +10,7 @@
  * Accessible by: HR Manager, HR Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import Spinner from '@/app/components/Spinner';
@@ -508,7 +508,7 @@ export default function HRLeaveManagementPage() {
           textAlign: 'center',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
         }}>
-          <span style={{ fontSize: '4rem', display: 'block', marginBottom: '1rem' }}>📋</span>
+          <span style={{ fontSize: '4rem', display: 'block', marginBottom: '1rem' }}></span>
           <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#374151', marginBottom: '0.75rem' }}>
             No Requests Found
           </h3>
@@ -548,8 +548,7 @@ export default function HRLeaveManagementPage() {
                     letterSpacing: '0.05em'
                   }}>
                     <input 
-                      type="checkbox"
-                      checked={selectedRequests.length === requests.length && requests.length > 0}
+                      type="checkbox" checked={selectedRequests.length === requests.length && requests.length > 0}
                       onChange={selectAllRequests}
                       style={{ cursor: 'pointer', width: '18px', height: '18px' }}
                     />
@@ -655,8 +654,7 @@ export default function HRLeaveManagementPage() {
                     {activeTab === 'bulk' && (
                       <td style={{ padding: '1.25rem 1rem' }}>
                         <input 
-                          type="checkbox"
-                          checked={selectedRequests.includes(request._id)}
+                          type="checkbox" checked={selectedRequests.includes(request._id)}
                           onChange={() => toggleSelectRequest(request._id)}
                           style={{ cursor: 'pointer', width: '18px', height: '18px' }}
                         />
@@ -769,11 +767,11 @@ export default function HRLeaveManagementPage() {
                                 onClick={() => handleDownloadAttachment(attachmentInfo.id, attachmentInfo.name)}
                                 title={`Download: ${attachmentInfo.name}`}
                               >
-                                📎 Download
+                                 Download
                               </button>
                             );
                           }
-                          return <span style={{ color: '#dc2626', fontSize: '0.9rem', fontWeight: '600' }}>❌ Missing</span>;
+                          return <span style={{ color: '#dc2626', fontSize: '0.9rem', fontWeight: '600' }}> Missing</span>;
                         })()}
                       </td>
                     )}
@@ -801,7 +799,7 @@ export default function HRLeaveManagementPage() {
                                 setShowFinalizeModal(true);
                               }}
                             >
-                              ✓ Finalize
+                               Finalize
                             </button>
                             <button
                               style={{
@@ -823,7 +821,7 @@ export default function HRLeaveManagementPage() {
                                 setShowRejectModal(true);
                               }}
                             >
-                              ✕ Reject
+                               Reject
                             </button>
                           </>
                         )}
@@ -848,7 +846,7 @@ export default function HRLeaveManagementPage() {
                               setShowOverrideModal(true);
                             }}
                           >
-                            ⚡ Override
+                             Override
                           </button>
                         )}
                         {activeTab === 'medical' && (
@@ -872,7 +870,7 @@ export default function HRLeaveManagementPage() {
                               setShowMedicalModal(true);
                             }}
                           >
-                            🔍 Verify
+                             Verify
                           </button>
                         )}
                       </div>
@@ -906,7 +904,7 @@ export default function HRLeaveManagementPage() {
           }}>
             <div>
               <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                🏢 HR Leave Management
+                 HR Leave Management
               </h1>
               <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem' }}>
                 Finalize requests, override decisions, process in bulk, and verify medical documents
@@ -1011,7 +1009,7 @@ export default function HRLeaveManagementPage() {
               }}
               onClick={() => setActiveTab('finalize')}
             >
-              ✅ Finalize Requests
+               Finalize Requests
             </button>
             <button
               style={{
@@ -1046,7 +1044,7 @@ export default function HRLeaveManagementPage() {
               }}
               onClick={() => setActiveTab('override')}
             >
-              ⚡ Override Decisions
+               Override Decisions
             </button>
             {isHRManager && (
               <button
@@ -1082,7 +1080,7 @@ export default function HRLeaveManagementPage() {
                 }}
                 onClick={() => setActiveTab('bulk')}
               >
-                📦 Bulk Processing
+                 Bulk Processing
               </button>
             )}
             <button
@@ -1118,7 +1116,7 @@ export default function HRLeaveManagementPage() {
               }}
               onClick={() => setActiveTab('medical')}
             >
-              🏥 Medical Verification
+               Medical Verification
             </button>
           </div>
 
@@ -1134,16 +1132,16 @@ export default function HRLeaveManagementPage() {
             lineHeight: '1.6'
           }}>
             {activeTab === 'finalize' && (
-              <p style={{ margin: 0 }}>📋 Review and finalize leave requests that have been approved by managers. This will update employee balances and send notifications.</p>
+              <p style={{ margin: 0 }}> Review and finalize leave requests that have been approved by managers. This will update employee balances and send notifications.</p>
             )}
             {activeTab === 'override' && (
-              <p style={{ margin: 0 }}>⚠️ Override manager decisions in special circumstances. Requires a reason and can optionally allow negative balances.</p>
+              <p style={{ margin: 0 }}> Override manager decisions in special circumstances. Requires a reason and can optionally allow negative balances.</p>
             )}
             {activeTab === 'bulk' && (
-              <p style={{ margin: 0 }}>📦 Process multiple pending leave requests at once for efficient management. Select requests and choose an action.</p>
+              <p style={{ margin: 0 }}> Process multiple pending leave requests at once for efficient management. Select requests and choose an action.</p>
             )}
             {activeTab === 'medical' && (
-              <p style={{ margin: 0 }}>🏥 Verify medical documents for sick leave requests longer than 1 day. Medical certificates are required for validation.</p>
+              <p style={{ margin: 0 }}> Verify medical documents for sick leave requests longer than 1 day. Medical certificates are required for validation.</p>
             )}
           </div>
 
@@ -1183,7 +1181,7 @@ export default function HRLeaveManagementPage() {
                   setShowBulkModal(true);
                 }}
               >
-                ✓ Approve Selected
+                 Approve Selected
               </button>
               <button
                 style={{
@@ -1205,7 +1203,7 @@ export default function HRLeaveManagementPage() {
                   setShowBulkModal(true);
                 }}
               >
-                ✕ Reject Selected
+                 Reject Selected
               </button>
             </div>
           )}
@@ -1218,7 +1216,7 @@ export default function HRLeaveManagementPage() {
             <div style={modalOverlayStyle} onClick={() => setShowFinalizeModal(false)}>
               <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
                 <div style={modalHeaderStyle}>
-                  <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: '700', margin: 0 }}>✅ Finalize Leave Request</h2>
+                  <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: '700', margin: 0 }}> Finalize Leave Request</h2>
                   <button 
                     style={{
                       background: 'rgba(255, 255, 255, 0.2)',
@@ -1238,7 +1236,7 @@ export default function HRLeaveManagementPage() {
                     onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
                     onClick={() => setShowFinalizeModal(false)}
                   >
-                    ✕
+                    
                   </button>
                 </div>
                 <div style={modalContentStyle}>
@@ -1272,12 +1270,12 @@ export default function HRLeaveManagementPage() {
                         borderRadius: '6px',
                         fontSize: '0.875rem',
                         fontWeight: '600'
-                      }}>✓ Approved</span>
+                      }}> Approved</span>
                     </div>
                   </div>
 
                   <div style={infoBoxStyle}>
-                    <strong style={{ color: '#1e40af', display: 'block', marginBottom: '0.75rem' }}>📌 What happens when you finalize:</strong>
+                    <strong style={{ color: '#1e40af', display: 'block', marginBottom: '0.75rem' }}> What happens when you finalize:</strong>
                     <ul style={{ margin: '0', paddingLeft: '1.5rem', color: '#1e40af' }}>
                       <li style={{ marginBottom: '0.5rem' }}>HR approval step will be marked as approved</li>
                       <li style={{ marginBottom: '0.5rem' }}>Employee's leave balance will be updated automatically</li>
@@ -1290,11 +1288,9 @@ export default function HRLeaveManagementPage() {
                       Comments (Optional)
                     </label>
                     <textarea
-                      id="comments"
-                      value={comments}
+                      id="comments" value={comments}
                       onChange={(e) => setComments(e.target.value)}
-                      placeholder="Add any comments for the employee..."
-                      rows={3}
+                      placeholder="Add any comments for the employee..." rows={3}
                       style={{
                         width: '100%',
                         padding: '0.75rem',
@@ -1380,7 +1376,7 @@ export default function HRLeaveManagementPage() {
             <div style={modalOverlayStyle} onClick={() => setShowRejectModal(false)}>
               <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
                 <div style={modalHeaderStyle}>
-                  <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: '700', margin: 0 }}>❌ Reject Leave Request</h2>
+                  <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: '700', margin: 0 }}> Reject Leave Request</h2>
                   <button 
                     style={{
                       background: 'rgba(255, 255, 255, 0.2)',
@@ -1400,7 +1396,7 @@ export default function HRLeaveManagementPage() {
                     onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
                     onClick={() => setShowRejectModal(false)}
                   >
-                    ✕
+                    
                   </button>
                 </div>
                 <div style={modalContentStyle}>
@@ -1423,23 +1419,21 @@ export default function HRLeaveManagementPage() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ fontWeight: '600', color: '#6b7280' }}>Manager Status:</span>
-                      <span style={{ padding: '0.25rem 0.75rem', background: '#dcfce7', color: '#16a34a', borderRadius: '6px', fontSize: '0.875rem', fontWeight: '600' }}>✓ Approved</span>
+                      <span style={{ padding: '0.25rem 0.75rem', background: '#dcfce7', color: '#16a34a', borderRadius: '6px', fontSize: '0.875rem', fontWeight: '600' }}> Approved</span>
                     </div>
                   </div>
 
                   <div style={warningBoxStyle}>
-                    <strong style={{ color: '#991b1b', display: 'block', marginBottom: '0.5rem' }}>⚠️ Warning:</strong>
+                    <strong style={{ color: '#991b1b', display: 'block', marginBottom: '0.5rem' }}> Warning:</strong>
                     <p style={{ margin: 0, color: '#991b1b' }}>You are about to reject a leave request that was already approved by the manager. The employee will be notified of this decision.</p>
                   </div>
 
                   <div style={{ marginBottom: '1.5rem' }}>
                     <label htmlFor="rejectReason" style={{ display: 'block', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>Rejection Reason (Required)</label>
                     <textarea
-                      id="rejectReason"
-                      value={rejectReason}
+                      id="rejectReason" value={rejectReason}
                       onChange={(e) => setRejectReason(e.target.value)}
-                      placeholder="Provide a reason for rejecting this request..."
-                      rows={3}
+                      placeholder="Provide a reason for rejecting this request..." rows={3}
                       required
                       style={{
                         width: '100%',
@@ -1509,9 +1503,9 @@ export default function HRLeaveManagementPage() {
             <div className={styles.modalOverlay} onClick={() => setShowOverrideModal(false)}>
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                  <h2>⚡ Override Manager Decision</h2>
+                  <h2> Override Manager Decision</h2>
                   <button className={styles.closeButton} onClick={() => setShowOverrideModal(false)}>
-                    ✕
+                    
                   </button>
                 </div>
                 <div className={styles.modalContent}>
@@ -1543,7 +1537,7 @@ export default function HRLeaveManagementPage() {
                   </div>
 
                   <div className={styles.warningBox}>
-                    <strong>⚠️ Override Warning:</strong>
+                    <strong> Override Warning:</strong>
                     <p>This action will override the manager's decision and update both approval steps. An audit log entry will be created.</p>
                   </div>
 
@@ -1552,23 +1546,17 @@ export default function HRLeaveManagementPage() {
                     <div className={styles.radioGroup}>
                       <label className={styles.radioLabel}>
                         <input
-                          type="radio"
-                          name="overrideDecision"
-                          value="approved"
-                          checked={overrideDecision === 'approved'}
+                          type="radio" name="overrideDecision" value="approved" checked={overrideDecision === 'approved'}
                           onChange={() => setOverrideDecision('approved')}
                         />
-                        <span className={styles.approveRadio}>✓ Approve</span>
+                        <span className={styles.approveRadio}> Approve</span>
                       </label>
                       <label className={styles.radioLabel}>
                         <input
-                          type="radio"
-                          name="overrideDecision"
-                          value="rejected"
-                          checked={overrideDecision === 'rejected'}
+                          type="radio" name="overrideDecision" value="rejected" checked={overrideDecision === 'rejected'}
                           onChange={() => setOverrideDecision('rejected')}
                         />
-                        <span className={styles.rejectRadio}>✕ Reject</span>
+                        <span className={styles.rejectRadio}> Reject</span>
                       </label>
                     </div>
                   </div>
@@ -1576,11 +1564,9 @@ export default function HRLeaveManagementPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="overrideReason">Override Reason *</label>
                     <textarea
-                      id="overrideReason"
-                      value={overrideReason}
+                      id="overrideReason" value={overrideReason}
                       onChange={(e) => setOverrideReason(e.target.value)}
-                      placeholder="Please provide a detailed reason for this override..."
-                      rows={3}
+                      placeholder="Please provide a detailed reason for this override..." rows={3}
                       required
                     />
                   </div>
@@ -1589,8 +1575,7 @@ export default function HRLeaveManagementPage() {
                     <div className={styles.checkboxGroup}>
                       <label className={styles.checkboxLabel}>
                         <input
-                          type="checkbox"
-                          checked={allowNegativeBalance}
+                          type="checkbox" checked={allowNegativeBalance}
                           onChange={(e) => setAllowNegativeBalance(e.target.checked)}
                         />
                         <span>Allow negative balance (override policy restriction)</span>
@@ -1626,14 +1611,14 @@ export default function HRLeaveManagementPage() {
             <div className={styles.modalOverlay} onClick={() => setShowBulkModal(false)}>
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                  <h2>📦 Bulk {bulkAction === 'approve' ? 'Approve' : 'Reject'} Requests</h2>
+                  <h2> Bulk {bulkAction === 'approve' ? 'Approve' : 'Reject'} Requests</h2>
                   <button className={styles.closeButton} onClick={() => setShowBulkModal(false)}>
-                    ✕
+                    
                   </button>
                 </div>
                 <div className={styles.modalContent}>
                   <div className={styles.infoBox}>
-                    <strong>📋 Selected Requests:</strong>
+                    <strong> Selected Requests:</strong>
                     <p>{selectedRequests.length} request(s) will be {bulkAction === 'approve' ? 'approved' : 'rejected'}.</p>
                   </div>
 
@@ -1641,11 +1626,9 @@ export default function HRLeaveManagementPage() {
                     <div className={styles.formGroup}>
                       <label htmlFor="bulkReason">Comments (Optional)</label>
                       <textarea
-                        id="bulkReason"
-                        value={bulkReason}
+                        id="bulkReason" value={bulkReason}
                         onChange={(e) => setBulkReason(e.target.value)}
-                        placeholder="Add any comments..."
-                        rows={3}
+                        placeholder="Add any comments..." rows={3}
                       />
                     </div>
                   )}
@@ -1654,11 +1637,9 @@ export default function HRLeaveManagementPage() {
                     <div className={styles.formGroup}>
                       <label htmlFor="bulkReason">Rejection Reason *</label>
                       <textarea
-                        id="bulkReason"
-                        value={bulkReason}
+                        id="bulkReason" value={bulkReason}
                         onChange={(e) => setBulkReason(e.target.value)}
-                        placeholder="Please provide a reason for rejection..."
-                        rows={3}
+                        placeholder="Please provide a reason for rejection..." rows={3}
                         required
                       />
                     </div>
@@ -1692,9 +1673,9 @@ export default function HRLeaveManagementPage() {
             <div className={styles.modalOverlay} onClick={() => setShowMedicalModal(false)}>
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                  <h2>🏥 Verify Medical Document</h2>
+                  <h2> Verify Medical Document</h2>
                   <button className={styles.closeButton} onClick={() => setShowMedicalModal(false)}>
-                    ✕
+                    
                   </button>
                 </div>
                 <div className={styles.modalContent}>
@@ -1722,17 +1703,17 @@ export default function HRLeaveManagementPage() {
                               onClick={() => handleDownloadAttachment(attachmentInfo.id, attachmentInfo.name)}
                               title={`Download: ${attachmentInfo.name}`}
                             >
-                              📎 Download Certificate
+                               Download Certificate
                             </button>
                           );
                         }
-                        return <span className={styles.noDocument}>❌ No Document Attached</span>;
+                        return <span className={styles.noDocument}> No Document Attached</span>;
                       })()}
                     </div>
                   </div>
 
                   <div className={styles.infoBox}>
-                    <strong>📋 Medical Document Requirements:</strong>
+                    <strong> Medical Document Requirements:</strong>
                     <ul>
                       <li>Medical certificate is required for sick leave longer than 1 day</li>
                       <li>Document must be from a licensed medical practitioner</li>
@@ -1745,21 +1726,17 @@ export default function HRLeaveManagementPage() {
                     <div className={styles.radioGroup}>
                       <label className={styles.radioLabel}>
                         <input
-                          type="radio"
-                          name="medicalVerified"
-                          checked={medicalVerified}
+                          type="radio" name="medicalVerified" checked={medicalVerified}
                           onChange={() => setMedicalVerified(true)}
                         />
-                        <span className={styles.approveRadio}>✓ Document Verified</span>
+                        <span className={styles.approveRadio}> Document Verified</span>
                       </label>
                       <label className={styles.radioLabel}>
                         <input
-                          type="radio"
-                          name="medicalVerified"
-                          checked={!medicalVerified}
+                          type="radio" name="medicalVerified" checked={!medicalVerified}
                           onChange={() => setMedicalVerified(false)}
                         />
-                        <span className={styles.rejectRadio}>✕ Document Rejected</span>
+                        <span className={styles.rejectRadio}> Document Rejected</span>
                       </label>
                     </div>
                   </div>
@@ -1767,8 +1744,7 @@ export default function HRLeaveManagementPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="medicalNotes">Notes {!medicalVerified && '*'}</label>
                     <textarea
-                      id="medicalNotes"
-                      value={medicalNotes}
+                      id="medicalNotes" value={medicalNotes}
                       onChange={(e) => setMedicalNotes(e.target.value)}
                       placeholder={medicalVerified 
                         ? "Add any verification notes..."
@@ -1781,7 +1757,7 @@ export default function HRLeaveManagementPage() {
 
                   {!medicalVerified && (
                     <div className={styles.warningBox}>
-                      <strong>⚠️ Warning:</strong>
+                      <strong> Warning:</strong>
                       <p>Rejecting the medical document will automatically reject the leave request.</p>
                     </div>
                   )}

@@ -4,7 +4,7 @@
  * REQ-AE-07: Flag or raise concerns about ratings
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -312,8 +312,7 @@ export default function DisputesPage() {
                     <textarea
                       value={resolution}
                       onChange={(e) => setResolution(e.target.value)}
-                      placeholder="Explain your decision and reasoning..."
-                      rows={4}
+                      placeholder="Explain your decision and reasoning..." rows={4}
                       className={styles.textarea}
                     />
                   </div>
@@ -321,14 +320,12 @@ export default function DisputesPage() {
                   <div className={styles.formGroup}>
                     <label>New Rating (if approving change)</label>
                     <input
-                      type="number"
-                      value={newRating || ''}
+                      type="number" value={newRating || ''}
                       onChange={(e) => setNewRating(e.target.value ? Number(e.target.value) : null)}
                       min={1}
                       max={5}
                       step={0.1}
-                      placeholder="Leave empty if rejecting"
-                      className={styles.input}
+                      placeholder="Leave empty if rejecting" className={styles.input}
                     />
                     <small style={{ color: '#666' }}>Only required if approving the dispute</small>
                   </div>

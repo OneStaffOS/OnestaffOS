@@ -126,14 +126,14 @@ export default function PolicyDetailPage() {
           </Link>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {loading ? (
             <Spinner message="Loading policy details..." />
           ) : !policy ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>❌</span>
+              <span className={styles.emptyIcon}></span>
               <h3>Policy Not Found</h3>
               <p>The requested policy could not be found.</p>
             </div>
@@ -180,7 +180,7 @@ export default function PolicyDetailPage() {
 
                 {/* Rule Definition */}
                 <div className={styles.section} style={{ marginTop: '24px' }}>
-                  <h3 className={styles.sectionTitle}>📐 Rule Definition</h3>
+                  <h3 className={styles.sectionTitle}> Rule Definition</h3>
                   <div className={styles.detailsGrid}>
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>Percentage</span>
@@ -199,7 +199,7 @@ export default function PolicyDetailPage() {
 
                 {/* Audit Information */}
                 <div className={styles.section} style={{ marginTop: '24px' }}>
-                  <h3 className={styles.sectionTitle}>📝 Audit Information</h3>
+                  <h3 className={styles.sectionTitle}> Audit Information</h3>
                   <div className={styles.detailsGrid}>
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>Created By</span>
@@ -240,13 +240,13 @@ export default function PolicyDetailPage() {
                       className={styles.btnSecondary}
                       onClick={() => router.push(`/dashboard/payroll/policies/${id}/edit`)}
                     >
-                      ✏️ Edit
+                       Edit
                     </button>
                     <button 
                       className={styles.btnDanger}
                       onClick={handleDelete}
                     >
-                      🗑️ Delete
+                       Delete
                     </button>
                   </>
                 )}
@@ -256,13 +256,13 @@ export default function PolicyDetailPage() {
                       className={styles.btnSuccess}
                       onClick={handleApprove}
                     >
-                      ✅ Approve
+                       Approve
                     </button>
                     <button 
                       className={styles.btnWarning}
                       onClick={handleReject}
                     >
-                      ❌ Reject
+                       Reject
                     </button>
                   </>
                 )}

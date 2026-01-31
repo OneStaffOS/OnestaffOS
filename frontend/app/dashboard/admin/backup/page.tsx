@@ -157,11 +157,11 @@ export default function BackupPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <span className={styles.badgeSuccess}>✅ Completed</span>;
+        return <span className={styles.badgeSuccess}> Completed</span>;
       case 'in_progress':
-        return <span className={styles.badgeWarning}>⏳ In Progress</span>;
+        return <span className={styles.badgeWarning}> In Progress</span>;
       case 'failed':
-        return <span className={styles.badgeDanger}>❌ Failed</span>;
+        return <span className={styles.badgeDanger}> Failed</span>;
       default:
         return <span className={styles.badge}>{status}</span>;
     }
@@ -179,7 +179,7 @@ export default function BackupPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>💾 Backup & Restore</h1>
+              <h1 className={styles.pageTitle}> Backup & Restore</h1>
               <p className={styles.pageSubtitle}>
                 Manage system backups and restore data when needed
               </p>
@@ -190,18 +190,18 @@ export default function BackupPage() {
                 onClick={handleCreateBackup}
                 disabled={creating}
               >
-                {creating ? '⏳ Creating...' : '➕ Create Backup'}
+                {creating ? 'Creating...' : 'Create Backup'}
               </button>
             </div>
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorAlert}>⚠️ {error}</div>}
-          {success && <div className={styles.successAlert}>✅ {success}</div>}
+          {error && <div className={styles.errorAlert}> {error}</div>}
+          {success && <div className={styles.successAlert}> {success}</div>}
 
           {/* Info Box */}
           <div className={styles.infoCard}>
-            <h4>ℹ️ Backup Information</h4>
+            <h4> Backup Information</h4>
             <ul>
               <li>Backups include all employee data, configurations, and system settings</li>
               <li>Scheduled backups run daily at 2:00 AM (server time)</li>
@@ -251,7 +251,7 @@ export default function BackupPage() {
             <Spinner message="Loading backups..." />
           ) : backups.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>💾</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Backups Found</h3>
               <p>Create your first backup to protect your data.</p>
               <button 
@@ -260,7 +260,7 @@ export default function BackupPage() {
                 disabled={creating}
                 style={{ marginTop: '16px' }}
               >
-                {creating ? '⏳ Creating...' : '➕ Create First Backup'}
+                {creating ? 'Creating...' : 'Create First Backup'}
               </button>
             </div>
           ) : (
@@ -290,7 +290,7 @@ export default function BackupPage() {
                       <td>{formatFileSize(backup.fileSize)}</td>
                       <td>
                         <span className={backup.type === 'scheduled' ? styles.badgeInfo : styles.badge}>
-                          {backup.type === 'scheduled' ? '🕐 Scheduled' : '👆 Manual'}
+                          {backup.type === 'scheduled' ? 'Scheduled' : 'Manual'}
                         </span>
                       </td>
                       <td>{getStatusBadge(backup.status)}</td>
@@ -303,13 +303,13 @@ export default function BackupPage() {
                                 className={styles.secondaryBtn}
                                 onClick={() => handleDownloadBackup(backup._id, backup.fileName)}
                               >
-                                ⬇️ Download
+                                 Download
                               </button>
                               <button 
                                 className={styles.warningBtn}
                                 onClick={() => handleRestoreBackup(backup._id)}
                               >
-                                🔄 Restore
+                                 Restore
                               </button>
                             </>
                           )}
@@ -317,7 +317,7 @@ export default function BackupPage() {
                             className={styles.dangerBtn}
                             onClick={() => handleDeleteBackup(backup._id)}
                           >
-                            🗑️ Delete
+                             Delete
                           </button>
                         </div>
                       </td>

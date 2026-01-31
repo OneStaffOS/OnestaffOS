@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
@@ -213,7 +213,7 @@ export default function AdminTicketsPage() {
       <DashboardLayout title="Ticket Management" role="Admin">
         <div className={styles.container}>
           <div className={styles.header}>
-            <h1>🎫 Support Ticket Management</h1>
+            <h1> Support Ticket Management</h1>
             <p>Manage and resolve employee support tickets</p>
           </div>
 
@@ -289,8 +289,8 @@ export default function AdminTicketsPage() {
                           </span>
                         </div>
                         <div className={styles.ticketFooter}>
-                          <span>👤 {ticket.employeeId.firstName} {ticket.employeeId.lastName}</span>
-                          <span>📅 {new Date(ticket.createdAt).toLocaleDateString()}</span>
+                          <span> {ticket.employeeId.firstName} {ticket.employeeId.lastName}</span>
+                          <span> {new Date(ticket.createdAt).toLocaleDateString()}</span>
                         </div>
                         {ticket.assignedTo && (
                           <div className={styles.assignedTo}>
@@ -312,7 +312,7 @@ export default function AdminTicketsPage() {
                       className={styles.closeBtn}
                       onClick={() => setSelectedTicket(null)}
                     >
-                      ✕
+                      
                     </button>
                   </div>
 
@@ -408,8 +408,7 @@ export default function AdminTicketsPage() {
                       <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Enter your comment..."
-                        rows={3}
+                        placeholder="Enter your comment..." rows={3}
                       />
                       <button 
                         onClick={() => handleAddComment(selectedTicket._id)}
@@ -455,8 +454,7 @@ export default function AdminTicketsPage() {
                         <textarea
                           value={resolution}
                           onChange={(e) => setResolution(e.target.value)}
-                          placeholder="Enter resolution details..."
-                          rows={4}
+                          placeholder="Enter resolution details..." rows={4}
                         />
                         <button 
                           onClick={() => handleResolveTicket(selectedTicket._id)}
@@ -484,7 +482,7 @@ export default function AdminTicketsPage() {
                           className={styles.liveChatBtn}
                           onClick={() => setShowChat(true)}
                         >
-                          💬 Start Live Chat with Employee
+                           Start Live Chat with Employee
                         </button>
                         <p className={styles.liveChatInfo}>
                           Communicate in real-time with the ticket submitter

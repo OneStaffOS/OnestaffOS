@@ -93,12 +93,12 @@ export default function EditSigningBonusPage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>✏️ Edit Signing Bonus</h1>
+            <h1 className={styles.formTitle}> Edit Signing Bonus</h1>
             <p className={styles.formSubtitle}>
               Update the signing bonus details. Only draft entries can be edited.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -106,13 +106,10 @@ export default function EditSigningBonusPage() {
                   Position Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="positionName"
-                  className={styles.formInput}
+                  type="text" name="positionName" className={styles.formInput}
                   value={formData.positionName}
                   onChange={handleChange}
-                  placeholder="e.g., Junior Developer, Senior Manager"
-                  required
+                  placeholder="e.g., Junior Developer, Senior Manager" required
                 />
                 <span className={styles.formHint}>The position that qualifies for this signing bonus</span>
               </div>
@@ -122,33 +119,27 @@ export default function EditSigningBonusPage() {
                   Bonus Amount (EGP) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="amount"
-                  className={styles.formInput}
+                  type="number" name="amount" className={styles.formInput}
                   value={formData.amount}
                   onChange={handleChange}
-                  min="0"
-                  step="1000"
-                  required
+                  min="0" step="1000" required
                 />
                 <span className={styles.formHint}>One-time signing bonus for new hires</span>
               </div>
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/signing-bonuses')}
                   disabled={saving}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={saving}
                 >
-                  {saving ? 'Saving...' : '💾 Save Changes'}
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>

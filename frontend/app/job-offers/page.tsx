@@ -5,7 +5,7 @@
  * Features: Job listings with title, department, location, openings
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';

@@ -3,7 +3,7 @@
  * REQ-PP-13, REQ-AE-03: View assigned appraisals and complete ratings for direct reports
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -207,8 +207,7 @@ export default function ManagerPerformanceDashboard() {
                     Cycle:
                   </label>
                   <select
-                    id="cycleFilter"
-                    className={styles.filterSelect}
+                    id="cycleFilter" className={styles.filterSelect}
                     value={filterCycle}
                     onChange={(e) => setFilterCycle(e.target.value)}
                   >
@@ -226,8 +225,7 @@ export default function ManagerPerformanceDashboard() {
                     Status:
                   </label>
                   <select
-                    id="statusFilter"
-                    className={styles.filterSelect}
+                    id="statusFilter" className={styles.filterSelect}
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
                   >

@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, HR Manager, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -210,7 +210,7 @@ export default function LeaveRequestsPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📝 Leave Requests</h1>
+              <h1 className={styles.title}> Leave Requests</h1>
               <p className={styles.subtitle}>
                 View and manage employee leave requests
               </p>
@@ -243,25 +243,25 @@ export default function LeaveRequestsPage() {
                 onClick={() => setStatusFilter('pending')}
                 style={statusFilter === 'pending' ? { background: statusColors.pending.bg, color: statusColors.pending.color } : undefined}
               >
-                ⏳ Pending ({pendingCount})
+                 Pending ({pendingCount})
               </button>
               <button
                 className={`${styles.filterButton} ${statusFilter === 'approved' ? styles.filterButtonActive : ''}`}
                 onClick={() => setStatusFilter('approved')}
               >
-                ✅ Approved
+                 Approved
               </button>
               <button
                 className={`${styles.filterButton} ${statusFilter === 'rejected' ? styles.filterButtonActive : ''}`}
                 onClick={() => setStatusFilter('rejected')}
               >
-                ❌ Rejected
+                 Rejected
               </button>
               <button
                 className={`${styles.filterButton} ${statusFilter === 'cancelled' ? styles.filterButtonActive : ''}`}
                 onClick={() => setStatusFilter('cancelled')}
               >
-                🚫 Cancelled
+                 Cancelled
               </button>
             </div>
           </div>
@@ -272,7 +272,7 @@ export default function LeaveRequestsPage() {
               <Spinner message="Loading requests..." />
             ) : filteredRequests.length === 0 ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>📝</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>No Requests Found</h3>
                 <p>
                   {statusFilter === 'all' 
@@ -342,13 +342,13 @@ export default function LeaveRequestsPage() {
                               className={styles.approveButton}
                               onClick={() => handleOpenActionModal(request, 'approve')}
                             >
-                              ✓ Approve
+                               Approve
                             </button>
                             <button
                               className={styles.rejectButton}
                               onClick={() => handleOpenActionModal(request, 'reject')}
                             >
-                              ✕ Reject
+                               Reject
                             </button>
                           </div>
                         ) : (
@@ -367,9 +367,9 @@ export default function LeaveRequestsPage() {
             <div className={styles.modalOverlay} onClick={handleCloseActionModal}>
               <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                  <h2>{actionType === 'approve' ? '✅ Approve Request' : '❌ Reject Request'}</h2>
+                  <h2>{actionType === 'approve' ? 'Approve Request' : 'Reject Request'}</h2>
                   <button className={styles.closeButton} onClick={handleCloseActionModal}>
-                    ✕
+                    
                   </button>
                 </div>
                 <div className={styles.modalContent}>
@@ -401,8 +401,7 @@ export default function LeaveRequestsPage() {
                       {actionType === 'approve' ? 'Comments (Optional)' : 'Rejection Reason *'}
                     </label>
                     <textarea
-                      id="comments"
-                      value={comments}
+                      id="comments" value={comments}
                       onChange={(e) => setComments(e.target.value)}
                       placeholder={actionType === 'approve' 
                         ? 'Add any comments for the employee...'

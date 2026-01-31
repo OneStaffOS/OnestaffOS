@@ -3,7 +3,7 @@
  * Full system access for system administrators
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
@@ -236,16 +236,12 @@ export default function AdminDashboard() {
                   </div>
                   <div className={styles.requestActions} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                     <input
-                      type="password"
-                      placeholder="New PIN"
-                      value={adminPin}
+                      type="password" placeholder="New PIN" value={adminPin}
                       onChange={(e) => setAdminPin(e.target.value)}
                       className={styles.input}
                     />
                     <input
-                      type="password"
-                      placeholder="Confirm PIN"
-                      value={adminPinConfirm}
+                      type="password" placeholder="Confirm PIN" value={adminPinConfirm}
                       onChange={(e) => setAdminPinConfirm(e.target.value)}
                       className={styles.input}
                     />

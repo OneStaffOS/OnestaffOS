@@ -311,7 +311,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle}>
-                💰 {run.runId}
+                 {run.runId}
               </h1>
               <p className={styles.pageSubtitle}>
                 Payroll Period: {formatDate(run.payrollPeriod)} | {run.entity}
@@ -325,20 +325,20 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Rejection Reason */}
           {run.status === 'rejected' && run.rejectionReason && (
             <div className={styles.errorMessage}>
-              <strong>❌ Rejection Reason:</strong> {run.rejectionReason}
+              <strong> Rejection Reason:</strong> {run.rejectionReason}
             </div>
           )}
 
           {/* Exceptions Alert */}
           {run.exceptions > 0 && (
             <div className={styles.warningMessage}>
-              ⚠️ This payroll run has {run.exceptions} exception(s) that need review before processing
+               This payroll run has {run.exceptions} exception(s) that need review before processing
             </div>
           )}
 
@@ -423,7 +423,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
           {exceptionsEmployees.length > 0 && (
             <div className={styles.card}>
               <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>⚠️ Exceptions ({exceptionsEmployees.length})</h2>
+                <h2 className={styles.cardTitle}> Exceptions ({exceptionsEmployees.length})</h2>
               </div>
               <div className={styles.tableWrapper}>
                 <table className={styles.table}>
@@ -473,7 +473,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
             </div>
             {employeeDetails.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>👥</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>No Employee Details Found</h3>
                 <p className={styles.emptyStateDescription}>
                   Employee payroll details will appear here once calculated
@@ -560,7 +560,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                 onClick={handleSubmitForReview}
                 disabled={actionLoading}
               >
-                📤 Submit for Manager Review
+                 Submit for Manager Review
               </button>
             )}
 
@@ -571,7 +571,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                 onClick={handlePublish}
                 disabled={actionLoading}
               >
-                📤 Send to Finance for Approval
+                 Send to Finance for Approval
               </button>
             )}
 
@@ -583,14 +583,14 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                   onClick={handleFinanceApprove}
                   disabled={actionLoading}
                 >
-                  ✅ Approve (Finance)
+                   Approve (Finance)
                 </button>
                 <button
                   className={styles.btnDanger}
                   onClick={handleReject}
                   disabled={actionLoading}
                 >
-                  ❌ Reject
+                   Reject
                 </button>
               </>
             )}
@@ -602,7 +602,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                 onClick={handleLock}
                 disabled={actionLoading}
               >
-                🔒 Lock Payroll Run
+                 Lock Payroll Run
               </button>
             )}
 
@@ -613,7 +613,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                 onClick={handleGeneratePayslips}
                 disabled={actionLoading}
               >
-                📄 Generate Payslips
+                 Generate Payslips
               </button>
             )}
 
@@ -623,7 +623,7 @@ export default function PayrollRunDetailPage({ params }: { params: Promise<{ id:
                 className={styles.btnSecondary}
                 onClick={() => router.push(`/dashboard/payroll/execution/runs/${runId}/payslips`)}
               >
-                👁️ View Payslips
+                 View Payslips
               </button>
             )}
           </div>

@@ -156,7 +156,7 @@ export default function EscalationSettingsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>⚡ Escalation Settings</h1>
+              <h1 className={styles.pageTitle}> Escalation Settings</h1>
               <p className={styles.pageSubtitle}>
                 Configure automatic escalation rules for pending requests before payroll cutoff
               </p>
@@ -180,7 +180,7 @@ export default function EscalationSettingsPage() {
           {/* Payroll Cutoff Day Setting */}
           <div className={styles.card} style={{ marginBottom: '2rem' }}>
             <div className={styles.cardHeader}>
-              <h3 className={styles.cardTitle}>📅 Payroll Cutoff Day</h3>
+              <h3 className={styles.cardTitle}> Payroll Cutoff Day</h3>
             </div>
             <div className={styles.cardBody}>
               <p style={{ marginBottom: '1rem', color: '#6B7280' }}>
@@ -188,10 +188,7 @@ export default function EscalationSettingsPage() {
               </p>
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 <input
-                  type="number"
-                  min="1"
-                  max="31"
-                  value={payrollCutoffDay}
+                  type="number" min="1" max="31" value={payrollCutoffDay}
                   onChange={(e) => setPayrollCutoffDay(parseInt(e.target.value))}
                   className={styles.input}
                   style={{ width: '100px' }}
@@ -212,7 +209,7 @@ export default function EscalationSettingsPage() {
             <div className={styles.card} style={{ marginBottom: '2rem', border: '2px solid #3B82F6' }}>
               <div className={styles.cardHeader}>
                 <h3 className={styles.cardTitle}>
-                  {isCreating ? '➕ Create New Rule' : '✏️ Edit Rule'}
+                  {isCreating ? 'Create New Rule' : 'Edit Rule'}
                 </h3>
               </div>
               <div className={styles.cardBody}>
@@ -235,9 +232,7 @@ export default function EscalationSettingsPage() {
                   <div>
                     <label className={styles.label}>Hours Before Payroll Cutoff</label>
                     <input
-                      type="number"
-                      min="1"
-                      value={editingRule.hoursBeforePayrollCutoff}
+                      type="number" min="1" value={editingRule.hoursBeforePayrollCutoff}
                       onChange={(e) => setEditingRule({ 
                         ...editingRule, 
                         hoursBeforePayrollCutoff: parseInt(e.target.value) 
@@ -253,8 +248,7 @@ export default function EscalationSettingsPage() {
                       {roleOptions.map((role) => (
                         <label key={role.value} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                           <input
-                            type="checkbox"
-                            checked={editingRule.escalateToRoles.includes(role.value)}
+                            type="checkbox" checked={editingRule.escalateToRoles.includes(role.value)}
                             onChange={(e) => {
                               if (e.target.checked) {
                                 setEditingRule({
@@ -279,8 +273,7 @@ export default function EscalationSettingsPage() {
                   <div>
                     <label className={styles.label}>
                       <input
-                        type="checkbox"
-                        checked={editingRule.isActive}
+                        type="checkbox" checked={editingRule.isActive}
                         onChange={(e) => setEditingRule({ ...editingRule, isActive: e.target.checked })}
                         style={{ marginRight: '0.5rem' }}
                       />
@@ -291,7 +284,7 @@ export default function EscalationSettingsPage() {
 
                 <div className={styles.cardActions} style={{ marginTop: '1rem' }}>
                   <button className={styles.btnSuccess} onClick={handleSaveRule}>
-                    💾 Save Rule
+                     Save Rule
                   </button>
                   <button className={styles.btnSecondary} onClick={cancelEdit}>
                     Cancel
@@ -317,7 +310,7 @@ export default function EscalationSettingsPage() {
             <div style={{ textAlign: 'center', padding: '2rem' }}>Loading rules...</div>
           ) : rules.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>⚡</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Escalation Rules</h3>
               <p>Create your first escalation rule to automate request processing</p>
             </div>
@@ -350,13 +343,13 @@ export default function EscalationSettingsPage() {
                       onClick={() => startEdit(rule)}
                       disabled={editingRule !== null}
                     >
-                      ✏️ Edit
+                       Edit
                     </button>
                     <button 
                       className={`${styles.btnDanger} ${styles.btnSmall}`}
                       onClick={() => rule._id && handleDeleteRule(rule._id)}
                     >
-                      🗑️ Delete
+                       Delete
                     </button>
                   </div>
                 </div>

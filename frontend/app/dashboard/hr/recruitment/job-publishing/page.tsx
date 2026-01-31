@@ -4,7 +4,7 @@
  * HR Employee can preview and publish job requisitions to the careers page
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -136,9 +136,7 @@ export default function JobPublishingPage() {
             flexWrap: 'wrap'
           }}>
             <input
-              type="text"
-              placeholder="Search by title, ID, or location..."
-              value={searchTerm}
+              type="text" placeholder="Search by title, ID, or location..." value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 flex: '1',
@@ -280,7 +278,7 @@ export default function JobPublishingPage() {
                           whiteSpace: 'nowrap'
                         }}
                       >
-                        👁️ Preview
+                         Preview
                       </button>
 
                       {req.publishStatus === 'draft' && (
@@ -297,7 +295,7 @@ export default function JobPublishingPage() {
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          📢 Publish
+                           Publish
                         </button>
                       )}
 
@@ -316,7 +314,7 @@ export default function JobPublishingPage() {
                               whiteSpace: 'nowrap'
                             }}
                           >
-                            📝 Unpublish
+                             Unpublish
                           </button>
                           <button
                             onClick={() => handlePublish(req._id, 'closed')}
@@ -331,7 +329,7 @@ export default function JobPublishingPage() {
                               whiteSpace: 'nowrap'
                             }}
                           >
-                            🔒 Close
+                             Close
                           </button>
                         </>
                       )}
@@ -400,13 +398,13 @@ export default function JobPublishingPage() {
                   
                   <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
                     <div>
-                      <strong>📍 Location:</strong> {previewingJob.location || 'Remote'}
+                      <strong> Location:</strong> {previewingJob.location || 'Remote'}
                     </div>
                     <div>
-                      <strong>🏢 Department:</strong> {previewingJob.templateId?.department}
+                      <strong> Department:</strong> {previewingJob.templateId?.department}
                     </div>
                     <div>
-                      <strong>👥 Openings:</strong> {previewingJob.openings}
+                      <strong> Openings:</strong> {previewingJob.openings}
                     </div>
                   </div>
 
@@ -466,7 +464,7 @@ export default function JobPublishingPage() {
                         fontWeight: '500'
                       }}
                     >
-                      📢 Publish to Careers Page
+                       Publish to Careers Page
                     </button>
                   )}
                   
@@ -484,7 +482,7 @@ export default function JobPublishingPage() {
                         fontWeight: '500'
                       }}
                     >
-                      📝 Unpublish
+                       Unpublish
                     </button>
                   )}
 

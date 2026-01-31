@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -220,8 +220,7 @@ export default function ClientBankingPage() {
               <label>
                 Amount
                 <input
-                  type="number"
-                  min={1}
+                  type="number" min={1}
                   step={1}
                   value={fundsAmount}
                   onChange={(e) => setFundsAmount(e.target.value)}

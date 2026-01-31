@@ -3,7 +3,7 @@
  * REQ-AE-10: Consolidated dashboard tracking appraisal completion across departments
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -210,8 +210,7 @@ export default function HRPerformanceDashboard() {
               Filter by Cycle:
             </label>
             <select
-              id="cycle"
-              className={styles.filterSelect}
+              id="cycle" className={styles.filterSelect}
               value={selectedCycle}
               onChange={(e) => setSelectedCycle(e.target.value)}
             >
@@ -229,20 +228,20 @@ export default function HRPerformanceDashboard() {
                 className={styles.actionBtn}
                 onClick={handleBulkAssign}
               >
-                📋 Bulk Assign
+                 Bulk Assign
               </button>
             )}
             <button
               className={styles.actionBtn}
               onClick={() => handleSendReminders()}
             >
-              📧 Send Reminders
+               Send Reminders
             </button>
             <button
               className={styles.actionBtn}
               onClick={handleExportReport}
             >
-              📊 Export Report
+               Export Report
             </button>
           </div>
         </div>
@@ -341,7 +340,7 @@ export default function HRPerformanceDashboard() {
                           className={styles.reminderButton}
                           onClick={() => handleSendReminders(dept.departmentId)}
                         >
-                          📧 Send Reminders
+                           Send Reminders
                         </button>
                       )}
                     </div>

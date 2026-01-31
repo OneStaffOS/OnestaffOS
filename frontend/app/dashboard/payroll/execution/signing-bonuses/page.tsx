@@ -121,7 +121,7 @@ export default function SigningBonusesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>✍️ Signing Bonuses Review</h1>
+              <h1 className={styles.pageTitle}> Signing Bonuses Review</h1>
               <p className={styles.pageSubtitle}>
                 Review and approve signing bonuses for new hires before payroll processing
               </p>
@@ -129,13 +129,13 @@ export default function SigningBonusesPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Info */}
           <div className={styles.warningMessage}>
-            ℹ️ <strong>Important:</strong> Signing bonuses must be approved before they can be included in payroll runs. 
-            Only approved bonuses will be automatically added to new employees' first payroll.
+             <strong>Important:</strong> Signing bonuses must be approved before they can be included in payroll runs. 
+            Only approved bonuses will be automatically added to new employees'first payroll.
           </div>
 
           {/* Stats */}
@@ -156,7 +156,7 @@ export default function SigningBonusesPage() {
           <div className={styles.card}>
             {bonuses.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>✅</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>All Caught Up!</h3>
                 <p className={styles.emptyStateDescription}>
                   There are no pending signing bonuses to review at this time.
@@ -197,14 +197,14 @@ export default function SigningBonusesPage() {
                             onClick={() => handleApprove(bonus._id)}
                             disabled={actionLoading === bonus._id}
                           >
-                            ✅ Approve
+                             Approve
                           </button>
                           <button
                             className={styles.btnDanger}
                             onClick={() => handleReject(bonus._id)}
                             disabled={actionLoading === bonus._id}
                           >
-                            ❌ Reject
+                             Reject
                           </button>
                         </div>
                       </td>

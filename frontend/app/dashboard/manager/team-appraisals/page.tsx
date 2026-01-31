@@ -5,7 +5,7 @@
  * /performance/ratings endpoints to fetch and save data.
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -206,11 +206,11 @@ export default function TeamAppraisalsPage() {
         {/* Header */}
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>📋 Team Appraisals</h1>
+            <h1 className={styles.title}> Team Appraisals</h1>
             <p className={styles.subtitle}>View employees, their cycle assignments and set Department Head rating & comments.</p>
           </div>
           <div className={styles.headerActions}>
-            <button className={styles.refreshButton} onClick={fetchTeamAndAssignments}>🔄 Refresh</button>
+            <button className={styles.refreshButton} onClick={fetchTeamAndAssignments}> Refresh</button>
             <button className={styles.secondaryButton} onClick={() => router.back()}>← Back</button>
           </div>
         </div>
@@ -220,19 +220,19 @@ export default function TeamAppraisalsPage() {
         {/* Stats Cards */}
         <div className={styles.statsGrid}>
           <div className={`${styles.statCard} ${styles.statBlue}`}>
-            <h3>👥 Team Members</h3>
+            <h3> Team Members</h3>
             <p>{totalMembers}</p>
           </div>
           <div className={`${styles.statCard} ${styles.statPurple}`}>
-            <h3>📋 With Assignments</h3>
+            <h3> With Assignments</h3>
             <p>{withAssignment}</p>
           </div>
           <div className={`${styles.statCard} ${styles.statGreen}`}>
-            <h3>✅ Completed</h3>
+            <h3> Completed</h3>
             <p>{completed}</p>
           </div>
           <div className={`${styles.statCard} ${styles.statOrange}`}>
-            <h3>⏳ Pending</h3>
+            <h3> Pending</h3>
             <p>{pending}</p>
           </div>
         </div>
@@ -240,7 +240,7 @@ export default function TeamAppraisalsPage() {
         {/* Team Cards */}
         {rows.length === 0 ? (
           <div className={styles.emptyState}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📋</div>
+            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}></div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#374151', marginBottom: '0.75rem' }}>No Team Members Found</h2>
             <p style={{ fontSize: '1.05rem', color: '#6b7280', margin: 0 }}>No team members or appraisal assignments found.</p>
           </div>
@@ -314,7 +314,7 @@ export default function TeamAppraisalsPage() {
                         borderRadius: '12px',
                         marginBottom: '1rem'
                       }}>
-                        <span style={{ fontSize: '0.9rem', color: '#92400e' }}>⭐ Current Score:</span>
+                        <span style={{ fontSize: '0.9rem', color: '#92400e' }}> Current Score:</span>
                         <span style={{ fontSize: '1.5rem', fontWeight: '700', color: '#92400e' }}>
                           {r.employee?.appraisal?.totalScore?.toFixed(1) || '—'}
                         </span>
@@ -326,10 +326,10 @@ export default function TeamAppraisalsPage() {
                       {a ? (
                         <>
                           <button className={styles.infoButton} onClick={() => router.push(a.latestAppraisalId ? `/dashboard/manager/performance/record/${a.latestAppraisalId}` : `/dashboard/manager/performance/appraisal/${a._id}`)}>
-                            📄 Open Appraisal
+                             Open Appraisal
                           </button>
                           <button className={styles.primaryButton} onClick={() => openEditor(a)}>
-                            ✏️ Edit Dept Head Comment
+                             Edit Dept Head Comment
                           </button>
                         </>
                       ) : (
@@ -341,7 +341,7 @@ export default function TeamAppraisalsPage() {
                     {a && editing[a._id] && (
                       <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '2px solid #e5e7eb' }}>
                         <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#374151', margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          📝 Department Head Comments
+                           Department Head Comments
                         </h4>
 
                         {deptValues[a._id]?.loading ? (
@@ -371,8 +371,7 @@ export default function TeamAppraisalsPage() {
                               </label>
                               <textarea
                                 rows={3}
-                                placeholder="Enter overall manager summary..."
-                                style={{
+                                placeholder="Enter overall manager summary..." style={{
                                   width: '100%',
                                   padding: '0.875rem',
                                   border: '2px solid #e5e7eb',
@@ -392,12 +391,11 @@ export default function TeamAppraisalsPage() {
                             {/* Strengths */}
                             <div style={{ marginBottom: '1rem' }}>
                               <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>
-                                💪 Key Strengths
+                                 Key Strengths
                               </label>
                               <textarea
                                 rows={2}
-                                placeholder="Highlight key strengths..."
-                                style={{
+                                placeholder="Highlight key strengths..." style={{
                                   width: '100%',
                                   padding: '0.875rem',
                                   border: '2px solid #e5e7eb',
@@ -416,12 +414,11 @@ export default function TeamAppraisalsPage() {
                             {/* Areas for Improvement */}
                             <div style={{ marginBottom: '1rem' }}>
                               <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>
-                                📈 Areas for Improvement
+                                 Areas for Improvement
                               </label>
                               <textarea
                                 rows={2}
-                                placeholder="Note areas for improvement..."
-                                style={{
+                                placeholder="Note areas for improvement..." style={{
                                   width: '100%',
                                   padding: '0.875rem',
                                   border: '2px solid #e5e7eb',
@@ -472,7 +469,7 @@ export default function TeamAppraisalsPage() {
                                   transition: 'all 0.3s ease'
                                 }}
                               >
-                                💾 Save
+                                 Save
                               </button>
                               <button
                                 onClick={() => closeEditor(a._id)}

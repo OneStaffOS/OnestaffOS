@@ -138,35 +138,35 @@ export default function MyClaimsPage() {
               className={styles.btnNewClaim}
               onClick={() => router.push('/dashboard/employee/payroll/submit-claim')}
             >
-              💼 Submit New Claim
+               Submit New Claim
             </button>
           </div>
 
           {/* Stats Grid */}
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📋</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Total Claims</div>
                 <div className={styles.statValue}>{stats.total}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>⏳</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Pending Review</div>
                 <div className={styles.statValue}>{stats.pending}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>✅</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Approved</div>
                 <div className={styles.statValue}>{stats.approved}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>💰</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Total Approved Amount</div>
                 <div className={styles.statValue}>{formatCurrency(stats.totalApproved)}</div>
@@ -217,7 +217,7 @@ export default function MyClaimsPage() {
           {/* Empty State */}
           {!error && filteredClaims.length === 0 && (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>💼</div>
+              <div className={styles.emptyIcon}></div>
               <h3>No Claims Found</h3>
               <p>
                 {filterStatus === 'all'

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -363,8 +363,7 @@ export default function EditLeaveRequestPage() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>Start Date *</label>
                 <input
-                  type="date"
-                  className={styles.input}
+                  type="date" className={styles.input}
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
                   min={new Date().toISOString().split('T')[0]}
@@ -374,8 +373,7 @@ export default function EditLeaveRequestPage() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>End Date *</label>
                 <input
-                  type="date"
-                  className={styles.input}
+                  type="date" className={styles.input}
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
                   min={dateFrom || new Date().toISOString().split('T')[0]}
@@ -405,8 +403,7 @@ export default function EditLeaveRequestPage() {
                 className={styles.textarea}
                 value={justification}
                 onChange={(e) => setJustification(e.target.value)}
-                placeholder="Please provide details about your leave request..."
-                rows={4}
+                placeholder="Please provide details about your leave request..." rows={4}
                 required={leaveType?.requiresAttachment}
               />
             </div>
@@ -420,14 +417,12 @@ export default function EditLeaveRequestPage() {
             <div className={styles.formGroup}>
               <div className={styles.fileUpload}>
                 <input
-                  type="file"
-                  id="attachment"
-                  className={styles.fileInput}
+                  type="file" id="attachment" className={styles.fileInput}
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
                 <label htmlFor="attachment" className={styles.fileLabel}>
-                  <span className={styles.uploadIcon}>📎</span>
+                  <span className={styles.uploadIcon}></span>
                   {attachmentFile ? (
                     <>
                       <span className={styles.fileName}>{attachmentFile.name}</span>
@@ -458,16 +453,14 @@ export default function EditLeaveRequestPage() {
         {/* Actions */}
         <div className={styles.formActions}>
           <button 
-            type="button" 
-            className={styles.cancelButton}
+            type="button" className={styles.cancelButton}
             onClick={() => router.push('/dashboard/employee/leaves')}
             disabled={submitting}
           >
             Cancel
           </button>
           <button 
-            type="submit" 
-            className={styles.submitButton}
+            type="submit" className={styles.submitButton}
             disabled={submitting || calculatedDays <= 0}
           >
             {submitting ? 'Updating...' : 'Update Request'}

@@ -4,7 +4,7 @@
  * Allows the root layout to remain a Server Component
  */
 
-'use client';
+"use client";
 
 import { AuthProvider } from '../context/AuthContext';
 import { SocketProvider } from '../context/SocketContext';

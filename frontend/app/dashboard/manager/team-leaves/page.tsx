@@ -1,11 +1,11 @@
 /**
  * Manager Team Leaves Page
- * REQ-034: Manager view team members' leave balances and upcoming leaves
+ * REQ-034: Manager view team members'leave balances and upcoming leaves
  * REQ-035: Filter and sort leave data by leave type, date range, department, and status
  * REQ-039: Flag irregular patterns
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -258,7 +258,7 @@ export default function ManagerTeamLeavesPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>👥 Team Leave Management</h1>
+              <h1 className={styles.title}> Team Leave Management</h1>
               <p className={styles.subtitle}>View and manage your team&apos;s leave balances and requests</p>
             </div>
             <div className={styles.headerActions}>
@@ -272,7 +272,7 @@ export default function ManagerTeamLeavesPage() {
                 className={styles.primaryButton}
                 onClick={() => router.push('/dashboard/manager/leave-requests')}
               >
-                📋 Pending Approvals
+                 Pending Approvals
               </button>
             </div>
           </div>
@@ -307,19 +307,19 @@ export default function ManagerTeamLeavesPage() {
               className={`${styles.tab} ${activeTab === 'balances' ? styles.tabActive : ''}`}
               onClick={() => setActiveTab('balances')}
             >
-              📊 Team Balances
+               Team Balances
             </button>
             <button
               className={`${styles.tab} ${activeTab === 'upcoming' ? styles.tabActive : ''}`}
               onClick={() => setActiveTab('upcoming')}
             >
-              📅 Upcoming Leaves
+               Upcoming Leaves
             </button>
             <button
               className={`${styles.tab} ${activeTab === 'history' ? styles.tabActive : ''}`}
               onClick={() => setActiveTab('history')}
             >
-              📜 Leave History
+               Leave History
             </button>
           </div>
 
@@ -378,8 +378,7 @@ export default function ManagerTeamLeavesPage() {
                         <div className={styles.filterGroup}>
                           <label>From:</label>
                           <input
-                            type="date"
-                            value={dateFromFilter}
+                            type="date" value={dateFromFilter}
                             onChange={(e) => setDateFromFilter(e.target.value)}
                             className={styles.filterInput}
                           />
@@ -387,8 +386,7 @@ export default function ManagerTeamLeavesPage() {
                         <div className={styles.filterGroup}>
                           <label>To:</label>
                           <input
-                            type="date"
-                            value={dateToFilter}
+                            type="date" value={dateToFilter}
                             onChange={(e) => setDateToFilter(e.target.value)}
                             className={styles.filterInput}
                           />
@@ -407,7 +405,7 @@ export default function ManagerTeamLeavesPage() {
                 <div className={styles.balancesTable}>
                   {filteredBalances.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <span className={styles.emptyIcon}>📊</span>
+                      <span className={styles.emptyIcon}></span>
                       <h3>No Balance Data</h3>
                       <p>No leave balance data found for your team.</p>
                     </div>
@@ -452,7 +450,7 @@ export default function ManagerTeamLeavesPage() {
                 <div className={styles.upcomingList}>
                   {upcomingLeaves.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <span className={styles.emptyIcon}>📅</span>
+                      <span className={styles.emptyIcon}></span>
                       <h3>No Upcoming Leaves</h3>
                       <p>No approved upcoming leaves for your team.</p>
                     </div>
@@ -489,7 +487,7 @@ export default function ManagerTeamLeavesPage() {
                 <div className={styles.historyTable}>
                   {filteredHistory.length === 0 ? (
                     <div className={styles.emptyState}>
-                      <span className={styles.emptyIcon}>📜</span>
+                      <span className={styles.emptyIcon}></span>
                       <h3>No Leave History</h3>
                       <p>No leave requests match your filters.</p>
                     </div>
@@ -512,7 +510,7 @@ export default function ManagerTeamLeavesPage() {
                               <td className={styles.employeeCell}>
                                 {getEmployeeName(request.employeeId)}
                                 {request.irregularPatternFlag && (
-                                  <span className={styles.flagBadge}>⚠️ Flagged</span>
+                                  <span className={styles.flagBadge}> Flagged</span>
                                 )}
                               </td>
                               <td>{getLeaveTypeName(request.leaveTypeId)}</td>
@@ -541,7 +539,7 @@ export default function ManagerTeamLeavesPage() {
                                     setShowFlagModal(true);
                                   }}
                                 >
-                                  🚩 Flag Pattern
+                                   Flag Pattern
                                 </button>
                               )}
                             </td>
@@ -560,7 +558,7 @@ export default function ManagerTeamLeavesPage() {
           {showFlagModal && selectedRequest && (
             <div className={styles.modalOverlay}>
               <div className={styles.modal}>
-                <h2 className={styles.modalTitle}>🚩 Flag Irregular Pattern</h2>
+                <h2 className={styles.modalTitle}> Flag Irregular Pattern</h2>
                 <p className={styles.modalDescription}>
                   You are flagging a leave request by {getEmployeeName(selectedRequest.employeeId)} 
                   for {getLeaveTypeName(selectedRequest.leaveTypeId)} 
@@ -571,8 +569,7 @@ export default function ManagerTeamLeavesPage() {
                   <textarea
                     value={flagReason}
                     onChange={(e) => setFlagReason(e.target.value)}
-                    placeholder="Describe the irregular pattern observed..."
-                    rows={3}
+                    placeholder="Describe the irregular pattern observed..." rows={3}
                   />
                 </div>
                 <div className={styles.modalActions}>

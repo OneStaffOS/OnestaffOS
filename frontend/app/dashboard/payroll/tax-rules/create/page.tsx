@@ -54,12 +54,12 @@ export default function CreateTaxRulePage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>🏛️ Create Tax Rule</h1>
+            <h1 className={styles.formTitle}> Create Tax Rule</h1>
             <p className={styles.formSubtitle}>
               Define a new tax rule for payroll deductions. It will require HR Manager approval.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -67,13 +67,10 @@ export default function CreateTaxRulePage() {
                   Tax Rule Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="name"
-                  className={styles.formInput}
+                  type="text" name="name" className={styles.formInput}
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="e.g., Income Tax, Social Security Tax"
-                  required
+                  placeholder="e.g., Income Tax, Social Security Tax" required
                 />
                 <span className={styles.formHint}>A unique name for the tax rule</span>
               </div>
@@ -83,16 +80,10 @@ export default function CreateTaxRulePage() {
                   Tax Rate (%) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="rate"
-                  className={styles.formInput}
+                  type="number" name="rate" className={styles.formInput}
                   value={formData.rate}
                   onChange={handleChange}
-                  placeholder="Enter tax rate (0-100)"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  required
+                  placeholder="Enter tax rate (0-100)" min="0" max="100" step="0.01" required
                 />
                 <span className={styles.formHint}>Tax rate as a percentage (0-100)</span>
               </div>
@@ -102,8 +93,7 @@ export default function CreateTaxRulePage() {
                   Description
                 </label>
                 <textarea
-                  name="description"
-                  className={styles.formTextarea}
+                  name="description" className={styles.formTextarea}
                   value={formData.description}
                   onChange={handleChange}
                   placeholder="Describe the tax rule and when it applies..."
@@ -113,19 +103,17 @@ export default function CreateTaxRulePage() {
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/tax-rules')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
-                  {loading ? 'Creating...' : '🏛️ Create Tax Rule'}
+                  {loading ? 'Creating...' : 'Create Tax Rule'}
                 </button>
               </div>
             </form>

@@ -3,7 +3,7 @@
  * Displays employee ID card or request interface
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -168,8 +168,7 @@ export default function EmployeeIDCardPage() {
                     {profile?.profilePictureUrl ? (
                       <img 
                         src={profile.profilePictureUrl} 
-                        alt="Employee" 
-                        className={styles.photo}
+                        alt="Employee" className={styles.photo}
                       />
                     ) : (
                       <div className={styles.photoPlaceholder}>
@@ -248,13 +247,13 @@ export default function EmployeeIDCardPage() {
           ) : (
             /* No Card Issued */
             <div className={styles.noCard}>
-              <div className={styles.noCardIcon}>🆔</div>
+              <div className={styles.noCardIcon}></div>
               <h2>No ID Card Issued</h2>
               <p>You don't have an employee ID card yet.</p>
               
               {requestStatus === 'requested' ? (
                 <div className={styles.requestSuccess}>
-                  <div className={styles.successIcon}>✓</div>
+                  <div className={styles.successIcon}></div>
                   <h3>Request Submitted</h3>
                   <p>Your ID card request has been submitted to HR. You'll be notified once it's processed.</p>
                 </div>

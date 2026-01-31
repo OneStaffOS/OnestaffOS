@@ -4,7 +4,7 @@
  * Process enforces validation rules (circular reporting, duplicates, etc.)
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

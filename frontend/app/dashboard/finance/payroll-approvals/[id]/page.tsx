@@ -113,7 +113,7 @@ export default function PayrollApprovalPage({ params }: { params: Promise<{ id: 
         amount: run?.totalnetpay || 0,
       });
       await axios.post(`/payroll-execution/runs/${runId}/finance-approve`, signedAction);
-      setSuccess('✅ Payroll disbursement approved successfully!');
+      setSuccess('Payroll disbursement approved successfully!');
       setTimeout(() => {
         router.push('/dashboard/finance');
       }, 2000);
@@ -193,7 +193,7 @@ export default function PayrollApprovalPage({ params }: { params: Promise<{ id: 
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle}>
-                💼 Review Payroll Disbursement: {run.runId}
+                 Review Payroll Disbursement: {run.runId}
               </h1>
               <p className={styles.pageSubtitle}>
                 Payroll Period: {formatDate(run.payrollPeriod)} | {run.entity}
@@ -202,18 +202,18 @@ export default function PayrollApprovalPage({ params }: { params: Promise<{ id: 
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
           {success && <div className={styles.successMessage}>{success}</div>}
 
           {/* Warnings */}
           {run.exceptions > 0 && (
             <div className={styles.errorMessage}>
-              ⚠️ <strong>Warning:</strong> This payroll run has {run.exceptions} exception(s) that need review
+               <strong>Warning:</strong> This payroll run has {run.exceptions} exception(s) that need review
             </div>
           )}
           {invalidBankAccounts.length > 0 && (
             <div className={styles.errorMessage}>
-              ⚠️ <strong>Warning:</strong> {invalidBankAccounts.length} employee(s) have invalid bank account information
+               <strong>Warning:</strong> {invalidBankAccounts.length} employee(s) have invalid bank account information
             </div>
           )}
 
@@ -311,7 +311,7 @@ export default function PayrollApprovalPage({ params }: { params: Promise<{ id: 
                       </strong>
                       {detail.exceptions && (
                         <div style={{ fontSize: '12px', color: '#dc2626', marginTop: '4px' }}>
-                          ⚠️ {detail.exceptions}
+                           {detail.exceptions}
                         </div>
                       )}
                     </td>
@@ -368,7 +368,7 @@ export default function PayrollApprovalPage({ params }: { params: Promise<{ id: 
                 disabled={actionLoading}
                 style={{ padding: '14px 32px', fontSize: '15px' }}
               >
-                {actionLoading ? '⏳ Processing...' : '✅ Approve Disbursement'}
+                {actionLoading ? 'Processing...' : 'Approve Disbursement'}
               </button>
               <button
                 onClick={handleReject}
@@ -384,7 +384,7 @@ export default function PayrollApprovalPage({ params }: { params: Promise<{ id: 
                   cursor: 'pointer'
                 }}
               >
-                ❌ Reject
+                 Reject
               </button>
               <button
                 className={styles.btnSecondary}

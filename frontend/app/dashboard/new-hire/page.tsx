@@ -3,7 +3,7 @@
  * Onboarding portal for new employees with pre-boarding checklist
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '../../components/ProtectedRoute';
@@ -194,13 +194,13 @@ export default function NewHireDashboard() {
             className={styles.quickActionButton}
             onClick={() => window.location.href = '/dashboard/new-hire/id-card'}
           >
-            🆔 View ID Card
+             View ID Card
           </button>
           <button 
             className={styles.quickActionButton}
             onClick={() => window.location.href = '/dashboard/employee/inbox'}
           >
-            📬 View Notifications
+             View Notifications
           </button>
         </div>
 
@@ -241,12 +241,12 @@ export default function NewHireDashboard() {
           <>
             {preBoarding.completed && (
               <div className={styles.completedBanner}>
-                🎊 Congratulations! You've completed all onboarding tasks!
+                 Congratulations! You've completed all onboarding tasks!
               </div>
             )}
 
             <div className={styles.section}>
-              <h2>📋 Onboarding Checklist</h2>
+              <h2> Onboarding Checklist</h2>
               <div className={styles.progressBar}>
                 <div 
                   className={styles.progressFill} 
@@ -266,7 +266,7 @@ export default function NewHireDashboard() {
                     >
                       <div className={styles.taskHeader}>
                         <div className={styles.taskTitle}>
-                          {task.status === 'completed' && <span className={styles.checkmark}>✓</span>}
+                          {task.status === 'completed' && <span className={styles.checkmark}></span>}
                           <h3>{task.name}</h3>
                         </div>
                         <div className={styles.taskBadges}>
@@ -301,7 +301,7 @@ export default function NewHireDashboard() {
                       <div className={styles.fileSection}>
                         {task.documentId ? (
                           <div className={styles.fileUploaded}>
-                            <span>📎 Document uploaded</span>
+                            <span> Document uploaded</span>
                             <button
                               onClick={() => handleDownloadDocument(index)}
                               className={styles.downloadBtn}
@@ -312,12 +312,11 @@ export default function NewHireDashboard() {
                         ) : (
                           <div className={styles.fileUpload}>
                             <label htmlFor={`file-upload-${index}`} className={styles.uploadLabel}>
-                              📎 Upload Document
+                               Upload Document
                             </label>
                             <input
                               id={`file-upload-${index}`}
-                              type="file"
-                              onChange={(e) => {
+                              type="file" onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (file) handleFileUpload(index, file);
                               }}
@@ -363,7 +362,7 @@ export default function NewHireDashboard() {
 
                       {task.status === 'completed' && task.completedAt && (
                         <div className={styles.completedInfo}>
-                          ✅ Completed on {formatDate(task.completedAt)}
+                           Completed on {formatDate(task.completedAt)}
                         </div>
                       )}
 
@@ -380,7 +379,7 @@ export default function NewHireDashboard() {
           </>
         ) : (
           <div className={styles.emptyState}>
-            <p>📋 Your onboarding checklist will be created by your HR manager after you accept your offer.</p>
+            <p> Your onboarding checklist will be created by your HR manager after you accept your offer.</p>
             <p>Check back soon or contact HR if you have questions!</p>
           </div>
         )}
@@ -397,8 +396,7 @@ export default function NewHireDashboard() {
                 <p><strong>{(selectedTask as any)?.name || 'Task'}</strong></p>
                 <textarea
                   className={styles.notesTextarea}
-                  placeholder="Add any notes or comments about this task..."
-                  value={taskNotes}
+                  placeholder="Add any notes or comments about this task..." value={taskNotes}
                   onChange={(e) => setTaskNotes(e.target.value)}
                   rows={4}
                 />
@@ -446,7 +444,7 @@ export default function NewHireDashboard() {
           <div className={styles.modalOverlay}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
               <div className={styles.modalHeader}>
-                <h3>🎉 Congratulations!</h3>
+                <h3> Congratulations!</h3>
               </div>
               <div className={styles.modalContent}>
                 <p className={styles.completionMessage}>
@@ -456,10 +454,10 @@ export default function NewHireDashboard() {
                   Your role has been updated from <strong>New Hire</strong> to <strong>Department Employee</strong>.
                 </p>
                 <p className={styles.completionMessage}>
-                  ✅ <strong>Leave entitlements have been automatically assigned</strong> to your account with zero carry-over balance.
+                   <strong>Leave entitlements have been automatically assigned</strong> to your account with zero carry-over balance.
                 </p>
                 <p className={styles.completionMessage}>
-                  ✅ <strong>All approved allowances have been automatically assigned</strong> to your account and will be included in your payroll.
+                   <strong>All approved allowances have been automatically assigned</strong> to your account and will be included in your payroll.
                 </p>
                 <p className={styles.completionMessage}>
                   Please log out and log back in for all changes to take effect.

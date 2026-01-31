@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -571,8 +571,7 @@ export default function EntitlementsPage() {
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Year</label>
                       <input
-                        type="number"
-                        className={styles.input}
+                        type="number" className={styles.input}
                         value={formData.year}
                         onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
                         min={currentYear - 1}
@@ -583,13 +582,10 @@ export default function EntitlementsPage() {
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Total Days</label>
                       <input
-                        type="number"
-                        className={styles.input}
+                        type="number" className={styles.input}
                         value={formData.totalDays}
                         onChange={(e) => setFormData({ ...formData, totalDays: e.target.value })}
-                        min="0"
-                        step="0.5"
-                        placeholder="Enter total days"
+                        min="0" step="0.5" placeholder="Enter total days"
                       />
                     </div>
                   </div>
@@ -597,13 +593,10 @@ export default function EntitlementsPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Carry Forward Days</label>
                     <input
-                      type="number"
-                      className={styles.input}
+                      type="number" className={styles.input}
                       value={formData.carryForwardDays}
                       onChange={(e) => setFormData({ ...formData, carryForwardDays: e.target.value })}
-                      min="0"
-                      step="0.5"
-                      placeholder="Enter carry forward days"
+                      min="0" step="0.5" placeholder="Enter carry forward days"
                     />
                     <p className={styles.hint}>Days carried over from previous year</p>
                   </div>

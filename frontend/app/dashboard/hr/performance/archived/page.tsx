@@ -4,7 +4,7 @@
  * Access historical appraisal records for reference, reporting, and performance trend analysis
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -168,9 +168,7 @@ export default function ArchivedRecordsPage() {
             <div className={styles.filterGroup}>
               <label>Search Employee</label>
               <input
-                type="text"
-                placeholder="Name or employee number..."
-                value={searchTerm}
+                type="text" placeholder="Name or employee number..." value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={styles.searchInput}
               />

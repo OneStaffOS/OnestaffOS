@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * NotFound Component (404 Page)

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -117,9 +117,7 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>First Name *</label>
                 <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
+                  type="text" name="firstName" value={formData.firstName}
                   onChange={handleChange}
                   required
                 />
@@ -127,9 +125,7 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>Last Name *</label>
                 <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
+                  type="text" name="lastName" value={formData.lastName}
                   onChange={handleChange}
                   required
                 />
@@ -137,9 +133,7 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>National ID *</label>
                 <input
-                  type="text"
-                  name="nationalId"
-                  value={formData.nationalId}
+                  type="text" name="nationalId" value={formData.nationalId}
                   onChange={handleChange}
                   required
                 />
@@ -147,17 +141,14 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>Date of Birth</label>
                 <input
-                  type="date"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
+                  type="date" name="dateOfBirth" value={formData.dateOfBirth}
                   onChange={handleChange}
                 />
               </div>
               <div className={styles.formGroup}>
                 <label>Gender</label>
                 <select
-                  name="gender"
-                  value={formData.gender}
+                  name="gender" value={formData.gender}
                   onChange={handleChange}
                 >
                   <option value="">Select Gender</option>
@@ -174,27 +165,21 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>Personal Email</label>
                 <input
-                  type="email"
-                  name="personalEmail"
-                  value={formData.personalEmail}
+                  type="email" name="personalEmail" value={formData.personalEmail}
                   onChange={handleChange}
                 />
               </div>
               <div className={styles.formGroup}>
                 <label>Work Email</label>
                 <input
-                  type="email"
-                  name="workEmail"
-                  value={formData.workEmail}
+                  type="email" name="workEmail" value={formData.workEmail}
                   onChange={handleChange}
                 />
               </div>
               <div className={styles.formGroup}>
                 <label>Mobile Phone</label>
                 <input
-                  type="tel"
-                  name="mobilePhone"
-                  value={formData.mobilePhone}
+                  type="tel" name="mobilePhone" value={formData.mobilePhone}
                   onChange={handleChange}
                 />
               </div>
@@ -207,9 +192,7 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>Client Number *</label>
                 <input
-                  type="text"
-                  name="employeeNumber"
-                  value={formData.employeeNumber}
+                  type="text" name="employeeNumber" value={formData.employeeNumber}
                   onChange={handleChange}
                   required
                   readOnly
@@ -219,9 +202,7 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>Start Date *</label>
                 <input
-                  type="date"
-                  name="dateOfHire"
-                  value={formData.dateOfHire}
+                  type="date" name="dateOfHire" value={formData.dateOfHire}
                   onChange={handleChange}
                   required
                   readOnly
@@ -231,9 +212,7 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>Initial Password *</label>
                 <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
+                  type="password" name="password" value={formData.password}
                   onChange={handleChange}
                   required
                   placeholder="Client's initial password"
@@ -242,8 +221,7 @@ export default function NewClientProfilePage() {
               <div className={styles.formGroup}>
                 <label>Department</label>
                 <select
-                  name="primaryDepartmentId"
-                  value={formData.primaryDepartmentId}
+                  name="primaryDepartmentId" value={formData.primaryDepartmentId}
                   onChange={handleChange}
                 >
                   <option value="">Select Department</option>
@@ -259,15 +237,13 @@ export default function NewClientProfilePage() {
 
           <div className={styles.formActions}>
             <button
-              type="button"
-              className={styles.cancelButton}
+              type="button" className={styles.cancelButton}
               onClick={() => router.back()}
             >
               Cancel
             </button>
             <button
-              type="submit"
-              className={styles.submitButton}
+              type="submit" className={styles.submitButton}
               disabled={saving}
             >
               {saving ? 'Creating...' : 'Create Client'}

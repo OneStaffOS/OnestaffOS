@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -219,7 +219,7 @@ export default function LeaveTypesPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📋 Leave Types</h1>
+              <h1 className={styles.title}> Leave Types</h1>
               <p className={styles.subtitle}>
                 Manage leave types and their configurations
               </p>
@@ -248,8 +248,7 @@ export default function LeaveTypesPage() {
           <div className={styles.filterBar}>
             <label htmlFor="categoryFilter">Filter by Category:</label>
             <select
-              id="categoryFilter"
-              value={filterCategory}
+              id="categoryFilter" value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
               className={styles.filterSelect}
             >
@@ -269,7 +268,7 @@ export default function LeaveTypesPage() {
               <Spinner message="Loading leave types..." />
             ) : filteredTypes.length === 0 ? (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>📋</span>
+                <span className={styles.emptyIcon}></span>
                 <h3>No Leave Types Found</h3>
                 <p>Create your first leave type to get started.</p>
                 <button 
@@ -289,13 +288,13 @@ export default function LeaveTypesPage() {
                         {leaveType.paid && <span className={styles.badgePaid}>Paid</span>}
                         {!leaveType.paid && <span className={styles.badgeUnpaid}>Unpaid</span>}
                         {leaveType.requiresAttachment && (
-                          <span className={styles.badgeAttachment}>📎</span>
+                          <span className={styles.badgeAttachment}></span>
                         )}
                       </div>
                     </div>
                     <h3 className={styles.cardTitle}>{leaveType.name}</h3>
                     <p className={styles.cardCategory}>
-                      📁 {getCategoryName(leaveType.categoryId)}
+                       {getCategoryName(leaveType.categoryId)}
                     </p>
                     {leaveType.description && (
                       <p className={styles.cardDescription}>{leaveType.description}</p>
@@ -323,7 +322,7 @@ export default function LeaveTypesPage() {
                         className={styles.editButton}
                         onClick={() => handleOpenModal(leaveType)}
                       >
-                        ✏️ Edit
+                         Edit
                       </button>
                       {deleteConfirm === leaveType._id ? (
                         <div className={styles.deleteConfirm}>
@@ -332,13 +331,13 @@ export default function LeaveTypesPage() {
                             onClick={() => handleDelete(leaveType._id)}
                             disabled={submitting}
                           >
-                            ✓ Confirm
+                             Confirm
                           </button>
                           <button
                             className={styles.cancelDeleteButton}
                             onClick={() => setDeleteConfirm(null)}
                           >
-                            ✕
+                            
                           </button>
                         </div>
                       ) : (
@@ -346,7 +345,7 @@ export default function LeaveTypesPage() {
                           className={styles.deleteButton}
                           onClick={() => setDeleteConfirm(leaveType._id)}
                         >
-                          🗑️ Delete
+                           Delete
                         </button>
                       )}
                     </div>
@@ -363,7 +362,7 @@ export default function LeaveTypesPage() {
                 <div className={styles.modalHeader}>
                   <h2>{editingType ? 'Edit Leave Type' : 'Add New Leave Type'}</h2>
                   <button className={styles.closeButton} onClick={handleCloseModal}>
-                    ✕
+                    
                   </button>
                 </div>
                 <form onSubmit={handleSubmit} className={styles.form}>
@@ -371,23 +370,17 @@ export default function LeaveTypesPage() {
                     <div className={styles.formGroup}>
                       <label htmlFor="code">Code *</label>
                       <input
-                        type="text"
-                        id="code"
-                        value={formData.code}
+                        type="text" id="code" value={formData.code}
                         onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                        placeholder="e.g., ANN, SICK, MAT"
-                        required
+                        placeholder="e.g., ANN, SICK, MAT" required
                       />
                     </div>
                     <div className={styles.formGroup}>
                       <label htmlFor="name">Name *</label>
                       <input
-                        type="text"
-                        id="name"
-                        value={formData.name}
+                        type="text" id="name" value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="e.g., Annual Leave"
-                        required
+                        placeholder="e.g., Annual Leave" required
                       />
                     </div>
                   </div>
@@ -395,8 +388,7 @@ export default function LeaveTypesPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="categoryId">Category *</label>
                     <select
-                      id="categoryId"
-                      value={formData.categoryId}
+                      id="categoryId" value={formData.categoryId}
                       onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                       required
                     >
@@ -415,35 +407,30 @@ export default function LeaveTypesPage() {
                   <div className={styles.formGroup}>
                     <label htmlFor="description">Description</label>
                     <textarea
-                      id="description"
-                      value={formData.description}
+                      id="description" value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Optional description for this leave type"
-                      rows={2}
+                      placeholder="Optional description for this leave type" rows={2}
                     />
                   </div>
 
                   <div className={styles.checkboxGroup}>
                     <label className={styles.checkbox}>
                       <input
-                        type="checkbox"
-                        checked={formData.paid}
+                        type="checkbox" checked={formData.paid}
                         onChange={(e) => setFormData({ ...formData, paid: e.target.checked })}
                       />
                       <span>Paid Leave</span>
                     </label>
                     <label className={styles.checkbox}>
                       <input
-                        type="checkbox"
-                        checked={formData.deductible}
+                        type="checkbox" checked={formData.deductible}
                         onChange={(e) => setFormData({ ...formData, deductible: e.target.checked })}
                       />
                       <span>Deductible from balance</span>
                     </label>
                     <label className={styles.checkbox}>
                       <input
-                        type="checkbox"
-                        checked={formData.requiresAttachment}
+                        type="checkbox" checked={formData.requiresAttachment}
                         onChange={(e) => setFormData({ ...formData, requiresAttachment: e.target.checked })}
                       />
                       <span>Requires Attachment</span>
@@ -454,8 +441,7 @@ export default function LeaveTypesPage() {
                     <div className={styles.formGroup}>
                       <label htmlFor="attachmentType">Attachment Type</label>
                       <select
-                        id="attachmentType"
-                        value={formData.attachmentType}
+                        id="attachmentType" value={formData.attachmentType}
                         onChange={(e) => setFormData({ ...formData, attachmentType: e.target.value })}
                       >
                         <option value="">Select type</option>
@@ -470,23 +456,17 @@ export default function LeaveTypesPage() {
                     <div className={styles.formGroup}>
                       <label htmlFor="minTenureMonths">Min Tenure (months)</label>
                       <input
-                        type="number"
-                        id="minTenureMonths"
-                        value={formData.minTenureMonths}
+                        type="number" id="minTenureMonths" value={formData.minTenureMonths}
                         onChange={(e) => setFormData({ ...formData, minTenureMonths: e.target.value })}
-                        placeholder="e.g., 12"
-                        min="0"
+                        placeholder="e.g., 12" min="0"
                       />
                     </div>
                     <div className={styles.formGroup}>
                       <label htmlFor="maxDurationDays">Max Duration (days)</label>
                       <input
-                        type="number"
-                        id="maxDurationDays"
-                        value={formData.maxDurationDays}
+                        type="number" id="maxDurationDays" value={formData.maxDurationDays}
                         onChange={(e) => setFormData({ ...formData, maxDurationDays: e.target.value })}
-                        placeholder="e.g., 30"
-                        min="1"
+                        placeholder="e.g., 30" min="1"
                       />
                     </div>
                   </div>
@@ -495,16 +475,14 @@ export default function LeaveTypesPage() {
                   
                   <div className={styles.modalActions}>
                     <button
-                      type="button"
-                      className={styles.cancelButton}
+                      type="button" className={styles.cancelButton}
                       onClick={handleCloseModal}
                       disabled={submitting}
                     >
                       Cancel
                     </button>
                     <button
-                      type="submit"
-                      className={styles.submitButton}
+                      type="submit" className={styles.submitButton}
                       disabled={submitting}
                     >
                       {submitting ? 'Saving...' : editingType ? 'Update Type' : 'Create Type'}

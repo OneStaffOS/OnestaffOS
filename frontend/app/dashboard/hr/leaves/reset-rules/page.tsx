@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -205,12 +205,10 @@ export default function ResetRulesPage() {
                       <div className={styles.formGroup}>
                         <label className={styles.label}>Start Day</label>
                         <input
-                          type="number"
-                          className={styles.input}
+                          type="number" className={styles.input}
                           value={config.startDay}
                           onChange={(e) => setConfig({ ...config, startDay: parseInt(e.target.value) || 1 })}
-                          min="1"
-                          max="28"
+                          min="1" max="28"
                         />
                       </div>
                     </div>
@@ -226,8 +224,7 @@ export default function ResetRulesPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.checkboxLabel}>
                       <input
-                        type="checkbox"
-                        checked={config.forfeitUnused}
+                        type="checkbox" checked={config.forfeitUnused}
                         onChange={(e) => setConfig({ ...config, forfeitUnused: e.target.checked })}
                       />
                       Forfeit unused leave at year end
@@ -240,13 +237,10 @@ export default function ResetRulesPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Grace Period (days)</label>
                     <input
-                      type="number"
-                      className={styles.input}
+                      type="number" className={styles.input}
                       value={config.gracePeroidDays || ''}
                       onChange={(e) => setConfig({ ...config, gracePeroidDays: parseInt(e.target.value) || 0 })}
-                      min="0"
-                      max="90"
-                      placeholder="Enter grace period days"
+                      min="0" max="90" placeholder="Enter grace period days"
                     />
                     <p className={styles.hint}>
                       Number of days after year end to use remaining balance before forfeiture
@@ -256,12 +250,10 @@ export default function ResetRulesPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Carry Forward Deadline (months)</label>
                     <input
-                      type="number"
-                      className={styles.input}
+                      type="number" className={styles.input}
                       value={config.carryForwardDeadline}
                       onChange={(e) => setConfig({ ...config, carryForwardDeadline: parseInt(e.target.value) || 0 })}
-                      min="0"
-                      max="12"
+                      min="0" max="12"
                     />
                     <p className={styles.hint}>
                       Carried forward leave must be used within this many months of the new year

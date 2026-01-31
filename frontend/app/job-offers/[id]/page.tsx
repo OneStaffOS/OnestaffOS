@@ -4,7 +4,7 @@
  * Features: Full job description, qualifications, skills, apply button
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';

@@ -121,7 +121,7 @@ export default function TerminationBenefitsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📤 Termination Benefits Review</h1>
+              <h1 className={styles.pageTitle}> Termination Benefits Review</h1>
               <p className={styles.pageSubtitle}>
                 Review and approve end-of-service benefits for terminated or resigned employees
               </p>
@@ -129,12 +129,12 @@ export default function TerminationBenefitsPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Info */}
           <div className={styles.warningMessage}>
-            ℹ️ <strong>Important:</strong> Termination benefits must be approved before they can be included in the final payroll. 
+             <strong>Important:</strong> Termination benefits must be approved before they can be included in the final payroll. 
             Only approved benefits will be automatically added to the employee's last payroll payment.
           </div>
 
@@ -156,7 +156,7 @@ export default function TerminationBenefitsPage() {
           <div className={styles.card}>
             {benefits.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>✅</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>All Caught Up!</h3>
                 <p className={styles.emptyStateDescription}>
                   There are no pending termination benefits to review at this time.
@@ -199,14 +199,14 @@ export default function TerminationBenefitsPage() {
                             onClick={() => handleApprove(benefit._id)}
                             disabled={actionLoading === benefit._id}
                           >
-                            ✅ Approve
+                             Approve
                           </button>
                           <button
                             className={styles.btnDanger}
                             onClick={() => handleReject(benefit._id)}
                             disabled={actionLoading === benefit._id}
                           >
-                            ❌ Reject
+                             Reject
                           </button>
                         </div>
                       </td>

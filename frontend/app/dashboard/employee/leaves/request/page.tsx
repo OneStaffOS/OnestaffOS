@@ -4,7 +4,7 @@
  * Accessible by: Employees
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -310,7 +310,7 @@ export default function SubmitLeaveRequestPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📝 Submit Leave Request</h1>
+              <h1 className={styles.title}> Submit Leave Request</h1>
               <p className={styles.subtitle}>Request time off by filling out the form below</p>
             </div>
             <button
@@ -362,16 +362,16 @@ export default function SubmitLeaveRequestPage() {
                       </p>
                       <div className={styles.leaveTypeMeta}>
                         <span className={selectedLeaveType.paid ? styles.paidBadge : styles.unpaidBadge}>
-                          {selectedLeaveType.paid ? '💰 Paid Leave' : '📋 Unpaid Leave'}
+                          {selectedLeaveType.paid ? 'Paid Leave' : 'Unpaid Leave'}
                         </span>
                         {selectedLeaveType.requiresAttachment && (
                           <span className={styles.attachmentRequired}>
-                            📎 Attachment Required ({selectedLeaveType.attachmentType || 'document'})
+                             Attachment Required ({selectedLeaveType.attachmentType || 'document'})
                           </span>
                         )}
                         {selectedLeaveType.maxDurationDays && (
                           <span className={styles.maxDuration}>
-                            ⏱️ Max: {selectedLeaveType.maxDurationDays} days
+                             Max: {selectedLeaveType.maxDurationDays} days
                           </span>
                         )}
                       </div>
@@ -411,8 +411,7 @@ export default function SubmitLeaveRequestPage() {
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Start Date *</label>
                       <input
-                        type="date"
-                        className={styles.input}
+                        type="date" className={styles.input}
                         value={formData.dateFrom}
                         onChange={(e) => setFormData({ ...formData, dateFrom: e.target.value })}
                         required
@@ -421,8 +420,7 @@ export default function SubmitLeaveRequestPage() {
                     <div className={styles.formGroup}>
                       <label className={styles.label}>End Date *</label>
                       <input
-                        type="date"
-                        className={styles.input}
+                        type="date" className={styles.input}
                         value={formData.dateTo}
                         onChange={(e) => setFormData({ ...formData, dateTo: e.target.value })}
                         min={formData.dateFrom}
@@ -436,14 +434,14 @@ export default function SubmitLeaveRequestPage() {
                       <span className={styles.durationLabel}>Duration:</span>
                       <span className={styles.durationValue}>{durationDays} business day(s)</span>
                       {isPostLeave && (
-                        <span className={styles.postLeaveBadge}>📋 Post-Leave Request</span>
+                        <span className={styles.postLeaveBadge}> Post-Leave Request</span>
                       )}
                     </div>
                   )}
 
                   {isPostLeave && (
                     <div className={styles.infoMessage}>
-                      ℹ️ This is a post-leave request. You are submitting this request after the leave has already been taken. 
+                       This is a post-leave request. You are submitting this request after the leave has already been taken. 
                       Please provide a justification explaining why the request was not submitted before or during the leave.
                     </div>
                   )}
@@ -480,23 +478,21 @@ export default function SubmitLeaveRequestPage() {
                     </label>
                     <div className={styles.fileUpload}>
                       <input
-                        type="file"
-                        id="attachment"
-                        className={styles.fileInput}
+                        type="file" id="attachment" className={styles.fileInput}
                         onChange={handleFileChange}
                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                       />
                       <label htmlFor="attachment" className={styles.fileLabel}>
                         {selectedFile ? (
                           <>
-                            <span className={styles.fileName}>📄 {selectedFile.name}</span>
+                            <span className={styles.fileName}> {selectedFile.name}</span>
                             <span className={styles.fileSize}>
                               ({(selectedFile.size / 1024).toFixed(1)} KB)
                             </span>
                           </>
                         ) : (
                           <>
-                            <span className={styles.uploadIcon}>📎</span>
+                            <span className={styles.uploadIcon}></span>
                             <span>Click to upload or drag and drop</span>
                             <span className={styles.fileHint}>PDF, DOC, DOCX, JPG, PNG (max 5MB)</span>
                           </>
@@ -515,16 +511,14 @@ export default function SubmitLeaveRequestPage() {
               {/* Submit Button */}
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.cancelButton}
+                  type="button" className={styles.cancelButton}
                   onClick={() => router.push('/dashboard/employee/leaves')}
                   disabled={submitting}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.submitButton}
+                  type="submit" className={styles.submitButton}
                   disabled={submitting || uploadingFile}
                 >
                   {submitting ? 'Submitting...' : uploadingFile ? 'Uploading...' : 'Submit Request'}

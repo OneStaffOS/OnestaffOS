@@ -3,7 +3,7 @@
  * Assign a position to an employee
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';

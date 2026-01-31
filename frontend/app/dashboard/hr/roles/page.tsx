@@ -4,7 +4,7 @@
  * Phase III: HR/Admin Processing & Master Data
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
@@ -125,9 +125,7 @@ export default function RolesPage() {
 
         <div className={styles.controls}>
           <input
-            type="text"
-            placeholder="Search employees..."
-            value={searchTerm}
+            type="text" placeholder="Search employees..." value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
           />
@@ -202,8 +200,7 @@ export default function RolesPage() {
                   {availableRoles.map(role => (
                     <label key={role} className={styles.roleCheckbox}>
                       <input
-                        type="checkbox"
-                        checked={selectedRoles.includes(role)}
+                        type="checkbox" checked={selectedRoles.includes(role)}
                         onChange={() => toggleRole(role)}
                       />
                       <span>{role}</span>

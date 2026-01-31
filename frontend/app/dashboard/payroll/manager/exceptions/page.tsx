@@ -137,7 +137,7 @@ export default function PayrollManagerExceptionsPage() {
           }}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle} style={{ color: 'white', fontSize: '32px' }}>
-                ⚠️ Escalated Exceptions Dashboard
+                 Escalated Exceptions Dashboard
               </h1>
               <p className={styles.pageSubtitle} style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px' }}>
                 Review and resolve payroll exceptions that require manager-level intervention
@@ -146,7 +146,7 @@ export default function PayrollManagerExceptionsPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
           {success && <div className={styles.successMessage}>{success}</div>}
 
           {/* Stats */}
@@ -207,12 +207,12 @@ export default function PayrollManagerExceptionsPage() {
                 marginBottom: '20px',
                 color: '#1f2937'
               }}>
-                📋 Payroll Runs Requiring Attention
+                 Payroll Runs Requiring Attention
               </h2>
 
               {runs.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <div className={styles.emptyStateIcon}>✅</div>
+                  <div className={styles.emptyStateIcon}></div>
                   <h3 className={styles.emptyStateTitle}>No Exceptions Found</h3>
                   <p className={styles.emptyStateDescription}>
                     All payroll runs are currently exception-free. Great work!
@@ -268,7 +268,7 @@ export default function PayrollManagerExceptionsPage() {
                               fontSize: '13px',
                               fontWeight: '700'
                             }}>
-                              ⚠️ {run.exceptions}
+                               {run.exceptions}
                             </span>
                           </td>
                           <td>{createdBy}</td>
@@ -287,7 +287,7 @@ export default function PayrollManagerExceptionsPage() {
                                 boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)'
                               }}
                             >
-                              🔍 Review Exceptions
+                               Review Exceptions
                             </button>
                           </td>
                         </tr>
@@ -337,7 +337,7 @@ export default function PayrollManagerExceptionsPage() {
                     fontWeight: '700',
                     color: '#dc2626'
                   }}>
-                    ⚠️ Exception Details: {selectedRun.runId}
+                     Exception Details: {selectedRun.runId}
                   </h2>
                   <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>
                     Period: {formatDate(selectedRun.payrollPeriod)} • Entity: {selectedRun.entity}
@@ -399,12 +399,12 @@ export default function PayrollManagerExceptionsPage() {
                               <td>
                                 {emp.hasBankAccount ? (
                                   emp.hasValidBank ? (
-                                    <span style={{ color: '#16a34a', fontSize: '13px' }}>✅ Valid</span>
+                                    <span style={{ color: '#16a34a', fontSize: '13px' }}> Valid</span>
                                   ) : (
-                                    <span style={{ color: '#dc2626', fontSize: '13px' }}>⚠️ Invalid</span>
+                                    <span style={{ color: '#dc2626', fontSize: '13px' }}> Invalid</span>
                                   )
                                 ) : (
-                                  <span style={{ color: '#f59e0b', fontSize: '13px' }}>⚠️ Missing</span>
+                                  <span style={{ color: '#f59e0b', fontSize: '13px' }}> Missing</span>
                                 )}
                               </td>
                               <td>
@@ -431,7 +431,7 @@ export default function PayrollManagerExceptionsPage() {
                       borderRadius: '4px'
                     }}>
                       <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#1e40af' }}>
-                        💡 Recommended Actions:
+                         Recommended Actions:
                       </h4>
                       <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#475569' }}>
                         <li>Review each exception reason carefully</li>

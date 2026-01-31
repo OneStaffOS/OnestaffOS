@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -169,7 +169,7 @@ export default function LeaveManagementDashboard() {
           }}>
             <div>
               <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '700', margin: 0, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                🏖️ Leave Management System
+                 Leave Management System
               </h1>
               <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', margin: 0 }}>
                 Comprehensive leave policy configuration and management
@@ -216,7 +216,7 @@ export default function LeaveManagementDashboard() {
               boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
               transition: 'all 0.3s ease',
             }}>
-              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>📁 Leave Categories</div>
+              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Leave Categories</div>
               <div style={{ color: 'white', fontSize: '3rem', fontWeight: '700', lineHeight: 1 }}>{loading ? '-' : stats.totalCategories}</div>
             </div>
             <div style={{
@@ -226,7 +226,7 @@ export default function LeaveManagementDashboard() {
               boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
               transition: 'all 0.3s ease',
             }}>
-              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>📄 Leave Types</div>
+              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Leave Types</div>
               <div style={{ color: 'white', fontSize: '3rem', fontWeight: '700', lineHeight: 1 }}>{loading ? '-' : stats.totalLeaveTypes}</div>
             </div>
             <div style={{
@@ -236,7 +236,7 @@ export default function LeaveManagementDashboard() {
               boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)',
               transition: 'all 0.3s ease',
             }}>
-              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>📋 Policies Configured</div>
+              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Policies Configured</div>
               <div style={{ color: 'white', fontSize: '3rem', fontWeight: '700', lineHeight: 1 }}>{loading ? '-' : stats.totalPolicies}</div>
             </div>
             <div style={{
@@ -246,7 +246,7 @@ export default function LeaveManagementDashboard() {
               boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
               transition: 'all 0.3s ease',
             }}>
-              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>⏳ Pending Requests</div>
+              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Pending Requests</div>
               <div style={{ color: 'white', fontSize: '3rem', fontWeight: '700', lineHeight: 1 }}>{loading ? '-' : stats.pendingRequests}</div>
             </div>
             <div style={{
@@ -256,7 +256,7 @@ export default function LeaveManagementDashboard() {
               boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
               transition: 'all 0.3s ease',
             }}>
-              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✅ Approved This Month</div>
+              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Approved This Month</div>
               <div style={{ color: 'white', fontSize: '3rem', fontWeight: '700', lineHeight: 1 }}>{loading ? '-' : stats.approvedThisMonth}</div>
             </div>
             <div style={{
@@ -266,7 +266,7 @@ export default function LeaveManagementDashboard() {
               boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
               transition: 'all 0.3s ease',
             }}>
-              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>📅 Current Leave Year</div>
+              <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}> Current Leave Year</div>
               <div style={{ color: 'white', fontSize: '3rem', fontWeight: '700', lineHeight: 1 }}>{stats.currentYear}</div>
             </div>
           </div>

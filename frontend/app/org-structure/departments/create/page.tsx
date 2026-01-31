@@ -3,7 +3,7 @@
  * System Admin can define and create new departments
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

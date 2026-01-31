@@ -3,7 +3,7 @@
  * REQ-AE-03, REQ-AE-04: Complete structured appraisal ratings with comments and recommendations
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
@@ -255,8 +255,7 @@ export default function ManagerAppraisalFormPage() {
           <div className={styles.inputGroup} style={{ marginBottom: 24 }}>
             <label className={styles.inputLabel} htmlFor="employeeSelect">Select Employee:</label>
             <select
-              id="employeeSelect"
-              value={currentEmployeeId}
+              id="employeeSelect" value={currentEmployeeId}
               onChange={e => setSelectedEmployeeId(e.target.value)}
               disabled={isReadOnly}
               className={styles.select}
@@ -332,8 +331,7 @@ export default function ManagerAppraisalFormPage() {
                   <label className={styles.ratingLabel}>Rating:</label>
                   <div className={styles.ratingControl}>
                     <input
-                      type="range"
-                      min={assignment.templateId.ratingScale.min}
+                      type="range" min={assignment.templateId.ratingScale.min}
                       max={assignment.templateId.ratingScale.max}
                       step={assignment.templateId.ratingScale.step || 1}
                       value={rating.ratingValue}

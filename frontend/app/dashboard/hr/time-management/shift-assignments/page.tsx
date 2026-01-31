@@ -81,7 +81,7 @@ export default function ShiftAssignmentsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📋 Shift Assignments</h1>
+              <h1 className={styles.pageTitle}> Shift Assignments</h1>
               <p className={styles.pageSubtitle}>
                 Manage employee, department, and position shift assignments
               </p>
@@ -91,7 +91,7 @@ export default function ShiftAssignmentsPage() {
                 className={styles.btnPrimary}
                 onClick={() => router.push('/dashboard/hr/time-management/shift-assignments/create')}
               >
-                ➕ Create Assignment
+                 Create Assignment
               </button>
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function ShiftAssignmentsPage() {
             <Spinner message="Loading assignments..." />
           ) : assignments.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📋</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Assignments</h3>
               <p>Create your first shift assignment to get started.</p>
             </div>

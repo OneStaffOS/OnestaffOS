@@ -156,13 +156,13 @@ export default function PayslipDetailPage({ params }: PageProps) {
             </Link>
             <div className={styles.actionButtons}>
               <button className={styles.btnDownload} onClick={downloadPayslip}>
-                📥 Download / Print
+                 Download / Print
               </button>
               <button
                 className={styles.btnDispute}
                 onClick={() => router.push(`/dashboard/employee/payroll/dispute?payslipId=${payslipId}`)}
               >
-                ⚠️ Dispute This Payslip
+                 Dispute This Payslip
               </button>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function PayslipDetailPage({ params }: PageProps) {
 
             {/* Earnings Section */}
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>💰 Earnings</h3>
+              <h3 className={styles.sectionTitle}> Earnings</h3>
               
               {/* Base Salary - REQ-PY-3 */}
               <div className={styles.lineItem}>
@@ -294,7 +294,7 @@ export default function PayslipDetailPage({ params }: PageProps) {
 
             {/* Deductions Section */}
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>📉 Deductions</h3>
+              <h3 className={styles.sectionTitle}> Deductions</h3>
 
               {/* Taxes - REQ-PY-8 */}
               {payslip.deductionsDetails.taxes && payslip.deductionsDetails.taxes.length > 0 && (
@@ -400,7 +400,7 @@ export default function PayslipDetailPage({ params }: PageProps) {
 
           {/* Additional Information - REQ-PY-14 */}
           <div className={styles.additionalInfo}>
-            <h3>📋 Employer Contributions & Benefits</h3>
+            <h3> Employer Contributions & Benefits</h3>
             <p className={styles.infoText}>
               In addition to your net salary, your employer contributes to your insurance, pension, and other benefits.
               For detailed information about employer contributions, please contact the HR department.

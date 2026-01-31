@@ -156,7 +156,7 @@ export default function SalaryHistoryPage() {
             </Link>
             <div className={styles.controls}>
               <button className={styles.btnExport} onClick={exportToCSV}>
-                📥 Export to CSV
+                 Export to CSV
               </button>
             </div>
           </div>
@@ -164,28 +164,28 @@ export default function SalaryHistoryPage() {
           {/* Stats Grid */}
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>💰</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Total Paid (All Time)</div>
                 <div className={styles.statValue}>{formatCurrency(stats.totalPaid)}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📊</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Average Net Pay</div>
                 <div className={styles.statValue}>{formatCurrency(stats.averageNet)}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📈</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Highest Net Pay</div>
                 <div className={styles.statValue}>{formatCurrency(stats.highestNet)}</div>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📉</div>
+              <div className={styles.statIcon}></div>
               <div className={styles.statContent}>
                 <div className={styles.statLabel}>Lowest Net Pay</div>
                 <div className={styles.statValue}>{formatCurrency(stats.lowestNet)}</div>
@@ -200,13 +200,13 @@ export default function SalaryHistoryPage() {
                 className={`${styles.viewTab} ${viewMode === 'table' ? styles.activeTab : ''}`}
                 onClick={() => setViewMode('table')}
               >
-                📋 Table View
+                 Table View
               </button>
               <button
                 className={`${styles.viewTab} ${viewMode === 'chart' ? styles.activeTab : ''}`}
                 onClick={() => setViewMode('chart')}
               >
-                📊 Chart View
+                 Chart View
               </button>
             </div>
             <div className={styles.sortControls}>
@@ -227,7 +227,7 @@ export default function SalaryHistoryPage() {
 
           {!error && payslips.length === 0 && (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>📭</div>
+              <div className={styles.emptyIcon}></div>
               <h3>No Salary History</h3>
               <p>You don't have any payslips yet.</p>
             </div>

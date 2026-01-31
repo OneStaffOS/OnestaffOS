@@ -131,7 +131,7 @@ export default function DisputePage() {
 
           {/* Info Banner */}
           <div className={styles.infoBanner}>
-            <div className={styles.infoIcon}>ℹ️</div>
+            <div className={styles.infoIcon}></div>
             <div className={styles.infoContent}>
               <h4>How to Submit a Dispute</h4>
               <p>
@@ -145,7 +145,7 @@ export default function DisputePage() {
           {/* Success Message */}
           {success && (
             <div className={styles.successMessage}>
-              ✅ Dispute submitted successfully! Redirecting to My Disputes...
+               Dispute submitted successfully! Redirecting to My Disputes...
             </div>
           )}
 
@@ -218,8 +218,7 @@ export default function DisputePage() {
                   className={styles.textarea}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Please provide a detailed description of the error or discrepancy you found in your payslip. Include specific amounts, categories, or calculations that you believe are incorrect."
-                  rows={6}
+                  placeholder="Please provide a detailed description of the error or discrepancy you found in your payslip. Include specific amounts, categories, or calculations that you believe are incorrect." rows={6}
                   required
                   disabled={loading}
                 />
@@ -241,15 +240,14 @@ export default function DisputePage() {
               {/* Action Buttons */}
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnCancel}
+                  type="button" className={styles.btnCancel}
                   onClick={() => router.push('/dashboard/employee/payroll/my-payslips')}
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button type="submit" className={styles.btnSubmit} disabled={loading}>
-                  {loading ? 'Submitting...' : '⚠️ Submit Dispute'}
+                  {loading ? 'Submitting...' : 'Submit Dispute'}
                 </button>
               </div>
             </div>

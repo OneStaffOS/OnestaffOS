@@ -7,7 +7,7 @@
  * Phase III: HR/Admin Processing & Master Data
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -213,9 +213,7 @@ export default function HREmployeesPage() {
         <div className={styles.controlsBar}>
           <div className={styles.searchBox}>
             <input
-              type="text"
-              placeholder="Search by name, ID, email, or position..."
-              className={styles.searchInput}
+              type="text" placeholder="Search by name, ID, email, or position..." className={styles.searchInput}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

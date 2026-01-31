@@ -4,7 +4,7 @@
  * Accessible by: Employees
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -257,7 +257,7 @@ export default function EmployeeLeavesPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📅 My Leave Management</h1>
+              <h1 className={styles.title}> My Leave Management</h1>
               <p className={styles.subtitle}>View your leave requests and balances</p>
             </div>
             <div className={styles.headerActions}>
@@ -353,8 +353,7 @@ export default function EmployeeLeavesPage() {
                   <div className={styles.filterGroup}>
                     <label>From:</label>
                     <input
-                      type="date"
-                      value={dateFromFilter}
+                      type="date" value={dateFromFilter}
                       onChange={(e) => setDateFromFilter(e.target.value)}
                       className={styles.filterInput}
                     />
@@ -362,8 +361,7 @@ export default function EmployeeLeavesPage() {
                   <div className={styles.filterGroup}>
                     <label>To:</label>
                     <input
-                      type="date"
-                      value={dateToFilter}
+                      type="date" value={dateToFilter}
                       onChange={(e) => setDateToFilter(e.target.value)}
                       className={styles.filterInput}
                     />
@@ -392,7 +390,7 @@ export default function EmployeeLeavesPage() {
               {/* Requests List */}
               {filteredAndSortedRequests.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <span className={styles.emptyIcon}>📋</span>
+                  <span className={styles.emptyIcon}></span>
                   <h3>No Leave Requests</h3>
                   <p>{requests.length > 0 ? 'No requests match your filters.' : "You haven't submitted any leave requests yet."}</p>
                   {requests.length === 0 && (
@@ -420,7 +418,7 @@ export default function EmployeeLeavesPage() {
 
                       <div className={styles.requestDetails}>
                         <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>📆 Dates:</span>
+                          <span className={styles.detailLabel}> Dates:</span>
                           <span className={styles.detailValue}>
                             {formatDate(request.dates.from)} - {formatDate(request.dates.to)}
                             {isPostLeave(request) && (
@@ -429,17 +427,17 @@ export default function EmployeeLeavesPage() {
                           </span>
                         </div>
                         <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>⏱️ Duration:</span>
+                          <span className={styles.detailLabel}> Duration:</span>
                           <span className={styles.detailValue}>{request.durationDays} day(s)</span>
                         </div>
                         {request.justification && (
                           <div className={styles.detailRow}>
-                            <span className={styles.detailLabel}>📝 Reason:</span>
+                            <span className={styles.detailLabel}> Reason:</span>
                             <span className={styles.detailValue}>{request.justification}</span>
                           </div>
                         )}
                         <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>🕐 Submitted:</span>
+                          <span className={styles.detailLabel}> Submitted:</span>
                           <span className={styles.detailValue}>{formatDate(request.createdAt)}</span>
                         </div>
                       </div>
@@ -452,7 +450,7 @@ export default function EmployeeLeavesPage() {
                             {request.approvalFlow.map((step, index) => (
                               <div key={index} className={styles.approvalStep}>
                                 <span className={`${styles.stepStatus} ${styles[`step${step.status}`]}`}>
-                                  {step.status === 'approved' ? '✓' : step.status === 'rejected' ? '✗' : '○'}
+                                  {step.status === 'approved' ? '' : step.status === 'rejected' ? '' : ''}
                                 </span>
                                 <span className={styles.stepRole}>{step.role}</span>
                               </div>
@@ -468,14 +466,14 @@ export default function EmployeeLeavesPage() {
                             className={styles.editButton}
                             onClick={() => router.push(`/dashboard/employee/leaves/edit/${request._id}`)}
                           >
-                            ✏️ Modify
+                             Modify
                           </button>
                           <button
                             className={styles.cancelButton}
                             onClick={() => handleCancelRequest(request._id)}
                             disabled={cancellingId === request._id}
                           >
-                            {cancellingId === request._id ? 'Cancelling...' : '❌ Cancel'}
+                            {cancellingId === request._id ? 'Cancelling...' : 'Cancel'}
                           </button>
                         </div>
                       )}
@@ -489,7 +487,7 @@ export default function EmployeeLeavesPage() {
             <div className={styles.balancesSection}>
               {/* Total Balance Overview */}
               <div className={styles.balanceOverview}>
-                <h2 className={styles.sectionTitle}>📊 Leave Balance Overview</h2>
+                <h2 className={styles.sectionTitle}> Leave Balance Overview</h2>
                 <div className={styles.overviewStats}>
                   <div className={styles.overviewStat}>
                     <span className={styles.overviewValue}>
@@ -522,7 +520,7 @@ export default function EmployeeLeavesPage() {
               <div className={styles.balancesGrid}>
                 {balances.length === 0 ? (
                   <div className={styles.emptyState}>
-                    <span className={styles.emptyIcon}>📊</span>
+                    <span className={styles.emptyIcon}></span>
                     <h3>No Leave Entitlements</h3>
                     <p>You don&apos;t have any leave entitlements assigned yet. Please contact HR.</p>
                   </div>

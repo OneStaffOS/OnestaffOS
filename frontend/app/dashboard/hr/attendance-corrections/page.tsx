@@ -73,7 +73,7 @@ export default function HrAttendanceCorrectionsPage() {
             boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)'
           }}>
             <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '700', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              ⏰ Attendance Correction Requests
+               Attendance Correction Requests
             </h1>
           </div>
 
@@ -86,7 +86,7 @@ export default function HrAttendanceCorrectionsPage() {
                 textAlign: 'center',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
               }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📋</div>
+                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}></div>
                 <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#374151', marginBottom: '0.75rem' }}>No Correction Requests</h2>
                 <p style={{ fontSize: '1.05rem', color: '#6b7280', margin: 0 }}>There are no attendance correction requests at this time.</p>
               </div>
@@ -154,7 +154,7 @@ export default function HrAttendanceCorrectionsPage() {
                           onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
                           onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                         >
-                          ✓ Approve
+                           Approve
                         </button>
                         <button
                           onClick={() => process(rq._id, 'REJECTED')}
@@ -173,7 +173,7 @@ export default function HrAttendanceCorrectionsPage() {
                           onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
                           onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                         >
-                          ✗ Reject
+                           Reject
                         </button>
                       </div>
                     )}

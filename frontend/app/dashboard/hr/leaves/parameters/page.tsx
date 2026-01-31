@@ -4,7 +4,7 @@
  * Accessible by: HR Admin, System Admin
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -259,23 +259,19 @@ export default function LeaveParametersPage() {
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Max Duration (days)</label>
                       <input
-                        type="number"
-                        className={styles.input}
+                        type="number" className={styles.input}
                         value={formData.maxDurationDays}
                         onChange={(e) => setFormData({ ...formData, maxDurationDays: parseInt(e.target.value) || 0 })}
-                        min="0"
-                        placeholder="0 = unlimited"
+                        min="0" placeholder="0 = unlimited"
                       />
                     </div>
                     <div className={styles.formGroup}>
                       <label className={styles.label}>Min Notice (days)</label>
                       <input
-                        type="number"
-                        className={styles.input}
+                        type="number" className={styles.input}
                         value={formData.minNoticeDays}
                         onChange={(e) => setFormData({ ...formData, minNoticeDays: e.target.value })}
-                        min="0"
-                        placeholder="Enter minimum notice days"
+                        min="0" placeholder="Enter minimum notice days"
                       />
                     </div>
                   </div>
@@ -283,12 +279,10 @@ export default function LeaveParametersPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Max Consecutive Days</label>
                     <input
-                      type="number"
-                      className={styles.input}
+                      type="number" className={styles.input}
                       value={formData.maxConsecutiveDays}
                       onChange={(e) => setFormData({ ...formData, maxConsecutiveDays: e.target.value })}
-                      min="0"
-                      placeholder="Enter max consecutive days (0 = unlimited)"
+                      min="0" placeholder="Enter max consecutive days (0 = unlimited)"
                     />
                   </div>
                 </div>

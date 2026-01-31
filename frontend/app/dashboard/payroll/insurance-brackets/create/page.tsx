@@ -99,14 +99,14 @@ export default function CreateInsuranceBracketPage() {
 
           {/* Header */}
           <div className={styles.pageHeader}>
-            <h1 className={styles.pageTitle}>🛡️ Create Insurance Bracket</h1>
+            <h1 className={styles.pageTitle}> Create Insurance Bracket</h1>
             <p className={styles.pageSubtitle}>
               Define social or health insurance rates based on salary range
             </p>
           </div>
 
           {/* Error */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Form */}
           <div className={styles.formCard}>
@@ -114,13 +114,10 @@ export default function CreateInsuranceBracketPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Insurance Name *</label>
                 <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
+                  type="text" name="name" value={formData.name}
                   onChange={handleChange}
                   className={styles.formInput}
-                  placeholder="e.g., Social Insurance Bracket A"
-                  required
+                  placeholder="e.g., Social Insurance Bracket A" required
                 />
                 <span className={styles.formHint}>
                   A descriptive name for this insurance bracket
@@ -131,15 +128,10 @@ export default function CreateInsuranceBracketPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Minimum Salary (EGP) *</label>
                   <input
-                    type="number"
-                    name="minSalary"
-                    value={formData.minSalary}
+                    type="number" name="minSalary" value={formData.minSalary}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 0"
-                    min="0"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 0" min="0" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Lower bound of salary range (inclusive)
@@ -149,15 +141,10 @@ export default function CreateInsuranceBracketPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Maximum Salary (EGP) *</label>
                   <input
-                    type="number"
-                    name="maxSalary"
-                    value={formData.maxSalary}
+                    type="number" name="maxSalary" value={formData.maxSalary}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 5000"
-                    min="0"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 5000" min="0" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Upper bound of salary range (inclusive)
@@ -169,16 +156,10 @@ export default function CreateInsuranceBracketPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Employee Contribution Rate (%) *</label>
                   <input
-                    type="number"
-                    name="employeeRate"
-                    value={formData.employeeRate}
+                    type="number" name="employeeRate" value={formData.employeeRate}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 11"
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 11" min="0" max="100" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Percentage deducted from employee&apos;s gross salary
@@ -188,16 +169,10 @@ export default function CreateInsuranceBracketPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Employer Contribution Rate (%) *</label>
                   <input
-                    type="number"
-                    name="employerRate"
-                    value={formData.employerRate}
+                    type="number" name="employerRate" value={formData.employerRate}
                     onChange={handleChange}
                     className={styles.formInput}
-                    placeholder="e.g., 18.75"
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    required
+                    placeholder="e.g., 18.75" min="0" max="100" step="0.01" required
                   />
                   <span className={styles.formHint}>
                     Percentage paid by employer on top of salary
@@ -207,7 +182,7 @@ export default function CreateInsuranceBracketPage() {
 
               {/* Info Box */}
               <div className={styles.infoBox}>
-                <h4>ℹ️ Insurance Bracket Guidelines</h4>
+                <h4> Insurance Bracket Guidelines</h4>
                 <ul>
                   <li>Insurance brackets will be created in <strong>Draft</strong> status</li>
                   <li>A manager must approve the bracket before it becomes active</li>
@@ -218,15 +193,13 @@ export default function CreateInsuranceBracketPage() {
 
               <div className={styles.formActions}>
                 <button 
-                  type="button" 
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.back()}
                 >
                   Cancel
                 </button>
                 <button 
-                  type="submit" 
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={loading}
                 >
                   {loading ? 'Creating...' : 'Create Insurance Bracket'}

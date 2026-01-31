@@ -95,12 +95,12 @@ export default function EditTaxRulePage() {
           </Link>
 
           <div className={styles.formContainer}>
-            <h1 className={styles.formTitle}>✏️ Edit Tax Rule</h1>
+            <h1 className={styles.formTitle}> Edit Tax Rule</h1>
             <p className={styles.formSubtitle}>
               Update the tax rule details. Only draft entries can be edited.
             </p>
 
-            {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+            {error && <div className={styles.errorMessage}> {error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -108,13 +108,10 @@ export default function EditTaxRulePage() {
                   Tax Rule Name <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="text"
-                  name="name"
-                  className={styles.formInput}
+                  type="text" name="name" className={styles.formInput}
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="e.g., Income Tax"
-                  required
+                  placeholder="e.g., Income Tax" required
                 />
                 <span className={styles.formHint}>A unique name for the tax rule</span>
               </div>
@@ -124,15 +121,10 @@ export default function EditTaxRulePage() {
                   Tax Rate (%) <span className={styles.required}>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="rate"
-                  className={styles.formInput}
+                  type="number" name="rate" className={styles.formInput}
                   value={formData.rate}
                   onChange={handleChange}
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  required
+                  min="0" max="100" step="0.01" required
                 />
                 <span className={styles.formHint}>Tax rate as a percentage (0-100)</span>
               </div>
@@ -142,8 +134,7 @@ export default function EditTaxRulePage() {
                   Description
                 </label>
                 <textarea
-                  name="description"
-                  className={styles.formTextarea}
+                  name="description" className={styles.formTextarea}
                   value={formData.description}
                   onChange={handleChange}
                   placeholder="Describe the tax rule..."
@@ -153,19 +144,17 @@ export default function EditTaxRulePage() {
 
               <div className={styles.formActions}>
                 <button
-                  type="button"
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll/tax-rules')}
                   disabled={saving}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={saving}
                 >
-                  {saving ? 'Saving...' : '💾 Save Changes'}
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>

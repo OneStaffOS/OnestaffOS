@@ -4,7 +4,7 @@
  * Supports: Template creation, Cycle management, Team appraisals, Progress monitoring
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -220,7 +220,7 @@ export default function ManagerDashboard() {
             boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)'
           }}>
             <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '700', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              👔 Manager Dashboard
+               Manager Dashboard
             </h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', margin: '0.5rem 0 0 0' }}>
               Performance appraisals, team management, and leave approvals
@@ -299,7 +299,7 @@ export default function ManagerDashboard() {
               <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Awaiting completion</span>
               {stats.overdue > 0 && (
                 <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(220, 38, 38, 0.3)', borderRadius: '8px', fontWeight: '700', fontSize: '0.9rem' }}>
-                  ⚠️ {stats.overdue} overdue
+                   {stats.overdue} overdue
                 </div>
               )}
               <button 
@@ -432,7 +432,7 @@ export default function ManagerDashboard() {
               <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Pending approval</span>
               {stats.pendingLeaveRequests > 0 && (
                 <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(245, 158, 11, 0.3)', borderRadius: '8px', fontWeight: '700', fontSize: '0.9rem' }}>
-                  📋 {stats.pendingLeaveRequests} awaiting review
+                   {stats.pendingLeaveRequests} awaiting review
                 </div>
               )}
               <button 
@@ -482,7 +482,7 @@ export default function ManagerDashboard() {
                 alignItems: 'center',
                 gap: '0.75rem'
               }}>
-                ⚡ Quick Actions
+                 Quick Actions
               </h2>
               <p style={{ fontSize: '1rem', color: '#6b7280', marginBottom: '1.5rem' }}>
                 Access frequently used management tools and features
@@ -497,7 +497,7 @@ export default function ManagerDashboard() {
                   marginBottom: '1.5rem', 
                   boxShadow: '0 4px 12px rgba(245, 158, 11, 0.2)' 
                 }}>
-                  <strong style={{ color: '#92400e', fontSize: '1.05rem' }}>⚠️ Missed punch alerts</strong>
+                  <strong style={{ color: '#92400e', fontSize: '1.05rem' }}> Missed punch alerts</strong>
                   <div style={{ fontSize: '0.95rem', color: '#92400e', marginTop: '0.25rem' }}>
                     You have missed-punch notifications in your inbox. <button onClick={() => router.push('/dashboard/manager/inbox')} style={{ textDecoration: 'underline', background: 'transparent', border: 'none', color: '#92400e', cursor: 'pointer', fontWeight: '600' }}>Open inbox</button>
                   </div>
@@ -577,7 +577,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📊 Performance Dashboard
+                 Performance Dashboard
               </button>
               
               {/* REQ-020, REQ-021, REQ-022: Leave Request Management */}
@@ -599,7 +599,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                🏖️ Leave Requests
+                 Leave Requests
               </button>
               
               {/* REQ-034, REQ-035: Team Leave Balances & Management */}
@@ -621,7 +621,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📅 Team Leave Balances
+                 Team Leave Balances
               </button>
               
               {/* REQ-AE-03: Team management */}
@@ -643,7 +643,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                👥 View Team
+                 View Team
               </button>
 
               {/* Time Exception Approval */}
@@ -665,7 +665,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                ⏰ Review Time Exceptions
+                 Review Time Exceptions
               </button>
 
               {/* Correction Requests (Manager) */}
@@ -687,7 +687,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                ✏️ Correction Requests
+                 Correction Requests
               </button>
 
               {/* Repeated Lateness Alerts (Department Head) */}
@@ -709,7 +709,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                🚨 Repeated Lateness Alerts
+                 Repeated Lateness Alerts
               </button>
 
               {/* Team Appraisals: consolidated view for dept-head ratings */}
@@ -731,7 +731,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📝 Team Appraisals
+                 Team Appraisals
               </button>
 
               {/* US-6: Manual Attendance Correction (Department Head only) */}
@@ -754,7 +754,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  🔧 Manual Attendance Correction
+                   Manual Attendance Correction
                 </button>
               )}
               
@@ -778,7 +778,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📈 Monitor Progress
+                   Monitor Progress
                 </button>
               )}
               
@@ -802,7 +802,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  🔔 Send Reminders ({stats.overdue} overdue)
+                   Send Reminders ({stats.overdue} overdue)
                 </button>
               )}
               
@@ -826,7 +826,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  ⚖️ Resolve Disputes ({stats.disputes})
+                   Resolve Disputes ({stats.disputes})
                 </button>
               )}
               
@@ -849,7 +849,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📊 Reports & Analytics
+                 Reports & Analytics
               </button>
 
               {/* Post Announcement / Leader Composer */}
@@ -871,7 +871,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📢 Post Announcement
+                 Post Announcement
               </button>
 
               {/* Manager Inbox */}
@@ -893,7 +893,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📬 Inbox
+                 Inbox
               </button>
 
               {/* REQ-OSM-03: Request Organizational Changes */}
@@ -915,7 +915,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                🏗️ Request Position/Team Change
+                 Request Position/Team Change
               </button>
 
               {/* REQ-OSM-03: View My Change Requests */}
@@ -937,7 +937,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                📋 My Change Requests
+                 My Change Requests
               </button>
             </div>
             </div>
@@ -967,7 +967,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📄 Create Template
+                   Create Template
                 </button>
                 
                 {/* REQ-PP-02: Cycle creation */}
@@ -989,7 +989,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  🔄 Create Cycle
+                   Create Cycle
                 </button>
                 
                 {/* REQ-PP-02, REQ-PP-05: Cycle and assignment management */}
@@ -1011,7 +1011,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  ⚙️ Manage Cycles
+                   Manage Cycles
                 </button>
                 
                 {/* REQ-AE-10: Consolidated view */}
@@ -1033,7 +1033,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📊 Consolidated Dashboard
+                   Consolidated Dashboard
                 </button>
                 
                 {/* REQ-OD-05: View archived records */}
@@ -1055,7 +1055,7 @@ export default function ManagerDashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  📦 View Archived Records
+                   View Archived Records
                 </button>
               </div>
             </div>
@@ -1070,7 +1070,7 @@ export default function ManagerDashboard() {
               padding: '2rem',
               boxShadow: '0 4px 12px rgba(220, 38, 38, 0.2)'
             }}>
-              <h2 style={{ color: '#dc2626', fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.75rem' }}>⚠️ Attention Required</h2>
+              <h2 style={{ color: '#dc2626', fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.75rem' }}> Attention Required</h2>
               <p style={{ marginBottom: '1.5rem', color: '#991b1b', fontSize: '1.05rem' }}>
                 You have {stats.overdue} overdue performance appraisal{stats.overdue > 1 ? 's' : ''} that need immediate attention.
               </p>
@@ -1091,7 +1091,7 @@ export default function ManagerDashboard() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                🚨 Review Overdue Items
+                 Review Overdue Items
               </button>
             </div>
           )}

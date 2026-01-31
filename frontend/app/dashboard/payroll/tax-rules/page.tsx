@@ -128,7 +128,7 @@ export default function TaxRulesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>🏛️ Tax Rules</h1>
+              <h1 className={styles.pageTitle}> Tax Rules</h1>
               <p className={styles.pageSubtitle}>
                 Configure tax rates and rules for payroll deductions
               </p>
@@ -139,15 +139,15 @@ export default function TaxRulesPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/tax-rules/create')}
                 >
-                  ➕ Create Tax Rule
+                   Create Tax Rule
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -172,7 +172,7 @@ export default function TaxRulesPage() {
           {/* Pending Approvals Section */}
           {canApprove && pendingRules.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingRules.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingRules.length})</h3>
               <div className={styles.approvalList}>
                 {pendingRules.map(rule => (
                   <div key={rule._id} className={styles.approvalItem}>
@@ -188,13 +188,13 @@ export default function TaxRulesPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(rule._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(rule._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -224,7 +224,7 @@ export default function TaxRulesPage() {
             <Spinner message="Loading tax rules..." />
           ) : taxRules.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>🏛️</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Tax Rules Found</h3>
               <p>Create your first tax rule to get started.</p>
               {canCreate && (
@@ -233,7 +233,7 @@ export default function TaxRulesPage() {
                   onClick={() => router.push('/dashboard/payroll/tax-rules/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Tax Rule
+                   Create Tax Rule
                 </button>
               )}
             </div>

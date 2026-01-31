@@ -3,7 +3,7 @@
  * Allows employees to submit resignation requests
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -101,8 +101,7 @@ export default function ResignationPage() {
             <div className={styles.formGroup}>
               <label htmlFor="reason">Reason for Resignation *</label>
               <select
-                id="reason"
-                value={reason}
+                id="reason" value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 required
                 className={styles.select}
@@ -122,8 +121,7 @@ export default function ResignationPage() {
             <div className={styles.formGroup}>
               <label htmlFor="comments">Additional Comments</label>
               <textarea
-                id="comments"
-                value={employeeComments}
+                id="comments" value={employeeComments}
                 onChange={(e) => setEmployeeComments(e.target.value)}
                 rows={5}
                 className={styles.textarea}
@@ -134,9 +132,7 @@ export default function ResignationPage() {
             <div className={styles.formGroup}>
               <label htmlFor="terminationDate">Proposed Last Working Day</label>
               <input
-                type="date"
-                id="terminationDate"
-                value={terminationDate}
+                type="date" id="terminationDate" value={terminationDate}
                 onChange={(e) => setTerminationDate(e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
                 className={styles.input}
@@ -145,7 +141,7 @@ export default function ResignationPage() {
             </div>
 
             <div className={styles.info}>
-              <h3>📋 What happens next?</h3>
+              <h3> What happens next?</h3>
               <ul>
                 <li>HR will review your resignation request</li>
                 <li>You will be notified of the status via email and notifications</li>
@@ -157,15 +153,13 @@ export default function ResignationPage() {
 
             <div className={styles.actions}>
               <button
-                type="button"
-                onClick={() => router.back()}
+                type="button" onClick={() => router.back()}
                 className={styles.cancelButton}
               >
                 Cancel
               </button>
               <button
-                type="submit"
-                disabled={submitting}
+                type="submit" disabled={submitting}
                 className={styles.submitButton}
               >
                 {submitting ? 'Submitting...' : 'Submit Resignation'}

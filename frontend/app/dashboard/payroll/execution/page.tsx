@@ -77,7 +77,7 @@ export default function PayrollExecutionDashboard() {
       id: 'payroll-runs',
       title: 'Payroll Runs',
       description: 'Create, manage, and process monthly payroll runs with automated calculations.',
-      icon: '💰',
+      icon: '',
       path: '/dashboard/payroll/execution/runs',
       stats: [
         { label: 'Total Runs', value: stats?.totalRuns || 0 },
@@ -88,7 +88,7 @@ export default function PayrollExecutionDashboard() {
       id: 'signing-bonuses',
       title: 'Signing Bonuses',
       description: 'Review and approve signing bonuses for new hires before payroll processing.',
-      icon: '✍️',
+      icon: '',
       path: '/dashboard/payroll/execution/signing-bonuses',
       stats: [
         { label: 'Pending', value: stats?.pendingBonuses || 0 },
@@ -98,7 +98,7 @@ export default function PayrollExecutionDashboard() {
       id: 'termination-benefits',
       title: 'Termination Benefits',
       description: 'Review and approve end-of-service benefits for terminated or resigned employees.',
-      icon: '📤',
+      icon: '',
       path: '/dashboard/payroll/execution/termination-benefits',
       stats: [
         { label: 'Pending', value: stats?.pendingBenefits || 0 },
@@ -108,7 +108,7 @@ export default function PayrollExecutionDashboard() {
       id: 'payslips',
       title: 'Payslips',
       description: 'View, generate, and distribute employee payslips for completed payroll runs.',
-      icon: '📄',
+      icon: '',
       path: '/dashboard/payroll/execution/payslips',
       stats: [],
     },
@@ -126,7 +126,7 @@ export default function PayrollExecutionDashboard() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>💼 Payroll Execution & Processing</h1>
+              <h1 className={styles.pageTitle}> Payroll Execution & Processing</h1>
               <p className={styles.pageSubtitle}>
                 Manage payroll runs, approve bonuses and benefits, and generate payslips
               </p>
@@ -134,7 +134,7 @@ export default function PayrollExecutionDashboard() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -161,7 +161,7 @@ export default function PayrollExecutionDashboard() {
           {/* Pending Approvals Alert */}
           {((stats?.pendingBonuses || 0) > 0 || (stats?.pendingBenefits || 0) > 0) && (
             <div className={styles.warningMessage}>
-              ⚠️ You have {(stats?.pendingBonuses || 0) + (stats?.pendingBenefits || 0)} pending 
+               You have {(stats?.pendingBonuses || 0) + (stats?.pendingBenefits || 0)} pending 
               approvals that need review before processing payroll
             </div>
           )}
@@ -201,20 +201,20 @@ export default function PayrollExecutionDashboard() {
                 className={styles.btnPrimary}
                 onClick={() => router.push('/dashboard/payroll/execution/runs/create')}
               >
-                ➕ Create New Payroll Run
+                 Create New Payroll Run
               </button>
               <button
                 className={styles.btnSecondary}
                 onClick={() => router.push('/dashboard/payroll/execution/runs')}
               >
-                📋 View All Payroll Runs
+                 View All Payroll Runs
               </button>
               {((stats?.pendingBonuses || 0) > 0) && (
                 <button
                   className={styles.btnWarning}
                   onClick={() => router.push('/dashboard/payroll/execution/signing-bonuses')}
                 >
-                  ✍️ Review Signing Bonuses ({stats?.pendingBonuses})
+                   Review Signing Bonuses ({stats?.pendingBonuses})
                 </button>
               )}
               {((stats?.pendingBenefits || 0) > 0) && (
@@ -222,7 +222,7 @@ export default function PayrollExecutionDashboard() {
                   className={styles.btnWarning}
                   onClick={() => router.push('/dashboard/payroll/execution/termination-benefits')}
                 >
-                  📤 Review Termination Benefits ({stats?.pendingBenefits})
+                   Review Termination Benefits ({stats?.pendingBenefits})
                 </button>
               )}
             </div>

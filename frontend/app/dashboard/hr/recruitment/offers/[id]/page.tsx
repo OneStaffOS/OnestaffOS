@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -291,20 +291,14 @@ export default function OfferDetailPage() {
               <div className={styles.approvalOptions}>
                 <label className={styles.radioLabel}>
                   <input
-                    type="radio"
-                    name="approvalStatus"
-                    value="approved"
-                    checked={approvalStatus === 'approved'}
+                    type="radio" name="approvalStatus" value="approved" checked={approvalStatus === 'approved'}
                     onChange={() => setApprovalStatus('approved')}
                   />
                   <span>Approve</span>
                 </label>
                 <label className={styles.radioLabel}>
                   <input
-                    type="radio"
-                    name="approvalStatus"
-                    value="rejected"
-                    checked={approvalStatus === 'rejected'}
+                    type="radio" name="approvalStatus" value="rejected" checked={approvalStatus === 'rejected'}
                     onChange={() => setApprovalStatus('rejected')}
                   />
                   <span>Reject</span>
@@ -312,8 +306,7 @@ export default function OfferDetailPage() {
               </div>
 
               <textarea
-                placeholder="Add a comment (optional)..."
-                value={comment}
+                placeholder="Add a comment (optional)..." value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 className={styles.commentTextarea}
                 rows={4}
@@ -332,7 +325,7 @@ export default function OfferDetailPage() {
           {offer.finalStatus !== 'pending' && (
             <div className={styles.finalStatusMessage}>
               <p>
-                ✓ This offer has been <strong>{offer.finalStatus}</strong>
+                 This offer has been <strong>{offer.finalStatus}</strong>
               </p>
             </div>
           )}

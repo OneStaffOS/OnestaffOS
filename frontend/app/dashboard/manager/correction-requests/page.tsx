@@ -74,7 +74,7 @@ export default function ManagerCorrectionRequestsPage() {
           {/* Page Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>📋 Attendance Correction Requests</h1>
+              <h1 className={styles.pageTitle}> Attendance Correction Requests</h1>
               <p className={styles.pageSubtitle}>
                 Review and process attendance correction requests from your team
               </p>
@@ -130,7 +130,7 @@ export default function ManagerCorrectionRequestsPage() {
             <Spinner message="Loading correction requests..." />
           ) : filteredRequests.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📭</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No {filter !== 'ALL' ? filter.toLowerCase() : ''} requests found</h3>
               <p>
                 {filter === 'PENDING' 
@@ -192,14 +192,14 @@ export default function ManagerCorrectionRequestsPage() {
                         onClick={() => process(rq._id, 'APPROVED')}
                         disabled={processingId === rq._id}
                       >
-                        {processingId === rq._id ? 'Processing...' : '✓ Approve'}
+                        {processingId === rq._id ? 'Processing...' : 'Approve'}
                       </button>
                       <button 
                         className={`${styles.btnDanger} ${styles.btnSmall}`}
                         onClick={() => process(rq._id, 'REJECTED')}
                         disabled={processingId === rq._id}
                       >
-                        {processingId === rq._id ? 'Processing...' : '✕ Reject'}
+                        {processingId === rq._id ? 'Processing...' : 'Reject'}
                       </button>
                     </div>
                   )}

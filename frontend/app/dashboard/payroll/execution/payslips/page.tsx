@@ -140,7 +140,7 @@ export default function AllPayslipsPage() {
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle}>
-                📄 {isEmployee ? "My Payslips" : "All Payslips"}
+                 {isEmployee ? "My Payslips" : "All Payslips"}
               </h1>
               <p className={styles.pageSubtitle}>
                 {isEmployee 
@@ -152,7 +152,7 @@ export default function AllPayslipsPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* For Employees: Show their payslips */}
           {isEmployee && (
@@ -191,7 +191,7 @@ export default function AllPayslipsPage() {
               <div className={styles.card}>
                 {payslips.length === 0 ? (
                   <div className={styles.emptyState}>
-                    <div className={styles.emptyStateIcon}>📄</div>
+                    <div className={styles.emptyStateIcon}></div>
                     <h3 className={styles.emptyStateTitle}>No Payslips Available</h3>
                     <p className={styles.emptyStateDescription}>
                       Your payslips will appear here once payroll is processed
@@ -288,7 +288,7 @@ export default function AllPayslipsPage() {
           {payslips.length === 0 && payrollRuns.length > 0 && (
             <div className={styles.card} style={{ marginBottom: '20px' }}>
               <h3 style={{ marginBottom: '15px', color: '#1e40af' }}>
-                📊 Locked Payroll Runs ({payrollRuns.length})
+                 Locked Payroll Runs ({payrollRuns.length})
               </h3>
               <p style={{ marginBottom: '15px', color: '#6b7280' }}>
                 The following payroll runs are locked but don't have payslips generated yet. 
@@ -350,7 +350,7 @@ export default function AllPayslipsPage() {
           <div className={styles.card}>
             {payslips.length === 0 && payrollRuns.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>📄</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>No Locked Payroll Runs</h3>
                 <p className={styles.emptyStateDescription}>
                   No locked payroll runs found. Lock and approve a payroll run first, then generate payslips.
@@ -358,7 +358,7 @@ export default function AllPayslipsPage() {
               </div>
             ) : payslips.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>📄</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>No Payslips Generated Yet</h3>
                 <p className={styles.emptyStateDescription}>
                   Payslips haven't been generated for the locked runs above. Click "View Run" and then "Generate Payslips".

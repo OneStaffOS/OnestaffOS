@@ -4,7 +4,7 @@
  * Phase III: HR/Admin Processing & Master Data
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
@@ -136,9 +136,7 @@ export default function EmployeeStatusPage() {
 
         <div className={styles.controls}>
           <input
-            type="text"
-            placeholder="Search employees..."
-            value={searchTerm}
+            type="text" placeholder="Search employees..." value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
           />
@@ -236,8 +234,7 @@ export default function EmployeeStatusPage() {
                   <div className={styles.formGroup}>
                     <label>Contract End Date</label>
                     <input
-                      type="date"
-                      value={endDate}
+                      type="date" value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                       className={styles.input}
                     />

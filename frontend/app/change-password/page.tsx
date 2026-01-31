@@ -4,7 +4,7 @@
  * Can be accessed voluntarily or forced due to expiry
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';

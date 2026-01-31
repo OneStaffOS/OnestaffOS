@@ -3,7 +3,7 @@
  * Manage multi-department clearance for approved terminations
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -311,15 +311,14 @@ export default function ClearancePage() {
               <div className={styles.clearanceHeader}>
                 <label className={styles.checkbox}>
                   <input
-                    type="checkbox"
-                    checked={item.cleared}
+                    type="checkbox" checked={item.cleared}
                     onChange={() => toggleClearance(index)}
                   />
                   <span className={styles.checkmark}></span>
                   <strong>{item.department}</strong>
                 </label>
                 {item.cleared && (
-                  <span className={styles.clearedBadge}>✓ Cleared</span>
+                  <span className={styles.clearedBadge}> Cleared</span>
                 )}
               </div>
               {item.clearedDate && (
@@ -328,8 +327,7 @@ export default function ClearancePage() {
                 </div>
               )}
               <textarea
-                placeholder="Add comments..."
-                value={item.comments || ''}
+                placeholder="Add comments..." value={item.comments || ''}
                 onChange={(e) => updateComments(index, e.target.value)}
                 className={styles.textarea}
                 rows={2}
@@ -347,8 +345,7 @@ export default function ClearancePage() {
             {Object.entries(checklist.equipmentReturned).map(([key, value]) => (
               <label key={key} className={styles.checkbox}>
                 <input
-                  type="checkbox"
-                  checked={value}
+                  type="checkbox" checked={value}
                   onChange={() => toggleEquipment(key as keyof ClearanceChecklist['equipmentReturned'])}
                 />
                 <span className={styles.checkmark}></span>
@@ -366,8 +363,7 @@ export default function ClearancePage() {
         <h2>ID/Access Card</h2>
         <label className={styles.checkbox}>
           <input
-            type="checkbox"
-            checked={checklist.cardReturned || false}
+            type="checkbox" checked={checklist.cardReturned || false}
             onChange={() => setChecklist({ ...checklist, cardReturned: !checklist.cardReturned })}
           />
           <span className={styles.checkmark}></span>
@@ -380,8 +376,7 @@ export default function ClearancePage() {
         <h2>Final Settlement</h2>
         <label className={styles.checkbox}>
           <input
-            type="checkbox"
-            checked={checklist.finalSettlementPaid || false}
+            type="checkbox" checked={checklist.finalSettlementPaid || false}
             onChange={() => setChecklist({ ...checklist, finalSettlementPaid: !checklist.finalSettlementPaid })}
           />
           <span className={styles.checkmark}></span>
@@ -393,8 +388,7 @@ export default function ClearancePage() {
       <div className={styles.card}>
         <h2>General Comments</h2>
         <textarea
-          placeholder="Add general comments about the clearance process..."
-          value={checklist.comments || ''}
+          placeholder="Add general comments about the clearance process..." value={checklist.comments || ''}
           onChange={(e) => setChecklist({ ...checklist, comments: e.target.value })}
           className={styles.textarea}
           rows={4}
@@ -405,9 +399,9 @@ export default function ClearancePage() {
       <div className={styles.actions}>
         {allCleared && (
           <div className={styles.completeBanner}>
-            ✓ All clearance requirements completed!
+             All clearance requirements completed!
             <br />
-            <small>💰 Termination benefits will be automatically assigned when you save.</small>
+            <small> Termination benefits will be automatically assigned when you save.</small>
           </div>
         )}
         <button

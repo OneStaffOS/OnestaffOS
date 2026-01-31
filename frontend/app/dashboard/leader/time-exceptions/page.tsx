@@ -91,7 +91,7 @@ export default function LeaderTimeExceptionsPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>⚠️ Pending Time Exceptions</h1>
+              <h1 className={styles.pageTitle}> Pending Time Exceptions</h1>
               <p className={styles.pageSubtitle}>
                 Review and process time exception requests from your department
               </p>
@@ -114,7 +114,7 @@ export default function LeaderTimeExceptionsPage() {
             <Spinner message="Loading exceptions..." />
           ) : exceptions.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>✓</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Pending Exceptions</h3>
               <p>All time exceptions have been processed.</p>
             </div>
@@ -147,14 +147,14 @@ export default function LeaderTimeExceptionsPage() {
                       disabled={processingId === ex._id}
                       onClick={() => handleAttachApprove(ex._id)}
                     >
-                      {processingId === ex._id ? 'Processing...' : '✓ Approve'}
+                      {processingId === ex._id ? 'Processing...' : 'Approve'}
                     </button>
                     <button 
                       className={`${styles.btnDanger} ${styles.btnSmall}`}
                       disabled={processingId === ex._id}
                       onClick={() => handleReject(ex._id)}
                     >
-                      {processingId === ex._id ? 'Processing...' : '✕ Reject'}
+                      {processingId === ex._id ? 'Processing...' : 'Reject'}
                     </button>
                   </div>
                 </div>

@@ -3,7 +3,7 @@
  * Standard employee portal - US-E2-04, US-E2-05, US-E2-12, US-E6-02
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -277,7 +277,7 @@ export default function EmployeeDashboard() {
       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
       flex: '1 1 auto',
       minWidth: '180px',
-      textAlign: 'center' as const,
+      textAlign: 'center'as const,
     },
     primary: {
       background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
@@ -352,7 +352,7 @@ export default function EmployeeDashboard() {
               marginBottom: '2rem',
               boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)',
             }}>
-              <h3 style={{ margin: '0 0 0.75rem', fontSize: '1.25rem', fontWeight: '700' }}>⚠️ Profile Not Found</h3>
+              <h3 style={{ margin: '0 0 0.75rem', fontSize: '1.25rem', fontWeight: '700' }}> Profile Not Found</h3>
               <p style={{ margin: '0 0 1rem', lineHeight: '1.6' }}>{error}</p>
               <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.6' }}>
                 <strong>Note:</strong> User accounts created through registration need an employee profile created by HR Admin. 
@@ -369,7 +369,7 @@ export default function EmployeeDashboard() {
                 background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
                 borderLeft: '4px solid #3b82f6',
               }}>
-                <h2 style={sectionTitleStyle}>⚡ Quick Actions</h2>
+                <h2 style={sectionTitleStyle}>Quick Actions</h2>
                 <div style={gridStyle}>
                   <button 
                     onClick={() => router.push('/dashboard/employee/id-card')}
@@ -377,7 +377,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🆔 View ID Card
+                    View ID Card
                   </button>
                   <button 
                     onClick={() => router.push('/dashboard/employee/resignation')}
@@ -385,7 +385,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📝 Submit Resignation
+                    Submit Resignation
                   </button>
                   <button 
                     onClick={() => router.push('/dashboard/employee/my-resignations')}
@@ -393,7 +393,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📊 Track Resignation
+                    Track Resignation
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/employee/balance')}
@@ -401,7 +401,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    💰 My Balance
+                    My Balance
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/employee/contracts')}
@@ -409,7 +409,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📄 Active Contracts
+                    Active Contracts
                   </button>
                 </div>
               </div>
@@ -428,7 +428,7 @@ export default function EmployeeDashboard() {
                   textAlign: 'center',
                   boxShadow: '0 4px 12px rgba(59, 130, 246, 0.15)',
                 }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🏖️</div>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                   <h3 style={{ fontSize: '1.1rem', color: '#1e40af', marginBottom: '0.5rem', fontWeight: '600' }}>Leave Balance</h3>
                   <p style={{ fontSize: '3rem', fontWeight: '700', color: '#1e3a8a', margin: '0.5rem 0' }}>
                     {loading ? '-' : stats.leaveBalance}
@@ -443,7 +443,7 @@ export default function EmployeeDashboard() {
                   textAlign: 'center',
                   boxShadow: '0 4px 12px rgba(245, 158, 11, 0.15)',
                 }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📋</div>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                   <h3 style={{ fontSize: '1.1rem', color: '#92400e', marginBottom: '0.5rem', fontWeight: '600' }}>Pending Requests</h3>
                   <p style={{ fontSize: '3rem', fontWeight: '700', color: '#78350f', margin: '0.5rem 0' }}>
                     {loading ? '-' : stats.pendingRequests}
@@ -458,7 +458,7 @@ export default function EmployeeDashboard() {
                   textAlign: 'center',
                   boxShadow: '0 4px 12px rgba(16, 185, 129, 0.15)',
                 }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>⭐</div>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
                   <h3 style={{ fontSize: '1.1rem', color: '#065f46', marginBottom: '0.5rem', fontWeight: '600' }}>Upcoming Appraisals</h3>
                   <p style={{ fontSize: '3rem', fontWeight: '700', color: '#064e3b', margin: '0.5rem 0' }}>
                     {loading ? '-' : stats.upcomingAppraisals}
@@ -469,7 +469,7 @@ export default function EmployeeDashboard() {
 
               {/* Profile Management */}
               <div style={sectionStyle}>
-                <h2 style={sectionTitleStyle}>👤 My Profile</h2>
+                <h2 style={sectionTitleStyle}>My Profile</h2>
                 <div style={gridStyle}>
                   <button 
                     onClick={() => router.push('/profile')}
@@ -553,7 +553,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📬 Inbox
+                    Inbox
                     {unreadCount > 0 && (
                       <span style={{
                         position: 'absolute',
@@ -580,7 +580,7 @@ export default function EmployeeDashboard() {
 
               {/* Leave & Time Management */}
               <div style={sectionStyle}>
-                <h2 style={sectionTitleStyle}>🕐 Leave & Time Management</h2>
+                <h2 style={sectionTitleStyle}>Leave & Time Management</h2>
                 
                 {notifications && notifications.some(n => (n.title || '').toLowerCase().includes('missed punch') || (n.message || '').toLowerCase().includes('missed')) && (
                   <div style={{ 
@@ -591,7 +591,7 @@ export default function EmployeeDashboard() {
                     marginBottom: '1.5rem',
                     boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)',
                   }}>
-                    <strong style={{ color: '#92400e', fontSize: '1rem' }}>⚠️ Missed punch detected</strong>
+                    <strong style={{ color: '#92400e', fontSize: '1rem' }}> Missed punch detected</strong>
                     <div style={{ fontSize: '0.9rem', color: '#92400e', marginTop: '0.5rem' }}>
                       You have an unresolved missed-punch notification — please contact your line manager or correct your punches.
                     </div>
@@ -605,7 +605,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🏖️ Leave Requests
+                    Leave Requests
                   </button>
                   <button 
                     onClick={() => router.push('/dashboard/employee/attendance-records')}
@@ -613,7 +613,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📊 Attendance Records
+                    Attendance Records
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/employee/attendance-records?view=corrections')}
@@ -621,7 +621,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    ✅ Correction Requests
+                    Correction Requests
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/employee/time-exception-request')}
@@ -629,7 +629,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    ⏰ Request Exception
+                    Request Exception
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/employee/attendance-records?view=time-exceptions')}
@@ -637,7 +637,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📋 View Exceptions
+                    View Exceptions
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/employee/csv-attendance')}
@@ -645,7 +645,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📄 CSV Attendance
+                    CSV Attendance
                   </button>
                 </div>
 
@@ -657,7 +657,7 @@ export default function EmployeeDashboard() {
                   borderRadius: '12px',
                   border: '2px solid #e5e7eb',
                 }}>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#111827', marginBottom: '1rem' }}>⏱️ Clock In/Out</h3>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#111827', marginBottom: '1rem' }}>Clock In/Out</h3>
                   <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                     <button
                       onClick={startClockIn}
@@ -675,7 +675,7 @@ export default function EmployeeDashboard() {
                       }}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                      ▶️ Clock In
+                      Clock In
                     </button>
                     <button
                       onClick={() => handleClock('OUT')}
@@ -693,7 +693,7 @@ export default function EmployeeDashboard() {
                       }}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                      ⏹️ Clock Out
+                      Clock Out
                     </button>
                   </div>
                   <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -706,14 +706,14 @@ export default function EmployeeDashboard() {
                         minWidth: '180px',
                       }}
                     >
-                      📷 Save / Update Face Print
+                      Save / Update Face Print
                     </button>
                   </div>
                   <div style={{ fontSize: '0.9rem', color: '#6b7280', textAlign: 'center', fontWeight: '500' }}>
-                    {attendanceLoading ? '⏳ Processing…' :
-                     hasClockedInToday ? '✅ Clocked In (clock out to continue)' : 
-                     hasClockedOutToday ? '🔴 Clocked Out (clock in to start new session)' : 
-                     '🟢 Ready to clock in'}
+                    {attendanceLoading ? 'Processing…' :
+                     hasClockedInToday ? 'Clocked In' : 
+                     hasClockedOutToday ? 'Clocked Out' : 
+                     'Ready to clock in'}
                   </div>
                   {attendanceMessage && (
                     <div style={{ 
@@ -733,7 +733,7 @@ export default function EmployeeDashboard() {
 
               {/* Documents & Payroll */}
               <div style={sectionStyle}>
-                <h2 style={sectionTitleStyle}>💼 Payroll</h2>
+                <h2 style={sectionTitleStyle}>Payroll</h2>
                 <div style={gridStyle}>
                   <button 
                     onClick={() => router.push('/dashboard/employee/payroll/my-payslips')}
@@ -741,7 +741,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    💰 View Payslips
+                    View Payslips
                   </button>
                   <button 
                     onClick={() => router.push('/dashboard/employee/payroll/salary-history')}
@@ -749,7 +749,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    📊 Salary History
+                    Salary History
                   </button>
                   <button 
                     onClick={() => router.push('/dashboard/employee/payroll/my-disputes')}
@@ -757,7 +757,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    ⚠️ My Disputes
+                    My Disputes
                   </button>
                   <button 
                     onClick={() => router.push('/dashboard/employee/payroll/my-claims')}
@@ -765,14 +765,14 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    💼 My Claims
+                    My Claims
                   </button>
                 </div>
               </div>
 
               {/* Organization */}
               <div style={sectionStyle}>
-                <h2 style={sectionTitleStyle}>🏢 Organization</h2>
+                <h2 style={sectionTitleStyle}>Organization</h2>
                 <div style={gridStyle}>
                   <button 
                     onClick={() => router.push('/org-structure/hierarchy')}
@@ -780,7 +780,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🌳 Organizational Hierarchy
+                    Organizational Hierarchy
                   </button>
                 </div>
               </div>
@@ -791,7 +791,7 @@ export default function EmployeeDashboard() {
                 background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
                 borderLeft: '4px solid #f59e0b',
               }}>
-                <h2 style={sectionTitleStyle}>🔐 Security</h2>
+                <h2 style={sectionTitleStyle}>Security</h2>
                 <div style={gridStyle}>
                   <button 
                     onClick={() => router.push('/dashboard/employee/security')}
@@ -799,7 +799,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🔑 Manage Passkeys (MFA)
+                    Manage Passkeys (MFA)
                   </button>
                   <button 
                     onClick={() => router.push('/change-password')}
@@ -807,7 +807,7 @@ export default function EmployeeDashboard() {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    🔒 Change Password
+                    Change Password
                   </button>
                 </div>
               </div>

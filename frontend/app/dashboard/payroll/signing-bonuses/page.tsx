@@ -128,7 +128,7 @@ export default function SigningBonusesPage() {
           {/* Header */}
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
-              <h1 className={styles.pageTitle}>✍️ Signing Bonuses</h1>
+              <h1 className={styles.pageTitle}> Signing Bonuses</h1>
               <p className={styles.pageSubtitle}>
                 Configure onboarding bonuses based on positions for new hires
               </p>
@@ -139,15 +139,15 @@ export default function SigningBonusesPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/signing-bonuses/create')}
                 >
-                  ➕ Create Signing Bonus
+                   Create Signing Bonus
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -172,7 +172,7 @@ export default function SigningBonusesPage() {
           {/* Pending Approvals Section */}
           {canApprove && pendingBonuses.length > 0 && (
             <div className={styles.approvalSection}>
-              <h3 className={styles.approvalTitle}>⚠️ Pending Approvals ({pendingBonuses.length})</h3>
+              <h3 className={styles.approvalTitle}> Pending Approvals ({pendingBonuses.length})</h3>
               <div className={styles.approvalList}>
                 {pendingBonuses.map(bonus => (
                   <div key={bonus._id} className={styles.approvalItem}>
@@ -188,13 +188,13 @@ export default function SigningBonusesPage() {
                         className={styles.btnSuccess}
                         onClick={() => handleApprove(bonus._id)}
                       >
-                        ✅ Approve
+                         Approve
                       </button>
                       <button 
                         className={styles.btnDanger}
                         onClick={() => handleReject(bonus._id)}
                       >
-                        ❌ Reject
+                         Reject
                       </button>
                     </div>
                   </div>
@@ -224,7 +224,7 @@ export default function SigningBonusesPage() {
             <Spinner message="Loading signing bonuses..." />
           ) : bonuses.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>✍️</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Signing Bonuses Found</h3>
               <p>Create your first signing bonus to get started.</p>
               {canCreate && (
@@ -233,7 +233,7 @@ export default function SigningBonusesPage() {
                   onClick={() => router.push('/dashboard/payroll/signing-bonuses/create')}
                   style={{ marginTop: '16px' }}
                 >
-                  ➕ Create Signing Bonus
+                   Create Signing Bonus
                 </button>
               )}
             </div>

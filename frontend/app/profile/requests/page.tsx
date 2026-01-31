@@ -4,7 +4,7 @@
  * Phase I: View request status and history
  */
 
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

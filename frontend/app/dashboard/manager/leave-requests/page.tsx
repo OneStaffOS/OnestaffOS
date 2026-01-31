@@ -4,7 +4,7 @@
  * Filters by manager's department by default
  */
 
-'use client';
+"use client";
 
 import { useEffect, useState, useCallback } from 'react';
 import axios from '@/lib/axios-config';
@@ -206,7 +206,7 @@ export default function ManagerLeaveRequestsPage() {
           {/* Header */}
           <div className={styles.header}>
             <div>
-              <h1 className={styles.title}>📋 Leave Requests</h1>
+              <h1 className={styles.title}> Leave Requests</h1>
               <p className={styles.subtitle}>
                 Review and manage leave requests from {getDepartmentName()}
               </p>
@@ -244,7 +244,7 @@ export default function ManagerLeaveRequestsPage() {
             <Spinner message="Loading leave requests..." />
           ) : requests.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>📭</span>
+              <span className={styles.emptyIcon}></span>
               <h3>No Leave Requests</h3>
               <p>There are no {statusFilter || ''} leave requests from your department at this time.</p>
             </div>
@@ -276,7 +276,7 @@ export default function ManagerLeaveRequestsPage() {
                     </div>
 
                     <div className={styles.dateRange}>
-                      <span className={styles.dateIcon}>📅</span>
+                      <span className={styles.dateIcon}></span>
                       <span>{formatDate(request.dates.from)}</span>
                       <span className={styles.dateSeparator}>→</span>
                       <span>{formatDate(request.dates.to)}</span>
@@ -317,14 +317,14 @@ export default function ManagerLeaveRequestsPage() {
                         onClick={() => handleApprove(request._id)}
                         disabled={processing === request._id}
                       >
-                        {processing === request._id ? 'Processing...' : '✓ Approve'}
+                        {processing === request._id ? 'Processing...' : 'Approve'}
                       </button>
                       <button
                         className={styles.rejectButton}
                         onClick={() => setShowRejectModal(request._id)}
                         disabled={processing === request._id}
                       >
-                        ✕ Reject
+                         Reject
                       </button>
                     </div>
                   )}
@@ -355,8 +355,7 @@ export default function ManagerLeaveRequestsPage() {
                   className={styles.rejectTextarea}
                   value={rejectReason}
                   onChange={(e) => setRejectReason(e.target.value)}
-                  placeholder="Enter rejection reason..."
-                  rows={4}
+                  placeholder="Enter rejection reason..." rows={4}
                 />
                 <div className={styles.modalActions}>
                   <button

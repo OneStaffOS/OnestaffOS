@@ -152,15 +152,15 @@ export default function CompanyWideSettingsPage() {
 
           {/* Header */}
           <div className={styles.pageHeader}>
-            <h1 className={styles.pageTitle}>⚙️ Company Wide Payroll Settings</h1>
+            <h1 className={styles.pageTitle}> Company Wide Payroll Settings</h1>
             <p className={styles.pageSubtitle}>
               Configure global payroll settings that apply to all employees
             </p>
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
-          {success && <div className={styles.successMessage}>✅ {success}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
+          {success && <div className={styles.successMessage}> {success}</div>}
 
           {/* Settings Card */}
           <div className={styles.formCard}>
@@ -169,15 +169,10 @@ export default function CompanyWideSettingsPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Monthly Pay Date *</label>
                 <input
-                  type="number"
-                  name="payDate"
-                  value={formData.payDate}
+                  type="number" name="payDate" value={formData.payDate}
                   onChange={handleChange}
                   className={styles.formInput}
-                  placeholder="e.g., 25"
-                  min="1"
-                  max="28"
-                  required
+                  placeholder="e.g., 25" min="1" max="28" required
                 />
                 <span className={styles.formHint}>
                   Day of the month when salaries are paid (1-28). Default: 25th
@@ -188,8 +183,7 @@ export default function CompanyWideSettingsPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Time Zone *</label>
                 <select
-                  name="timeZone"
-                  value={formData.timeZone}
+                  name="timeZone" value={formData.timeZone}
                   onChange={handleChange}
                   className={styles.formSelect}
                   required
@@ -209,8 +203,7 @@ export default function CompanyWideSettingsPage() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Currency *</label>
                 <select
-                  name="currency"
-                  value={formData.currency}
+                  name="currency" value={formData.currency}
                   onChange={handleChange}
                   className={styles.formSelect}
                   required
@@ -228,7 +221,7 @@ export default function CompanyWideSettingsPage() {
 
               {/* Info Box */}
               <div className={styles.infoBox}>
-                <h4>⚠️ Important Notes</h4>
+                <h4> Important Notes</h4>
                 <ul>
                   <li>These settings affect all payroll calculations across the organization</li>
                   <li>Pay date is limited to 1-28 to avoid end-of-month edge cases</li>
@@ -239,7 +232,7 @@ export default function CompanyWideSettingsPage() {
 
               {/* Summary Card */}
               <div className={styles.summaryCard}>
-                <h4 className={styles.summaryTitle}>📋 Current Configuration Summary</h4>
+                <h4 className={styles.summaryTitle}> Current Configuration Summary</h4>
                 <div className={styles.summaryGrid}>
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>Pay Date</span>
@@ -264,15 +257,13 @@ export default function CompanyWideSettingsPage() {
 
               <div className={styles.formActions}>
                 <button 
-                  type="button" 
-                  className={styles.btnSecondary}
+                  type="button" className={styles.btnSecondary}
                   onClick={() => router.push('/dashboard/payroll')}
                 >
                   Cancel
                 </button>
                 <button 
-                  type="submit" 
-                  className={styles.btnPrimary}
+                  type="submit" className={styles.btnPrimary}
                   disabled={saving}
                 >
                   {saving ? 'Saving...' : (settingsExist ? 'Update Settings' : 'Save Settings')}

@@ -81,7 +81,7 @@ export default function FinanceDashboardPage() {
           }}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle} style={{ color: 'white', fontSize: '32px' }}>
-                💼 Finance Dashboard
+                 Finance Dashboard
               </h1>
               <p className={styles.pageSubtitle} style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px' }}>
                 Review and approve payroll disbursements before execution
@@ -90,7 +90,7 @@ export default function FinanceDashboardPage() {
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {loading ? (
             <Spinner message="Loading pending approvals..." />
@@ -154,7 +154,7 @@ export default function FinanceDashboardPage() {
                   color: '#1e40af',
                   marginBottom: '16px'
                 }}>
-                  🚀 Quick Actions
+                   Quick Actions
                 </h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
                   <button
@@ -185,7 +185,7 @@ export default function FinanceDashboardPage() {
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
-                    <span style={{ fontSize: '24px' }}>📊</span>
+                    <span style={{ fontSize: '24px' }}></span>
                     <span>All Payroll Runs</span>
                   </button>
                   <button
@@ -216,7 +216,7 @@ export default function FinanceDashboardPage() {
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
-                    <span style={{ fontSize: '24px' }}>🏦</span>
+                    <span style={{ fontSize: '24px' }}></span>
                     <span>Company Banking</span>
                   </button>
                   <button
@@ -247,7 +247,7 @@ export default function FinanceDashboardPage() {
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
-                    <span style={{ fontSize: '24px' }}>⚖️</span>
+                    <span style={{ fontSize: '24px' }}></span>
                     <span>Approved Disputes</span>
                   </button>
                   <button
@@ -278,7 +278,7 @@ export default function FinanceDashboardPage() {
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
-                    <span style={{ fontSize: '24px' }}>💰</span>
+                    <span style={{ fontSize: '24px' }}></span>
                     <span>Approved Claims</span>
                   </button>
                   <button
@@ -309,7 +309,7 @@ export default function FinanceDashboardPage() {
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
-                    <span style={{ fontSize: '24px' }}>📈</span>
+                    <span style={{ fontSize: '24px' }}></span>
                     <span>Financial Reports</span>
                   </button>
                 </div>
@@ -329,7 +329,7 @@ export default function FinanceDashboardPage() {
                   gap: '12px',
                   color: '#92400e'
                 }}>
-                  📋 Payroll Disbursements Pending Approval
+                   Payroll Disbursements Pending Approval
                 </h2>
                 <p className={styles.sectionDescription}>
                   Review payroll runs that have been approved by Payroll Manager and require finance approval before disbursement
@@ -343,7 +343,7 @@ export default function FinanceDashboardPage() {
               }}>
                 {pendingRuns.length === 0 ? (
                   <div className={styles.emptyState}>
-                    <div className={styles.emptyStateIcon} style={{ fontSize: '72px' }}>✅</div>
+                    <div className={styles.emptyStateIcon} style={{ fontSize: '72px' }}></div>
                     <h3 className={styles.emptyStateTitle}>No Pending Approvals</h3>
                     <p className={styles.emptyStateDescription}>
                       All payroll disbursements have been reviewed. New approvals will appear here when HR Manager approves payroll runs.
@@ -448,7 +448,7 @@ export default function FinanceDashboardPage() {
                                 boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
                               }}
                             >
-                              📝 Review & Approve
+                               Review & Approve
                             </button>
                           </td>
                         </tr>
@@ -477,7 +477,7 @@ export default function FinanceDashboardPage() {
                       alignItems: 'center',
                       gap: '10px'
                     }}>
-                      📊 View All Payroll Runs
+                       View All Payroll Runs
                     </h3>
                     <p style={{ 
                       margin: 0, 
@@ -531,7 +531,7 @@ export default function FinanceDashboardPage() {
                       alignItems: 'center',
                       gap: '10px'
                     }}>
-                      📊 Financial Reports & Analytics
+                       Financial Reports & Analytics
                     </h3>
                     <p style={{ 
                       margin: 0, 

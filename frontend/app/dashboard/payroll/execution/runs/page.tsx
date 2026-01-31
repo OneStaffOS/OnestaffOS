@@ -109,7 +109,7 @@ export default function PayrollRunsPage() {
           <div className={styles.pageHeader}>
             <div className={styles.headerContent}>
               <h1 className={styles.pageTitle}>
-                <span className="emoji">💰</span>
+                <span className="emoji"></span>
                 <span className="text">Payroll Runs</span>
               </h1>
               <p className={styles.pageSubtitle}>
@@ -122,14 +122,14 @@ export default function PayrollRunsPage() {
                   className={styles.btnPrimary}
                   onClick={() => router.push('/dashboard/payroll/execution/runs/create')}
                 >
-                  ➕ Create Payroll Run
+                   Create Payroll Run
                 </button>
               </div>
             )}
           </div>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
+          {error && <div className={styles.errorMessage}> {error}</div>}
 
           {/* Stats */}
           <div className={styles.statsGrid}>
@@ -179,7 +179,7 @@ export default function PayrollRunsPage() {
           <div className={styles.card}>
             {runs.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyStateIcon}>💰</div>
+                <div className={styles.emptyStateIcon}></div>
                 <h3 className={styles.emptyStateTitle}>No Payroll Runs Found</h3>
                 <p className={styles.emptyStateDescription}>
                   {statusFilter !== 'all' 
@@ -191,7 +191,7 @@ export default function PayrollRunsPage() {
                     className={styles.btnPrimary}
                     onClick={() => router.push('/dashboard/payroll/execution/runs/create')}
                   >
-                    ➕ Create First Payroll Run
+                     Create First Payroll Run
                   </button>
                 )}
               </div>
@@ -224,10 +224,10 @@ export default function PayrollRunsPage() {
                         <td>
                           {run.exceptions > 0 ? (
                             <span className={styles.exceptionBadge}>
-                              ⚠️ {run.exceptions}
+                               {run.exceptions}
                             </span>
                           ) : (
-                            <span style={{ color: '#10b981' }}>✓ None</span>
+                            <span style={{ color: '#10b981' }}> None</span>
                           )}
                         </td>
                         <td>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -208,9 +208,7 @@ export default function RecruitmentMonitoringPage() {
           {/* Filters */}
           <div className={styles.filters}>
             <input
-              type="text"
-              placeholder="Search positions..."
-              value={searchQuery}
+              type="text" placeholder="Search positions..." value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className={styles.searchInput}
             />
@@ -263,9 +261,9 @@ export default function RecruitmentMonitoringPage() {
                   </div>
                   
                   <div className={styles.positionMeta}>
-                    <span>📍 {position.location || 'Not specified'}</span>
-                    <span>👥 {position.openings} opening{position.openings !== 1 ? 's' : ''}</span>
-                    <span>🆔 {position.requisitionId}</span>
+                    <span> {position.location || 'Not specified'}</span>
+                    <span> {position.openings} opening{position.openings !== 1 ? 's' : ''}</span>
+                    <span> {position.requisitionId}</span>
                   </div>
 
                   <div className={styles.positionStats}>
@@ -287,7 +285,7 @@ export default function RecruitmentMonitoringPage() {
                     </div>
                     {position.referralCount! > 0 && (
                       <div className={styles.stat}>
-                        <span className={styles.statValue} style={{ color: '#f59e0b' }}>⭐ {position.referralCount}</span>
+                        <span className={styles.statValue} style={{ color: '#f59e0b' }}> {position.referralCount}</span>
                         <span className={styles.statLabel}>Referrals</span>
                       </div>
                     )}
@@ -313,7 +311,7 @@ export default function RecruitmentMonitoringPage() {
                   onClick={() => setSelectedPosition(null)}
                   className={styles.closeButton}
                 >
-                  ✕
+                  
                 </button>
               </div>
 
@@ -372,7 +370,7 @@ export default function RecruitmentMonitoringPage() {
                                 `${app.candidateId.firstName} ${app.candidateId.lastName}` : 
                                 'N/A'}
                               {app.isReferral && (
-                                <span className={styles.referralBadge}>⭐ Referral</span>
+                                <span className={styles.referralBadge}> Referral</span>
                               )}
                             </div>
                           </td>
@@ -400,7 +398,7 @@ export default function RecruitmentMonitoringPage() {
             </>
           ) : (
             <div className={styles.emptyState}>
-              <div className={styles.emptyStateIcon}>📋</div>
+              <div className={styles.emptyStateIcon}></div>
               <h3>Select a Position</h3>
               <p>Click on a position from the list to view its candidates</p>
             </div>
