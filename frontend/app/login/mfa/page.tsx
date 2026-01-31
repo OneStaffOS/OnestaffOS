@@ -14,7 +14,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { axios } from '@/lib/axios-config';
 import { useAuth } from '@/app/context/AuthContext';
 import { startAuthentication, browserSupportsWebAuthn } from '@simplewebauthn/browser';
-import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/browser';
+import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/types';
 import { setCsrfToken } from '@/lib/security';
 import { getDashboardRoute, getAvailableDashboards } from '@/lib/roles';
 import RoleSelectionModal from '@/app/components/RoleSelectionModal';
@@ -142,9 +142,9 @@ function MFAVerificationContent() {
       const { options } = optionsRes.data;
 
       // Step 2: Start WebAuthn authentication ceremony
-      const credential = await startAuthentication({
-        optionsJSON: options as PublicKeyCredentialRequestOptionsJSON,
-      });
+      const credential = await startAuthentication(
+        options as PublicKeyCredentialRequestOptionsJSON,
+      );
 
       // Step 3: Verify authentication with server
       const verifyRes = await axios.post('/passkeys/authenticate/verify', {

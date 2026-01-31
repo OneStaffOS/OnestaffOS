@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { axios } from '@/lib/axios-config';
 import { useAuth } from '@/app/context/AuthContext';
 import { startRegistration, browserSupportsWebAuthn, platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
-import type { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/browser';
+import type { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/types';
 import styles from './security.module.css';
 
 import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
@@ -106,11 +106,9 @@ export default function SecurityPage() {
       const { options } = optionsRes.data;
 
       // Step 2: Start WebAuthn registration ceremony with platform authenticator
-      // Force useAutoRegister: false to prevent showing QR code options
-      const credential = await startRegistration({
-        optionsJSON: options as PublicKeyCredentialCreationOptionsJSON,
-        useAutoRegister: false,
-      });
+      const credential = await startRegistration(
+        options as PublicKeyCredentialCreationOptionsJSON,
+      );
 
       // Step 3: Verify registration with server
       const verifyRes = await axios.post('/passkeys/register/verify', {
