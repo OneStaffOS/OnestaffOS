@@ -20,6 +20,7 @@ import { PasskeysModule } from './passkeys/passkeys.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { AIChatbotModule } from './chatbot/ai-chatbot.module';
 import { EncryptionModule } from './common/encryption';
+import { PasswordModule } from './common/security/password.module';
 import { BiometricsModule } from './biometrics/biometrics.module';
 import { BankingContractsModule } from './banking-contracts/banking-contracts.module';
 import { CsrfGuard } from './common/guards/csrf.guard';
@@ -34,6 +35,7 @@ import { LoggerService } from './common/logger/logger.service';
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/onestaff'),
     EncryptionModule, // Global encryption module
+    PasswordModule, // Global password hashing/verification
     AuthModule,
     TimeManagementModule, 
     RecruitmentModule, 

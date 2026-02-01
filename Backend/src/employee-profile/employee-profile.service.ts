@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException, Inject, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import { PasswordService } from '../common/security/password.service';
 import { EmployeeProfile, EmployeeProfileDocument } from './models/employee-profile.schema';
 import { EmployeeSystemRole, EmployeeSystemRoleDocument } from './models/employee-system-role.schema';
 import { EmployeeProfileChangeRequest } from './models/ep-change-request.schema';
@@ -57,6 +57,7 @@ export class EmployeeProfileService {
     private employeePayrollDetailsModel: Model<employeePayrollDetailsDocument>,
     @Inject(forwardRef(() => NotificationService))
     private notificationService: NotificationService,
+    private readonly passwordService: PasswordService,
   ) {}
 
   // ========== EMPLOYEE SELF-SERVICE METHODS ==========
@@ -133,9 +134,20 @@ export class EmployeeProfileService {
       throw new NotFoundException('Employee profile not found');
     }
 
-    const hash = await bcrypt.hash(pin, 10);
-    profile.adminPinHash = hash;
+    const pinResult = await this.passwordService.hashPassword(pin);
+    profile.adminPinHash = pinResult.hash;
     await profile.save();
+  }
+
+  /**
+   * Update admin PIN hash during auth flow (lazy rehash).
+   * Keeps auth flow isolated from admin PIN management endpoints.
+   */
+  async updateAdminPinHashForAuth(employeeId: string, pinHash: string): Promise<void> {
+    await this.employeeProfileModel.updateOne(
+      { _id: new Types.ObjectId(employeeId) },
+      { $set: { adminPinHash: pinHash } },
+    ).exec();
   }
 
 
@@ -616,13 +628,15 @@ export class EmployeeProfileService {
     }
 
     // Hash the password before saving
-    const passwordHash = await bcrypt.hash(createDto.password, 10);
+    const passwordResult = await this.passwordService.hashPassword(createDto.password);
 
     const fullName = `${createDto.firstName} ${createDto.middleName || ''} ${createDto.lastName}`.trim();
 
     const newProfile = new this.employeeProfileModel({
       ...createDto,
-      password: passwordHash,
+      password: passwordResult.hash,
+      passwordAlgo: passwordResult.algorithm,
+      passwordUpdatedAt: passwordResult.updatedAt,
       fullName,
       primaryPositionId: createDto.primaryPositionId ? new Types.ObjectId(createDto.primaryPositionId) : undefined,
       primaryDepartmentId: createDto.primaryDepartmentId ? new Types.ObjectId(createDto.primaryDepartmentId) : undefined,
@@ -677,7 +691,10 @@ export class EmployeeProfileService {
 
     // Hash password if it's being updated
     if (updateDto.password) {
-      updateDto['password'] = await bcrypt.hash(updateDto.password, 10);
+      const passwordResult = await this.passwordService.hashPassword(updateDto.password);
+      updateDto['password'] = passwordResult.hash;
+      updateDto['passwordAlgo'] = passwordResult.algorithm;
+      updateDto['passwordUpdatedAt'] = passwordResult.updatedAt;
     }
 
     // If status changes, update statusEffectiveFrom
@@ -931,6 +948,28 @@ export class EmployeeProfileService {
       .select('+password')
       .populate('accessProfileId')
       .exec();
+  }
+
+  /**
+   * Update password hash during auth flow (lazy rehash).
+   * Keeps logic centralized and avoids side effects of full profile updates.
+   */
+  async updatePasswordHashForAuth(
+    employeeId: string,
+    passwordHash: string,
+    passwordAlgo: 'bcrypt' | 'argon2',
+    passwordUpdatedAt: Date,
+  ): Promise<void> {
+    await this.employeeProfileModel.updateOne(
+      { _id: new Types.ObjectId(employeeId) },
+      {
+        $set: {
+          password: passwordHash,
+          passwordAlgo,
+          passwordUpdatedAt,
+        },
+      },
+    ).exec();
   }
 
   // ========== ADMIN DASHBOARD METHODS ==========

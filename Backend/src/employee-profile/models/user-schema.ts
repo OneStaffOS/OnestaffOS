@@ -38,6 +38,13 @@ export class UserProfileBase {
   @Prop({ type: String })
   password?: string;
 
+  // Password hashing metadata
+  @Prop({ type: String, enum: ['bcrypt', 'argon2'] })
+  passwordAlgo?: 'bcrypt' | 'argon2';
+
+  @Prop({ type: Date })
+  passwordUpdatedAt?: Date;
+
   // Password Reset OTP fields
   @Prop({ type: String })
   resetOtpHash?: string;

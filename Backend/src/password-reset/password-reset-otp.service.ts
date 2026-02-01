@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import { PasswordService } from '../common/security/password.service';
 import {
   RequestPasswordResetDto,
   VerifyOtpDto,
@@ -24,6 +24,7 @@ import {
   isExpired,
   validatePasswordStrength,
 } from '../common/utils/password-reset-security.utils';
+import { ChangePasswordDto } from './dto/password-reset.dto';
 
 /**
  * Password Reset Service with OTP-based verification
@@ -32,12 +33,12 @@ import {
 @Injectable()
 export class PasswordResetService {
   private readonly logger = new Logger(PasswordResetService.name);
-  private readonly SALT_ROUNDS = 10;
 
   constructor(
     @InjectModel('EmployeeProfile')
     private employeeProfileModel: Model<any>,
     private emailService: EmailService,
+    private readonly passwordService: PasswordService,
   ) {}
 
   /**
@@ -266,10 +267,13 @@ export class PasswordResetService {
 
       // Check if new password is same as current password
       if (employee.password) {
-        const isSamePassword = await bcrypt.compare(
+        const passwordAlgo = employee.passwordAlgo;
+        const verifyResult = await this.passwordService.verifyPassword(
           newPassword,
           employee.password,
+          passwordAlgo,
         );
+        const isSamePassword = verifyResult.valid;
         if (isSamePassword) {
           throw new BadRequestException(
             'New password must be different from your current password',
@@ -278,13 +282,15 @@ export class PasswordResetService {
       }
 
       // Hash new password
-      const hashedPassword = await bcrypt.hash(newPassword, this.SALT_ROUNDS);
+      const passwordResult = await this.passwordService.hashPassword(newPassword);
 
       // Update password and clear reset token (single-use token)
       const updateResult = await this.employeeProfileModel.findByIdAndUpdate(
         employee._id,
         {
-          password: hashedPassword,
+          password: passwordResult.hash,
+          passwordAlgo: passwordResult.algorithm,
+          passwordUpdatedAt: passwordResult.updatedAt,
           passwordResetTokenHash: null,
           passwordResetExpiresAt: null,
         },
@@ -324,5 +330,79 @@ export class PasswordResetService {
         'Failed to reset password. Please try again.',
       );
     }
+  }
+
+  /**
+   * Change password for authenticated user.
+   * Verifies current password and replaces with Argon2 hash.
+   */
+  async changePassword(
+    dto: ChangePasswordDto,
+    employeeId: string,
+  ): Promise<{ success: boolean; message?: string }> {
+    const { currentPassword, newPassword, confirmPassword } = dto;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      throw new BadRequestException('All password fields are required');
+    }
+
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    const passwordValidation = validatePasswordStrength(newPassword);
+    if (!passwordValidation.isValid) {
+      throw new BadRequestException(passwordValidation.message);
+    }
+
+    const employee = await this.employeeProfileModel.findById(employeeId);
+    if (!employee) {
+      throw new NotFoundException('Employee not found');
+    }
+
+    if (!employee.password) {
+      throw new BadRequestException('Current password is not set');
+    }
+
+    const verifyResult = await this.passwordService.verifyPassword(
+      currentPassword,
+      employee.password,
+      employee.passwordAlgo,
+    );
+    if (!verifyResult.valid) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    const newPasswordCheck = await this.passwordService.verifyPassword(
+      newPassword,
+      employee.password,
+      employee.passwordAlgo,
+    );
+    if (newPasswordCheck.valid) {
+      throw new BadRequestException('New password must be different from your current password');
+    }
+
+    const passwordResult = await this.passwordService.hashPassword(newPassword);
+
+    const updateResult = await this.employeeProfileModel.findByIdAndUpdate(
+      employeeId,
+      {
+        password: passwordResult.hash,
+        passwordAlgo: passwordResult.algorithm,
+        passwordUpdatedAt: passwordResult.updatedAt,
+      },
+      { new: true },
+    );
+
+    if (!updateResult) {
+      throw new BadRequestException('Failed to update password. Please try again.');
+    }
+
+    this.logger.log(`Password changed for employee ${employeeId}`);
+
+    return {
+      success: true,
+      message: 'Your password has been changed successfully.',
+    };
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import { PasswordService } from '../common/security/password.service';
 import { EmployeeProfile, EmployeeProfileDocument } from '../employee-profile/models/employee-profile.schema';
 import { EmployeeSystemRole, EmployeeSystemRoleDocument } from '../employee-profile/models/employee-system-role.schema';
 import { CreateRegistrationDto } from './dto/create-registration.dto';
@@ -12,6 +12,7 @@ export class RegisterService {
   constructor(
     @InjectModel(EmployeeProfile.name) private employeeProfileModel: Model<EmployeeProfileDocument>,
     @InjectModel(EmployeeSystemRole.name) private employeeSystemRoleModel: Model<EmployeeSystemRoleDocument>,
+    private readonly passwordService: PasswordService,
   ) {}
 
   async createRegistration(dto: CreateRegistrationDto): Promise<EmployeeProfile> {
@@ -41,7 +42,7 @@ export class RegisterService {
         // Auto-generate employee number
         const employeeNumber = await this.generateEmployeeNumber();
 
-        const passwordHash = await bcrypt.hash(dto.password, 10);
+        const passwordResult = await this.passwordService.hashPassword(dto.password);
 
         const employeeProfile = new this.employeeProfileModel({
           firstName: dto.firstName,
@@ -50,7 +51,9 @@ export class RegisterService {
           nationalId: dto.nationalId,
           dateOfBirth: new Date(dto.dateOfBirth),
           personalEmail: dto.email,
-          password: passwordHash,
+          password: passwordResult.hash,
+          passwordAlgo: passwordResult.algorithm,
+          passwordUpdatedAt: passwordResult.updatedAt,
           employeeNumber: employeeNumber,
           dateOfHire: new Date(), // Set to current date
           status: EmployeeStatus.ACTIVE,

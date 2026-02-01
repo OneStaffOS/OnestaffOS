@@ -7,12 +7,12 @@ import {
   Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import type { StringValue } from 'ms';
 import { EmployeeProfileService } from '../employee-profile/employee-profile.service';
 import { PasskeysService } from '../passkeys/passkeys.service';
 import { Roles, Role } from '../auth/decorators/roles.decorator';
+import { PasswordService } from '../common/security/password.service';
 
 type SignInPayload = {
   sub: string;
@@ -38,6 +38,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @Inject(forwardRef(() => PasskeysService))
     private readonly passkeysService: PasskeysService,
+    private readonly passwordService: PasswordService,
   ) {}
 
   async signIn(email: string, password: string): Promise<SignInResult> {
@@ -82,8 +83,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, String(hash));
-    if (!isPasswordValid) {
+    const passwordAlgo = (user as any).passwordAlgo;
+    const passwordVerify = await this.passwordService.verifyPassword(
+      password,
+      String(hash),
+      passwordAlgo,
+    );
+    if (!passwordVerify.valid) {
       this.logger.warn(`[${correlationId}] Invalid password`);
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -97,6 +103,23 @@ export class AuthService {
     }
 
     const employeeId = String((user as any)._id as Types.ObjectId);
+
+    if (passwordVerify.needsRehash) {
+      try {
+        const upgraded = await this.passwordService.hashPassword(password);
+        await this.employeeService.updatePasswordHashForAuth(
+          employeeId,
+          upgraded.hash,
+          upgraded.algorithm,
+          upgraded.updatedAt,
+        );
+        this.logger.log(`[${correlationId}] Password hash upgraded to Argon2id`);
+      } catch (error) {
+        this.logger.warn(
+          `[${correlationId}] Password upgrade failed, continuing login: ${(error as Error).message}`,
+        );
+      }
+    }
 
     const isSystemAdmin = roles.includes(Role.SYSTEM_ADMIN);
     const pinHash = (user as any).adminPinHash;
@@ -214,9 +237,29 @@ export class AuthService {
       throw new UnauthorizedException('Admin PIN is not set. Please create one in the admin dashboard.');
     }
 
-    const pinValid = await bcrypt.compare(adminPin, String(pinHash));
+    const pinVerify = await this.passwordService.verifyPassword(
+      adminPin,
+      String(pinHash),
+      undefined,
+    );
+    const pinValid = pinVerify.valid;
     if (!pinValid) {
       throw new UnauthorizedException('Invalid Admin PIN');
+    }
+
+    if (pinVerify.needsRehash) {
+      try {
+        const upgraded = await this.passwordService.hashPassword(adminPin);
+        await this.employeeService.updateAdminPinHashForAuth(
+          employeeId,
+          upgraded.hash,
+        );
+        this.logger.log(`[admin_pin] Admin PIN hash upgraded to Argon2id`);
+      } catch (error) {
+        this.logger.warn(
+          `[admin_pin] Admin PIN upgrade failed, continuing: ${(error as Error).message}`,
+        );
+      }
     }
 
     const expiresIn = ('24h') as StringValue;

@@ -7,6 +7,9 @@ import {
   HttpCode,
   HttpStatus,
   Logger,
+  Req,
+  UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { PasswordResetService as PasswordResetOtpService } from './password-reset-otp.service';
 import {
@@ -14,8 +17,10 @@ import {
   VerifyOtpDto,
   VerifyResetTokenDto,
   ResetPasswordDto,
+  ChangePasswordDto,
 } from './dto/password-reset.dto';
 import { Public } from '../auth/decorators/public.decorator';
+import { AuthGuard } from '../auth/gaurds/authentication.guard';
 
 /**
  * Password Reset Controller
@@ -88,5 +93,25 @@ export class PasswordResetController {
       // Pass through BadRequestException with its message
       throw error;
     }
+  }
+
+  /**
+   * Authenticated change password flow
+   * Requires current password and uses Argon2 for new password.
+   */
+  @Post('change')
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async changePassword(@Body() dto: ChangePasswordDto, @Req() req: any) {
+    const userId = req.user?.sub;
+    if (!userId) {
+      throw new ForbiddenException('Unauthorized');
+    }
+
+    if (dto.employeeId && dto.employeeId !== userId) {
+      throw new ForbiddenException('Invalid employee context');
+    }
+
+    return this.passwordResetService.changePassword(dto, userId);
   }
 }
