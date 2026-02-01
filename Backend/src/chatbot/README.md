@@ -143,16 +143,16 @@ Backend/src/chatbot/
 pip install torch numpy scikit-learn tqdm
 
 # 2. Preprocess data
-python preprocess.py
+python3 preprocess.py
 
 # 3. Train model
-python train.py
+python3 train.py
 
 # 4. Evaluate
-python evaluate.py
+python3 evaluate.py
 
 # 5. Run inference
-python inference.py
+python3 inference.py
 ```
 
 ---

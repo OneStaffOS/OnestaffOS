@@ -47,12 +47,8 @@ src/**/*.gz
 ##################################
 
 secrets
-.encryption-keys
-.banking-keys
 .env
 .env.*
-*.key
-*.pem
 
 ##################################
 # 6. Tests & dev-only

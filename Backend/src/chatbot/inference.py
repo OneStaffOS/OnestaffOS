@@ -232,33 +232,47 @@ class ChatBot:
 
 
 def load_responses() -> Dict[str, List[str]]:
-    """Load responses from knowledge data"""
-    responses = {}
-    
+    """Load responses from knowledge data or training datasets"""
+    responses: Dict[str, List[str]] = {}
+
+    def add_responses(intent: str, intent_responses) -> None:
+        if not intent or not intent_responses:
+            return
+        if isinstance(intent_responses, str):
+            intent_responses = [intent_responses]
+        existing = responses.setdefault(intent, [])
+        for item in intent_responses:
+            if item and item not in existing:
+                existing.append(item)
+
     # Load main knowledge base (in chatbot root directory)
     kb_path = os.path.join(BASE_DIR, 'knowledge-data.json')
     if os.path.exists(kb_path):
         with open(kb_path, 'r') as f:
             data = json.load(f)
-        
         for intent_data in data.get('intents', []):
-            tag = intent_data.get('tag')
-            intent_responses = intent_data.get('responses', [])
-            if tag and intent_responses:
-                responses[tag] = intent_responses
-    
+            add_responses(intent_data.get('tag'), intent_data.get('responses', []))
+
     # Load greeting intents (also in chatbot root directory)
     intent_path = os.path.join(BASE_DIR, 'Intent.json')
     if os.path.exists(intent_path):
         with open(intent_path, 'r') as f:
             data = json.load(f)
-        
         for intent_data in data.get('intents', []):
-            tag = intent_data.get('tag')
-            intent_responses = intent_data.get('responses', [])
-            if tag and intent_responses:
-                responses[tag] = intent_responses
-    
+            add_responses(intent_data.get('tag'), intent_data.get('responses', []))
+
+    # Fallback: build responses from training datasets
+    if not responses:
+        for dataset_name in ('train.json', 'valid.json', 'test.json'):
+            dataset_path = os.path.join(DATA_DIR, dataset_name)
+            if not os.path.exists(dataset_path):
+                continue
+            with open(dataset_path, 'r') as f:
+                dataset = json.load(f)
+            if isinstance(dataset, list):
+                for row in dataset:
+                    add_responses(row.get('intent'), row.get('responses'))
+
     return responses
 
 

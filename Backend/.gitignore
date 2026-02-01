@@ -4,8 +4,10 @@
 /build
 
 data/
-/Users/ali/Desktop/OnestaffOS/Backend/src/chatbot/Intent.json
-/Users/ali/Desktop/OnestaffOS/Backend/src/chatbot/knowledge-data.json
+Intent.json
+knowledge-data.json
+scripts/
+uploads/
 
 # Logs
 logs

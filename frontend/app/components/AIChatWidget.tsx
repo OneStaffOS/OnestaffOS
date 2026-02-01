@@ -114,34 +114,36 @@ export default function AIChatWidget({
     checkHealth();
   }, []);
 
+  const initEncryption = useCallback(async () => {
+    if (!enableEncryption || !isEncryptionSupported()) {
+      setEncryptionReady(false);
+      return false;
+    }
+
+    try {
+      const response = await axios.get('/ai-chatbot/encryption/public-key');
+      if (response.data?.success && response.data?.data?.publicKey) {
+        encryptionRef.current?.destroy();
+        encryptionRef.current = new ChatEncryption('ai_chatbot');
+        const encryptedSessionKey = await encryptionRef.current.initialize(
+          response.data.data.publicKey
+        );
+        sessionKeyRef.current = encryptedSessionKey;
+        setEncryptionReady(true);
+        setEncryptionError(null);
+        return true;
+      }
+    } catch (error) {
+      console.error('Failed to initialize encryption:', error);
+    }
+
+    setEncryptionError('Encryption unavailable');
+    setEncryptionReady(false);
+    return false;
+  }, [enableEncryption]);
+
   // Initialize encryption
   useEffect(() => {
-    const initEncryption = async () => {
-      if (!enableEncryption || !isEncryptionSupported()) {
-        setEncryptionReady(false);
-        return;
-      }
-
-      try {
-        // Get server's public key
-        const response = await axios.get('/ai-chatbot/encryption/public-key');
-        if (response.data?.success && response.data?.data?.publicKey) {
-          // Initialize encryption
-          encryptionRef.current = new ChatEncryption('ai_chatbot');
-          const encryptedSessionKey = await encryptionRef.current.initialize(
-            response.data.data.publicKey
-          );
-          sessionKeyRef.current = encryptedSessionKey;
-          setEncryptionReady(true);
-          setEncryptionError(null);
-        }
-      } catch (error) {
-        console.error('Failed to initialize encryption:', error);
-        setEncryptionError('Encryption unavailable');
-        setEncryptionReady(false);
-      }
-    };
-
     initEncryption();
 
     return () => {
@@ -149,7 +151,7 @@ export default function AIChatWidget({
         encryptionRef.current.destroy();
       }
     };
-  }, [enableEncryption]);
+  }, [initEncryption]);
 
   // Focus input when opening
   useEffect(() => {
@@ -187,71 +189,89 @@ export default function AIChatWidget({
     ]);
 
     try {
-      let response;
+      const requestChatbot = async (
+        text: string,
+        attempt: number,
+        forcePlaintext: boolean = false
+      ): Promise<{
+        response: ChatbotResponse;
+        messageContent: string;
+      }> => {
+        let response: { data: ChatbotResponse };
 
-      // Use encrypted endpoint if encryption is ready
-      if (encryptionReady && encryptionRef.current && sessionKeyRef.current) {
-        const encryptedPayload = await encryptionRef.current.encrypt(messageText.trim());
-        const endpoint = useAuth ? '/ai-chatbot/chat/encrypted' : '/ai-chatbot/quick-help/encrypted';
-        
-        response = await axios.post<ChatbotResponse>(endpoint, {
-          encryptedMessage: {
-            ciphertext: encryptedPayload.ciphertext,
-            iv: encryptedPayload.iv,
-            tag: encryptedPayload.tag,
-          },
-          encryptedSessionKey: sessionKeyRef.current,
-        });
-      } else {
-        // Fallback to unencrypted
-        const endpoint = useAuth ? '/ai-chatbot/chat' : '/ai-chatbot/quick-help';
-        response = await axios.post<ChatbotResponse>(endpoint, {
-          message: messageText.trim(),
-        });
-      }
+        const canEncrypt = !forcePlaintext && encryptionReady && encryptionRef.current && sessionKeyRef.current;
+        if (canEncrypt) {
+          const encryptedPayload = await encryptionRef.current!.encrypt(text);
+          const endpoint = useAuth ? '/ai-chatbot/chat/encrypted' : '/ai-chatbot/quick-help/encrypted';
+          const sessionId = encryptionRef.current?.getSessionId();
 
-      // Determine message content - decrypt if encrypted
-      let messageContent: string;
-      
-      if (response.data.isEncrypted && response.data.encryptedData && encryptionRef.current) {
-        // Decrypt the message asynchronously
-        try {
-          messageContent = await encryptionRef.current.decrypt(response.data.encryptedData);
-        } catch (decryptError) {
-          console.error('Failed to decrypt response:', decryptError);
-          messageContent = "I received a response but couldn't decrypt it. Please try again.";
+          response = await axios.post<ChatbotResponse>(endpoint, {
+            encryptedMessage: {
+              ciphertext: encryptedPayload.ciphertext,
+              iv: encryptedPayload.iv,
+              tag: encryptedPayload.tag,
+            },
+            encryptedSessionKey: sessionKeyRef.current,
+            sessionId: sessionId || undefined,
+          });
+        } else {
+          const endpoint = useAuth ? '/ai-chatbot/chat' : '/ai-chatbot/quick-help';
+          response = await axios.post<ChatbotResponse>(endpoint, {
+            message: text,
+          });
         }
-      } else {
-        // Use plaintext message (for non-encrypted responses)
-        messageContent = response.data.data?.message || "I'm sorry, I couldn't process your request.";
-      }
 
-      // Remove loading message and add response
+        const payload = response.data;
+        let messageContent = payload.data?.message || "I'm sorry, I couldn't process your request.";
+
+        if (payload.encryptedData && encryptionRef.current) {
+          try {
+            messageContent = await encryptionRef.current.decrypt(payload.encryptedData);
+          } catch (decryptError) {
+            console.error('Failed to decrypt response:', decryptError);
+            if (attempt === 0 && !forcePlaintext) {
+              const refreshed = await initEncryption();
+              if (refreshed) {
+                return requestChatbot(text, attempt + 1, false);
+              }
+            }
+            if (payload.data?.message) {
+              messageContent = payload.data.message;
+            } else {
+              messageContent = "I received a response but couldn't decrypt it. Please try again.";
+            }
+          }
+        }
+
+        return { response: payload, messageContent };
+      };
+
+      const { response, messageContent } = await requestChatbot(messageText.trim(), 0);
+
       setMessages((prev) => {
         const filtered = prev.filter((m) => m.id !== loadingId);
-        if (response.data.success && response.data.data) {
+        if (response.success && response.data) {
           return [
             ...filtered,
             {
               id: generateId(),
               role: 'assistant',
               content: messageContent,
-              timestamp: new Date(response.data.data.timestamp),
-              intent: response.data.data.intent,
-              confidence: response.data.data.confidence,
-            },
-          ];
-        } else {
-          return [
-            ...filtered,
-            {
-              id: generateId(),
-              role: 'assistant',
-              content: response.data.error || "I'm sorry, I couldn't process your request.",
-              timestamp: new Date(),
+              timestamp: new Date(response.data.timestamp),
+              intent: response.data.intent,
+              confidence: response.data.confidence,
             },
           ];
         }
+        return [
+          ...filtered,
+          {
+            id: generateId(),
+            role: 'assistant',
+            content: response.error || "I'm sorry, I couldn't process your request.",
+            timestamp: new Date(),
+          },
+        ];
       });
     } catch (error) {
       // Remove loading message and add error

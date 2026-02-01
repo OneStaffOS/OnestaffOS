@@ -288,7 +288,8 @@ class DataProcessor:
         
         # Step 1: Load datasets
         print("\n[1/6] Loading datasets...")
-        knowledge_samples = self.loader.load_knowledge_data(DATA_CONFIG.knowledge_data_path)
+        knowledge_path = self._resolve_knowledge_path()
+        knowledge_samples = self.loader.load_knowledge_data(knowledge_path)
         print(f"  - Loaded {len(knowledge_samples)} samples from knowledge-data.json")
         
         intent_samples = []
@@ -341,6 +342,31 @@ class DataProcessor:
         self._print_statistics(all_samples)
         
         return train, valid, test
+
+    def _resolve_knowledge_path(self) -> str:
+        """Resolve knowledge-data.json path with fallbacks."""
+        if os.path.exists(DATA_CONFIG.knowledge_data_path):
+            return DATA_CONFIG.knowledge_data_path
+
+        env_path = os.environ.get('CHATBOT_KNOWLEDGE_PATH')
+        if env_path and os.path.exists(env_path):
+            return env_path
+
+        repo_root = os.path.abspath(os.path.join(BASE_DIR, '..', '..', '..'))
+        fallback_path = os.path.join(
+            repo_root,
+            'frontend',
+            'app',
+            'knowledge-base',
+            'knowledge-data.json',
+        )
+        if os.path.exists(fallback_path):
+            return fallback_path
+
+        raise FileNotFoundError(
+            "knowledge-data.json not found. Set CHATBOT_KNOWLEDGE_PATH or place the file at "
+            f"{DATA_CONFIG.knowledge_data_path} or {fallback_path}"
+        )
     
     def _remove_duplicates(self, samples: List[Dict]) -> List[Dict]:
         """Remove duplicate text entries"""
