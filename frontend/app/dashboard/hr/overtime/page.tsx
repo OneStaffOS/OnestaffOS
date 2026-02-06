@@ -85,7 +85,7 @@ export default function HROvertimePage() {
             {rules.length === 0 && !loading && <p>No overtime rules configured.</p>}
             <div style={{ display: 'grid', gap: 12 }}>
               {rules.map((r) => (
-                <div key={r._id} style={{ border: '1px solid #e5e7eb', padding: 12, borderRadius: 8 }}>
+                <div key={r._id} style={{ marginTop: 12, background: 'white', border: '1px solid #e5e7eb', padding: 12, borderRadius: 8 }}>
                   <strong>{r.name}</strong>
                   <div style={{ fontSize: 13, color: '#555', marginTop: 6 }}>{r.description}</div>
                   <div style={{ marginTop: 8, fontSize: 13, color: '#333' }}>

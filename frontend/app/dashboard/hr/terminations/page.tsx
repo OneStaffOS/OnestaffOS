@@ -112,7 +112,7 @@ export default function TerminationsPage() {
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
           {/* Header */}
           <div style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%)',
             borderRadius: '20px',
             padding: '2.5rem',
             marginBottom: '2rem',
@@ -132,7 +132,7 @@ export default function TerminationsPage() {
               marginBottom: '2rem'
             }}>
               <div style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%)',
                 borderRadius: '16px',
                 padding: '1.75rem',
                 boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
@@ -142,7 +142,7 @@ export default function TerminationsPage() {
                 <p style={{ color: 'white', fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{stats.total}</p>
               </div>
               <div style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%)',
                 borderRadius: '16px',
                 padding: '1.75rem',
                 boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
@@ -152,7 +152,7 @@ export default function TerminationsPage() {
                 <p style={{ color: 'white', fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{stats.byStatus.pending}</p>
               </div>
               <div style={{
-                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                background: 'linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%)',
                 borderRadius: '16px',
                 padding: '1.75rem',
                 boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
@@ -162,7 +162,7 @@ export default function TerminationsPage() {
                 <p style={{ color: 'white', fontSize: '3rem', fontWeight: '700', margin: 0, lineHeight: 1 }}>{stats.byStatus.underReview}</p>
               </div>
               <div style={{
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: 'linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%)',
                 borderRadius: '16px',
                 padding: '1.75rem',
                 boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',

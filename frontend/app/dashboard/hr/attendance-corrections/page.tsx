@@ -66,7 +66,7 @@ export default function HrAttendanceCorrectionsPage() {
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
           {/* Header */}
           <div style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%)',
             borderRadius: '20px',
             padding: '2.5rem',
             marginBottom: '2rem',

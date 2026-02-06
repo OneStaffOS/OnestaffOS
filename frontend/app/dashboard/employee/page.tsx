@@ -280,31 +280,31 @@ export default function EmployeeDashboard() {
       textAlign: 'center'as const,
     },
     primary: {
-      background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+      background: '#0F3A44',
       color: '#ffffff',
     },
     success: {
-      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      background: '#0F3A44',
       color: '#ffffff',
     },
     warning: {
-      background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      background: '#0F3A44',
       color: '#ffffff',
     },
     danger: {
-      background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+      background: '#0F3A44',
       color: '#ffffff',
     },
     purple: {
-      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+      background: '#0F3A44',
       color: '#ffffff',
     },
     indigo: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: '#0F3A44',
       color: '#ffffff',
     },
     gray: {
-      background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+      background: '#0F3A44',
       color: '#ffffff',
     },
     disabled: {
@@ -638,14 +638,6 @@ export default function EmployeeDashboard() {
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
                     View Exceptions
-                  </button>
-                  <button
-                    onClick={() => router.push('/dashboard/employee/csv-attendance')}
-                    style={{ ...buttonStyle.base, ...buttonStyle.purple }}
-                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
-                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                  >
-                    CSV Attendance
                   </button>
                 </div>
 

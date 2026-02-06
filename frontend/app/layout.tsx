@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
-import "./globals.css";
 import { ClientProviders } from "./components/ClientProviders";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import Navbar from "./components/Navbar";
 import Spinner from "./components/Spinner";
+import "./global.css";
 
-import { safeMap, ensureArray, safeLength } from '@/lib/safe-array';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

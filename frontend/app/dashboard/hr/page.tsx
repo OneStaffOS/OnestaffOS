@@ -236,7 +236,7 @@ export default function UnifiedHRDashboard() {
     flex: '1 1 auto',
     minWidth: '200px',
     textAlign: 'center'as const,
-    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+    background: '#0F3A44',
     color: '#ffffff',
   };
 
@@ -252,7 +252,7 @@ export default function UnifiedHRDashboard() {
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 1rem' }}>
           {/* Welcome Header */}
           <div style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #0f172a 0%, #0f3a44 45%, #0f5132 100%)',
             borderRadius: '16px',
             padding: '2rem',
             marginBottom: '2rem',
@@ -278,7 +278,7 @@ export default function UnifiedHRDashboard() {
                   onClick={() => router.push('/dashboard/hr/leaves')}
                   style={{
                     ...buttonBaseStyle,
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    background: '#0F3A44',
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -291,7 +291,7 @@ export default function UnifiedHRDashboard() {
                   onClick={() => router.push('/dashboard/hr/leaves/hr-management')}
                   style={{
                     ...buttonBaseStyle,
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                    background: '#0F3A44',
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -303,7 +303,7 @@ export default function UnifiedHRDashboard() {
                 onClick={() => router.push('/dashboard/hr/terminations')}
                 style={{
                   ...buttonBaseStyle,
-                  background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                  background: '#0F3A44',
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -435,7 +435,7 @@ export default function UnifiedHRDashboard() {
               {isHRAdmin && (
                 <button 
                   onClick={() => router.push('/dashboard/hr/employees/new')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -456,7 +456,7 @@ export default function UnifiedHRDashboard() {
                 <>
                   <button
                     onClick={() => router.push('/dashboard/hr/holidays')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -464,7 +464,7 @@ export default function UnifiedHRDashboard() {
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/time-exceptions')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -475,8 +475,8 @@ export default function UnifiedHRDashboard() {
                     style={{ 
                       ...buttonBaseStyle, 
                       background: stats.pendingChangeRequests > 0 
-                        ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' 
-                        : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+                        ? '#0F3A44' 
+                        : '#0F3A44'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -495,7 +495,7 @@ export default function UnifiedHRDashboard() {
 
                   <button 
                     onClick={() => router.push('/dashboard/hr/employee-status')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -508,7 +508,7 @@ export default function UnifiedHRDashboard() {
                 <>
                   <button 
                     onClick={() => router.push('/dashboard/hr/roles')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -516,7 +516,7 @@ export default function UnifiedHRDashboard() {
                   </button>
                   <button
                     onClick={() => router.push('/dashboard/hr/time-management/shift-assignments')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -543,7 +543,7 @@ export default function UnifiedHRDashboard() {
               {isHRManager && (
                 <button
                   onClick={() => router.push('/dashboard/manager/time-management/schedule-rules')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -554,7 +554,7 @@ export default function UnifiedHRDashboard() {
               {isHRManager && (
                 <button
                   onClick={() => router.push('/dashboard/hr/overtime')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -564,19 +564,8 @@ export default function UnifiedHRDashboard() {
 
               {isHRManager && (
                 <button
-                  onClick={() => router.push('/dashboard/hr/lateness')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
-                  onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                >
-                   Lateness Rules
-                </button>
-              )}
-
-              {isHRManager && (
-                <button
                   onClick={() => router.push('/dashboard/hr/repeated-lateness')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -590,8 +579,8 @@ export default function UnifiedHRDashboard() {
                   style={{ 
                     ...buttonBaseStyle, 
                     background: stats.pendingInsuranceBrackets > 0 
-                      ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' 
-                      : 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)'
+                      ? '#0F3A44' 
+                      : '#0F3A44'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -603,7 +592,7 @@ export default function UnifiedHRDashboard() {
               {(isHRAdmin || isSystemAdmin) && (
                 <button
                   onClick={handleTriggerExpiry}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -615,7 +604,7 @@ export default function UnifiedHRDashboard() {
                 <>
                   <button 
                     onClick={() => router.push('/org-structure/change-requests')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -624,7 +613,7 @@ export default function UnifiedHRDashboard() {
 
                   <button 
                     onClick={() => router.push('/dashboard/hr/audit')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -642,7 +631,7 @@ export default function UnifiedHRDashboard() {
               <div style={gridStyle}>
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/monitoring')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -660,7 +649,7 @@ export default function UnifiedHRDashboard() {
 
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/hiring-process-templates')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -669,7 +658,7 @@ export default function UnifiedHRDashboard() {
 
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/requisitions')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -678,7 +667,7 @@ export default function UnifiedHRDashboard() {
 
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/applications')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -687,7 +676,7 @@ export default function UnifiedHRDashboard() {
 
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/offers')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -696,7 +685,7 @@ export default function UnifiedHRDashboard() {
 
                 <button 
                   onClick={() => router.push('/dashboard/hr/onboarding-management')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -705,7 +694,7 @@ export default function UnifiedHRDashboard() {
 
                 <button 
                   onClick={() => router.push('/dashboard/hr/signed-contracts')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -722,7 +711,7 @@ export default function UnifiedHRDashboard() {
               <div style={gridStyle}>
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/applications')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -731,7 +720,7 @@ export default function UnifiedHRDashboard() {
 
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/offers')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -740,7 +729,7 @@ export default function UnifiedHRDashboard() {
                 
                 <button 
                   onClick={() => router.push('/dashboard/hr/recruitment/job-publishing')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -829,7 +818,7 @@ export default function UnifiedHRDashboard() {
                     <>
                       <button 
                         onClick={() => router.push('/dashboard/hr/performance/templates')}
-                        style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}
+                        style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                       >
@@ -838,7 +827,7 @@ export default function UnifiedHRDashboard() {
 
                       <button 
                         onClick={() => router.push('/dashboard/hr/performance/templates/create')}
-                        style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                        style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                       >
@@ -849,7 +838,7 @@ export default function UnifiedHRDashboard() {
 
                   <button 
                     onClick={() => router.push('/dashboard/hr/performance/cycles')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -858,7 +847,7 @@ export default function UnifiedHRDashboard() {
 
                   <button 
                     onClick={() => router.push('/dashboard/hr/performance/cycles/create')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -872,7 +861,7 @@ export default function UnifiedHRDashboard() {
                 <div style={gridStyle}>
                   <button 
                     onClick={() => router.push('/dashboard/hr/performance-dashboard')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -882,7 +871,7 @@ export default function UnifiedHRDashboard() {
                   {stats.overdueAppraisals > 0 && (
                     <button 
                       onClick={handleSendReminders}
-                      style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+                      style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                       onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
@@ -896,8 +885,8 @@ export default function UnifiedHRDashboard() {
                       style={{ 
                         ...buttonBaseStyle, 
                         background: stats.pendingDisputes > 0 
-                          ? 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)' 
-                          : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+                          ? '#0F3A44' 
+                          : '#0F3A44'
                       }}
                       onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -908,7 +897,7 @@ export default function UnifiedHRDashboard() {
 
                   <button 
                     onClick={() => router.push('/dashboard/hr/performance/archived')}
-                    style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)' }}
+                    style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                   >
@@ -925,7 +914,7 @@ export default function UnifiedHRDashboard() {
             <div style={gridStyle}>
               <button 
                 onClick={() => router.push('/dashboard/hr/reports')}
-                style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+                style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
@@ -935,7 +924,7 @@ export default function UnifiedHRDashboard() {
               {(isHRManager || isHREmployee) && (
                 <button 
                   onClick={() => router.push('/dashboard/hr/performance/reports')}
-                  style={{ ...buttonBaseStyle, background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)' }}
+                  style={{ ...buttonBaseStyle, background: '#0F3A44' }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
@@ -948,7 +937,7 @@ export default function UnifiedHRDashboard() {
           {/* Urgent Alerts */}
           {!loading && (stats.overdueAppraisals > 0 || stats.pendingDisputes > 0 || stats.pendingChangeRequests > 0) && (
             <div style={{ 
-              background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)', 
+              background: '#0F3A44', 
               border: '2px solid #dc2626',
               borderRadius: '16px',
               padding: '2rem',
@@ -978,7 +967,7 @@ export default function UnifiedHRDashboard() {
                     onClick={() => router.push('/dashboard/hr/change-requests')}
                     style={{ 
                       padding: '0.875rem 1.5rem',
-                      background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                      background: '#0F3A44',
                       color: 'white',
                       border: 'none',
                       borderRadius: '10px',
@@ -999,7 +988,7 @@ export default function UnifiedHRDashboard() {
                     onClick={handleSendReminders}
                     style={{ 
                       padding: '0.875rem 1.5rem',
-                      background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                      background: '#0F3A44',
                       color: 'white',
                       border: 'none',
                       borderRadius: '10px',
@@ -1020,7 +1009,7 @@ export default function UnifiedHRDashboard() {
                     onClick={() => router.push('/dashboard/hr/performance/disputes')}
                     style={{ 
                       padding: '0.875rem 1.5rem',
-                      background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                      background: '#0F3A44',
                       color: 'white',
                       border: 'none',
                       borderRadius: '10px',
